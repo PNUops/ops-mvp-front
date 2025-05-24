@@ -1,8 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 import { OPS_COLOR } from './src/styles/theme';
 
-export const content = ['./src/**/*.{js,jsx,ts,tsx}'];
-export const theme = {
+module.exports = {
+  content: content,
+  theme: theme,
+  plugins: plugins,
+};
+
+const content = ['./src/**/*.{js,jsx,ts,tsx}'];
+const theme = {
   extend: {
     colors: {
       mainGreen: OPS_COLOR.mainGreen,
@@ -49,4 +55,4 @@ export const theme = {
     },
   },
 };
-export const plugins = [];
+const plugins = [];
