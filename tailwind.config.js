@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import { OPS_COLOR } from './src/styles/theme';
+import { OPS_COLOR , OPS_HEIGHT, OPS_WIDTH} from './src/styles/theme';
 
 export const content = ['./src/**/*.{js,jsx,ts,tsx}'];
 export const theme = {
@@ -15,20 +15,32 @@ export const theme = {
       base: 'Inter, system-ui, sans-serif',
     },
     fontSize: {
-      sm: '18px',
-      mid: '24px',
-      title: '28px',
-      smbold: ['18px', { fontWeight: '700' }],
-      exsm: ['15px'],
+      sm: ['18px', { lineHeight: 'auto' }],
+      mid: ['24px', { lineHeight: 'auto' }],
+      title: ['28px', { lineHeight: 'auto' }],
+      smbold: ['18px', { fontWeight: '700', lineHeight: 'auto' }],
+      exsm: ['15px', { lineHeight: 'auto' }],
     },
     spacing: {
-      // 사용자 정의 spacing
+      sidebar: OPS_WIDTH.sidebar,
+      container: OPS_WIDTH.container,
+      header: OPS_HEIGHT.header,
+      footer: OPS_HEIGHT.footer,
     },
     maxWidth: {
-      // 사용자 정의 maxWidth
+      container: OPS_WIDTH.container,
+      sidebar: OPS_WIDTH.sidebar,
     },
     minWidth: {
-      // 사용자 정의 minWidth
+      sidebar: OPS_WIDTH.sidebar,
+    },
+    height: {
+      ...OPS_HEIGHT,
+    },
+    minHeight: {
+      sidebar: OPS_HEIGHT.sidebar,
+      footer: OPS_HEIGHT.footer,
+      header: OPS_HEIGHT.header,
     },
     keyframes: {
       typing: {

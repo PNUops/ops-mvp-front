@@ -7,7 +7,13 @@ export const OPS_COLOR = {
 } as const;
 
 export const OPS_WIDTH = {
-  // sidebar, container, header, footer
+  sidebar: '280px',
+  container: '1448px',
 } as const;
 
-export const OPS_HEIGHT = {} as const;
+export const OPS_HEIGHT = {
+  header: '104px',
+  sidebar: '1120px',
+  footer: '470px',
+  page: '3351px',
+} as const;
