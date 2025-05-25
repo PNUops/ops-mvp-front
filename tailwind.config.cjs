@@ -1,8 +1,14 @@
 /** @type {import('tailwindcss').Config} */
-import { OPS_COLOR , OPS_HEIGHT, OPS_WIDTH} from './src/styles/theme';
+import { OPS_COLOR, OPS_HEIGHT, OPS_WIDTH } from './src/styles/theme';
 
-export const content = ['./src/**/*.{js,jsx,ts,tsx}'];
-export const theme = {
+module.exports = {
+  content: content,
+  theme: theme,
+  plugins: plugins,
+};
+
+const content = ['./src/**/*.{js,jsx,ts,tsx}'];
+const theme = {
   extend: {
     colors: {
       mainGreen: OPS_COLOR.mainGreen,
@@ -42,6 +48,7 @@ export const theme = {
       footer: OPS_HEIGHT.footer,
       header: OPS_HEIGHT.header,
     },
+
     keyframes: {
       typing: {
         '0%': {
@@ -61,4 +68,4 @@ export const theme = {
     },
   },
 };
-export const plugins = [];
+const plugins = [];
