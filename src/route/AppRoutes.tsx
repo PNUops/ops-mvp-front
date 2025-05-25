@@ -4,11 +4,11 @@ import MainLayout from '@layout/MainLayout';
 import FullContainer from '@layout/FullContainer';
 import FitContainer from '@layout/FitContainer';
 import SignUp from '@pages/auth/SignUp';
-import Login from '@pages/auth/Login';
 import Main from '@pages/main/Main';
 import ProjectEditor from '@pages/project-editor/ProjectEditor';
 import ProjectViewer from '@pages/project-viewer/ProjectViewer';
 import AdminDashboard from '@pages/admin/AdminDashboard';
+import SignInPage from '@pages/signin/SignInPage';
 
 const AppRoutes = () =>
   useRoutes([
@@ -24,8 +24,8 @@ const AppRoutes = () =>
               element: <SignUp />,
             },
             {
-              path: 'login',
-              element: <Login />,
+              path: 'signin',
+              element: <SignInPage />,
             },
           ],
         },
