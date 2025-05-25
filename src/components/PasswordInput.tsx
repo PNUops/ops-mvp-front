@@ -21,7 +21,7 @@ const PasswordInput = ({ value, setValue, ...rest }: Props) => {
         onClick={() => setShowPassword(!showPassword)}
         className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500"
       >
-        {showPassword ? '가리기' : '보기'}
+        {showPassword ? '가리기' : '보기'} {/*[TODO] 아이콘으로 변경 필요*/}
       </button>
     </div>
   );
