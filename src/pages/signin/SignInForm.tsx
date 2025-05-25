@@ -3,7 +3,7 @@ import PasswordInput from '@components/PasswordInput';
 
 const SignInForm = () => {
   return (
-    <form className="flex flex-col gap-4">
+    <form className="flex w-full flex-col gap-4">
       <Input placeholder="이메일" />
       <PasswordInput value="" setValue={() => {}} />
       <div className="h-2" />
