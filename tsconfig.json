@@ -8,7 +8,8 @@
       "@recoil/*": ["recoil/*"],
       "@route/*": ["route/*"],
       "@layout/*": ["layout/*"],
-      "@mocks/*": ["mocks/*"]
+      "@mocks/*": ["mocks/*"],
+      "@components/*": ["components/*"]
     },
     "target": "es2017",
     "lib": ["dom", "dom.iterable", "esnext"],
