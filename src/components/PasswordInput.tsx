@@ -1,7 +1,7 @@
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from 'react-icons/md';
-import { useState } from 'react';
+import { InputHTMLAttributes, useState } from 'react';
 
-interface Props {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   setValue: (value: string) => void;
 }
