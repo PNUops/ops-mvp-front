@@ -32,17 +32,20 @@ const ProjectSubmissionTable: React.FC<ProjectSubmissionTableProps> = ({ submiss
         <tbody>
           {submissions.map((item: Submission, idx: number) => (
             <tr key={item.id} className="">
-              <td className="w-[5%] border-r border-b border-gray-300 p-2 pl-4 text-sm">{idx + 1}</td>
-              <td className="w-[20%] border-r border-b border-gray-300 p-2 pl-4 text-sm">{item.teamName}</td>
-              <td className="w-[55%] border-r border-b border-gray-300 p-2 pl-4 text-sm">{item.projectName}</td>
+              <td className="w-[10%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{idx + 1}</td>
+              <td className="w-[20%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{item.teamName}</td>
+              <td className="w-[50%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{item.projectName}</td>
               {type === 'vote' ? (
-                <td className="w-[20%] border-b border-gray-300 p-2 pl-4 text-sm">
-                  <div className="flex h-[30px] w-[100px] items-center">좋아요 {item.likes.toLocaleString()}개</div>
+                <td className="w-[20%] border-b border-gray-300 p-2 py-3 pl-4 text-sm">
+                  <div className="flex h-[30px] w-[100px] items-center">
+                    <span>좋아요&nbsp;&nbsp;</span>
+                    <span className="font-bold">{item.likes.toLocaleString()}</span>개
+                  </div>
                 </td>
               ) : (
-                <td className="w-[20%] border-b border-gray-300 p-2 pl-4 text-sm">
+                <td className="w-[20%] border-b border-gray-300 p-2 py-3 pl-4 text-sm">
                   <div
-                    className={`inline-block w-[80px] rounded-md text-center ${
+                    className={`flex h-[35px] w-[80px] items-center justify-center rounded-md text-center ${
                       item.isSubmitted ? 'bg-[#005BAA]' : 'bg-[#EC523E]'
                     } px-2 py-[4px] text-sm text-white`}
                   >

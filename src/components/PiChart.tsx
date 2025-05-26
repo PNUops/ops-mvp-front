@@ -70,8 +70,9 @@ const VoteRate: React.FC<PieData> = ({ pieData, totalVotes, participationRate, p
           </PieChart>
         </div>
         <p className="-mt-20 text-xl font-bold text-green-600">{participationRate}%</p>
-        <p className="mt-20 text-lg font-bold">
-          총 투표수 <span className="text-black">{totalVotes}개</span>
+        <p className="mt-20 text-gray-400">총 투표수 </p>
+        <p className="text-lg font-bold">
+          <span className="text-black">{totalVotes}개</span>
         </p>
       </div>
     </section>
