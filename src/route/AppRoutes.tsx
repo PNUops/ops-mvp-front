@@ -7,8 +7,12 @@ import SignUp from '@pages/auth/SignUp';
 import Main from '@pages/main/Main';
 import ProjectEditor from '@pages/project-editor/ProjectEditor';
 import ProjectViewer from '@pages/project-viewer/ProjectViewer';
-import AdminDashboard from '@pages/admin/AdminDashboard';
+
+
 import SignInPage from '@pages/signin/SignInPage';
+
+import AdminPage from '@pages/admin/AdminPage';
+
 
 const AppRoutes = () =>
   useRoutes([
@@ -46,7 +50,7 @@ const AppRoutes = () =>
             },
             {
               path: 'monitor',
-              element: <AdminDashboard />,
+              element: <AdminPage />,
             },
           ],
         },
