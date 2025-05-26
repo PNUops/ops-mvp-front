@@ -1,6 +1,5 @@
-import React from 'react';
-import ProjectSubmissionTable from 'components/ProjectSubmissionTable';
-import VoteRate from 'components/PiChart';
+import ProjectSubmissionTable from '@pages/admin/ProjectSubmissionTable';
+import VoteRate from '@pages/admin/VoteRate';
 
 const mockSubmissions = Array.from({ length: 20 }, (_, i) => ({
   id: i + 1,
@@ -17,7 +16,7 @@ const pieData = [
 ];
 const pieColors = ['#22c55e', '#e5e7eb'];
 
-const AdminDashboardContent = () => {
+const AdminPage = () => {
   return (
     <div className="max-w-container flex flex-col gap-12 p-8">
       {/* 프로젝트 등록현황 */}
@@ -37,4 +36,4 @@ const AdminDashboardContent = () => {
   );
 };
 
-export default AdminDashboardContent;
+export default AdminPage;
