@@ -1,11 +1,159 @@
 @import 'tailwindcss';
 
-/* @tailwind base;
-@tailwind components; */
-@tailwind utilities;
+/* 1. 테마 변수 정의 (cjs와 동일한 이름) */
+@theme {
+  /* Colors */
+  --color-mainBlue: #005baa;
+  --color-mainGreen: #00a651;
+  --color-midGray: #979797;
+  --color-lightGray: #e2e2e2;
+  --color-whiteGray: #f9f9f9;
+  --color-mainRed: #ec523e;
 
+  /* Font family */
+  --font-base: Inter, system-ui, sans-serif;
+
+  /* Font size */
+  --text-sm: 18px;
+  --text-mid: 24px;
+  --text-title: 28px;
+  --text-smbold: 18px;
+  --text-exsm: 15px;
+
+  /* Spacing (width/height) */
+  --spacing-sidebar: 280px;
+  --spacing-container: 1448px;
+  --spacing-header: 104px;
+  --spacing-footer: 470px;
+
+  /* Height */
+  --height-header: 104px;
+  --height-sidebar: 1120px;
+  --height-footer: 470px;
+  --height-page: 3351px;
+}
+
+/* 2. 폰트 패밀리 기본값 설정 */
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-base);
+  }
+}
+
+/* 3. 커스텀 컬러 유틸리티 (bg-mainBlue 등) */
+@utilities {
+  .bg-mainBlue {
+    background-color: var(--color-mainBlue);
+  }
+  .bg-mainGreen {
+    background-color: var(--color-mainGreen);
+  }
+  .bg-midGray {
+    background-color: var(--color-midGray);
+  }
+  .bg-lightGray {
+    background-color: var(--color-lightGray);
+  }
+  .bg-whiteGray {
+    background-color: var(--color-whiteGray);
+  }
+
+  .text-mainBlue {
+    color: var(--color-mainBlue);
+  }
+  .text-mainGreen {
+    color: var(--color-mainGreen);
+  }
+  .text-midGray {
+    color: var(--color-midGray);
+  }
+  .text-lightGray {
+    color: var(--color-lightGray);
+  }
+  .text-whiteGray {
+    color: var(--color-whiteGray);
+  }
+}
+
+/* 4. 폰트 사이즈 유틸리티 (text-sm 등) */
+@utilities {
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: normal;
+  }
+  .text-mid {
+    font-size: var(--text-mid);
+    line-height: normal;
+  }
+  .text-title {
+    font-size: var(--text-title);
+    line-height: normal;
+  }
+  .text-smbold {
+    font-size: var(--text-smbold);
+    font-weight: 700;
+    line-height: normal;
+  }
+  .text-exsm {
+    font-size: var(--text-exsm);
+    line-height: normal;
+  }
+}
+
+/* 5. 스페이싱/사이즈 유틸리티 (w-sidebar 등) */
+@utilities {
+  .w-sidebar {
+    width: var(--spacing-sidebar);
+  }
+  .w-container {
+    width: var(--spacing-container);
+  }
+  .h-header {
+    height: var(--height-header);
+  }
+  .h-sidebar {
+    height: var(--height-sidebar);
+  }
+  .h-footer {
+    height: var(--height-footer);
+  }
+  .h-page {
+    height: var(--height-page);
+  }
+  .max-w-container {
+    max-width: var(--spacing-container);
+  }
+  .max-w-sidebar {
+    max-width: var(--spacing-sidebar);
+  }
+  .min-w-sidebar {
+    min-width: var(--spacing-sidebar);
+  }
+}
+
+/* 6. 애니메이션 (typing 등) */
+@keyframes typing {
+  0% {
+    width: 0%;
+    visibility: hidden;
+  }
+  100% {
+    width: 100%;
+  }
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+@utilities {
+  .animate-typing {
+    animation:
+      typing 2s steps(25),
+      blink 1s step-end infinite;
   }
 }
