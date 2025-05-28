@@ -3,15 +3,11 @@ import { useRoutes } from 'react-router-dom';
 import MainLayout from '@layout/MainLayout';
 import FullContainer from '@layout/FullContainer';
 import FitContainer from '@layout/FitContainer';
-import SignUp from '@pages/auth/SignUp';
-import Login from '@pages/auth/Login';
 import MainPage from '@pages/main/MainPage';
 import ProjectEditor from '@pages/project-editor/ProjectEditor';
 import ProjectViewer from '@pages/project-viewer/ProjectViewer';
-
-
 import SignInPage from '@pages/signin/SignInPage';
-
+import SignUpPage from '@pages/signup/SignUpPage';
 import AdminPage from '@pages/admin/AdminPage';
 
 
@@ -26,7 +22,7 @@ const AppRoutes = () =>
           children: [
             {
               path: 'signup',
-              element: <SignUp />,
+              element: <SignUpPage />,
             },
             {
               path: 'signin',
