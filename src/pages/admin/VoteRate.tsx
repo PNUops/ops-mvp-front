@@ -1,18 +1,12 @@
 import { PieChart, Pie, Cell } from 'recharts';
 
-interface PieItem {
-  name: string;
-  value: number;
-}
-
 interface Props {
-  pieData: PieItem[];
   totalVotes: number;
   participationRate: number;
-  pieColors: string[];
 }
 
-const VoteRate = ({ pieData, totalVotes, participationRate, pieColors }: Props) => {
+const VoteRate = ({ totalVotes, participationRate }: Props) => {
+  const pieColors = ['#22c55e', '#e5e7eb'];
   return (
     <section className="">
       <h2 className="mb-4 text-2xl font-bold">투표 참여율</h2>
