@@ -4,7 +4,8 @@ import MainLayout from '@layout/MainLayout';
 import FullContainer from '@layout/FullContainer';
 import FitContainer from '@layout/FitContainer';
 import SignUp from '@pages/auth/SignUp';
-import Main from '@pages/main/Main';
+import Login from '@pages/auth/Login';
+import MainPage from '@pages/main/MainPage';
 import ProjectEditor from '@pages/project-editor/ProjectEditor';
 import ProjectViewer from '@pages/project-viewer/ProjectViewer';
 
@@ -38,7 +39,7 @@ const AppRoutes = () =>
           children: [
             {
               index: true,
-              element: <Main />,
+              element: <MainPage />,
             },
             {
               path: 'view',
