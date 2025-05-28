@@ -8,7 +8,12 @@ import Login from '@pages/auth/Login';
 import MainPage from '@pages/main/MainPage';
 import ProjectEditor from '@pages/project-editor/ProjectEditor';
 import ProjectViewer from '@pages/project-viewer/ProjectViewer';
+
+
+import SignInPage from '@pages/signin/SignInPage';
+
 import AdminPage from '@pages/admin/AdminPage';
+
 
 const AppRoutes = () =>
   useRoutes([
@@ -24,8 +29,8 @@ const AppRoutes = () =>
               element: <SignUp />,
             },
             {
-              path: 'login',
-              element: <Login />,
+              path: 'signin',
+              element: <SignInPage />,
             },
           ],
         },
