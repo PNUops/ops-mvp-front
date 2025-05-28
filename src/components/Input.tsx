@@ -1,10 +1,11 @@
 import { InputHTMLAttributes } from 'react';
 
-type InputProps = InputHTMLAttributes<HTMLInputElement>;
-const Input = ({ ...props }: InputProps) => {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {}
+
+const Input = ({ className = '', ...props }: Props) => {
   return (
     <input
-      className="border-midGray focus:outline-mainGreen w-full rounded-lg border p-3 text-lg focus:outline-2"
+      className={`border-midGray focus:outline-mainGreen w-full rounded-lg border p-3 text-lg focus:outline-2 ${className}`}
       {...props}
     />
   );
