@@ -7,8 +7,8 @@ const SignInForm = () => {
       <Input placeholder="이메일" />
       <PasswordInput value="" setValue={() => {}} />
       <div className="h-2" />
-      <button className="rounded-lg bg-blue-500 p-3 text-lg font-bold text-white">로그인</button>
-      <button className="rounded-lg p-3 text-lg font-bold outline outline-gray-500">회원가입</button>
+      <button className="bg-mainBlue rounded-lg p-3 text-lg font-bold text-white">로그인</button>
+      <button className="border-midGray rounded-lg border p-3 text-lg font-bold">회원가입</button>
     </form>
   );
 };

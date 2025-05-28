@@ -4,7 +4,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement>;
 const Input = ({ ...props }: InputProps) => {
   return (
     <input
-      className="w-full rounded-lg p-3 text-lg outline outline-gray-500 focus:outline-2 focus:outline-green-500"
+      className="border-midGray focus:outline-mainGreen w-full rounded-lg border p-3 text-lg focus:outline-2"
       {...props}
     />
   );
