@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useTokenStore } from 'stores/useTokenStore';
 
 const base = import.meta.env.VITE_API_BASE_URL ?? '';
 
@@ -10,5 +11,16 @@ const apiClient = axios.create({
   },
   withCredentials: true,
 });
+
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = useTokenStore.getState().token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
 
 export default apiClient;
