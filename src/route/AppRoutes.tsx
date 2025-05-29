@@ -4,12 +4,12 @@ import MainLayout from '@layout/MainLayout';
 import FullContainer from '@layout/FullContainer';
 import FitContainer from '@layout/FitContainer';
 import MainPage from '@pages/main/MainPage';
-import ProjectEditor from '@pages/project-editor/ProjectEditor';
-import ProjectViewer from '@pages/project-viewer/ProjectViewer';
+import ProjectEditorPage from '@pages/project-editor/ProjectEditorPage';
+// import ProjectViewerPage from '@pages/project-viewer/ProjectViewerPage';
 import SignInPage from '@pages/signin/SignInPage';
 import SignUpPage from '@pages/signup/SignUpPage';
 import AdminPage from '@pages/admin/AdminPage';
-
+import ProjectViewerPage from '@pages/project-viewer/ProjectViewerPage';
 
 const AppRoutes = () =>
   useRoutes([
@@ -39,11 +39,11 @@ const AppRoutes = () =>
             },
             {
               path: 'view',
-              element: <ProjectViewer />,
+              element: <ProjectViewerPage />,
             },
             {
               path: 'edit',
-              element: <ProjectEditor />,
+              element: <ProjectEditorPage />,
             },
             {
               path: 'monitor',

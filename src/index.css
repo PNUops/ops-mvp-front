@@ -30,11 +30,11 @@
 
   --h-header: 104px;
   --h-sidebar: 1120px;
-  --h-footer: 470px;
+  --h-footer: 140px;
   --h-page: 3351px;
 
   --min-h-sidebar: 1120px;
-  --min-h-footer: 470px;
+  --min-h-footer: 100px;
   --min-h-header: 104px;
 }
 
