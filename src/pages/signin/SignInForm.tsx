@@ -5,6 +5,7 @@ import { postSignIn } from 'apis/signIn';
 import useAuth from 'hooks/useAuth';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isPNUEmail } from 'utils/email';
 
 const SignInForm = () => {
   const [email, setEmail] = useState('');
@@ -26,6 +27,16 @@ const SignInForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isPNUEmail(email)) {
+      alert('부산대 이메일이 아닙니다.');
+      return;
+    }
+
+    if (!password.trim()) {
+      alert('비밀번호가 비어 있습니다.');
+      return;
+    }
+
     signInMutation.mutate({ email, password });
   };
 
