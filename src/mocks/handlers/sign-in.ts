@@ -6,7 +6,7 @@ export const signInHandlers = [
   http.post('/api/sign-in', async ({ request }) => {
     const { email, password } = (await request.json()) as SignInRequestDto;
 
-    if (email === 'test@test.com' && password === 'test') {
+    if (email === 'test@pusan.ac.kr' && password === 'test') {
       return HttpResponse.json(mockSignInResponse);
     }
 
