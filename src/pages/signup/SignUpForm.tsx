@@ -20,7 +20,7 @@ const SignUpForm = () => {
       <EmailVerifyRow />
       <Spacer />
 
-      <PasswordRow value={name} setValue={setName} />
+      <PasswordRow value={password} setValue={setPassword} />
       <PasswordConfirmRow />
 
       <div className="col-span-3 mt-8 flex justify-end gap-4">
