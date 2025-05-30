@@ -3,10 +3,12 @@ import Input from '@components/Input';
 import PasswordInput from '@components/PasswordInput';
 import NameRow from './NameRow';
 import StudentNumberRow from './StudentNumberRow';
+import PasswordRow from './PasswordRow';
 
 const SignUpForm = () => {
   const [name, setName] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <form className="grid w-full grid-cols-[max-content_1fr_max-content] items-center gap-x-4 gap-y-6">
@@ -18,7 +20,7 @@ const SignUpForm = () => {
       <EmailVerifyRow />
       <Spacer />
 
-      <PasswordRow />
+      <PasswordRow value={name} setValue={setName} />
       <PasswordConfirmRow />
 
       <div className="col-span-3 mt-8 flex justify-end gap-4">
@@ -54,18 +56,7 @@ const EmailVerifyRow = () => {
     </>
   );
 };
-const PasswordRow = () => {
-  return (
-    <>
-      <label className="flex items-center gap-1">
-        <span className="text-mainRed">*</span>
-        <span className="text-midGray">비밀번호</span>
-      </label>
-      <PasswordInput value="" />
-      <div />
-    </>
-  );
-};
+
 const PasswordConfirmRow = () => {
   return (
     <>
