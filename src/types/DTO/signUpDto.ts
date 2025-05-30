@@ -8,3 +8,8 @@ export interface SignUpRequestDto {
 export interface EmailVerificationRequestDTO {
   email: string;
 }
+
+export interface EmailVerificationCodeRequestDTO {
+  email: string;
+  authCode: string;
+}
