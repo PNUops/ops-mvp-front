@@ -12,7 +12,13 @@ const StudentNumberRow = ({ value, setValue }: Props) => {
         <span className="text-mainRed">*</span>
         <span className="text-midGray">학번</span>
       </label>
-      <Input value={value} onChange={(e) => setValue(e.target.value)} />
+      <Input
+        value={value}
+        onChange={(e) => {
+          const input = e.target.value;
+          if (/^\d*$/.test(input)) setValue(input);
+        }}
+      />
       <div />
     </>
   );
