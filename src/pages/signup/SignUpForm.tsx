@@ -4,17 +4,16 @@ import StudentNumberRow from './StudentNumberRow';
 import PasswordRow from './PasswordRow';
 import PasswordConfirmRow from './PasswordConfirmRow';
 import EmailBlock from './EmailBlock';
+import { useSignUpFormState } from './useSignUpFormState';
 
 const SignUpForm = () => {
-  const [name, setName] = useState('');
-  const [studentNumber, setStudentNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const { formState, updateField, formError, validate } = useSignUpFormState();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (validate()) {
+      // TODO: 회원가입 api 호출
+    }
   };
 
   return (
@@ -22,20 +21,20 @@ const SignUpForm = () => {
       onSubmit={handleSubmit}
       className="grid w-full grid-cols-[max-content_1fr_max-content] items-center gap-x-4 gap-y-6"
     >
-      <NameRow value={name} setValue={setName} />
-      <StudentNumberRow value={studentNumber} setValue={setStudentNumber} />
+      <NameRow value={formState.name} setValue={(val) => updateField('name', val)} />
+      <StudentNumberRow value={formState.studentNumber} setValue={(val) => updateField('studentNumber', val)} />
       <Spacer />
 
       <EmailBlock
-        email={email}
-        setEmail={setEmail}
-        isEmailVerified={isEmailVerified}
-        setIsEmailVerified={setIsEmailVerified}
+        email={formState.email}
+        setEmail={(val) => updateField('email', val)}
+        isEmailVerified={formState.isEmailVerified}
+        setIsEmailVerified={(val) => updateField('isEmailVerified', val)}
       />
       <Spacer />
 
-      <PasswordRow value={password} setValue={setPassword} />
-      <PasswordConfirmRow value={passwordConfirm} setValue={setPasswordConfirm} />
+      <PasswordRow value={formState.password} setValue={(val) => updateField('password', val)} />
+      <PasswordConfirmRow value={formState.passwordConfirm} setValue={(val) => updateField('passwordConfirm', val)} />
 
       <div className="col-span-3 mt-8 flex justify-end gap-4">
         <button className="border-lightGray w-32 rounded-full border p-3">취소</button>
