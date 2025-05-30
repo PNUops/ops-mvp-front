@@ -10,7 +10,7 @@ const EmailVerifyRow = ({ value, setValue }: Props) => {
     <>
       <label />
       <Input placeholder="인증코드 입력" value={value} onChange={(e) => setValue(e.target.value)} />
-      <button className="border-lightGray rounded-lg border p-3 px-4">확인</button>
+      <button className="border-lightGray hover:bg-lightGray rounded-lg border p-3 px-4">확인</button>
     </>
   );
 };
