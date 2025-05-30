@@ -17,16 +17,10 @@ const EmailBlock = ({ email, setEmail, isEmailVerified, setIsEmailVerified }: Pr
   useEffect(() => {
     if (cooldown <= 0) return;
     const timer = setInterval(() => {
-      setCooldown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
+      setCooldown((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(timer);
-  }, [cooldown]);
+  }, [cooldown > 0]);
 
   const startCooldown = () => {
     setCooldown(EMAIL_VERIFY_COOLDOWN_SEC);
