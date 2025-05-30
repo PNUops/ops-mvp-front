@@ -13,7 +13,7 @@ const EmailBlock = ({ email, setEmail, isEmailVerified, setIsEmailVerified }: Pr
   const [isMailSent, setIsMailSent] = useState(false);
   return (
     <>
-      <EmailRow value={email} setValue={setEmail} isEmailVerified={isEmailVerified} setIsMailSent={setIsMailSent} />
+      <EmailRow email={email} setEmail={setEmail} isEmailVerified={isEmailVerified} setIsMailSent={setIsMailSent} />
       <EmailVerifyRow
         email={email}
         isEmailVerified={isEmailVerified}

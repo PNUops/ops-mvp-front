@@ -5,13 +5,13 @@ import { useEffect, useState } from 'react';
 import { isPNUEmail } from 'utils/email';
 
 interface Props {
-  value: string;
-  setValue: (value: string) => void;
+  email: string;
+  setEmail: (value: string) => void;
   isEmailVerified: boolean;
   setIsMailSent: (value: boolean) => void;
 }
 
-const EmailRow = ({ value: email, setValue: setEmail, isEmailVerified, setIsMailSent }: Props) => {
+const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent }: Props) => {
   const [isFirstSend, setIsFirstSend] = useState(true);
   const [isSendable, setIsSendable] = useState(true);
   const COOLDOWN_SEC = 30;
