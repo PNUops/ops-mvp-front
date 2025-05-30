@@ -7,9 +7,10 @@ interface Props {
   email: string;
   isEmailVerified: boolean;
   setIsEmailVerified: (value: boolean) => void;
+  isMailSent: boolean;
 }
 
-const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified }: Props) => {
+const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified, isMailSent }: Props) => {
   const [authCode, setAuthCode] = useState('');
 
   const mutation = useMutation({
@@ -24,6 +25,10 @@ const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified }: Props) =
   });
 
   const handleSendCode = () => {
+    if (!isMailSent) {
+      alert('인증코드 전송이 필요합니다.');
+      return;
+    }
     mutation.mutate({ email, authCode });
   };
 

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import EmailRow from './EmailRow';
 import EmailVerifyRow from './EmailVerifyRow';
 
@@ -9,10 +10,16 @@ interface Props {
 }
 
 const EmailBlock = ({ email, setEmail, isEmailVerified, setIsEmailVerified }: Props) => {
+  const [isMailSent, setIsMailSent] = useState(false);
   return (
     <>
-      <EmailRow value={email} setValue={setEmail} isEmailVerified={isEmailVerified} />
-      <EmailVerifyRow email={email} isEmailVerified={isEmailVerified} setIsEmailVerified={setIsEmailVerified} />
+      <EmailRow value={email} setValue={setEmail} isEmailVerified={isEmailVerified} setIsMailSent={setIsMailSent} />
+      <EmailVerifyRow
+        email={email}
+        isEmailVerified={isEmailVerified}
+        setIsEmailVerified={setIsEmailVerified}
+        isMailSent={isMailSent}
+      />
     </>
   );
 };
