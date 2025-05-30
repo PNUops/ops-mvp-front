@@ -4,10 +4,12 @@ import NameRow from './NameRow';
 import StudentNumberRow from './StudentNumberRow';
 import PasswordRow from './PasswordRow';
 import PasswordConfirmRow from './PasswordConfirmRow';
+import EmailRow from './EmailRow';
 
 const SignUpForm = () => {
   const [name, setName] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
@@ -17,7 +19,7 @@ const SignUpForm = () => {
       <StudentNumberRow value={studentNumber} setValue={setStudentNumber} />
       <Spacer />
 
-      <EmailRow />
+      <EmailRow value={email} setValue={setEmail} />
       <EmailVerifyRow />
       <Spacer />
 
@@ -34,19 +36,6 @@ const SignUpForm = () => {
 export default SignUpForm;
 
 const Spacer = () => <div className="col-span-3 h-2" aria-hidden="true" />;
-
-const EmailRow = () => {
-  return (
-    <>
-      <label className="flex items-center gap-1">
-        <span className="text-mainRed">*</span>
-        <span className="text-midGray">이메일</span>
-      </label>
-      <Input placeholder="@pusan.ac.kr" />
-      <button className="border-lightGray rounded-lg border p-3 px-4">인증코드 전송</button>
-    </>
-  );
-};
 
 const EmailVerifyRow = () => {
   return (
