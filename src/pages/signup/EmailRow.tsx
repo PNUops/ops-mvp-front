@@ -34,7 +34,11 @@ const EmailRow = ({ value: email, setValue: setEmail }: Props) => {
         <span className="text-midGray">이메일</span>
       </label>
       <Input placeholder="@pusan.ac.kr" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <button onClick={handleSendCode} className="border-lightGray hover:bg-lightGray rounded-lg border p-3 px-4">
+      <button
+        onClick={handleSendCode}
+        disabled={mutation.isPending}
+        className="border-lightGray hover:bg-lightGray rounded-lg border p-3 px-4"
+      >
         인증코드 전송
       </button>
     </>
