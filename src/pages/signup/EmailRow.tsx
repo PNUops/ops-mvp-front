@@ -9,9 +9,10 @@ interface Props {
   setEmail: (value: string) => void;
   isEmailVerified: boolean;
   setIsMailSent: (value: boolean) => void;
+  startCooldown: () => void;
 }
 
-const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent }: Props) => {
+const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldown }: Props) => {
   const [isFirstSend, setIsFirstSend] = useState(true);
   const [isSendable, setIsSendable] = useState(true);
   const COOLDOWN_SEC = 30;
@@ -21,6 +22,7 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent }: Props) =>
     onSuccess: () => {
       alert(`${email}로 인증 메일을 전송했어요`);
       setIsMailSent(true);
+      startCooldown();
     },
     onError: (error) => {
       alert(`인증 메일 전송에 실패했어요: ${error.message}`);

@@ -8,9 +8,11 @@ interface Props {
   isEmailVerified: boolean;
   setIsEmailVerified: (value: boolean) => void;
   isMailSent: boolean;
+  cooldown: number;
+  stopCooldown: () => void;
 }
 
-const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified, isMailSent }: Props) => {
+const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified, isMailSent, cooldown, stopCooldown }: Props) => {
   const [authCode, setAuthCode] = useState('');
 
   const mutation = useMutation({
@@ -18,6 +20,7 @@ const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified, isMailSent
     onSuccess: () => {
       alert(`이메일 인증에 성공했어요`);
       setIsEmailVerified(true);
+      stopCooldown();
     },
     onError: (error) => {
       alert(`이메일 인증에 실패했어요. ${error.message}`);
@@ -35,13 +38,18 @@ const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified, isMailSent
   return (
     <>
       <label />
-      <Input
-        disabled={isEmailVerified}
-        className="disabled:bg-whiteGray disabled:text-midGray"
-        placeholder="인증코드 입력"
-        value={authCode}
-        onChange={(e) => setAuthCode(e.target.value)}
-      />
+      <div className="relative">
+        <Input
+          disabled={isEmailVerified}
+          className="disabled:bg-whiteGray disabled:text-midGray"
+          placeholder="인증코드 입력"
+          value={authCode}
+          onChange={(e) => setAuthCode(e.target.value)}
+        />
+        {cooldown > 0 && (
+          <span className="text-mainRed absolute top-1/2 right-3 -translate-y-1/2 text-sm">{cooldown}</span>
+        )}
+      </div>
       <button
         onClick={handleSendCode}
         disabled={isEmailVerified}
