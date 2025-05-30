@@ -3,8 +3,7 @@ import NameRow from './NameRow';
 import StudentNumberRow from './StudentNumberRow';
 import PasswordRow from './PasswordRow';
 import PasswordConfirmRow from './PasswordConfirmRow';
-import EmailRow from './EmailRow';
-import EmailVerifyRow from './EmailVerifyRow';
+import EmailBlock from './EmailBlock';
 
 const SignUpForm = () => {
   const [name, setName] = useState('');
@@ -27,13 +26,12 @@ const SignUpForm = () => {
       <StudentNumberRow value={studentNumber} setValue={setStudentNumber} />
       <Spacer />
 
-      <EmailRow
-        value={email}
-        setValue={setEmail}
+      <EmailBlock
+        email={email}
+        setEmail={setEmail}
         isEmailVerified={isEmailVerified}
         setIsEmailVerified={setIsEmailVerified}
       />
-      <EmailVerifyRow email={email} isEmailVerified={isEmailVerified} setIsEmailVerified={setIsEmailVerified} />
       <Spacer />
 
       <PasswordRow value={password} setValue={setPassword} />
