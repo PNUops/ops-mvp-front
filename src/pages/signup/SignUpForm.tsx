@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import Input from '@components/Input';
-import PasswordInput from '@components/PasswordInput';
 import NameRow from './NameRow';
 import StudentNumberRow from './StudentNumberRow';
 import PasswordRow from './PasswordRow';
+import PasswordConfirmRow from './PasswordConfirmRow';
 
 const SignUpForm = () => {
   const [name, setName] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
 
   return (
     <form className="grid w-full grid-cols-[max-content_1fr_max-content] items-center gap-x-4 gap-y-6">
@@ -21,7 +22,7 @@ const SignUpForm = () => {
       <Spacer />
 
       <PasswordRow value={password} setValue={setPassword} />
-      <PasswordConfirmRow />
+      <PasswordConfirmRow value={passwordConfirm} setValue={setPasswordConfirm} />
 
       <div className="col-span-3 mt-8 flex justify-end gap-4">
         <button className="border-lightGray w-32 rounded-full border p-3">취소</button>
@@ -53,19 +54,6 @@ const EmailVerifyRow = () => {
       <label />
       <Input placeholder="인증코드 입력" />
       <button className="border-lightGray rounded-lg border p-3 px-4">확인</button>
-    </>
-  );
-};
-
-const PasswordConfirmRow = () => {
-  return (
-    <>
-      <label className="flex items-center gap-1">
-        <span className="text-mainRed">*</span>
-        <span className="text-midGray">비밀번호 확인</span>
-      </label>
-      <PasswordInput value="" placeholder="비밀번호 확인" />
-      <div />
     </>
   );
 };
