@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { EmailVerificationRequestDTO, SignUpRequestDto } from 'types/DTO';
+import { EmailVerificationCodeRequestDTO, EmailVerificationRequestDTO, SignUpRequestDto } from 'types/DTO';
 import { isPNUEmail } from 'utils/email';
 
 export const signUpHandlers = [
@@ -16,5 +16,12 @@ export const signUpHandlers = [
     if (!isPNUEmail(email)) return HttpResponse.json({ error: '유효하지 않은 이메일 형식' }, { status: 400 });
 
     return new HttpResponse(null, { status: 201 });
+  }),
+
+  http.patch('/api/sign-up/email-auth', async ({ request }) => {
+    const { email, authCode } = (await request.json()) as EmailVerificationCodeRequestDTO;
+    if (!isPNUEmail(email)) return HttpResponse.json({ error: '유효하지 않은 이메일 형식' }, { status: 400 });
+
+    return new HttpResponse(null, { status: 204 });
   }),
 ];
