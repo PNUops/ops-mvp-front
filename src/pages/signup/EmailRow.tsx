@@ -12,7 +12,7 @@ const EmailRow = ({ value, setValue }: Props) => {
         <span className="text-mainRed">*</span>
         <span className="text-midGray">이메일</span>
       </label>
-      <Input placeholder="@pusan.ac.kr" />
+      <Input placeholder="@pusan.ac.kr" value={value} onChange={(e) => setValue(e.target.value)} />
       <button className="border-lightGray rounded-lg border p-3 px-4">인증코드 전송</button>
     </>
   );
