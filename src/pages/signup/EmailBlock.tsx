@@ -11,12 +11,7 @@ interface Props {
 const EmailBlock = ({ email, setEmail, isEmailVerified, setIsEmailVerified }: Props) => {
   return (
     <>
-      <EmailRow
-        value={email}
-        setValue={setEmail}
-        isEmailVerified={isEmailVerified}
-        setIsEmailVerified={setIsEmailVerified}
-      />
+      <EmailRow value={email} setValue={setEmail} isEmailVerified={isEmailVerified} />
       <EmailVerifyRow email={email} isEmailVerified={isEmailVerified} setIsEmailVerified={setIsEmailVerified} />
     </>
   );

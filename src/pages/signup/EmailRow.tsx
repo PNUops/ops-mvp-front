@@ -8,10 +8,9 @@ interface Props {
   value: string;
   setValue: (value: string) => void;
   isEmailVerified: boolean;
-  setIsEmailVerified: (value: boolean) => void;
 }
 
-const EmailRow = ({ value: email, setValue: setEmail, isEmailVerified, setIsEmailVerified }: Props) => {
+const EmailRow = ({ value: email, setValue: setEmail, isEmailVerified }: Props) => {
   const [isFirstSend, setIsFirstSend] = useState(true);
   const [isSendable, setIsSendable] = useState(true);
   const COOLDOWN_SEC = 30;
