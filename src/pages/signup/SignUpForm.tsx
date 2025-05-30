@@ -4,46 +4,14 @@ import PasswordInput from '@components/PasswordInput';
 const SignUpForm = () => {
   return (
     <form className="grid w-full grid-cols-[max-content_1fr_max-content] items-center gap-x-4 gap-y-6">
-      <label className="flex items-center gap-1">
-        <span className="text-mainRed">*</span>
-        <span className="text-midGray">이름</span>
-      </label>
-      <Input />
-      <div />
-
-      <label className="flex items-center gap-1">
-        <span className="text-mainRed">*</span>
-        <span className="text-midGray">학번</span>
-      </label>
-      <Input />
-      <div />
+      <NameRow />
+      <StudentNumberRow />
       <Spacer />
-
-      <label className="flex items-center gap-1">
-        <span className="text-mainRed">*</span>
-        <span className="text-midGray">이메일</span>
-      </label>
-      <Input placeholder="@pusan.ac.kr" />
-      <button className="border-lightGray rounded-lg border p-3 px-4">인증코드 전송</button>
-
-      <label />
-      <Input placeholder="인증코드 입력" />
-      <button className="border-lightGray rounded-lg border p-3 px-4">확인</button>
+      <EmailRow />
+      <EmailVerifyRow />
       <Spacer />
-
-      <label className="flex items-center gap-1">
-        <span className="text-mainRed">*</span>
-        <span className="text-midGray">비밀번호</span>
-      </label>
-      <PasswordInput value="" setValue={() => {}} />
-      <div />
-
-      <label className="flex items-center gap-1">
-        <span className="text-mainRed">*</span>
-        <span className="text-midGray">비밀번호 확인</span>
-      </label>
-      <PasswordInput value="" setValue={() => {}} placeholder="비밀번호 확인" />
-      <div />
+      <PasswordRow />
+      <PasswordConfirmRow />
 
       <div className="col-span-3 mt-8 flex justify-end gap-4">
         <button className="border-lightGray w-32 rounded-full border p-3">취소</button>
@@ -55,3 +23,74 @@ const SignUpForm = () => {
 export default SignUpForm;
 
 const Spacer = () => <div className="col-span-3 h-2" aria-hidden="true" />;
+
+const NameRow = () => {
+  return (
+    <>
+      <label className="flex items-center gap-1">
+        <span className="text-mainRed">*</span>
+        <span className="text-midGray">이름</span>
+      </label>
+      <Input />
+      <div />
+    </>
+  );
+};
+const StudentNumberRow = () => {
+  return (
+    <>
+      <label className="flex items-center gap-1">
+        <span className="text-mainRed">*</span>
+        <span className="text-midGray">학번</span>
+      </label>
+      <Input />
+      <div />
+    </>
+  );
+};
+const EmailRow = () => {
+  return (
+    <>
+      <label className="flex items-center gap-1">
+        <span className="text-mainRed">*</span>
+        <span className="text-midGray">이메일</span>
+      </label>
+      <Input placeholder="@pusan.ac.kr" />
+      <button className="border-lightGray rounded-lg border p-3 px-4">인증코드 전송</button>
+    </>
+  );
+};
+
+const EmailVerifyRow = () => {
+  return (
+    <>
+      <label />
+      <Input placeholder="인증코드 입력" />
+      <button className="border-lightGray rounded-lg border p-3 px-4">확인</button>
+    </>
+  );
+};
+const PasswordRow = () => {
+  return (
+    <>
+      <label className="flex items-center gap-1">
+        <span className="text-mainRed">*</span>
+        <span className="text-midGray">비밀번호</span>
+      </label>
+      <PasswordInput value="" />
+      <div />
+    </>
+  );
+};
+const PasswordConfirmRow = () => {
+  return (
+    <>
+      <label className="flex items-center gap-1">
+        <span className="text-mainRed">*</span>
+        <span className="text-midGray">비밀번호 확인</span>
+      </label>
+      <PasswordInput value="" placeholder="비밀번호 확인" />
+      <div />
+    </>
+  );
+};
