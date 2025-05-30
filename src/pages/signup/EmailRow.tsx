@@ -7,9 +7,11 @@ import { isPNUEmail } from 'utils/email';
 interface Props {
   value: string;
   setValue: (value: string) => void;
+  isEmailVerified: boolean;
+  setIsEmailVerified: (value: boolean) => void;
 }
 
-const EmailRow = ({ value: email, setValue: setEmail }: Props) => {
+const EmailRow = ({ value: email, setValue: setEmail, isEmailVerified, setIsEmailVerified }: Props) => {
   const [isFirstSend, setIsFirstSend] = useState(true);
   const [isSendable, setIsSendable] = useState(true);
   const COOLDOWN_SEC = 30;
@@ -48,10 +50,16 @@ const EmailRow = ({ value: email, setValue: setEmail }: Props) => {
         <span className="text-mainRed">*</span>
         <span className="text-midGray">이메일</span>
       </label>
-      <Input placeholder="example@pusan.ac.kr" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <Input
+        disabled={isEmailVerified}
+        className="disabled:bg-whiteGray disabled:text-midGray"
+        placeholder="example@pusan.ac.kr"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
       <button
         onClick={handleSendCode}
-        disabled={mutation.isPending}
+        disabled={mutation.isPending || isEmailVerified}
         className="border-lightGray hover:bg-lightGray rounded-lg border p-3 px-4"
       >
         {isFirstSend ? '인증코드 전송' : '재전송'}

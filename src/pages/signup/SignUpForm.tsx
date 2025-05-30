@@ -27,7 +27,12 @@ const SignUpForm = () => {
       <StudentNumberRow value={studentNumber} setValue={setStudentNumber} />
       <Spacer />
 
-      <EmailRow value={email} setValue={setEmail} />
+      <EmailRow
+        value={email}
+        setValue={setEmail}
+        isEmailVerified={isEmailVerified}
+        setIsEmailVerified={setIsEmailVerified}
+      />
       <EmailVerifyRow email={email} isEmailVerified={isEmailVerified} setIsEmailVerified={setIsEmailVerified} />
       <Spacer />
 

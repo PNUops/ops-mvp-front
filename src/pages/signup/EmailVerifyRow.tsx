@@ -32,6 +32,7 @@ const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified }: Props) =
       <label />
       <Input
         disabled={isEmailVerified}
+        className="disabled:bg-whiteGray disabled:text-midGray"
         placeholder="인증코드 입력"
         value={authCode}
         onChange={(e) => setAuthCode(e.target.value)}
