@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import Input from '@components/Input';
 import NameRow from './NameRow';
 import StudentNumberRow from './StudentNumberRow';
 import PasswordRow from './PasswordRow';
 import PasswordConfirmRow from './PasswordConfirmRow';
 import EmailRow from './EmailRow';
+import EmailVerifyRow from './EmailVerifyRow';
 
 const SignUpForm = () => {
   const [name, setName] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
   const [email, setEmail] = useState('');
+  const [emailVerifyCode, setEmailVerifyCode] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
@@ -20,7 +21,7 @@ const SignUpForm = () => {
       <Spacer />
 
       <EmailRow value={email} setValue={setEmail} />
-      <EmailVerifyRow />
+      <EmailVerifyRow value={emailVerifyCode} setValue={setEmailVerifyCode} />
       <Spacer />
 
       <PasswordRow value={password} setValue={setPassword} />
@@ -36,13 +37,3 @@ const SignUpForm = () => {
 export default SignUpForm;
 
 const Spacer = () => <div className="col-span-3 h-2" aria-hidden="true" />;
-
-const EmailVerifyRow = () => {
-  return (
-    <>
-      <label />
-      <Input placeholder="인증코드 입력" />
-      <button className="border-lightGray rounded-lg border p-3 px-4">확인</button>
-    </>
-  );
-};
