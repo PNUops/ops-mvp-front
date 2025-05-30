@@ -1,15 +1,20 @@
 import Input from '@components/Input';
 import PasswordInput from '@components/PasswordInput';
+import NameRow from './NameRow';
+import { useState } from 'react';
 
 const SignUpForm = () => {
+  const [name, setName] = useState('');
   return (
     <form className="grid w-full grid-cols-[max-content_1fr_max-content] items-center gap-x-4 gap-y-6">
-      <NameRow />
+      <NameRow value={name} setValue={setName} />
       <StudentNumberRow />
       <Spacer />
+
       <EmailRow />
       <EmailVerifyRow />
       <Spacer />
+
       <PasswordRow />
       <PasswordConfirmRow />
 
@@ -24,18 +29,6 @@ export default SignUpForm;
 
 const Spacer = () => <div className="col-span-3 h-2" aria-hidden="true" />;
 
-const NameRow = () => {
-  return (
-    <>
-      <label className="flex items-center gap-1">
-        <span className="text-mainRed">*</span>
-        <span className="text-midGray">이름</span>
-      </label>
-      <Input />
-      <div />
-    </>
-  );
-};
 const StudentNumberRow = () => {
   return (
     <>
