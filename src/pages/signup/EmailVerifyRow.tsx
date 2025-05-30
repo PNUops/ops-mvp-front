@@ -54,6 +54,7 @@ const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified, isMailSent
         )}
       </div>
       <button
+        type="button"
         onClick={handleSendCode}
         disabled={isEmailVerified}
         className="border-lightGray hover:bg-lightGray rounded-lg border p-3 px-4"

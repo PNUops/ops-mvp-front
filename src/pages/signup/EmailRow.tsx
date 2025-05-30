@@ -1,7 +1,7 @@
 import Input from '@components/Input';
 import { useMutation } from '@tanstack/react-query';
 import { postEmailVerification } from 'apis/signUp';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { isPNUEmail } from 'utils/email';
 
 interface Props {
@@ -61,6 +61,7 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldo
         onChange={(e) => setEmail(e.target.value)}
       />
       <button
+        type="button"
         onClick={handleSendCode}
         disabled={mutation.isPending || isEmailVerified}
         className="border-lightGray hover:bg-lightGray rounded-lg border p-3 px-4"
