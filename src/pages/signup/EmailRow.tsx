@@ -32,7 +32,7 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldo
 
   const handleSendCode = () => {
     if (!isPNUEmail(email)) {
-      alert('부산대학교 이메일(@pusan.ac.kr)만 사용할 수 있습니다.');
+      alert('부산대학교 이메일(@pusan.ac.kr)이 아닙니다.');
       return;
     }
     if (!isSendable) {

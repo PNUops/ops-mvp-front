@@ -35,7 +35,7 @@ export const useSignUpFormState = () => {
     const errors: SignUpFormError = {};
     if (!formState.name.trim()) errors.name = '이름을 입력해주세요.';
     if (!formState.studentNumber.trim()) errors.studentNumber = '학번을 입력해주세요.';
-    if (!isPNUEmail(formState.email)) errors.email = '부산대학교 이메일(@pusan.ac.kr)만 사용할 수 있습니다.';
+    if (!isPNUEmail(formState.email)) errors.email = '부산대학교 이메일(@pusan.ac.kr)이 아닙니다.';
     else if (!formState.isEmailVerified) errors.email = '이메일 인증이 필요합니다.';
     if (!formState.password) errors.password = '비밀번호는 대문자 포함 00자 이상이어야 합니다.'; // TODO: 비밀번호 규칙 검증
     if (formState.password !== formState.passwordConfirm) errors.passwordConfirm = '비밀번호가 일치하지 않아요.';
