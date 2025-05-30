@@ -2,6 +2,7 @@ import Input from '@components/Input';
 import { useMutation } from '@tanstack/react-query';
 import { patchEmailVerificationCode } from 'apis/signUp';
 import { useState } from 'react';
+import { formatToMMSS } from 'utils/time';
 
 interface Props {
   email: string;
@@ -47,7 +48,9 @@ const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified, isMailSent
           onChange={(e) => setAuthCode(e.target.value)}
         />
         {cooldown > 0 && (
-          <span className="text-mainRed absolute top-1/2 right-3 -translate-y-1/2 text-sm">{cooldown}</span>
+          <span className="text-mainRed absolute top-1/2 right-3 -translate-y-1/2 text-sm">
+            {formatToMMSS(cooldown)}
+          </span>
         )}
       </div>
       <button
