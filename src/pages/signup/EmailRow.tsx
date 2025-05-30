@@ -48,7 +48,7 @@ const EmailRow = ({ value: email, setValue: setEmail }: Props) => {
         <span className="text-mainRed">*</span>
         <span className="text-midGray">이메일</span>
       </label>
-      <Input placeholder="@pusan.ac.kr" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <Input placeholder="example@pusan.ac.kr" value={email} onChange={(e) => setEmail(e.target.value)} />
       <button
         onClick={handleSendCode}
         disabled={mutation.isPending}
