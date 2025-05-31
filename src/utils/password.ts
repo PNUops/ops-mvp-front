@@ -6,15 +6,13 @@
  */
 export const isValidPassword = (password: string) => {
   const lengthRegex = /^.{8,16}$/;
-  const upperCaseRegex = /[A-Z]/;
-  const lowerCaseRegex = /[a-z]/;
+  const alphabetRegex = /[A-Za-z]/;
   const numberRegex = /[0-9]/;
   const specialCharRegex = /[^A-Za-z0-9]/;
 
   return (
     lengthRegex.test(password) &&
-    upperCaseRegex.test(password) &&
-    lowerCaseRegex.test(password) &&
+    alphabetRegex.test(password) &&
     numberRegex.test(password) &&
     specialCharRegex.test(password)
   );
