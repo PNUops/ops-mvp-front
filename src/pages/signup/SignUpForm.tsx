@@ -4,14 +4,34 @@ import PasswordRow from './PasswordRow';
 import PasswordConfirmRow from './PasswordConfirmRow';
 import EmailBlock from './EmailBlock';
 import { useSignUpFormState } from './useSignUpFormState';
+import { useMutation } from '@tanstack/react-query';
+import { postSignUp } from 'apis/signUp';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpForm = () => {
-  const { formState, updateField, formError, validate } = useSignUpFormState(); // TODO: formError 전달하여 에러 상태 표시
+  const { formState, updateField, formError, validate } = useSignUpFormState();
+  const navigate = useNavigate();
+
+  const mutation = useMutation({
+    mutationFn: postSignUp,
+    onSuccess: (data) => {
+      alert(`회원가입이 완료되었어요.`);
+      navigate('/signin'); // TODO: 회원가입 완료 시 자동 로그인
+    },
+    onError: (error) => {
+      alert(`회원가입에 실패했어요. ${error.message}`);
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validate()) {
-      // TODO: 회원가입 api 호출
+      mutation.mutate({
+        name: formState.name,
+        studentId: formState.studentNumber,
+        email: formState.email,
+        password: formState.password,
+      });
     }
   };
 
