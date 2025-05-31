@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { isPNUEmail } from 'utils/email';
+import { isValidPassword } from 'utils/password';
 
 interface SignUpFormState {
   name: string;
@@ -37,7 +38,8 @@ export const useSignUpFormState = () => {
     if (!formState.studentNumber.trim()) errors.studentNumber = '학번을 입력해주세요.';
     if (!isPNUEmail(formState.email)) errors.email = '부산대학교 이메일(@pusan.ac.kr)이 아닙니다.';
     else if (!formState.isEmailVerified) errors.email = '이메일 인증이 필요합니다.';
-    if (!formState.password) errors.password = '비밀번호는 대문자 포함 00자 이상이어야 합니다.'; // TODO: 비밀번호 규칙 검증
+    if (!isValidPassword(formState.password))
+      errors.password = '비밀번호는 8~16자, 영어, 숫자, 특수문자를 포함하여 구성되어야 합니다.';
     if (formState.password !== formState.passwordConfirm) errors.passwordConfirm = '비밀번호가 일치하지 않아요.';
     return errors;
   };
