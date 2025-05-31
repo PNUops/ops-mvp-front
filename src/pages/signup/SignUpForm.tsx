@@ -69,7 +69,7 @@ const SignUpForm = () => {
       />
 
       <div className="col-span-3 mt-8 flex justify-end gap-4">
-        <button type="button" className="border-lightGray w-32 rounded-full border p-3">
+        <button type="button" onClick={() => navigate(-1)} className="border-lightGray w-32 rounded-full border p-3">
           취소
         </button>
         <button type="submit" className="bg-lightGray w-32 rounded-full p-3">
