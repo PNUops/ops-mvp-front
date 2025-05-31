@@ -14,22 +14,22 @@ import ProjectViewerPage from '@pages/project-viewer/ProjectViewerPage';
 const AppRoutes = () =>
   useRoutes([
     {
+      element: <FullContainer />,
+      children: [
+        {
+          path: '/signin',
+          element: <SignInPage />,
+        },
+        {
+          path: '/signup',
+          element: <SignUpPage />,
+        },
+      ],
+    },
+    {
       path: '/',
       element: <MainLayout />,
       children: [
-        {
-          element: <FullContainer />,
-          children: [
-            {
-              path: 'signup',
-              element: <SignUpPage />,
-            },
-            {
-              path: 'signin',
-              element: <SignInPage />,
-            },
-          ],
-        },
         {
           element: <FitContainer />,
           children: [

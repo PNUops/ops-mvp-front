@@ -1,10 +1,12 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Header from './Header';
 
 const FullContainer = () => {
   return (
-    <div className="flex min-h-screen w-full justify-center pt-10 sm:pt-16">
-      <div className="mt-header mb-20 w-full max-w-[1448px] px-2 2xl:px-0">
+    <div className="flex min-h-screen w-full flex-col items-center">
+      <Header />
+      <div className="w-full max-w-[1448px] flex-1 px-2 pb-20 2xl:px-0">
         <Outlet />
       </div>
     </div>
