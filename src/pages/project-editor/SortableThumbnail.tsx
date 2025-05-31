@@ -23,7 +23,7 @@ const SortableThumbnail: React.FC<SortableThumbnailProps> = ({ file, index, onRe
       style={style}
       {...attributes}
       {...listeners}
-      className="relative flex h-[120px] w-full items-center justify-center overflow-hidden rounded border text-xs text-gray-400"
+      className="border-lightGray relative flex h-[120px] w-full items-center justify-center overflow-hidden rounded border text-xs text-gray-400"
     >
       {file ? (
         <>
