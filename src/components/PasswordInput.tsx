@@ -3,10 +3,9 @@ import { InputHTMLAttributes, useState } from 'react';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
-  setValue: (value: string) => void;
 }
 
-const PasswordInput = ({ value, setValue, ...rest }: Props) => {
+const PasswordInput = ({ value, ...rest }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
