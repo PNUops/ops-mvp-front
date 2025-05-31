@@ -10,9 +10,10 @@ interface Props {
   isEmailVerified: boolean;
   setIsMailSent: (value: boolean) => void;
   startCooldown: () => void;
+  error?: string;
 }
 
-const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldown }: Props) => {
+const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldown, error }: Props) => {
   const [isFirstSend, setIsFirstSend] = useState(true);
   const [isSendable, setIsSendable] = useState(true);
   const COOLDOWN_SEC = 30;
@@ -53,13 +54,16 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldo
         <span className="text-mainRed">*</span>
         <span className="text-midGray">이메일</span>
       </label>
-      <Input
-        disabled={isEmailVerified}
-        className="disabled:bg-whiteGray disabled:text-midGray"
-        placeholder="example@pusan.ac.kr"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <div>
+        <Input
+          disabled={isEmailVerified}
+          className="disabled:bg-whiteGray disabled:text-midGray"
+          placeholder="example@pusan.ac.kr"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <p className="text-mainRed mt-1">{error}</p>
+      </div>
       <button
         type="button"
         onClick={handleSendCode}
