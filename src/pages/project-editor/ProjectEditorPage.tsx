@@ -6,36 +6,15 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { project_view } from '@mocks/data/viewer';
-import MembersInput from './MembersInput';
 
-const MAX_TEAM_MEMBERS = 6;
 const MAX_IMAGES = 6;
 const MAX_OVERVIEW = 400;
 
 const ProjectEditorPage = () => {
-  const [members, setMembers] = useState<string[]>(['']);
+  const { projectName, teamName, leaderName, participants } = project_view;
   const [overview, setOverview] = useState('');
   const [thumbnails, setThumbnails] = useState<File[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleMemberChange = (index: number, name: string) => {
-    const updatedMembers = [...members];
-    updatedMembers[index] = name;
-    setMembers(updatedMembers);
-  };
-
-  const handleMemberAdd = (name: string) => {
-    if (members.length < MAX_TEAM_MEMBERS) {
-      setMembers([...members, name]);
-    } else {
-      alert(`최대 추가할 수 있는 팀원 {MAX_TEAM_MEMBERS}명을 초과하였습니다.`);
-    }
-  };
-
-  const handleMemberRemove = (index: number) => {
-    const remainingMembers = members.filter((_, i) => i !== index);
-    setMembers(remainingMembers);
-  };
 
   const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -87,30 +66,22 @@ const ProjectEditorPage = () => {
       <div className="text-title font-bold">프로젝트 생성</div>
       <div className="h-10" />
       <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25 flex-col gap-1 pl-3">
+        <div className="text-midGray flex w-25 flex-col gap-3 pl-3">
           <span>프로젝트</span>
           <span>팀명</span>
           <span>팀장</span>
-        </div>
-        <div className="flex flex-col gap-1">
-          <span>{project_view.projectName}</span>
-          <span>{project_view.teamName}</span>
-          <span>{project_view.leaderName}</span>
-        </div>
-      </div>
-      <div className="h-15" />
-      <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25">
-          <span className="mr-1 text-red-500">*</span>
           <span>팀원</span>
         </div>
-        <MembersInput
-          memberList={members}
-          onMemberChange={handleMemberChange}
-          onMemberAdd={handleMemberAdd}
-          onMemberRemove={handleMemberRemove}
-          max={MAX_TEAM_MEMBERS}
-        />
+        <div className="flex flex-col gap-3">
+          <span>{projectName}</span>
+          <span>{teamName}</span>
+          <span>{leaderName}</span>
+          <div className="flex flex-wrap gap-x-3">
+            {participants.map((name, index) => (
+              <span key={index}>{name}</span>
+            ))}
+          </div>
+        </div>
       </div>
       <div className="h-15" />
       <div className="flex gap-10 text-sm">
@@ -155,7 +126,7 @@ const ProjectEditorPage = () => {
               Drag & Drop images here.
             </p>
             <p className="text-midGray my-2">OR</p>
-            <label className="text-mainGreen w-[50%] cursor-pointer rounded-full bg-[#D1F3E1] px-5 py-4 text-sm font-bold">
+            <label className="text-mainGreen cursor-pointer rounded-full bg-[#D1F3E1] px-15 py-4 text-sm font-bold">
               파일 업로드
               <input type="file" accept="image/*" multiple className="hidden" onChange={handleThumbnailUpload} />
             </label>
