@@ -4,14 +4,14 @@ import nolike from "@assets/nolike.svg"
 /*
 * 썸네일과 좋아요는 null 예외 처리
 * */
-type OneCardProps = {
+interface OneCardProps {
     thumbnail? : string;
     title : string;
     teamName : string;
     isLiked?: boolean;
 };
 
-const OneCard = ({thumbnail, title, teamName, isLiked = false}: OneCardProps) => {
+const TeamCard = ({thumbnail, title, teamName, isLiked = false}: OneCardProps) => {
 return (
     <section aria-labelledby="oneCard"
              className="w-[250px] overflow-hidden rounded-xl border border-gray-200 shadow-sm">
@@ -35,4 +35,4 @@ return (
 );
 };
 
-export default OneCard;
+export default TeamCard;
