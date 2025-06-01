@@ -1,8 +1,9 @@
 import { BiError } from "react-icons/bi";
+// TODO: lucide-react 써서 말풍선 모양 구현하기
 
-type LeaderProps = {
+interface LeaderProps {
     leaderName : string;
-};
+}
 
 const LeaderMessage = ({ leaderName } : LeaderProps) => {
     return(

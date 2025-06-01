@@ -9,7 +9,7 @@ interface OneCardProps {
     title : string;
     teamName : string;
     isLiked?: boolean;
-};
+}
 
 const TeamCard = ({thumbnail, title, teamName, isLiked = false}: OneCardProps) => {
 return (
@@ -22,12 +22,12 @@ return (
         <img src={thumbnail} alt="썸네일" className="w-full h-full object-cover" />
       </div>
     ) : (
-      <div className="w-full aspect-[5/3] flex items-center justify-center bg-lightGray text-middleGray text-sm">썸네일</div>
+      <div className="w-full aspect-[5/3] flex items-center justify-center bg-lightGray text-midGray text-sm">썸네일</div>
     )}
 
     <div className="relative p-4 flex-grow flex flex-col justify-between">
       <div className="text-sm font-semibold text-black">{title}</div>
-      <div className="text-base text-gray-500">{teamName}</div>
+      <div className="text-base text-midGray">{teamName}</div>
 
       <div className="absolute right-4 bottom-4 text-gray-300">
         {isLiked ? <FaHeart color="red" size={24}/> : <FaHeart color="lightGray" size={24}/>}

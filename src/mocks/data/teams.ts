@@ -9,3 +9,24 @@ export const mockTeamDetail = {
   isLiked: true,
   viewCount: 1523,
 };
+
+export const mockTeamsMain = [
+  {
+    teamId: 1,
+    teamName: "team1",
+    projectName: "team1 Project",
+    isLiked: false,
+  },
+  {
+    teamId: 2,
+    teamName: "team2",
+    projectName: "team2 Project",
+    isLiked: true,
+  },
+  {
+    teamId: 3,
+    teamName: "PNU OPS",
+    projectName: "OPs Bakery",
+    isLiked: true,
+  },
+]
