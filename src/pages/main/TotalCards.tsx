@@ -9,7 +9,6 @@ import { decodeJwt } from "jose";
 
 
 const TotalCards = () => {
-    console.log("🎯 TotalCards 함수 시작됨");
     const [teams, setTeams] = useState([]);
     const [isLeaderAndNotSubmitted, setCondition] = useState(false);
     const token = useTokenStore((state)=> state.token);
