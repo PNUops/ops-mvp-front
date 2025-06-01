@@ -1,6 +1,7 @@
 import {mockTeamDetail} from "@mocks/data/teams";
 import TeamCard from "@pages/main/TeamCard";
 import LeaderMessage from "@pages/main/LeaderMessage";
+import {project_view} from "@mocks/data/viewer";
 
 const TotalCards = () => {
     return (
@@ -17,9 +18,9 @@ const TotalCards = () => {
                     teamName= "방가요"
                     isLiked={true}/>
                 <TeamCard
-                    title = {mockTeamDetail.name}
-                    teamName= {mockTeamDetail.description}
-                    isLiked={mockTeamDetail.isLiked}/>
+                    title = {project_view.projectName}
+                    teamName= {project_view.teamName}
+                    isLiked={project_view.isLiked}/>
                 <TeamCard
                     title = "하이요"
                     teamName= "방가방가"/>
