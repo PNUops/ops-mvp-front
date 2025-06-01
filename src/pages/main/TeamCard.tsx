@@ -1,5 +1,5 @@
-import like from "@assets/like.svg"
-import nolike from "@assets/nolike.svg"
+
+import { FaHeart } from "react-icons/fa";
 
 /*
 * 썸네일과 좋아요는 null 예외 처리
@@ -30,7 +30,7 @@ return (
       <div className="text-base text-gray-500">{teamName}</div>
 
       <div className="absolute right-4 bottom-4 text-gray-300">
-        {isLiked ? <img src={like} alt="좋아요 투표" /> : <img src={nolike} alt="좋아요 투표 안함" />}
+        {isLiked ? <FaHeart color="red" size={24}/> : <FaHeart color="lightGray" size={24}/>}
       </div>
     </div>
   </section>
