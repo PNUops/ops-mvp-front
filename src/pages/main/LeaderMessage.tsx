@@ -6,6 +6,7 @@ interface LeaderProps {
 }
 
 const LeaderMessage = ({ leaderName } : LeaderProps) => {
+    console.log("👀 LeaderMessage 렌더링됨");
     return(
         <div className="relative ml-2 rounded-lg px-4 py-2 text-base text-mainGreen shadow-sm border border-green-200">
             <span className="flex items-center gap-1">

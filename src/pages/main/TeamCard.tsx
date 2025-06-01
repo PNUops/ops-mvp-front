@@ -1,6 +1,7 @@
 
 import { FaHeart } from "react-icons/fa";
 import {useState} from "react";
+import { useNavigate} from "react-router-dom";
 
 /*
 * 썸네일과 좋아요는 null or defined 예외 처리
