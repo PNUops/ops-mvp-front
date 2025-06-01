@@ -4,6 +4,7 @@ import LeaderMessage from "@pages/main/LeaderMessage";
 import {mockSignInResponse} from "@mocks/data/sign-in";
 import {useEffect, useState} from "react";
 import {fetchAllTeams} from "../../apis/main";
+import {team_thumbnail} from "@mocks/data/viewer";
 
 const TotalCards = () => {
     const [teams, setTeams] = useState([]);
@@ -26,6 +27,9 @@ const TotalCards = () => {
                             title={team.projectName}
                             teamName={team.teamName}
                             isLiked={team.isLiked}
+                            //thumbnail={`${import.meta.env.VITE_API_URL}/teams/${team.teamId}/thumbnail`}
+                            // Todo: 실제 api 연동할 때는 위 코드로
+                            thumbnail={team.thumbnail}
                         />
                     )
 
