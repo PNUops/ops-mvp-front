@@ -19,7 +19,7 @@
   --spacing-sidebar: 280px;
   --spacing-container: 1448px;
   --spacing-header: 104px;
-  --spacing-footer: 470px;
+  --spacing-footer: 250px;
 
   --w-sidebar: 280px;
   --w-container: 1448px;
@@ -30,11 +30,11 @@
 
   --h-header: 104px;
   --h-sidebar: 1120px;
-  --h-footer: 470px;
+  --h-footer: 140px;
   --h-page: 3351px;
 
   --min-h-sidebar: 1120px;
-  --min-h-footer: 470px;
+  --min-h-footer: 100px;
   --min-h-header: 104px;
 }
 

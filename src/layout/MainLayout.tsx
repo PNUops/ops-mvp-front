@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Header from './Header';
-import Sidebar from './Sidebar';
 import Footer from './Footer';
+import Sidebar from './Sidebar';
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <Sidebar />
-      <Outlet />
+      <div className="flex flex-1">
+        <div className="hidden lg:block">
+          <Sidebar />
+        </div>
+        <div className="flex-1">
+          <Outlet />
+        </div>
+      </div>
       <Footer />
     </div>
   );
