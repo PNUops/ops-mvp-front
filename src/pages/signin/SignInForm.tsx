@@ -28,7 +28,7 @@ const SignInForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isPNUEmail(email)) {
-      alert('부산대 이메일이 아닙니다.');
+      alert('부산대학교 이메일(@pusan.ac.kr)이 아닙니다.');
       return;
     }
 
