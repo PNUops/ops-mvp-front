@@ -1,7 +1,7 @@
 import { MemberType } from './MemberType';
 
 export type User = {
-  sub: number; // userId
+  id: number;
   name: string;
   roles: MemberType[];
 };

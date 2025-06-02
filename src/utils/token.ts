@@ -31,7 +31,8 @@ export const getUserFromToken = (token: string): User | null => {
     if (parts.length !== 3) throw new Error('Invalid JWT format');
 
     const payload = base64UrlDecode(parts[1]);
-    return JSON.parse(payload) as User;
+    const parsed = JSON.parse(payload);
+    return { id: parsed.sub, name: parsed.name, roles: parsed.roles } as User;
   } catch (error) {
     console.error('Failed to decode token', error);
     return null;
