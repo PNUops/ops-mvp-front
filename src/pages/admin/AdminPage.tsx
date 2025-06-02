@@ -3,6 +3,7 @@ import VoteRate from '@pages/admin/VoteRate';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { getDashboard, getRanking } from 'apis/admin';
+
 interface DashboardSubmission {
   teamId: number;
   teamName: string;
@@ -53,4 +54,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-
