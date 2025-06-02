@@ -25,7 +25,7 @@ const Carousel = () => {
       </button>
 
       <div className="flex flex-col">
-        <div className="border-midGray relative aspect-[3/2] max-h-[400px] w-full overflow-hidden rounded border">
+        <div className="border-midGray relative aspect-[3/2] w-full max-w-[600px] overflow-hidden rounded border">
           <img src={images[currentIndex].imageId} alt="Project image" className="h-full w-full object-cover" />
         </div>
         <div className="mt-4 flex justify-center gap-3 px-3">
