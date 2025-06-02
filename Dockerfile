@@ -1,5 +1,5 @@
 FROM node:22-slim AS builder
-ENV NODE_OPTIONS=--max_old_space_size=256
+ENV NODE_OPTIONS=--max_old_space_size=128
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
