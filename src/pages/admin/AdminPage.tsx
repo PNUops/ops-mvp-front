@@ -26,6 +26,10 @@ const AdminPage = () => {
     queryKey: ['ranking'],
     queryFn: getRanking,
   });
+  const sortedRankingData = useMemo(
+    () => [...(rankingData ?? [])].sort((a, b) => (b.likeCount ?? 0) - (a.likeCount ?? 0)),
+    [rankingData],
+  );
   if (isDashboardLoading || isRankingLoading) {
     return <p className="text-center text-gray-400">로딩 중...</p>;
   }
@@ -36,11 +40,6 @@ const AdminPage = () => {
       </div>
     );
   }
-
-  const sortedRankingData = useMemo(
-    () => [...(rankingData ?? [])].sort((a, b) => (b.likeCount ?? 0) - (a.likeCount ?? 0)),
-    [rankingData],
-  );
 
   return (
     <div className="max-w-container flex flex-col gap-12 p-8">
