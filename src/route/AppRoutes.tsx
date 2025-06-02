@@ -18,9 +18,9 @@ const AppRoutes = () =>
         { index: true, element: <MainPage /> },
         { path: 'signin', element: <SignInPage /> },
         { path: 'signup', element: <SignUpPage /> },
-        { path: 'view', element: <ProjectViewerPage /> },
-        { path: 'edit', element: <ProjectEditorPage /> },
-        { path: 'monitor', element: <AdminPage /> },
+        { path: 'teams/view/:teamId', element: <ProjectViewerPage /> },
+        { path: 'teams/edit/:teamId', element: <ProjectEditorPage /> },
+        { path: 'admin', element: <AdminPage /> },
       ],
     },
   ]);
