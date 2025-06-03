@@ -27,7 +27,7 @@ const ProjectViewerPage = () => {
 
   return (
     <div>
-      <IntroSection projectName={data.projectName} teamName={data.teamName} />
+      <IntroSection teamId={data.teamId} leaderId={data.leaderId} projectName={data.projectName} teamName={data.teamName} />
       <div className="h-10" />
       <CarouselSection teamId={data.teamId} previewIds={data.previewIds} />
       <div className="h-10" />
