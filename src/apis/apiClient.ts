@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getAccessToken } from 'utils/token';
+
 const base = import.meta.env.VITE_API_BASE_URL ?? '';
 
 const apiClient = axios.create({
