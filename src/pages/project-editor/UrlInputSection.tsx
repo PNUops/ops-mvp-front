@@ -1,7 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { FaGithub, FaYoutube } from 'react-icons/fa';
 
-const UrlInputSection = () => {
+interface UrlInputSectionProps {
+  githubUrl: string;
+  setGithubUrl: (value: string) => void;
+  youtubeUrl: string;
+  setYoutubeUrl: (value: string) => void;
+}
+
+const UrlInputSection = ({githubUrl, setGithubUrl, youtubeUrl, setYoutubeUrl}: UrlInputSectionProps) => {
+
   return (
     <div className="flex gap-10 text-sm">
       <div className="text-midGray flex w-25">
@@ -15,6 +23,8 @@ const UrlInputSection = () => {
             type="url"
             placeholder="https://github.com/"
             className="placeholder-lightGray focus:ring-lightGray w-full rounded bg-gray-100 py-3 pl-15 text-sm text-black focus:ring-2 focus:outline-none"
+            value={githubUrl}
+            onChange={(e) => setGithubUrl(e.target.value)}
           />
         </div>
         <div className="relative w-full">
@@ -23,6 +33,8 @@ const UrlInputSection = () => {
             type="url"
             placeholder="https://youtube.com/"
             className="placeholder-lightGray focus:ring-lightGray w-full rounded bg-gray-100 py-3 pl-15 text-sm text-black focus:ring-2 focus:outline-none"
+            value={youtubeUrl}
+            onChange={(e)=>setYoutubeUrl}
           />
         </div>
       </div>
