@@ -6,5 +6,5 @@
  * @returns 부산대 이메일 형식이면 true
  */
 export const isPNUEmail = (email: string) => {
-  return /^[\w.-]+@pusan\.ac\.kr$/.test(email);
+  return /^[\w.!-]+@pusan\.ac\.kr$/.test(email);
 };
