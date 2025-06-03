@@ -32,7 +32,7 @@ export const getUserFromToken = (token: string): User | null => {
 
     const payload = base64UrlDecode(parts[1]);
     const parsed = JSON.parse(payload);
-    return { id: parsed.sub, name: parsed.name, roles: parsed.roles } as User;
+    return { id: Number(parsed.sub), name: parsed.name, roles: parsed.roles } as User;
   } catch (error) {
     console.error('Failed to decode token', error);
     return null;
