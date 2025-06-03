@@ -1,166 +1,44 @@
-import React, { useState, useRef } from 'react';
-import { FaYoutube, FaGithub } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useTeamId } from 'hooks/useTeamId';
+import { getProjectDetails } from 'apis/projectViewer';
+import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
 
-import SortableThumbnail from './SortableThumbnail';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
-
-import { project_view } from '@mocks/data/viewer';
-
-const MAX_IMAGES = 6;
-const MAX_OVERVIEW = 400;
+import IntroSection from './IntroSection';
+import UrlInput from './UrlInputSection';
+import ImageUploader from './ImageUploaderSection';
+import OverViewInput from './OverviewInput';
 
 const ProjectEditorPage = () => {
-  const { projectName, teamName, leaderName, participants } = project_view;
+  const teamId = useTeamId();
   const [overview, setOverview] = useState('');
   const [thumbnails, setThumbnails] = useState<File[]>([]);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setThumbnails((prev) => [...prev, ...files].slice(0, 6));
-  };
+  const { data } = useQuery<ProjectDetailsResponseDto>({
+    queryKey: ['projectEditorInfo', teamId],
+    queryFn: async () => {
+      if (teamId === null) throw new Error('teamId is null');
+      return await getProjectDetails(teamId);
+    },
+  });
 
-  const handleThumbnailRemove = (index: number) => {
-    setThumbnails((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleDragEnd = (event: any) => {
-    const { active, over } = event;
-    if (active.id !== over?.id) {
-      setThumbnails((items) => {
-        const oldIndex = active.id as number;
-        const newIndex = over.id as number;
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
-  };
-
-  const handleThumbnailDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-    const imageFiles = files.filter((file) => file.type.startsWith('image/'));
-    setThumbnails((prev) => [...prev, ...imageFiles].slice(0, 6));
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault(); // 드롭 가능하게 만들기 위해 필요
-  };
-
-  const paddedThumbnails: (File | null)[] = [...thumbnails];
-  while (paddedThumbnails.length < 6) paddedThumbnails.push(null);
-
-  const handleOverviewChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= MAX_OVERVIEW) {
-      setOverview(e.target.value);
-    }
-
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
+  const { projectName, teamName, leaderName, participants } = data!;
 
   return (
     <div>
       <div className="text-title font-bold">프로젝트 생성</div>
       <div className="h-10" />
-      <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25 flex-col gap-3 pl-3">
-          <span>프로젝트</span>
-          <span>팀명</span>
-          <span>팀장</span>
-          <span>팀원</span>
-        </div>
-        <div className="flex flex-col gap-3">
-          <span>{projectName}</span>
-          <span>{teamName}</span>
-          <span>{leaderName}</span>
-          <div className="flex flex-wrap gap-x-3">
-            {participants.map((name, index) => (
-              <span key={index}>{name}</span>
-            ))}
-          </div>
-        </div>
-      </div>
+
+      <IntroSection {...{ projectName, teamName, leaderName, participants }} />
       <div className="h-15" />
-      <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25">
-          <span className="mr-1 text-red-500">*</span>
-          <span>URL</span>
-        </div>
-        <div className="flex flex-1 flex-col gap-3">
-          <div className="relative w-full">
-            <FaGithub className="absolute top-1/2 left-5 -translate-y-1/2 text-gray-500" size={20} />
-            <input
-              type="url"
-              placeholder="https://github.com/"
-              className="placeholder-lightGray focus:ring-lightGray w-full rounded bg-gray-100 py-3 pl-15 text-sm text-black focus:ring-2 focus:outline-none"
-            />
-          </div>
-          <div className="relative w-full">
-            <FaYoutube className="absolute top-1/2 left-5 -translate-y-1/2 text-red-400" size={20} />
-            <input
-              type="url"
-              placeholder="https://youtube.com/"
-              className="placeholder-lightGray focus:ring-lightGray w-full rounded bg-gray-100 py-3 pl-15 text-sm text-black focus:ring-2 focus:outline-none"
-            />
-          </div>
-        </div>
-      </div>
+
+      <UrlInput />
       <div className="h-15" />
-      <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25 gap-1">
-          <span className="mr-1 text-red-500">*</span>
-          <span>썸네일</span>
-        </div>
-        <div className="flex w-full flex-1 flex-col gap-3 md:flex-row">
-          <div
-            className="border-midGray text-midGray flex min-h-[250px] flex-1 flex-col items-center justify-evenly rounded border p-10 text-center"
-            onDrop={handleThumbnailDrop}
-            onDragOver={handleDragOver}
-          >
-            <p>
-              파일을 이곳에 끌어놓아주세요.
-              <br />
-              Drag & Drop images here.
-            </p>
-            <p className="text-midGray my-2">OR</p>
-            <label className="text-mainGreen cursor-pointer rounded-full bg-[#D1F3E1] px-15 py-4 text-sm font-bold">
-              파일 업로드
-              <input type="file" accept="image/*" multiple className="hidden" onChange={handleThumbnailUpload} />
-            </label>
-          </div>
-          <div className="grid flex-1 grid-cols-3 gap-3 text-center sm:grid-cols-2">
-            <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-              <SortableContext items={paddedThumbnails.map((_, i) => i)} strategy={verticalListSortingStrategy}>
-                {paddedThumbnails.map((file, index) => (
-                  <SortableThumbnail key={index} file={file} index={index} onRemove={handleThumbnailRemove} />
-                ))}
-              </SortableContext>
-            </DndContext>
-          </div>
-        </div>
-      </div>
+
+      <ImageUploader thumbnails={thumbnails} setThumbnails={setThumbnails} />
       <div className="h-15" />
-      <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25 gap-1">
-          <span className="mr-1 text-red-500">*</span>
-          <span className="w-full">Overview</span>
-        </div>
-        <div className="flex-1 flex-col">
-          <textarea
-            ref={textareaRef}
-            placeholder={`Overview를 입력해주세요. (최대 ${MAX_OVERVIEW}자)`}
-            className="placeholder-lightGray focus:outline-lightGray w-full rounded bg-gray-100 p-5 text-sm"
-            value={overview}
-            onChange={handleOverviewChange}
-          />
-          <div className={`text-right text-xs ${overview.length === MAX_OVERVIEW ? 'text-red-500' : 'text-gray-500'}`}>
-            {overview.length} / {MAX_OVERVIEW}자
-          </div>
-        </div>
-      </div>
+
+      <OverViewInput overview={overview} setOverview={setOverview} />
 
       <div className="h-20" />
       <div className="flex justify-center">

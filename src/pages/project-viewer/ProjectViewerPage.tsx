@@ -1,64 +1,43 @@
-import React, { useState, useRef } from 'react';
-import Carousel from './Carousel';
-import CommentSection from './CommentSection';
-import { GoPencil } from 'react-icons/go';
-import { FaHeart } from 'react-icons/fa';
-import { PiCrown } from 'react-icons/pi';
-import { IoPersonOutline } from 'react-icons/io5';
+import React, { useState, useRef, useEffect } from 'react';
+import { useTeamId } from 'hooks/useTeamId';
+import { useQuery } from '@tanstack/react-query';
+import { getProjectDetails } from 'apis/projectViewer';
 
-import { project_view } from '@mocks/data/viewer';
-import MediaEmbedder from './MediaEmbedder';
+import IntroSection from './IntroSection';
+import CarouselSection from './CarouselSection';
+import LikeSection from './LikeSection';
+import DetailSection from './DetailSection';
+import MediaSection from './MediaSection/MediaSection';
+import CommentSection from './CommentSection/CommentSection';
 
 const ProjectViewerPage = () => {
-  const { projectName, teamName, isLiked, overview, leaderName, participants, githubPath, youTubePath } = project_view;
+  const teamId = useTeamId();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['projectDetails', teamId],
+    queryFn: async () => {
+      if (teamId === null) throw new Error('teamId is null');
+      return await getProjectDetails(teamId);
+    },
+  });
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>에러 발생: {String(error)}</div>;
+  if (!data) return <div>데이터를 불러올 수 없습니다.</div>;
 
   return (
     <div>
-      <div className="flex gap-10">
-        <div className="text-[36px] font-bold">{projectName}</div>
-        <button className="border-midGray text-exsm flex items-center gap-3 rounded-full border px-5">
-          <GoPencil />
-          수정하기
-        </button>
-      </div>
-      <div className="text-smbold flex font-bold">{teamName}</div>
+      <IntroSection projectName={data.projectName} teamName={data.teamName} />
       <div className="h-10" />
-      <Carousel />
+      <CarouselSection teamId={data.teamId} previewIds={data.previewIds} />
       <div className="h-10" />
-      <button
-        className={`bg-${isLiked ? 'mainGreen' : 'lightGray'} relative flex items-center gap-5 justify-self-center rounded-full px-5 py-3 text-sm text-white sm:px-8`}
-      >
-        <FaHeart className={`text-${isLiked ? 'white' : 'midGray'}`} size={20} />
-        <span className="hidden sm:inline">좋아요</span>
-      </button>
+      <LikeSection teamId={data.teamId} isLiked={data.isLiked} />
       <div className="h-20" />
-      <div className="flex flex-col gap-5">
-        <div className="text-title font-bold">Overview</div>
-        <div className="text-sm leading-[1.8]">{overview}</div>
-      </div>
+      <DetailSection overview={data.overview} leaderName={data.leaderName} participants={data.participants} />
       <div className="h-20" />
-      <div className="flex flex-col gap-5">
-        <div className="text-title font-bold">Participants</div>
-        <span className="flex items-center gap-3">
-          <PiCrown />
-          <span className="text-sm">{leaderName}</span>
-        </span>
-        <span className="flex items-center gap-3">
-          <IoPersonOutline />
-          {participants.map((name, index) => (
-            <span key={index} className="text-sm">
-              {name}
-            </span>
-          ))}
-        </span>
-      </div>
+      <MediaSection githubUrl={data.githubPath} youtubeUrl={data.youtubePath} />
       <div className="h-20" />
-      <div className="flex flex-col gap-5">
-        <div className="text-title font-bold">URL</div>
-        <MediaEmbedder githubUrl={githubPath} youtubeUrl={youTubePath} />
-      </div>
-      <div className="h-20" />
-      <CommentSection />
+      <CommentSection teamId={data.teamId} />
     </div>
   );
 };
