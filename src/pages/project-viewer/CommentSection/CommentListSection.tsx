@@ -46,10 +46,16 @@ const CommentListSection = ({ teamId }: CommentListSectionProps) => {
             isMenuOpen={isMenuOpen === comment.commentId}
             toggleMenu={() => setIsMenuOpen(isMenuOpen === comment.commentId ? null : comment.commentId)}
             handleEdit={() =>
-              editMutation.mutate({ teamId, commentId: comment.commentId, description: editedDescription })
+              editMutation.mutate({
+                teamId,
+                commentId: comment.commentId,
+                description: editedDescription,
+              })
             }
             handleDelete={() => deleteMutation.mutate({ teamId, commentId: comment.commentId })}
             setEditedDescription={setEditedDescription}
+            onStartEdit={() => setEditingId(comment.commentId)}
+            onCancelEdit={() => setEditingId(null)}
           />
         ))}
       </div>
