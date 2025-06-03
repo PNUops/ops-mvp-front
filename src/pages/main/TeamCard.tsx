@@ -1,44 +1,48 @@
 
 import { FaHeart } from "react-icons/fa";
 import {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import apiClient from "../../apis/apiClient";
 
-interface TeamInfo {
-    thumbnail?: string;
-    title: string;
-    teamName: string;
-    isLiked: boolean;
+interface TeamCardProps {
+    teamId : number;
+    teamName : string;
+    projectName : string;
+    liked : boolean;
 }
 
-const TeamCard = ({teamId}: {teamId:number}) => {
-    const [team, setTeam] = useState<TeamInfo | null>(null);
+
+const TeamCard = ({teamId, teamName, projectName, liked} : TeamCardProps) => {
     const [imageError, setImageError] = useState(false);
-    const navigate = useNavigate();
+    const [thumbnailUrl, setThumbnailUrl] = useState<string | undefined>(undefined);
+
+
 
     useEffect(() => {
-        const fetchTeam = async() => {
+        const fetchImage = async () => {
             try {
-                const res = await apiClient.get(`/teams/${teamId}`);
-                setTeam(res.data);
-            } catch (e) {
-                console.error("팀 정보 가져오기 실패", e);
+                const res = await apiClient.get(`/teams/${teamId}/image/thumbnail`, {
+                    responseType: "blob",
+                });
+                const imageUrl = URL.createObjectURL(res.data);
+                setThumbnailUrl(imageUrl);
+            } catch (err) {
+                console.error("썸네일 로딩 실패", err);
+                setImageError(true);
             }
         };
-        fetchTeam();
+        fetchImage();
     }, [teamId]);
 
 
-    if (!team) return null;
-    const showImage = team?.thumbnail && !imageError;
 
     return (
-      <Link to={`/teams/${teamId}`}
+      <Link to={`/teams/view/${teamId}`}
         className="cursor-pointer transition-transform duration-200 hover:shadow-lg hover:scale-[1.02] w-full max-w-[250px] max-h-[250px] aspect-[5/6] min-w-0 overflow-hidden rounded-xl border border-gray-200 shadow-sm"
       >
-        {showImage ? (
+        {!imageError ? (
           <div className="w-full aspect-[5/3]">
-            <img src={team.thumbnail}
+            <img src={thumbnailUrl}
                  alt="썸네일"
                  className="w-full h-full object-cover"
                  onError={() => setImageError(true)}/>
@@ -48,11 +52,11 @@ const TeamCard = ({teamId}: {teamId:number}) => {
         )}
 
         <div className="relative p-4 flex-grow flex flex-col justify-between">
-          <div className="text-sm font-semibold text-black">{team.title}</div>
-          <div className="text-base text-midGray">{team.teamName}</div>
+          <div className="text-sm font-semibold text-black">{projectName}</div>
+          <div className="text-base text-midGray">{teamName}</div>
 
           <div className="absolute right-4 bottom-4 text-gray-300">
-            {team.isLiked ? <FaHeart color="red" size={24}/> : <FaHeart color="lightGray" size={24}/>}
+            {liked ? <FaHeart color="red" size={24}/> : <FaHeart color="lightGray" size={24}/>}
           </div>
         </div>
       </Link>

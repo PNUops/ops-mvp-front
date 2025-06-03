@@ -1,13 +1,13 @@
-import axios from "axios";
-import { useTokenStore } from "../stores/useTokenStore";
+import { TeamListItemDto } from "../types/DTO/teamListDto";
+import { SubmissionStatusDto} from "../types/DTO/submissionStatusDto";
 import apiClient from "./apiClient";
 
-export const fetchAllTeams = async () => {
+export const getAllTeams = async (): Promise<TeamListItemDto[]> => {
     const res = await apiClient.get("/teams");
     return res.data;
 }
 
-export const fetchSubmissionStatus = async () => {
-    const res = await apiClient.get("/teams/submission-status");
+export const getSubmissionStatus = async (): Promise<SubmissionStatusDto> => {
+    const res = await apiClient.get("/teams/teams/submission-status");
     return res.data;
 }
