@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 
 export type ToastType = 'success' | 'error' | 'info';
 
-interface Toast {
+export interface Toast {
   id: string;
   message: string;
   type?: ToastType;
