@@ -1,7 +1,7 @@
 import apiClient from './apiClient';
-import { VoteRate } from '../types/DTO';
+import { VoteRateResponseDto } from '../types/DTO';
 
-export const getVoteRate = async (): Promise<VoteRate> => {
-  const { data } = await apiClient.get<VoteRate>('/admin/participation-rate');
+export const getVoteRate = async (): Promise<VoteRateResponseDto> => {
+  const { data } = await apiClient.get<VoteRateResponseDto>('/admin/participation-rate');
   return data;
 };

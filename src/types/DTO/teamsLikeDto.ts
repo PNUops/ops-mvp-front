@@ -1,4 +1,4 @@
-export interface TeamLike {
+export interface TeamLikeResponseDto {
   rank: number;
   teamName: string;
   projectName: string;

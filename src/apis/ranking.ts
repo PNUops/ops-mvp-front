@@ -1,7 +1,7 @@
 import apiClient from './apiClient';
-import { TeamLike } from '../types/DTO';
+import { TeamLikeResponseDto } from '../types/DTO';
 
-export const getRanking = async (): Promise<TeamLike[]> => {
-  const { data } = await apiClient.get<TeamLike[]>('/admin/ranking');
+export const getRanking = async (): Promise<TeamLikeResponseDto[]> => {
+  const { data } = await apiClient.get<TeamLikeResponseDto[]>('/admin/ranking');
   return data;
 };

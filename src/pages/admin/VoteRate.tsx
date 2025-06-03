@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { PieChart, Pie, Cell } from 'recharts';
 import { getVoteRate } from 'apis/voteRate';
-import type { VoteRate as VoteRateType } from 'types/DTO';
+import { VoteRateResponseDto } from 'types/DTO';
 
 const VoteRate = () => {
-  const { data, isLoading, isError } = useQuery<VoteRateType>({
+  const { data, isLoading, isError } = useQuery<VoteRateResponseDto>({
     queryKey: ['voteRate'],
     queryFn: getVoteRate,
   });

@@ -1,4 +1,4 @@
-export interface DashboardTeam {
+export interface DashboardTeamResponseDto {
   teamId: number;
   teamName: string;
   projectName: string;

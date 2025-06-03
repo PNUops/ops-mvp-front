@@ -1,7 +1,7 @@
 import apiClient from './apiClient';
-import { DashboardTeam } from '../types/DTO';
+import { DashboardTeamResponseDto } from '../types/DTO';
 
-export const getDashboard = async (): Promise<DashboardTeam[]> => {
-  const { data } = await apiClient.get<DashboardTeam[]>('/admin/dashboard');
+export const getDashboard = async (): Promise<DashboardTeamResponseDto[]> => {
+  const { data } = await apiClient.get<DashboardTeamResponseDto[]>('/admin/dashboard');
   return data;
 };

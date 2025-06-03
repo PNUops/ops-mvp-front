@@ -4,14 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { getDashboard } from 'apis/dashboard';
 import { getRanking } from 'apis/ranking';
-import { DashboardTeam, TeamLike } from 'types/DTO';
+import { DashboardTeamResponseDto, TeamLikeResponseDto } from 'types/DTO';
 
 const AdminPage = () => {
-  const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeam[]>({
+  const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeamResponseDto[]>({
     queryKey: ['dashboard'],
     queryFn: getDashboard,
   });
-  const { data: rankingData, isLoading: isRankingLoading } = useQuery<TeamLike[]>({
+  const { data: rankingData, isLoading: isRankingLoading } = useQuery<TeamLikeResponseDto[]>({
     queryKey: ['ranking'],
     queryFn: getRanking,
   });

@@ -1,8 +1,4 @@
-export interface VoteRate {
+export interface VoteRateResponseDto {
   voteRate: number;
   totalVoteCount: number;
 }
-
-export interface GetVoteRateResponse {
-  voteRate: VoteRate;
-} 
