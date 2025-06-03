@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import useAuth from 'hooks/useAuth';
+import { CommentFormRequestDto } from 'types/DTO/projectViewerDto';
 import { postCommentForm } from 'apis/projectViewer';
 import { comment } from 'postcss';
 
@@ -21,7 +22,7 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
       setNewComment('');
     },
     onError: () => {
-      alert('댓글 등록에 실패했어요.'); // TODO
+      alert('댓글 등록에 실패했어요.');
     },
   });
 
