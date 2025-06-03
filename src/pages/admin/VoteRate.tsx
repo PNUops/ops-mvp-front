@@ -1,16 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import { PieChart, Pie, Cell } from 'recharts';
-import { getRate } from 'apis/admin';
+import { getVoteRate } from 'apis/voteRate';
+import type { VoteRate as VoteRateType } from 'types/DTO';
 
 const VoteRate = () => {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<VoteRateType>({
     queryKey: ['voteRate'],
-    queryFn: getRate,
+    queryFn: getVoteRate,
   });
 
+  console.log('VoteRate data:', data);
   const pieColors = ['#22c55e', '#e5e7eb'];
-  const voteRate = data?.voteRate ?? 0;
-  const totalVoteCount = data?.totalVoteCount ?? 0;
+  const voteData = data ?? { voteRate: 0, totalVoteCount: 0 };
+  const { voteRate, totalVoteCount } = voteData;
 
   return (
     <section>
@@ -69,4 +71,3 @@ const VoteRate = () => {
 };
 
 export default VoteRate;
-

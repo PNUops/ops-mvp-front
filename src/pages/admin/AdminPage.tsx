@@ -2,35 +2,25 @@ import ProjectSubmissionTable from '@pages/admin/ProjectSubmissionTable';
 import VoteRate from '@pages/admin/VoteRate';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { getDashboard, getRanking } from 'apis/admin';
-
-interface DashboardSubmission {
-  teamId: number;
-  teamName: string;
-  projectName: string;
-  isSubmitted: boolean;
-}
-
-interface RankingSubmission {
-  rank: number;
-  teamName: string;
-  projectName: string;
-  likeCount: number;
-}
+import { getDashboard } from 'apis/dashboard';
+import { getRanking } from 'apis/ranking';
+import { DashboardTeam, TeamLike } from 'types/DTO';
 
 const AdminPage = () => {
-  const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardSubmission[]>({
+  const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeam[]>({
     queryKey: ['dashboard'],
     queryFn: getDashboard,
   });
-  const { data: rankingData, isLoading: isRankingLoading } = useQuery<RankingSubmission[]>({
+  const { data: rankingData, isLoading: isRankingLoading } = useQuery<TeamLike[]>({
     queryKey: ['ranking'],
     queryFn: getRanking,
   });
+
   const sortedRankingData = useMemo(
     () => [...(rankingData ?? [])].sort((a, b) => (b.likeCount ?? 0) - (a.likeCount ?? 0)),
     [rankingData],
   );
+
   if (isDashboardLoading || isRankingLoading) {
     return <p className="text-center text-gray-400">로딩 중...</p>;
   }
