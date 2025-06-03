@@ -1,9 +1,7 @@
 import apiClient from './apiClient';
 import {
   ProjectDetailsEditDto,
-  ThumbnailUploadRequestDto,
   ThumbnailDeleteRequestDto,
-  PreviewUploadRequestDto,
   PreviewDeleteRequestDto,
 } from 'types/DTO/projectEditorDto';
 
@@ -12,8 +10,17 @@ export const patchProjectDetails = async (teamId: number, body: ProjectDetailsEd
   return response.data;
 };
 
-export const postThumbnail = async (teamId: number, body: ThumbnailUploadRequestDto) => {
-  const response = await apiClient.post(`/teams/${teamId}/image/thumbnail`, body);
+export const getThumbnail = async (teamId: number): Promise<string> => {
+  const response = await apiClient.get(`/teams/${teamId}/image/thumbnail`, {
+    responseType: 'blob',
+  });
+  return URL.createObjectURL(response.data);
+};
+
+export const postThumbnail = async (teamId: number, formData: FormData) => {
+  const response = await apiClient.post(`/teams/${teamId}/image/thumbnail`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return response.data;
 };
 
@@ -22,8 +29,10 @@ export const deleteThumbnail = async (teamId: number, body: ThumbnailDeleteReque
   return response.data;
 };
 
-export const postPreview = async (teamId: number, body: PreviewUploadRequestDto) => {
-  const response = await apiClient.post(`/teams/${teamId}/image`, body);
+export const postPreview = async (teamId: number, formData: FormData) => {
+  const response = await apiClient.post(`/teams/${teamId}/image`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return response.data;
 };
 

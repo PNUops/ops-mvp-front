@@ -32,19 +32,18 @@ export const patchLikeToggle = async (request: LikeRequestDto) => {
   return response.data;
 };
 
-export const postCommentForm = async (request: CommentFormRequestDto): Promise<void> => {
-  const { teamId } = request;
-  await apiClient.post(`/teams/${teamId}/comments`);
+export const postCommentForm = async ({ teamId, description }: CommentFormRequestDto) => {
+  const response = await apiClient.post(`/teams/${teamId}/comments`, { description });
+  return response.data;
 };
 
-export const deleteComment = async (request: CommentDeleteRequestDto): Promise<void> => {
-  const { teamId, commentId } = request;
+export const deleteComment = async ({teamId, commentId}: CommentDeleteRequestDto) => {
   await apiClient.delete(`teams/${teamId}/comments/${commentId}`);
 };
 
-export const editComment = async (request: CommentEditRequestDto): Promise<void> => {
-  const { teamId, commentId } = request;
-  await apiClient.patch(`teams/${teamId}/comments/${commentId}`);
+export const editComment = async ({ teamId, commentId, description }: CommentEditRequestDto) => {
+  const response = await apiClient.patch(`teams/${teamId}/comments/${commentId}`, { description });
+  return response.data;
 };
 
 export const getCommentsList = async (teamId: number): Promise<CommentDto[]> => {
