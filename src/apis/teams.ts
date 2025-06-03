@@ -3,10 +3,7 @@ import { useTokenStore } from "../stores/useTokenStore";
 import apiClient from "./apiClient";
 
 export const fetchAllTeams = async () => {
-    const token = useTokenStore.getState().token;
-    const headers = token ? {Authorization: `Bearer ${token}`} : {};
-
-    const res = await axios.get("/teams", {headers});
+    const res = await apiClient.get("/teams");
     return res.data;
 }
 

@@ -1,38 +1,44 @@
 
 import { FaHeart } from "react-icons/fa";
-import {useState} from "react";
-import { useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import apiClient from "../../apis/apiClient";
 
-/*
-* 썸네일과 좋아요는 null or defined 예외 처리
-* Todo : 초기값이 null 인지 undefined 인지에 따라서 interface 수정하기
-* */
-interface OneCardProps {
-    thumbnail? : string;
-    title : string;
-    teamName : string;
-    isLiked?: boolean;
+interface TeamInfo {
+    thumbnail?: string;
+    title: string;
+    teamName: string;
+    isLiked: boolean;
 }
 
-const TeamCard = ({thumbnail, title, teamName, isLiked = false}: OneCardProps) => {
+const TeamCard = ({teamId}: {teamId:number}) => {
+    const [team, setTeam] = useState<TeamInfo | null>(null);
+    const [imageError, setImageError] = useState(false);
     const navigate = useNavigate();
 
-    const handleClick = () => {
-        navigate(`/view`); // Todo: /teams/${teamId}로 변경 필요
-    };
+    useEffect(() => {
+        const fetchTeam = async() => {
+            try {
+                const res = await apiClient.get(`/teams/${teamId}`);
+                setTeam(res.data);
+            } catch (e) {
+                console.error("팀 정보 가져오기 실패", e);
+            }
+        };
+        fetchTeam();
+    }, [teamId]);
 
-    const [imageError, setImageError] = useState(false);
 
-    const showImage = thumbnail && !imageError;
+    if (!team) return null;
+    const showImage = team?.thumbnail && !imageError;
 
     return (
-      <section onClick={handleClick}
-        aria-labelledby="teamCard"
+      <Link to={`/teams/${teamId}`}
         className="cursor-pointer transition-transform duration-200 hover:shadow-lg hover:scale-[1.02] w-full max-w-[250px] max-h-[250px] aspect-[5/6] min-w-0 overflow-hidden rounded-xl border border-gray-200 shadow-sm"
       >
         {showImage ? (
           <div className="w-full aspect-[5/3]">
-            <img src={thumbnail}
+            <img src={team.thumbnail}
                  alt="썸네일"
                  className="w-full h-full object-cover"
                  onError={() => setImageError(true)}/>
@@ -42,14 +48,14 @@ const TeamCard = ({thumbnail, title, teamName, isLiked = false}: OneCardProps) =
         )}
 
         <div className="relative p-4 flex-grow flex flex-col justify-between">
-          <div className="text-sm font-semibold text-black">{title}</div>
-          <div className="text-base text-midGray">{teamName}</div>
+          <div className="text-sm font-semibold text-black">{team.title}</div>
+          <div className="text-base text-midGray">{team.teamName}</div>
 
           <div className="absolute right-4 bottom-4 text-gray-300">
-            {isLiked ? <FaHeart color="red" size={24}/> : <FaHeart color="lightGray" size={24}/>}
+            {team.isLiked ? <FaHeart color="red" size={24}/> : <FaHeart color="lightGray" size={24}/>}
           </div>
         </div>
-      </section>
+      </Link>
     );
 };
 
