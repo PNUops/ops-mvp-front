@@ -1,5 +1,6 @@
 import { signInHandlers } from './sign-in';
 import { signUpHandlers } from './sign-up';
 import { teamsHandlers } from './teams';
+import { adminHandlers } from './admin';
 
-export const handlers = [...teamsHandlers, ...signInHandlers, ...signUpHandlers];
+export const handlers = [...teamsHandlers, ...signInHandlers, ...signUpHandlers, ...adminHandlers];
