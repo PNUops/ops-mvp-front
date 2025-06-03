@@ -16,6 +16,7 @@ const TotalCards = () => {
     } = useQuery<SubmissionStatusDto>({
         queryKey: ['submissionStatus'],
         queryFn: getSubmissionStatus,
+        enabled: isLeader,
     });
 
     const {
@@ -25,6 +26,10 @@ const TotalCards = () => {
         queryFn: getAllTeams,
     });
 
+
+    console.log("isLeader", isLeader);
+    console.log("teams", teams);
+    console.log("submissionData", submissionData);
 
     const showLeaderMessage = isLeader && submissionData?.isSubmitted === false;
 
@@ -39,6 +44,7 @@ const TotalCards = () => {
                      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-screen-xl px-4 mx-0">
                 {teams?.map((team) => (
                     <TeamCard
+                        key={team.teamId}
                         teamId={team.teamId}
                         teamName={team.teamName}
                         projectName={team.projectName}

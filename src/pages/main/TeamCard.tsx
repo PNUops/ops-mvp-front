@@ -14,6 +14,8 @@ interface TeamCardProps {
 
 const TeamCard = ({teamId, teamName, projectName, liked} : TeamCardProps) => {
     const [imageError, setImageError] = useState(false);
+    /*
+    * apiClient 로 썸네일 받아올때의 코드 -> Url 접근으로 변경
     const [thumbnailUrl, setThumbnailUrl] = useState<string | undefined>(undefined);
 
 
@@ -33,7 +35,9 @@ const TeamCard = ({teamId, teamName, projectName, liked} : TeamCardProps) => {
         };
         fetchImage();
     }, [teamId]);
+*/
 
+    const thumbnailUrl = `${import.meta.env.VITE_API_BASE_URL}/api/teams/${teamId}/image/thumbnail`;
 
 
     return (
