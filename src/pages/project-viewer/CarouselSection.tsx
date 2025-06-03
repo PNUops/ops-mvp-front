@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getPreviewImages } from 'apis/projectViewer';
 import { PreviewImagesResponseDto } from 'types/DTO/projectViewerDto';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
-import { AiFillPicture } from 'react-icons/ai';
 
 interface CarouselSectionProps {
   teamId: number;
