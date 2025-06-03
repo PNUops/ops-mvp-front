@@ -27,9 +27,6 @@ const TotalCards = () => {
         queryFn: getAllTeams,
     });
 
-    console.log("teams", teams);
-    console.log("submissionData", submissionData);
-
     const showLeaderMessage = isLeader && submissionData?.isSubmitted === false;
 
     return (

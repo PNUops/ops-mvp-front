@@ -14,28 +14,6 @@ interface TeamCardProps {
 
 const TeamCard = ({teamId, teamName, projectName, liked} : TeamCardProps) => {
     const [imageError, setImageError] = useState(false);
-    /*
-    * apiClient 로 썸네일 받아올때의 코드 -> Url 접근으로 변경
-    const [thumbnailUrl, setThumbnailUrl] = useState<string | undefined>(undefined);
-
-
-
-    useEffect(() => {
-        const fetchImage = async () => {
-            try {
-                const res = await apiClient.get(`/teams/${teamId}/image/thumbnail`, {
-                    responseType: "blob",
-                });
-                const imageUrl = URL.createObjectURL(res.data);
-                setThumbnailUrl(imageUrl);
-            } catch (err) {
-                console.error("썸네일 로딩 실패", err);
-                setImageError(true);
-            }
-        };
-        fetchImage();
-    }, [teamId]);
-*/
 
     const thumbnailUrl = `${import.meta.env.VITE_API_BASE_URL}/api/teams/${teamId}/image/thumbnail`;
 

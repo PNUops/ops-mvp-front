@@ -8,6 +8,6 @@ export const getAllTeams = async (): Promise<TeamListItemDto[]> => {
 }
 
 export const getSubmissionStatus = async (): Promise<SubmissionStatusDto> => {
-    const res = await apiClient.get("/teams/teams/submission-status");
+    const res = await apiClient.get("/teams/submission-status");
     return res.data;
 }
