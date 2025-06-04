@@ -33,3 +33,10 @@ export const mockTeamsMain = [
     thumbnail: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
   },
 ]
+
+export const mockTeamLeaderMessage = {
+  teamId: 1,
+  teamName: "team1",
+  projectName: "team1 Project",
+  isSubmitted: false,
+}
