@@ -26,7 +26,7 @@ const LeaderSection = () => {
             {submissionData?.teamId && (
             <Link
                 to={`/teams/edit/${submissionData.teamId}`}
-                className="flex items-center gap-2 bg-mainGreen text-white font-bold text-lg leading-[100%] rounded-full px-5 py-3">
+                className="border border-2px px-10 py-5 flex items-center gap-2 bg-mainGreen text-white font-bold text-lg leading-[100%] rounded-full shadow-md hover:brightness-110 transition">
                 <TbPencil size={16} strokeWidth={2} />
                 프로젝트 에디터
             </Link>
