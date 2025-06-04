@@ -1,18 +1,17 @@
 
 import { FaHeart } from "react-icons/fa";
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import {Link} from "react-router-dom";
-import apiClient from "../../apis/apiClient";
 
 interface TeamCardProps {
     teamId : number;
     teamName : string;
     projectName : string;
-    liked : boolean;
+    isLiked : boolean;
 }
 
 
-const TeamCard = ({teamId, teamName, projectName, liked} : TeamCardProps) => {
+const TeamCard = ({teamId, teamName, projectName, isLiked} : TeamCardProps) => {
     const [imageError, setImageError] = useState(false);
 
     const thumbnailUrl = `${import.meta.env.VITE_API_BASE_URL}/api/teams/${teamId}/image/thumbnail`;
@@ -38,7 +37,7 @@ const TeamCard = ({teamId, teamName, projectName, liked} : TeamCardProps) => {
           <div className="text-base text-midGray">{teamName}</div>
 
           <div className="absolute right-4 bottom-4 text-gray-300">
-            {liked ? <FaHeart color="red" size={24}/> : <FaHeart color="lightGray" size={24}/>}
+            {isLiked ? <FaHeart color="red" size={24}/> : <FaHeart color="lightGray" size={24}/>}
           </div>
         </div>
       </Link>

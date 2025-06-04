@@ -8,7 +8,6 @@ import LeaderSection from "@pages/main/LeaderSection";
 
 
 const TotalCards = () => {
-
     const {
         data: teams,
     } = useQuery<TeamListItemResponseDto[]>({
@@ -32,7 +31,7 @@ const TotalCards = () => {
               teamId={team.teamId}
               teamName={team.teamName}
               projectName={team.projectName}
-              liked={team.liked}
+              isLiked={team.liked}
             />
           ))}
         </section>
