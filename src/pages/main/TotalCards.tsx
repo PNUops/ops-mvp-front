@@ -3,8 +3,8 @@ import LeaderMessage from "@pages/main/LeaderMessage";
 import useAuth from "../../hooks/useAuth";
 import {useQuery} from "@tanstack/react-query"
 import {getAllTeams, getSubmissionStatus} from "../../apis/teams";
-import {TeamListItemDto} from "../../types/DTO/teamListDto";
-import {SubmissionStatusDto} from "../../types/DTO/submissionStatusDto";
+import {TeamListItemResponseDto} from "../../types/DTO/teams/teamListDto";
+import {SubmissionStatusResponseDto} from "../../types/DTO/teams/submissionStatusDto";
 import {Link} from "react-router-dom";
 import { TbPencil } from "react-icons/tb";
 
@@ -14,7 +14,7 @@ const TotalCards = () => {
     const { isLeader, user } = useAuth();
     const {
         data: submissionData,
-    } = useQuery<SubmissionStatusDto>({
+    } = useQuery<SubmissionStatusResponseDto>({
         queryKey: ['submissionStatus'],
         queryFn: getSubmissionStatus,
         enabled: isLeader,
@@ -22,7 +22,7 @@ const TotalCards = () => {
 
     const {
         data: teams,
-    } = useQuery<TeamListItemDto[]>({
+    } = useQuery<TeamListItemResponseDto[]>({
         queryKey: ['teams'],
         queryFn: getAllTeams,
     });
@@ -31,9 +31,9 @@ const TotalCards = () => {
 
     return (
       <div id="projects" className="flex flex-col gap-4">
-        {isLeader && submissionData?.teamId && (
           <div className="flex justify-between items-center px-4">
             <h3 id="projects" className="text-sm font-bold">현재 투표진행중인 작품</h3>
+              {isLeader && submissionData?.teamId && (
             <Link
               to={`/teams/edit/${submissionData.teamId}`}
               className="flex items-center gap-2 bg-mainGreen text-white font-inter font-bold text-[18px] leading-[100%] rounded-full px-5 py-3"
@@ -41,8 +41,9 @@ const TotalCards = () => {
               <TbPencil size={16} strokeWidth={2} />
               프로젝트 에디터
             </Link>
-          </div>
-        )}
+
+            )}
+      </div>
 
         {showLeaderMessage && <LeaderMessage leaderName={user?.name ?? '팀장'} />}
 
