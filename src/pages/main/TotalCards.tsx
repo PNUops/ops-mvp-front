@@ -1,9 +1,10 @@
 import TeamCard from "@pages/main/TeamCard";
 import {useQuery} from "@tanstack/react-query"
-import {getAllTeams, getSubmissionStatus} from "../../apis/teams";
+import {getAllTeams} from "../../apis/teams";
 import {TeamListItemResponseDto} from "../../types/DTO/teams/teamListDto";
 import LeaderSection from "@pages/main/LeaderSection";
 import LoadingSpinner from "@pages/main/LoadingSpinner";
+import { useRef } from "react";
 
 
 const TotalCards = () => {
@@ -19,10 +20,12 @@ const TotalCards = () => {
     });
 
     return (
+
       <div id="projects" className="flex flex-col gap-4">
           <div className="flex justify-between items-center px-4">
-            <h3 id="projects" className="text-sm md:text-md lg:text-xl font-bold">현재 투표진행중인 작품</h3>
-            <LeaderSection />
+            <h3 id="projects" className="text-sm md:text-md lg:text-xl font-bold">
+                현재 투표진행중인 작품</h3>
+              <LeaderSection />
       </div>
 
         <section

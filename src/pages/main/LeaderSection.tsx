@@ -19,20 +19,24 @@ const LeaderSection = () => {
 
     const showLeaderMessage = isLeader && submissionData?.isSubmitted === false;
 
-    if (!isLeader) return null;
+    if (!showLeaderMessage) return null;
 
     return (
-        <>
-            {submissionData?.teamId && (
-            <Link
-                to={`/teams/edit/${submissionData.teamId}`}
-                className="border border-2px px-10 py-5 flex items-center gap-2 bg-mainGreen text-white font-bold text-lg leading-[100%] rounded-full shadow-md hover:brightness-110 transition">
-                <TbPencil size={16} strokeWidth={2} />
-                프로젝트 에디터
-            </Link>
-            )}
-            {showLeaderMessage && (<LeaderMessage leaderName={user?.name ?? '팀장'} />)}
-        </>
+        <div className="absolute top-[150px] left-[280px] z-50">
+            <div className="relative bg-white rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.1)] p-6 w-fit">
+                <div className="absolute -bottom-4 left-6 w-6 h-10 bg-white rotate-60 shadow-[3px_3px_6px_rgba(0,0,0,0.05)] z-0"/>
+
+                <LeaderMessage leaderName={user?.name ?? '팀장'}/>
+
+                <Link
+                    to={`/teams/edit/${submissionData?.teamId}`}
+                    className="mt-4 px-7 py-3 w-fit border border-midGray rounded-full text-sm font-medium flex items-center gap-2 mx-auto hover:bg-gray-50 transition">
+
+                    <TbPencil size={20} strokeWidth={2}/>
+                    프로젝트 에디터
+                </Link>
+            </div>
+        </div>
 
     )
 }
