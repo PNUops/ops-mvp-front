@@ -4,21 +4,10 @@ import useAuth from "../../hooks/useAuth";
 import {useQuery} from "@tanstack/react-query"
 import {getAllTeams, getSubmissionStatus} from "../../apis/teams";
 import {TeamListItemResponseDto} from "../../types/DTO/teams/teamListDto";
-import {SubmissionStatusResponseDto} from "../../types/DTO/teams/submissionStatusDto";
-import {Link} from "react-router-dom";
-import { TbPencil } from "react-icons/tb";
+import LeaderSection from "@pages/main/LeaderSection";
 
 
 const TotalCards = () => {
-
-    const { isLeader, user } = useAuth();
-    const {
-        data: submissionData,
-    } = useQuery<SubmissionStatusResponseDto>({
-        queryKey: ['submissionStatus'],
-        queryFn: getSubmissionStatus,
-        enabled: isLeader,
-    });
 
     const {
         data: teams,
@@ -27,28 +16,14 @@ const TotalCards = () => {
         queryFn: getAllTeams,
     });
 
-    const showLeaderMessage = isLeader && submissionData?.isSubmitted === false;
-
     return (
       <div id="projects" className="flex flex-col gap-4">
           <div className="flex justify-between items-center px-4">
             <h3 id="projects" className="text-sm font-bold">현재 투표진행중인 작품</h3>
-              {isLeader && submissionData?.teamId && (
-            <Link
-              to={`/teams/edit/${submissionData.teamId}`}
-              className="flex items-center gap-2 bg-mainGreen text-white font-inter font-bold text-[18px] leading-[100%] rounded-full px-5 py-3"
-            >
-              <TbPencil size={16} strokeWidth={2} />
-              프로젝트 에디터
-            </Link>
-
-            )}
+            <LeaderSection />
       </div>
 
-        {showLeaderMessage && <LeaderMessage leaderName={user?.name ?? '팀장'} />}
-
         <section
-          aria-labelledby="allCards"
           className="mx-0 grid max-w-screen-xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
         >
           {teams?.map((team) => (
