@@ -1,18 +1,21 @@
 import TeamCard from "@pages/main/TeamCard";
-import LeaderMessage from "@pages/main/LeaderMessage";
-import useAuth from "../../hooks/useAuth";
 import {useQuery} from "@tanstack/react-query"
 import {getAllTeams, getSubmissionStatus} from "../../apis/teams";
 import {TeamListItemResponseDto} from "../../types/DTO/teams/teamListDto";
 import LeaderSection from "@pages/main/LeaderSection";
+import LoadingSpinner from "@pages/main/LoadingSpinner";
 
 
 const TotalCards = () => {
     const {
         data: teams,
+        isLoading,
+        isError,
     } = useQuery<TeamListItemResponseDto[]>({
         queryKey: ['teams'],
         queryFn: getAllTeams,
+        staleTime: 1000 * 60 * 15,  // stale 시간: 15분
+        gcTime: 1000 * 60 * 15,  // 캐시 삭제 기간 : 15분 간격
     });
 
     return (
@@ -23,8 +26,9 @@ const TotalCards = () => {
       </div>
 
         <section
-          className="mx-0 grid max-w-screen-xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-        >
+          className="mx-0 grid max-w-screen-xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {isLoading && <LoadingSpinner />}
+            {isError && <p>데이터를 불러오지 못했습니다.</p>}
           {teams?.map((team) => (
             <TeamCard
               key={team.teamId}

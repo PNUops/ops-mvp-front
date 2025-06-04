@@ -19,8 +19,7 @@ const TeamCard = ({teamId, teamName, projectName, isLiked} : TeamCardProps) => {
 
     return (
       <Link to={`/teams/view/${teamId}`}
-        className="cursor-pointer transition-transform duration-200 hover:shadow-lg hover:scale-[1.02] w-full max-w-[250px] max-h-[250px] aspect-[5/6] min-w-0 overflow-hidden rounded-xl border border-gray-200 shadow-sm"
-      >
+        className="cursor-pointer transition-transform duration-200 hover:shadow-lg hover:scale-[1.02] w-full max-w-[250px] max-h-[250px] aspect-[5/6] min-w-0 overflow-hidden rounded-xl border border-gray-200 shadow-sm">
         {!imageError ? (
           <div className="w-full aspect-[5/3]">
             <img src={thumbnailUrl}
