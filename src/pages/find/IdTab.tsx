@@ -1,28 +1,36 @@
-import Input from '@components/Input';
-import RoundedButton from '@components/RoundedButton';
-import { useCallback, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getFindEmail } from 'apis/signIn';
+import { useEffect, useState } from 'react';
+import FindEmailForm from './FindEmailForm';
+import FindEmailResult from './FindEmailResult';
+import { FindEmailResponsetDto } from 'types/DTO';
 
 const IdTab = () => {
-  const [value, setValue] = useState('');
-  const isNumber = useCallback((value: string) => /^\d*$/.test(value), []);
+  const [studentNumber, setStudentNumber] = useState('');
 
+  const { data, refetch, isFetching, isError } = useQuery<FindEmailResponsetDto>({
+    queryKey: ['findEmail', studentNumber],
+    queryFn: () => getFindEmail({ studentId: studentNumber }),
+    enabled: false,
+  });
+
+  const handleSubmit = () => {
+    if (!studentNumber.trim()) return;
+    refetch();
+  };
+
+  useEffect(() => {
+    if (isError) alert('회원을 찾을 수 없습니다.');
+  }, [isError]);
+
+  if (data) return <FindEmailResult email={data.email} />;
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex max-w-md gap-4">
-        <label className="flex min-w-fit items-center gap-1">
-          <span className="text-mainRed">*</span>
-          <span className="text-midGray">학번</span>
-        </label>
-        <Input
-          value={value}
-          onChange={(e) => {
-            const input = e.target.value;
-            if (isNumber(input)) setValue(input);
-          }}
-        />
-      </div>
-      <RoundedButton className="mx-auto">아이디 찾기</RoundedButton>
-    </div>
+    <FindEmailForm
+      studentNumber={studentNumber}
+      setStudentNumber={setStudentNumber}
+      onSubmit={handleSubmit}
+      isLoading={isFetching}
+    />
   );
 };
 export default IdTab;
