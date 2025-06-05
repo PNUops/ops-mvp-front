@@ -1,63 +1,138 @@
-import React, { useState, useRef } from 'react';
-import { FaYoutube, FaGithub } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useUserStore } from 'stores/useUserStore';
+import { useTeamId } from 'hooks/useTeamId';
+import { getProjectDetails, getPreviewImages} from 'apis/projectViewer';
+import { getThumbnail, patchProjectDetails, postThumbnail, postPreview } from 'apis/projectEditor';
+import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
 
-import SortableThumbnail from './SortableThumbnail';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
-
-import { project_view } from '@mocks/data/viewer';
-
-const MAX_IMAGES = 6;
-const MAX_OVERVIEW = 400;
+import IntroSection from './IntroSection';
+import UrlInput from './UrlInputSection';
+import ImageUploaderSection from './ImageUploaderSection';
+import OverviewInput from './OverviewInput';
 
 const ProjectEditorPage = () => {
-  const { projectName, teamName, leaderName, participants } = project_view;
+  const memberId = useUserStore((state) => state.user?.id);
+  const teamId = useTeamId();
+  if (!teamId) return <div>팀 정보를 불러올 수 없습니다.</div>;
+
+ const {
+   data: projectData,
+   isLoading: isProjectLoading,
+   isError: isProjectError,
+ } = useQuery<ProjectDetailsResponseDto>({
+   queryKey: ['projectEditorInfo', teamId],
+   queryFn: async () => {
+     if (teamId === null) throw new Error('teamId is null');
+     return await getProjectDetails(teamId);
+   },
+   enabled: teamId !== null,
+ });
+
+ if (isProjectLoading) return <div>로딩 중...</div>;
+ if (isProjectError || !projectData) return <div>데이터를 가져오지 못했습니다.</div>;
+ if (memberId !== projectData?.leaderId) return <div>접근 권한이 없습니다.</div>;
+
+ const {
+   data: thumbnailUrl,
+   isLoading: isThumbnailLoading,
+   isError: isThumbnailError,
+ } = useQuery({
+   queryKey: ['thumbnail', teamId],
+   queryFn: async () => {
+    if (teamId === null) throw new Error('teamId is null');
+    return await getThumbnail(teamId);
+   },
+   enabled: teamId !== null,
+ });
+
+   const {
+     data: previewData,
+     isLoading: isPreviewLoading,
+     isError: isPreviewError,
+   } = useQuery({
+     queryKey: ['previewImages', teamId, projectData?.previewIds],
+     queryFn: async () => {
+        if (teamId === null || !projectData?.previewIds) throw new Error('previewIds 없음');
+        return await getPreviewImages(teamId, projectData.previewIds);
+     },
+     enabled: teamId !== null && !!projectData?.previewIds,
+   });
+
+  const [githubUrl, setGithubUrl] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [thumbnail, setThumbnail] = useState<File | string | undefined>();
+  const [previews, setPreviews] = useState<(File | string)[]>([]);
   const [overview, setOverview] = useState('');
-  const [thumbnails, setThumbnails] = useState<File[]>([]);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setThumbnails((prev) => [...prev, ...files].slice(0, 6));
-  };
+  useEffect(() => {
+    if (projectData) {
+      setGithubUrl(projectData.githubPath);
+      setYoutubeUrl(projectData.youtubePath);
+      setOverview(projectData.overview);
+    }
+  }, [projectData]);
 
-  const handleThumbnailRemove = (index: number) => {
-    setThumbnails((prev) => prev.filter((_, i) => i !== index));
-  };
+  useEffect(() => {
+    setThumbnail(thumbnailUrl);
+  }, [thumbnailUrl]);
 
-  const handleDragEnd = (event: any) => {
-    const { active, over } = event;
-    if (active.id !== over?.id) {
-      setThumbnails((items) => {
-        const oldIndex = active.id as number;
-        const newIndex = over.id as number;
-        return arrayMove(items, oldIndex, newIndex);
+  useEffect(() => {
+    if (previewData?.imageUrls) {
+      setPreviews(previewData.imageUrls);
+    }
+  }, [previewData]);
+
+  useEffect(() => {
+    if (typeof thumbnailUrl !== 'string') return;
+    setThumbnail(thumbnailUrl);
+
+    return () => {
+      URL.revokeObjectURL(thumbnailUrl);
+    };
+  }, [thumbnailUrl]);
+
+  useEffect(() => {
+    if (!previewData?.imageUrls) return;
+    setPreviews(previewData.imageUrls);
+
+    return () => {
+      previewData.imageUrls.forEach((url) => {
+        URL.revokeObjectURL(url);
       });
-    }
-  };
+    };
+  }, [previewData]);
 
-  const handleThumbnailDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-    const imageFiles = files.filter((file) => file.type.startsWith('image/'));
-    setThumbnails((prev) => [...prev, ...imageFiles].slice(0, 6));
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault(); // 드롭 가능하게 만들기 위해 필요
-  };
-
-  const paddedThumbnails: (File | null)[] = [...thumbnails];
-  while (paddedThumbnails.length < 6) paddedThumbnails.push(null);
-
-  const handleOverviewChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= MAX_OVERVIEW) {
-      setOverview(e.target.value);
+  const handleSave = async () => {
+    if (!teamId) {
+      alert('팀 정보를 불러올 수 없습니다.');
+      return;
     }
 
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    try {
+      await patchProjectDetails(teamId, {
+        overview,
+        githubPath: githubUrl,
+        youTubePath: youtubeUrl, // NOT youtube. It's youTube!!
+      });
+
+      if (thumbnail instanceof File) {
+        const formData = new FormData();
+        formData.append('image', thumbnail);
+        await postThumbnail(teamId, formData);
+      }
+
+      const previewFiles = previews.filter((p): p is File => p instanceof File);
+      if (previewFiles.length > 0) {
+        const formData = new FormData();
+        previewFiles.forEach((file) => formData.append('images', file));
+        await postPreview(teamId, formData);
+      }
+
+      alert('저장 완료!');
+    } catch (err: any) {
+      console.error(err);
+      alert(err?.response?.data?.message || '저장 중 오류가 발생했습니다.');
     }
   };
 
@@ -65,106 +140,27 @@ const ProjectEditorPage = () => {
     <div>
       <div className="text-title font-bold">프로젝트 생성</div>
       <div className="h-10" />
-      <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25 flex-col gap-3 pl-3">
-          <span>프로젝트</span>
-          <span>팀명</span>
-          <span>팀장</span>
-          <span>팀원</span>
-        </div>
-        <div className="flex flex-col gap-3">
-          <span>{projectName}</span>
-          <span>{teamName}</span>
-          <span>{leaderName}</span>
-          <div className="flex flex-wrap gap-x-3">
-            {participants.map((name, index) => (
-              <span key={index}>{name}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="h-15" />
-      <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25">
-          <span className="mr-1 text-red-500">*</span>
-          <span>URL</span>
-        </div>
-        <div className="flex flex-1 flex-col gap-3">
-          <div className="relative w-full">
-            <FaGithub className="absolute top-1/2 left-5 -translate-y-1/2 text-gray-500" size={20} />
-            <input
-              type="url"
-              placeholder="https://github.com/"
-              className="placeholder-lightGray focus:ring-lightGray w-full rounded bg-gray-100 py-3 pl-15 text-sm text-black focus:ring-2 focus:outline-none"
-            />
-          </div>
-          <div className="relative w-full">
-            <FaYoutube className="absolute top-1/2 left-5 -translate-y-1/2 text-red-400" size={20} />
-            <input
-              type="url"
-              placeholder="https://youtube.com/"
-              className="placeholder-lightGray focus:ring-lightGray w-full rounded bg-gray-100 py-3 pl-15 text-sm text-black focus:ring-2 focus:outline-none"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="h-15" />
-      <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25 gap-1">
-          <span className="mr-1 text-red-500">*</span>
-          <span>썸네일</span>
-        </div>
-        <div className="flex w-full flex-1 flex-col gap-3 md:flex-row">
-          <div
-            className="border-midGray text-midGray flex min-h-[250px] flex-1 flex-col items-center justify-evenly rounded border p-10 text-center"
-            onDrop={handleThumbnailDrop}
-            onDragOver={handleDragOver}
-          >
-            <p>
-              파일을 이곳에 끌어놓아주세요.
-              <br />
-              Drag & Drop images here.
-            </p>
-            <p className="text-midGray my-2">OR</p>
-            <label className="text-mainGreen cursor-pointer rounded-full bg-[#D1F3E1] px-15 py-4 text-sm font-bold">
-              파일 업로드
-              <input type="file" accept="image/*" multiple className="hidden" onChange={handleThumbnailUpload} />
-            </label>
-          </div>
-          <div className="grid flex-1 grid-cols-3 gap-3 text-center sm:grid-cols-2">
-            <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-              <SortableContext items={paddedThumbnails.map((_, i) => i)} strategy={verticalListSortingStrategy}>
-                {paddedThumbnails.map((file, index) => (
-                  <SortableThumbnail key={index} file={file} index={index} onRemove={handleThumbnailRemove} />
-                ))}
-              </SortableContext>
-            </DndContext>
-          </div>
-        </div>
-      </div>
-      <div className="h-15" />
-      <div className="flex gap-10 text-sm">
-        <div className="text-midGray flex w-25 gap-1">
-          <span className="mr-1 text-red-500">*</span>
-          <span className="w-full">Overview</span>
-        </div>
-        <div className="flex-1 flex-col">
-          <textarea
-            ref={textareaRef}
-            placeholder={`Overview를 입력해주세요. (최대 ${MAX_OVERVIEW}자)`}
-            className="placeholder-lightGray focus:outline-lightGray w-full rounded bg-gray-100 p-5 text-sm"
-            value={overview}
-            onChange={handleOverviewChange}
-          />
-          <div className={`text-right text-xs ${overview.length === MAX_OVERVIEW ? 'text-red-500' : 'text-gray-500'}`}>
-            {overview.length} / {MAX_OVERVIEW}자
-          </div>
-        </div>
-      </div>
 
+      <IntroSection
+        projectName={projectData.projectName}
+        teamName={projectData.teamName}
+        leaderName={projectData.leaderName}
+        participants={projectData.participants}
+      />
+      <div className="h-15" />
+      <UrlInput
+        githubUrl={githubUrl}
+        setGithubUrl={setGithubUrl}
+        youtubeUrl={youtubeUrl}
+        setYoutubeUrl={setYoutubeUrl}
+      />
+      <div className="h-15" />
+      <ImageUploaderSection teamId={teamId} thumbnail={thumbnail} setThumbnail={setThumbnail} previews={previews} setPreviews={setPreviews} />
+      <div className="h-15" />
+      <OverviewInput overview={overview} setOverview={setOverview} />
       <div className="h-20" />
       <div className="flex justify-center">
-        <button className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white">저장</button>
+        <button onClick={handleSave} className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white">저장</button>
       </div>
     </div>
   );
