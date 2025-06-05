@@ -11,6 +11,7 @@ interface Props {
 
 const FindEmailForm = ({ studentNumber, setStudentNumber, onSubmit, isLoading }: Props) => {
   const isNumber = useCallback((value: string) => /^\d*$/.test(value), []);
+  // TODO : isLoading 사용하여 RoundedButton에 로딩 스피너 적용시키기
 
   return (
     <div className="flex flex-col gap-8">
