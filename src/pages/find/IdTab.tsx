@@ -1,9 +1,11 @@
 import Input from '@components/Input';
 import RoundedButton from '@components/RoundedButton';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const IdTab = () => {
   const [value, setValue] = useState('');
+  const isNumber = useCallback((value: string) => /^\d*$/.test(value), []);
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex max-w-md gap-4">
@@ -15,7 +17,7 @@ const IdTab = () => {
           value={value}
           onChange={(e) => {
             const input = e.target.value;
-            if (/^\d*$/.test(input)) setValue(input);
+            if (isNumber(input)) setValue(input);
           }}
         />
       </div>
