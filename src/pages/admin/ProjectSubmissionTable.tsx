@@ -31,7 +31,7 @@ const TableBody = ({ submissions, type }: Props) => {
   return (
     <tbody>
       {submissions.map((item: Submission, idx: number) => (
-        <tr key={item.teamId} className="">
+        <tr key={`${item.teamName}-${item.projectName}-${idx}`}  className="">
           <td className="w-[10%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{idx + 1}</td>
           <td className="w-[20%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{item.teamName}</td>
           <td className="w-[50%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{item.projectName}</td>
