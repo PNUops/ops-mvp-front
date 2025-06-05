@@ -1,5 +1,4 @@
 import { BiError } from "react-icons/bi";
-// TODO: lucide-react 써서 말풍선 모양 구현하기
 
 interface LeaderProps {
     leaderName : string;
@@ -7,13 +6,19 @@ interface LeaderProps {
 
 const LeaderMessage = ({ leaderName } : LeaderProps) => {
     return(
-        <div className="relative ml-2 rounded-lg px-4 py-2 text-base text-mainGreen shadow-sm border border-green-200">
-            <span className="flex items-center gap-1">
-                <BiError color="#00A651"/>
-                <strong className="font-bold">{leaderName}</strong> 팀장님, 에디터에서 프로젝트 정보를 작성해주세요!
-            </span>
+        <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-4 text-mainRed">
+                <BiError size={40} />
+                <div className="flex flex-col leading-snug">
+                    <span className="text-sm">
+                      <strong>{leaderName}</strong> 팀장님
+                    </span>
+                    <span className="text-sm">에디터에서 프로젝트 정보를 작성해 주세요!</span>
+                </div>
+            </div>
 
         </div>
+
     );
 };
 

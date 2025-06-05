@@ -1,11 +1,12 @@
 import Notice from "@pages/main/Notice";
 import TotalCards from "@pages/main/TotalCards";
+import LeaderSection from "@pages/main/LeaderSection";
 
 const MainPage = () => {
   return (
-      <div className="flex flex-col gap-20">
+      <div className="relative flex flex-col gap-20">
         <Notice/>
-        <TotalCards />
+          <TotalCards />
       </div>
   )
 }
