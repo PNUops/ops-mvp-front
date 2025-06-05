@@ -5,6 +5,14 @@ export interface SignInRequestDto {
   password: string;
 }
 
+export interface FindEmailRequestDto {
+  studentId: string;
+}
+
+export interface FindEmailResponsetDto {
+  email: string;
+}
+
 export interface SignInResponseDto {
   memberId: number;
   name: string;
