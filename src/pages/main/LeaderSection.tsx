@@ -1,4 +1,3 @@
-
 import LeaderMessage from "@pages/main/LeaderMessage";
 import useAuth from "../../hooks/useAuth";
 import {getSubmissionStatus} from "../../apis/teams";
@@ -22,21 +21,20 @@ const LeaderSection = () => {
     if (!showLeaderMessage) return null;
 
     return (
-        <div className="absolute top-[150px] left-[280px] z-50">
-            <div className="relative bg-white rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.1)] p-6 w-fit">
-                <div className="absolute -bottom-4 left-6 w-6 h-10 bg-white rotate-60 shadow-[3px_3px_6px_rgba(0,0,0,0.05)] z-0"/>
+        <div className="relative bg-white rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.2)] p-7 w-fit">
+            <div className="absolute -bottom-9 left-10 w-10 h-20 bg-white rotate-63 shadow-[3px_3px_6px_rgba(0,0,0,0.1)] z-0"/>
 
-                <LeaderMessage leaderName={user?.name ?? '팀장'}/>
+            <LeaderMessage leaderName={user?.name ?? '팀장'}/>
 
-                <Link
-                    to={`/teams/edit/${submissionData?.teamId}`}
-                    className="mt-4 px-7 py-3 w-fit border border-midGray rounded-full text-sm font-medium flex items-center gap-2 mx-auto hover:bg-gray-50 transition">
+            <Link
+                to={`/teams/edit/${submissionData?.teamId}`}
+                className="mt-4 px-8 py-4 w-fit border border-midGray rounded-full text-exsm flex items-center gap-2 mx-auto hover:bg-gray-50 transition">
 
-                    <TbPencil size={20} strokeWidth={2}/>
-                    프로젝트 에디터
-                </Link>
-            </div>
+                <TbPencil size={20} strokeWidth={2}/>
+                프로젝트 에디터
+            </Link>
         </div>
+
 
     )
 }
