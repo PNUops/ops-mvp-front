@@ -1,13 +1,13 @@
-import { TeamListItemDto } from "../types/DTO/teamListDto";
-import { SubmissionStatusDto} from "../types/DTO/submissionStatusDto";
+import { TeamListItemResponseDto } from "../types/DTO/teams/teamListDto";
+import { SubmissionStatusResponseDto} from "../types/DTO/teams/submissionStatusDto";
 import apiClient from "./apiClient";
 
-export const getAllTeams = async (): Promise<TeamListItemDto[]> => {
+export const getAllTeams = async (): Promise<TeamListItemResponseDto[]> => {
     const res = await apiClient.get("/teams");
     return res.data;
 }
 
-export const getSubmissionStatus = async (): Promise<SubmissionStatusDto> => {
+export const getSubmissionStatus = async (): Promise<SubmissionStatusResponseDto> => {
     const res = await apiClient.get("/teams/submission-status");
     return res.data;
 }
