@@ -11,3 +11,8 @@ export interface SignInResponseDto {
   token: string;
   memberType: MemberType[];
 }
+
+export interface PasswordResetRequestDto {
+  email: string;
+  newPassword: string;
+}
