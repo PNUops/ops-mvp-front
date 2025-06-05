@@ -5,8 +5,18 @@ import { useMemo } from 'react';
 import { getDashboard } from 'apis/dashboard';
 import { getRanking } from 'apis/ranking';
 import { DashboardTeamResponseDto, TeamLikeResponseDto } from 'types/DTO';
+import useAuth from 'hooks/useAuth';
 
 const AdminPage = () => {
+  const { isAdmin } = useAuth();
+  if (!isAdmin) {
+    return (
+      <div className="mx-auto w-full rounded bg-white p-6 text-center shadow-md">
+        <p className="text-red-500">관리자 권한이 없습니다.</p>
+      </div>
+    );
+  }
+
   const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeamResponseDto[]>({
     queryKey: ['dashboard'],
     queryFn: getDashboard,
