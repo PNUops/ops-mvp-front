@@ -22,7 +22,7 @@ const TabSelector = ({ activeTab, setActiveTab }: Props) => {
         }`}
         onClick={() => setActiveTab('pw')}
       >
-        비밀번호 찾기
+        비밀번호 변경
       </button>
     </div>
   );
