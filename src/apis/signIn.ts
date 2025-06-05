@@ -1,6 +1,7 @@
 import {
   EmailVerificationCodeRequestDTO,
   EmailVerificationRequestDTO,
+  PasswordResetRequestDto,
   SignInRequestDto,
   SignInResponseDto,
 } from 'types/DTO';
@@ -16,5 +17,9 @@ export const postEmailVerificationPasswordReset = async (request: EmailVerificat
 };
 export const patchEmailVerificationCodePasswordReset = async (request: EmailVerificationCodeRequestDTO) => {
   const response = await apiClient.patch('/sign-in/password-reset/email-auth', request);
+  return response.data;
+};
+export const patchPasswordReset = async (request: PasswordResetRequestDto) => {
+  const response = await apiClient.patch('/sign-in/password-reset', request);
   return response.data;
 };
