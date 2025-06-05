@@ -5,7 +5,7 @@ import PasswordConfirmRow from './PasswordConfirmRow';
 import EmailBlock from './EmailBlock';
 import { useSignUpFormState } from './useSignUpFormState';
 import { useMutation } from '@tanstack/react-query';
-import { postEmailVerification, postSignUp } from 'apis/signUp';
+import { patchEmailVerificationCode, postEmailVerification, postSignUp } from 'apis/signUp';
 import { useNavigate } from 'react-router-dom';
 import RoundedButton from '@components/RoundedButton';
 
@@ -55,7 +55,8 @@ const SignUpForm = () => {
         isEmailVerified={formState.isEmailVerified}
         setIsEmailVerified={(val) => updateField('isEmailVerified', val)}
         error={formError.email}
-        mutationFn={postEmailVerification}
+        emailVerificationMutationFn={postEmailVerification}
+        emailVerificationCodeMutationFn={patchEmailVerificationCode}
       />
       <Spacer />
 
