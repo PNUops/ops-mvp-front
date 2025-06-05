@@ -70,5 +70,3 @@ const PasswordTab = () => {
   );
 };
 export default PasswordTab;
-
-const Spacer = () => <div className="col-span-3 h-2" aria-hidden="true" />;
