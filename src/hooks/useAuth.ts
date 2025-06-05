@@ -13,8 +13,8 @@ const useAuth = () => {
   const initToken = useTokenStore((state) => state.initToken);
 
   const isSignedIn = !!user && !!token;
-  const isLeader = isSignedIn && user.memberType.includes('ROLE_팀장');
-  const isAdmin = isSignedIn && user.memberType.includes('ROLE_관리자');
+  const isLeader = isSignedIn && user?.roles?.includes('ROLE_팀장');
+  const isAdmin = isSignedIn && user?.roles?.includes('ROLE_관리자');
 
   const signOut = useCallback(() => {
     clearToken();

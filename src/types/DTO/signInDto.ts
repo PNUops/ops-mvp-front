@@ -9,5 +9,5 @@ export interface SignInResponseDto {
   memberId: number;
   name: string;
   token: string;
-  memberType: MemberType[];
+  roles: MemberType[];
 }
