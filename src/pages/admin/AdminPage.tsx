@@ -9,6 +9,22 @@ import useAuth from 'hooks/useAuth';
 
 const AdminPage = () => {
   const { isAdmin } = useAuth();
+  const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeamResponseDto[]>({
+    queryKey: ['dashboard'],
+    queryFn: getDashboard,
+    enabled: isAdmin,
+  });
+  const { data: rankingData, isLoading: isRankingLoading } = useQuery<TeamLikeResponseDto[]>({
+    queryKey: ['ranking'],
+    queryFn: getRanking,
+    enabled: isAdmin,
+  });
+
+  const sortedRankingData = useMemo(
+    () => [...(rankingData ?? [])].sort((a, b) => (b.likeCount ?? 0) - (a.likeCount ?? 0)),
+    [rankingData],
+  );
+
   if (!isAdmin) {
     return (
       <div className="mx-auto w-full rounded bg-white p-6 text-center shadow-md">
@@ -17,23 +33,10 @@ const AdminPage = () => {
     );
   }
 
-  const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeamResponseDto[]>({
-    queryKey: ['dashboard'],
-    queryFn: getDashboard,
-  });
-  const { data: rankingData, isLoading: isRankingLoading } = useQuery<TeamLikeResponseDto[]>({
-    queryKey: ['ranking'],
-    queryFn: getRanking,
-  });
-
-  const sortedRankingData = useMemo(
-    () => [...(rankingData ?? [])].sort((a, b) => (b.likeCount ?? 0) - (a.likeCount ?? 0)),
-    [rankingData],
-  );
-
   if (isDashboardLoading || isRankingLoading) {
     return <p className="text-center text-gray-400">로딩 중...</p>;
   }
+
   if (!dashboardData || !rankingData) {
     return (
       <div className="mx-auto w-full rounded bg-white p-6 text-center shadow-md">
@@ -45,9 +48,7 @@ const AdminPage = () => {
   return (
     <div className="max-w-container flex flex-col gap-12 p-8">
       <ProjectSubmissionTable submissions={dashboardData} type="project" />
-
       <ProjectSubmissionTable submissions={sortedRankingData} type="vote" />
-
       <VoteRate />
     </div>
   );
