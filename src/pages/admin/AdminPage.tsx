@@ -31,14 +31,21 @@ const AdminPage = () => {
       </div>
     );
   }
-
   return (
     <div className="max-w-container flex flex-col gap-12 p-8">
-      <ProjectSubmissionTable submissions={dashboardData} type="project" />
+      {/* 프로젝트 등록현황 */}
+      <ProjectSubmissionTable submissions={mockSubmissions} type="project" />
 
-      <ProjectSubmissionTable submissions={sortedRankingData} type="vote" />
+      {/* 좋아요 랭킹 */}
+      <ProjectSubmissionTable submissions={sortedByLikes} type="vote" />
 
-      <VoteRate />
+      {/* 투표 참여율 */}
+      <VoteRate
+        pieData={pieData}
+        pieColors={pieColors}
+        totalVotes={1000} // 총 투표수
+        participationRate={pieData[0].value} // 참여율
+      />
     </div>
   );
 };

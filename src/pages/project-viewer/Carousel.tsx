@@ -24,8 +24,8 @@ const Carousel = () => {
         <FaChevronLeft size={35} className="text-midGray hover:text-mainGreen" />
       </button>
 
-      <div className="flex w-full flex-col">
-        <div className="border-midGray aspect-[3/2] h-[300px] w-full rounded border">
+      <div className="flex flex-col">
+        <div className="border-midGray relative aspect-[3/2] w-full max-w-[80vh] overflow-hidden rounded border">
           <img src={images[currentIndex].imageId} alt="Project image" className="h-full w-full object-cover" />
         </div>
         <div className="mt-4 flex justify-center gap-3 px-3">

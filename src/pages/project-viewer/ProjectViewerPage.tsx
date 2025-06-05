@@ -14,9 +14,9 @@ const ProjectViewerPage = () => {
 
   return (
     <div>
-      <div className="flex gap-19">
+      <div className="flex gap-10">
         <div className="text-[36px] font-bold">{projectName}</div>
-        <button className="border-midGray flex items-center gap-3 rounded-full border px-10 py-4 text-sm">
+        <button className="border-midGray text-exsm flex items-center gap-3 rounded-full border px-5">
           <GoPencil />
           수정하기
         </button>
@@ -26,10 +26,10 @@ const ProjectViewerPage = () => {
       <Carousel />
       <div className="h-10" />
       <button
-        className={`bg-${isLiked ? 'mainGreen' : 'lightGray'} relative flex items-center gap-3 justify-self-center rounded-full px-30 py-4 text-sm text-white`}
+        className={`bg-${isLiked ? 'mainGreen' : 'lightGray'} relative flex items-center gap-5 justify-self-center rounded-full px-5 py-3 text-sm text-white sm:px-8`}
       >
-        <FaHeart className={`absolute left-7 text-${isLiked ? 'white' : 'midGray'}`} size={25} />
-        좋아요
+        <FaHeart className={`text-${isLiked ? 'white' : 'midGray'}`} size={20} />
+        <span className="hidden sm:inline">좋아요</span>
       </button>
       <div className="h-20" />
       <div className="flex flex-col gap-5">

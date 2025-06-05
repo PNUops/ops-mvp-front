@@ -1,77 +1,46 @@
-import {mockTeamsMain} from "@mocks/data/teams";
 import TeamCard from "@pages/main/TeamCard";
-import LeaderMessage from "@pages/main/LeaderMessage";
-import {mockSignInResponse, mockTeamLeaderMessage} from "@mocks/data/sign-in";
-import {useEffect, useState} from "react";
-import {fetchAllTeams, fetchSubmissionStatus} from "../../apis/main";
-import {useTokenStore} from "../../stores/useTokenStore";
-import { decodeJwt } from "jose";
+import {useQuery} from "@tanstack/react-query"
+import {getAllTeams, getSubmissionStatus} from "../../apis/teams";
+import {TeamListItemResponseDto} from "../../types/DTO/teams/teamListDto";
+import LeaderSection from "@pages/main/LeaderSection";
+import LoadingSpinner from "@pages/main/LoadingSpinner";
 
 
 const TotalCards = () => {
-    const [teams, setTeams] = useState([]);
-    const [isLeaderAndNotSubmitted, setCondition] = useState(false);
-    const token = useTokenStore((state)=> state.token);
-
-    useEffect(() => {
-        /*
-        Todo : payload role == 팀장 확인 로직
-        // if (!token) {
-        //     console.log("토큰 없음");
-        //     return;
-        // }
-        // const payload = decodeJwt(token);
-        // const isLeader = payload?.role?.includes("ROLE_팀장");
-
-        */
-
-        const mockIsLeader = mockSignInResponse.memberType.includes("ROLE_팀장");
-        const mockIsSubmitted = mockTeamLeaderMessage.isSubmitted;
-
-        if (mockIsLeader && !mockIsSubmitted) {
-        /*
-        Todo : 실제 api 연동 시
-        if (mockIsLeader) {
-            fetchSubmissionStatus()
-                .then(() => {
-                    if (!mockTeamLeaderMessage.isSubmitted) {
-                        setCondition(true);
-                    }
-                })
-                .catch(console.error);
-              */
-           setCondition(true);
-
-        }
-
-        // fetchAllTeams().then(setTeams).catch(console.error);
-    }, []);
+    const {
+        data: teams,
+        isLoading,
+        isError,
+    } = useQuery<TeamListItemResponseDto[]>({
+        queryKey: ['teams'],
+        queryFn: getAllTeams,
+        staleTime: 1000 * 60 * 15,  // stale 시간: 15분
+        gcTime: 1000 * 60 * 15,  // 캐시 삭제 기간 : 15분 간격
+    });
 
     return (
-        <div id="projects" className="flex flex-col gap-4">
-            <h3 id="projects" className="text-sm font-bold">현재 투표진행중인 작품</h3>
-            {isLeaderAndNotSubmitted && (
-                <LeaderMessage leaderName={mockSignInResponse.name} />
-            )}
+      <div id="projects" className="flex flex-col gap-4">
+          <div className="flex justify-between items-center px-4">
+            <h3 id="projects" className="text-sm md:text-md lg:text-xl font-bold">현재 투표진행중인 작품</h3>
+            <LeaderSection />
+      </div>
 
-            <section aria-labelledby="allCards"
-                     className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-screen-xl px-4 mx-0">
-                {mockTeamsMain.map((team) => (
-                    <TeamCard
-                        key={team.teamId}
-                        title={team.projectName}
-                        teamName={team.teamName}
-                        isLiked={team.isLiked}
-                        //thumbnail={`${import.meta.env.VITE_API_URL}/teams/${team.teamId}/thumbnail`}
-                        // Todo: 실제 api 연동할 때는 위 코드로
-                        thumbnail={team.thumbnail}
-                    />
-                ))}
-
-            </section>
-
-        </div>
-    )
+        <section
+          className="mx-0 grid max-w-screen-xl grid-cols-1 gap-8 px-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {isLoading && <LoadingSpinner />}
+            {isError && <p>데이터를 불러오지 못했습니다.</p>}
+          {teams?.map((team) => (
+            <TeamCard
+              key={team.teamId}
+              teamId={team.teamId}
+              teamName={team.teamName}
+              projectName={team.projectName}
+              isLiked={team.liked}
+            />
+          ))}
+        </section>
+      </div>
+    );
 
 };
 

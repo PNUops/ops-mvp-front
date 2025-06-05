@@ -1,6 +1,19 @@
+import Cookies from 'js-cookie';
 import { User } from 'types/User';
 
 export const ACCESS_TOKEN_KEY = 'access_token';
+
+export const writeAccessToken = (token: string): void => {
+  Cookies.set(ACCESS_TOKEN_KEY, token);
+};
+
+export const removeAccessToken = (): void => {
+  Cookies.remove(ACCESS_TOKEN_KEY);
+};
+
+export const getAccessToken = (): string | null => {
+  return Cookies.get(ACCESS_TOKEN_KEY) || null;
+};
 
 const base64UrlDecode = (input: string): string => {
   const base64 = input.replace(/-/g, '+').replace(/_/g, '/');
@@ -18,7 +31,8 @@ export const getUserFromToken = (token: string): User | null => {
     if (parts.length !== 3) throw new Error('Invalid JWT format');
 
     const payload = base64UrlDecode(parts[1]);
-    return JSON.parse(payload) as User;
+    const parsed = JSON.parse(payload);
+    return { id: parsed.sub, name: parsed.name, roles: parsed.roles } as User;
   } catch (error) {
     console.error('Failed to decode token', error);
     return null;
