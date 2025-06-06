@@ -25,9 +25,6 @@ const TotalCards = () => {
         <h3 id="projects" className="md:text-md text-sm font-bold lg:text-xl">
           현재 투표진행중인 작품
         </h3>
-        <h3 id="projects" className="md:text-md text-sm font-bold lg:text-xl">
-          {user?.id ?? 'null'}
-        </h3>
       </div>
       <div className="absolute top-10 left-50 z-50 sm:top-0 sm:left-55 md:top-0 md:left-50 md:left-65 md:left-70 lg:top-10 xl:top-30">
         <LeaderSection />
