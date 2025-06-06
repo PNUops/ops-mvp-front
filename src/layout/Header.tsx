@@ -2,6 +2,7 @@ import logo from 'assets/logo.svg';
 import useAuth from 'hooks/useAuth';
 import { BiCog } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
