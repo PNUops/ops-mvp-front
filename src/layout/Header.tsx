@@ -3,18 +3,18 @@ import useAuth from 'hooks/useAuth';
 import { BiCog } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useToast } from 'hooks/useToast';
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isSignedIn, signOut, isAdmin } = useAuth();
+  const toast = useToast();
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm('로그아웃 하시겠습니까?');
-    if (confirmLogout) {
-      signOut();
-      navigate('/');
-    }
+    toast('로그아웃 되었습니다.', 'success');
+    signOut();
+    navigate('/');
   };
 
   return (

@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import FindEmailForm from './FindEmailForm';
 import FindEmailResult from './FindEmailResult';
 import { FindEmailResponsetDto } from 'types/DTO';
+import { useToast } from 'hooks/useToast';
 
 const IdTab = () => {
   const [studentNumber, setStudentNumber] = useState('');
+  const toast = useToast();
 
   const { data, refetch, isFetching, isError } = useQuery<FindEmailResponsetDto>({
     queryKey: ['findEmail', studentNumber],
@@ -20,7 +22,7 @@ const IdTab = () => {
   };
 
   useEffect(() => {
-    if (isError) alert('회원을 찾을 수 없습니다.');
+    if (isError) toast('회원을 찾을 수 없습니다.', 'error');
   }, [isError]);
 
   if (data) return <FindEmailResult email={data.email} />;
