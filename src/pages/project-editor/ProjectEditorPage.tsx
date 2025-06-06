@@ -180,7 +180,7 @@ const ProjectEditorPage = () => {
       <div className="h-20" />
 
       <div className="flex justify-center">
-        <button onClick={handleSave} className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white">
+        <button onClick={handleSave} className="hover:cursor-pointer bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white">
           저장
         </button>
       </div>

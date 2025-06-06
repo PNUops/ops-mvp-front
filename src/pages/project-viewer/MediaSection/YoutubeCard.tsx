@@ -5,7 +5,6 @@ interface YoutubeCardProps {
 }
 
 const YoutubeCard = ({ youtubeVidUrl }: YoutubeCardProps) => {
-  console.log('전달된 URL:', youtubeVidUrl);
   const embedUrl = formatEmbedUrl(youtubeVidUrl);
 
   if (!embedUrl) {
