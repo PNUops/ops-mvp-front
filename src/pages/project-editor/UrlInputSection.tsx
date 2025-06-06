@@ -34,7 +34,7 @@ const UrlInputSection = ({githubUrl, setGithubUrl, youtubeUrl, setYoutubeUrl}: U
             placeholder="https://youtube.com/"
             className="placeholder-lightGray focus:ring-lightGray w-full rounded bg-gray-100 py-3 pl-15 text-sm text-black focus:ring-2 focus:outline-none"
             value={youtubeUrl}
-            onChange={(e)=>setYoutubeUrl}
+            onChange={(e)=>setYoutubeUrl(e.target.value)}
           />
         </div>
       </div>
