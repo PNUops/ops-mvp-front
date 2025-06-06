@@ -23,20 +23,12 @@ const Header = () => {
         <img className="h-10 w-auto" src="/Logo.svg" alt="부산대학교 SW성과관리시스템 로고" />
       </Link>
       <div className="flex items-center justify-between gap-8">
-        {isAdmin ? (
-          // 이미 /admin 경로에 있다면 Link가 아닌 div로 감싸서 클릭 이벤트를 막음
-          location.pathname !== '/admin' ? (
-            <Link to="/admin" className="flex items-center gap-2 hover:cursor-pointer">
-              <BiCog className="text-mainGreen text-exsm cursor-pointer" />
-              <span className="text-exsm">관리자 페이지</span>
-            </Link>
-          ) : (
-            <div className="flex items-center gap-2 hover:cursor-pointer">
-              <BiCog className="text-mainGreen text-exsm cursor-pointer" />
-              <span className="text-exsm">관리자 페이지</span>
-            </div>
-          )
-        ) : null}
+        {isAdmin ?? (
+          <Link to="/admin" className="flex items-center gap-2 hover:cursor-pointer">
+            <BiCog className="text-mainGreen text-exsm cursor-pointer" />
+            <span className="text-exsm">관리자 페이지</span>
+          </Link>
+        )}
         <button
           onClick={isSignedIn ? handleLogout : () => navigate('/signin')}
           className="text-exsm border-lightGray mr-8 rounded-full border px-4 py-2 hover:cursor-pointer"
