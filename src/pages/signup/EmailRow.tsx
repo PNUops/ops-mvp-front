@@ -29,8 +29,8 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldo
       setIsMailSent(true);
       startCooldown();
     },
-    onError: (error) => {
-      toast(`인증 메일 전송에 실패했어요: ${error.message}`, 'error');
+    onError: (error: any) => {
+      toast(`인증 메일 전송에 실패했어요: ${error?.response.data.message}`, 'error');
       setIsSendable(true);
     },
   });
