@@ -4,10 +4,6 @@ export interface ProjectDetailsEditDto {
   youTubePath: string;
 }
 
-export interface ThumbnailDeleteRequestDto {
-  imageId: number;
-}
-
 export interface PreviewDeleteRequestDto {
   imageIds: number[];
 }

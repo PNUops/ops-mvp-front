@@ -1,9 +1,5 @@
 import apiClient from './apiClient';
-import {
-  ProjectDetailsEditDto,
-  ThumbnailDeleteRequestDto,
-  PreviewDeleteRequestDto,
-} from 'types/DTO/projectEditorDto';
+import { ProjectDetailsEditDto, PreviewDeleteRequestDto } from 'types/DTO/projectEditorDto';
 
 export const patchProjectDetails = async (teamId: number, body: ProjectDetailsEditDto) => {
   const response = await apiClient.patch(`/teams/${teamId}`, body);
@@ -24,8 +20,8 @@ export const postThumbnail = async (teamId: number, formData: FormData) => {
   return response.data;
 };
 
-export const deleteThumbnail = async (teamId: number, body: ThumbnailDeleteRequestDto) => {
-  const response = await apiClient.delete(`/teams/${teamId}/image/thumbnail`, { data: body });
+export const deleteThumbnail = async (teamId: number) => {
+  const response = await apiClient.delete(`/teams/${teamId}/image/thumbnail`);
   return response.data;
 };
 

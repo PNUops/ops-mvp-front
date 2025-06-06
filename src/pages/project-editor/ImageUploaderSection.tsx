@@ -1,58 +1,77 @@
 import React, { useMemo } from 'react';
-import { deletePreview, deleteThumbnail } from 'apis/projectEditor';
 import { FiX } from 'react-icons/fi';
 import { AiFillPicture } from 'react-icons/ai';
+import { PreviewImage } from './ProjectEditorPage';
 
 interface ImageUploaderSectionProps {
-  teamId: number;
-  thumbnail: File | string | undefined;
-  setThumbnail: (thumb: File | string | undefined) => void;
-  previews: (File | string)[];
-  setPreviews: React.Dispatch<React.SetStateAction<(File | string)[]>>;
+  thumbnail: string | File | undefined;
+  setThumbnail: (thumb: string | File | undefined) => void;
+  previews: PreviewImage[];
+  setPreviews: React.Dispatch<React.SetStateAction<PreviewImage[]>>;
+  setThumbnailToDelete: (value: boolean) => void;
+  previewsToDelete: number[];
+  setPreviewsToDelete: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const MAX_IMAGES = 6;
 
 const ImageUploaderSection = ({
-  teamId,
   thumbnail,
   setThumbnail,
   previews,
   setPreviews,
+  setThumbnailToDelete,
+  previewsToDelete,
+  setPreviewsToDelete,
 }: ImageUploaderSectionProps) => {
-  const images = useMemo(() => {
-    const all = thumbnail ? [thumbnail, ...previews.filter((p) => p !== thumbnail)] : [...previews];
-    return all.slice(0, MAX_IMAGES);
+  // const images = useMemo(() => {
+  //   const all = thumbnail ? [{ url: thumbnail }, ...previews.filter((p) => p.url !== thumbnail)] : [...previews];
+  //   return all.slice(0, MAX_IMAGES);
+  // }, [thumbnail, previews]);
+  const images: (PreviewImage | undefined)[] = useMemo(() => {
+    const thumbSlot = thumbnail ? { url: thumbnail } : undefined;
+    const result: (PreviewImage | undefined)[] = [thumbSlot, ...previews];
+    return result.slice(0, MAX_IMAGES);
   }, [thumbnail, previews]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    const nextImages = [...images, ...files].slice(0, MAX_IMAGES);
-    setThumbnail(nextImages[0]);
+    const newPreviews: PreviewImage[] = files.map((file) => ({ url: file }));
+    const nextImages = [...(thumbnail ? [{ url: thumbnail }] : []), ...previews, ...newPreviews].slice(0, MAX_IMAGES);
+    setThumbnail(nextImages[0]?.url);
     setPreviews(nextImages.slice(1));
   };
 
-  const handleRemove = async (index: number) => {
+  const handleRemove = (index: number) => {
     const target = images[index];
+    if (!target) return;
 
-    // 서버 삭제
-    if (typeof target === 'object' && 'id' in target) {
-      const id = (target as { id: number }).id;
-      await deletePreview(teamId, { imageIds: [id] });
-    } else if (typeof target === 'string' && target === thumbnail) {
-      await deleteThumbnail(teamId, { imageId: 0 });
+    // 썸네일 삭제
+    if (index === 0) {
+      if (typeof target.url === 'string') {
+        setThumbnailToDelete(true);
+      }
+      setThumbnail(undefined);
+      return;
     }
 
-    const next = images.filter((_, i) => i !== index);
-    setThumbnail(next[0] ?? undefined);
-    setPreviews(next.slice(1));
+    // 프리뷰 삭제
+    if (target.id !== undefined) {
+      setPreviewsToDelete((prev) => [...prev, target.id!]);
+    }
+    const next = images
+      .filter((_, i) => i !== index)
+      .filter((img, i) => i !== 0 && img !== undefined) as PreviewImage[];
+
+    setPreviews(next);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'));
-    const next = [...images, ...files].slice(0, MAX_IMAGES);
-    setThumbnail(next[0]);
+    const newPreviews: PreviewImage[] = files.map((file) => ({ url: file }));
+    const next = [...(thumbnail ? [{ url: thumbnail }] : []), ...previews, ...newPreviews].slice(0, MAX_IMAGES);
+    setThumbnail(next[0]?.url);
     setPreviews(next.slice(1));
   };
 
@@ -60,8 +79,8 @@ const ImageUploaderSection = ({
 
   const getImageSrc = (data: File | string): string => (typeof data === 'string' ? data : URL.createObjectURL(data));
 
-  const paddedImages = [...images];
-  while (paddedImages.length < MAX_IMAGES) paddedImages.push('');
+  const paddedImages: (PreviewImage | undefined)[] = [...images];
+  while (paddedImages.length < MAX_IMAGES) paddedImages.push(undefined);
 
   return (
     <div className="flex gap-10 text-sm">
@@ -87,14 +106,14 @@ const ImageUploaderSection = ({
           </label>
         </div>
         <div className="grid flex-1 grid-cols-3 gap-3 text-center sm:grid-cols-2">
-          {paddedImages.map((url, index) =>
-            url ? (
+          {paddedImages.map((img, index) =>
+            img ? (
               <div
                 key={index}
                 className="border-lightGray relative flex h-[120px] w-full items-center justify-center overflow-hidden rounded border text-xs text-gray-400"
               >
                 <img
-                  src={getImageSrc(url)}
+                  src={getImageSrc(img.url)}
                   alt={`image-${index}`}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
@@ -113,8 +132,9 @@ const ImageUploaderSection = ({
             ) : (
               <div
                 key={index}
-                className="border-lightGray flex h-[120px] w-full items-center justify-center rounded border border-dashed text-title text-lightGray"
-              ><AiFillPicture />
+                className="border-lightGray text-title text-lightGray flex h-[120px] w-full items-center justify-center rounded border border-dashed"
+              >
+                <AiFillPicture />
               </div>
             ),
           )}
