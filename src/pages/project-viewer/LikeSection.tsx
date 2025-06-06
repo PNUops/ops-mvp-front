@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from 'hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { patchLikeToggle } from 'apis/projectViewer';
@@ -17,10 +17,13 @@ const LikeSection = ({ teamId, isLiked: initIsLiked }: LikeSectionProps) => {
   const [isLiked, setIsLiked] = useState(initIsLiked);
   const navigate = useNavigate();
 
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
   const likeMutation = useMutation({
     mutationFn: (nextIsLiked: boolean) => patchLikeToggle({ teamId, isLiked: nextIsLiked }),
     onSuccess: () => {
       setIsLiked((prev) => !prev);
+      queryClient.invalidateQueries({ queryKey: ['teams', user?.id ?? 'guest'] });
     },
   });
 

@@ -8,19 +8,21 @@ import { useMutation } from '@tanstack/react-query';
 import { patchEmailVerificationCode, postEmailVerification, postSignUp } from 'apis/signUp';
 import { useNavigate } from 'react-router-dom';
 import RoundedButton from '@components/RoundedButton';
+import { useToast } from 'hooks/useToast';
 
 const SignUpForm = () => {
   const { formState, updateField, formError, validate } = useSignUpFormState();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const mutation = useMutation({
     mutationFn: postSignUp,
     onSuccess: (data) => {
-      alert(`회원가입이 완료되었어요.`);
+      toast(`회원가입이 완료되었어요.`, 'success');
       navigate('/signin'); // TODO: 회원가입 완료 시 자동 로그인
     },
-    onError: (error) => {
-      alert(`회원가입에 실패했어요. ${error.message}`);
+    onError: (error: any) => {
+      toast(`${error?.response.data.message}` || '회원가입에 실패했어요.', 'error');
     },
   });
 
