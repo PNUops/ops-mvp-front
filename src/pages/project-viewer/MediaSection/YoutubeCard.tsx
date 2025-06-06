@@ -16,7 +16,7 @@ const YoutubeCard = ({ youtubeVidUrl }: YoutubeCardProps) => {
     <div className="aspect-video w-full">
       <iframe
         className="h-full w-full rounded"
-        src="https://www.youtube.com/embed/HTyxQGPw_HA"
+        src={embedUrl}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       />
