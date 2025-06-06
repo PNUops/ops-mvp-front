@@ -4,7 +4,7 @@ import { useState } from 'react';
 interface CommentProps {
   comment: {
     commentId: number;
-    memberId: number;
+    memberName: string;
     description: string;
   };
   isEditing: boolean;
@@ -33,7 +33,7 @@ const Comment = ({
   return (
     <div className="border-lightGray relative flex flex-col gap-2 border-b p-5 text-sm">
       <span className="flex justify-between font-bold">
-        {comment.memberId}
+        {comment.memberName}
         <button onClick={toggleMenu}>
           <GoKebabHorizontal className="text-midGray cursor-pointer hover:bg-gray-100" />
         </button>
