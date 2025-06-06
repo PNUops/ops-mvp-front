@@ -21,16 +21,14 @@ const TotalCards = () => {
 
   return (
     <div id="projects" className="flex flex-col gap-4">
-      <div className="flex items-center justify-between px-4">
-        <h3 id="projects" className="md:text-md text-sm font-bold lg:text-xl">
+      <div className="my-4 flex items-center justify-between">
+        <h3 id="projects" className="lg:text-title xl:text-title text-sm font-bold md:text-base">
           현재 투표진행중인 작품
         </h3>
-      </div>
-      <div className="absolute top-10 left-50 z-50 sm:top-0 sm:left-55 md:top-0 md:left-50 md:left-65 md:left-70 lg:top-10 xl:top-30">
         <LeaderSection />
       </div>
 
-      <section className="mx-0 grid max-w-screen-xl grid-cols-1 gap-8 px-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <section className="mx-0 grid max-w-screen-xl grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {isLoading && <LoadingSpinner />}
         {isError && <p>데이터를 불러오지 못했습니다.</p>}
         {teams?.map((team) => (
