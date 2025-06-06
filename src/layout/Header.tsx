@@ -23,7 +23,7 @@ const Header = () => {
           <img className="h-10 w-auto" src="/Logo.svg" alt="부산대학교 SW성과관리시스템 로고" />
         </Link>
         <div className="flex items-center justify-between gap-8">
-          {isAdmin ?? (
+          {isAdmin && (
             <Link to="/admin" className="flex items-center gap-2 hover:cursor-pointer">
               <BiCog className="text-mainGreen text-exsm cursor-pointer" />
               <span className="text-exsm">관리자 페이지</span>
