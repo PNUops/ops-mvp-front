@@ -3,23 +3,18 @@ import useAuth from 'hooks/useAuth';
 import { BiCog } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useToast } from 'hooks/useToast';
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isSignedIn, signOut, user, isAdmin } = useAuth();
+  const { isSignedIn, signOut, isAdmin } = useAuth();
+  const toast = useToast();
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm('로그아웃 하시겠습니까?');
-    if (confirmLogout) {
-      signOut();
-      navigate('/');
-    }
-  };
-
-  const handleAdminPage = () => {
-    navigate('/admin');
-    return;
+    toast('로그아웃 되었습니다.', 'success');
+    signOut();
+    navigate('/');
   };
 
   return (
@@ -29,13 +24,18 @@ const Header = () => {
       </Link>
       <div className="flex items-center justify-between gap-8">
         {isAdmin ? (
-          <div
-            className="flex items-center gap-2 hover:cursor-pointer"
-            onClick={location.pathname != '/admin' ? handleAdminPage : undefined}
-          >
-            <BiCog className="text-mainGreen text-exsm cursor-pointer" />
-            <span className="text-exsm">관리자 페이지</span>
-          </div>
+          // 이미 /admin 경로에 있다면 Link가 아닌 div로 감싸서 클릭 이벤트를 막음
+          location.pathname !== '/admin' ? (
+            <Link to="/admin" className="flex items-center gap-2 hover:cursor-pointer">
+              <BiCog className="text-mainGreen text-exsm cursor-pointer" />
+              <span className="text-exsm">관리자 페이지</span>
+            </Link>
+          ) : (
+            <div className="flex items-center gap-2 hover:cursor-pointer">
+              <BiCog className="text-mainGreen text-exsm cursor-pointer" />
+              <span className="text-exsm">관리자 페이지</span>
+            </div>
+          )
         ) : null}
         <button
           onClick={isSignedIn ? handleLogout : () => navigate('/signin')}
