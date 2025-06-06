@@ -28,7 +28,7 @@ const TotalCards = () => {
         <LeaderSection />
       </div>
 
-      <section className="mx-0 grid max-w-screen-xl grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <section className="mx-0 grid max-w-screen gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {isLoading && <LoadingSpinner />}
         {isError && <p>데이터를 불러오지 못했습니다.</p>}
         {teams?.map((team) => (
