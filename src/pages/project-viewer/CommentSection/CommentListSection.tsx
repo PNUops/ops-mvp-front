@@ -6,9 +6,10 @@ import { CommentDto, CommentDeleteRequestDto, CommentEditRequestDto } from 'type
 
 interface CommentListSectionProps {
   teamId: number;
+  memberId: number;
 }
 
-const CommentListSection = ({ teamId }: CommentListSectionProps) => {
+const CommentListSection = ({ teamId, memberId }: CommentListSectionProps) => {
   const queryClient = useQueryClient();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<number | null>(null);
@@ -56,6 +57,7 @@ const CommentListSection = ({ teamId }: CommentListSectionProps) => {
             setEditedDescription={setEditedDescription}
             onStartEdit={() => setEditingId(comment.commentId)}
             onCancelEdit={() => setEditingId(null)}
+            currentUserId={memberId}
           />
         ))}
       </div>

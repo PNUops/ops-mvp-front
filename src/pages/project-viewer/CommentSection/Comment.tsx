@@ -4,6 +4,7 @@ import { useState } from 'react';
 interface CommentProps {
   comment: {
     commentId: number;
+    memberId: number;
     memberName: string;
     description: string;
   };
@@ -15,6 +16,7 @@ interface CommentProps {
   setEditedDescription: (desc: string) => void;
   onStartEdit: () => void;
   onCancelEdit: () => void;
+  currentUserId: number;
 }
 
 const Comment = ({
@@ -27,6 +29,7 @@ const Comment = ({
   setEditedDescription,
   onStartEdit,
   onCancelEdit,
+  currentUserId
 }: CommentProps) => {
   const [localDesc, setLocalDesc] = useState(comment.description);
 
@@ -34,9 +37,11 @@ const Comment = ({
     <div className="border-lightGray relative flex flex-col gap-2 border-b p-5 text-sm">
       <span className="flex justify-between font-bold">
         {comment.memberName}
-        <button onClick={toggleMenu}>
-          <GoKebabHorizontal className="text-midGray cursor-pointer hover:bg-gray-100" />
-        </button>
+        {comment.memberId === currentUserId && (
+          <button onClick={toggleMenu}>
+            <GoKebabHorizontal size={25}className="rounded-full p-1 text-midGray cursor-pointer hover:bg-gray-100" />
+          </button>
+        )}
       </span>
 
       {isEditing ? (
