@@ -1,5 +1,6 @@
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from 'react-icons/md';
 import { InputHTMLAttributes, useState } from 'react';
+import Input from './Input';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
@@ -10,12 +11,7 @@ const PasswordInput = ({ value, ...rest }: Props) => {
 
   return (
     <div className="relative w-full">
-      <input
-        type={showPassword ? 'text' : 'password'}
-        className="border-midGray focus:outline-mainGreen w-full rounded-lg border p-3 text-lg focus:outline-2"
-        placeholder="비밀번호"
-        {...rest}
-      />
+      <Input type={showPassword ? 'text' : 'password'} placeholder="비밀번호" {...rest} />
       <button
         type="button"
         onClick={() => setShowPassword(!showPassword)}

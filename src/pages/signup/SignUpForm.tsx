@@ -5,8 +5,9 @@ import PasswordConfirmRow from './PasswordConfirmRow';
 import EmailBlock from './EmailBlock';
 import { useSignUpFormState } from './useSignUpFormState';
 import { useMutation } from '@tanstack/react-query';
-import { postSignUp } from 'apis/signUp';
+import { patchEmailVerificationCode, postEmailVerification, postSignUp } from 'apis/signUp';
 import { useNavigate } from 'react-router-dom';
+import RoundedButton from '@components/RoundedButton';
 
 const SignUpForm = () => {
   const { formState, updateField, formError, validate } = useSignUpFormState();
@@ -54,6 +55,8 @@ const SignUpForm = () => {
         isEmailVerified={formState.isEmailVerified}
         setIsEmailVerified={(val) => updateField('isEmailVerified', val)}
         error={formError.email}
+        emailVerificationMutationFn={postEmailVerification}
+        emailVerificationCodeMutationFn={patchEmailVerificationCode}
       />
       <Spacer />
 
@@ -69,12 +72,12 @@ const SignUpForm = () => {
       />
 
       <div className="col-span-3 mt-8 flex justify-end gap-4">
-        <button type="button" onClick={() => navigate(-1)} className="border-lightGray w-32 rounded-full border p-3">
+        <RoundedButton type="button" onClick={() => navigate(-1)}>
           취소
-        </button>
-        <button type="submit" className="bg-lightGray w-32 rounded-full p-3">
+        </RoundedButton>
+        <RoundedButton className="bg-lightGray" type="submit">
           가입
-        </button>
+        </RoundedButton>
       </div>
     </form>
   );

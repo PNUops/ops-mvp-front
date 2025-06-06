@@ -2,6 +2,7 @@ import Input from '@components/Input';
 import { useMutation } from '@tanstack/react-query';
 import { patchEmailVerificationCode } from 'apis/signUp';
 import { useState } from 'react';
+import { EmailVerificationCodeRequestDTO } from 'types/DTO';
 import { formatToMMSS } from 'utils/time';
 
 interface Props {
@@ -11,13 +12,22 @@ interface Props {
   isMailSent: boolean;
   cooldown: number;
   stopCooldown: () => void;
+  mutationFn: (request: EmailVerificationCodeRequestDTO) => Promise<any>;
 }
 
-const EmailVerifyRow = ({ email, isEmailVerified, setIsEmailVerified, isMailSent, cooldown, stopCooldown }: Props) => {
+const EmailVerifyRow = ({
+  email,
+  isEmailVerified,
+  setIsEmailVerified,
+  isMailSent,
+  cooldown,
+  stopCooldown,
+  mutationFn,
+}: Props) => {
   const [authCode, setAuthCode] = useState('');
 
   const mutation = useMutation({
-    mutationFn: patchEmailVerificationCode,
+    mutationFn: mutationFn,
     onSuccess: () => {
       alert(`이메일 인증에 성공했어요`);
       setIsEmailVerified(true);
