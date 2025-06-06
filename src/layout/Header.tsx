@@ -17,10 +17,15 @@ const Header = () => {
   };
 
   return (
-    <header className="h-header min-h-header border-lightGray z-20 flex w-full items-center justify-between border-b bg-white px-4">
+    <header className="h-header min-h-header border-lightGray z-20 flex w-full min-w-[350px] items-center justify-between border-b bg-white px-4">
       <div className="mx-auto flex w-full items-center justify-between px-4 sm:px-8 lg:px-16">
         <Link to="/">
-          <img className="h-10 w-auto" src="/Logo.svg" alt="부산대학교 SW성과관리시스템 로고" />
+          <img className="h-10 w-auto max-sm:hidden" src="/Logo.svg" alt="부산대학교 SW성과관리시스템 로고" />
+          <img
+            className="h-10 w-auto sm:hidden"
+            src="/swOpsLogo-sm.png"
+            alt="부산대학교 SW성과관리시스템 로고 (작은 버전)"
+          />
         </Link>
         <div className="flex items-center justify-between gap-8">
           {isAdmin && (
@@ -30,7 +35,7 @@ const Header = () => {
             </Link>
           )}
           {user?.name && (
-            <div className="text-exsm">
+            <div className="text-exsm max-md:hidden">
               <span className="text-mainGreen text-sm">{user.name}</span> 님 환영합니다!
             </div>
           )}
