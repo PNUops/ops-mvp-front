@@ -13,17 +13,16 @@ const AdminPage = () => {
     queryKey: ['dashboard'],
     queryFn: getDashboard,
     enabled: isAdmin,
+    staleTime: 0,
+    refetchOnMount: true,
   });
   const { data: rankingData, isLoading: isRankingLoading } = useQuery<TeamLikeResponseDto[]>({
     queryKey: ['ranking'],
     queryFn: getRanking,
     enabled: isAdmin,
+    staleTime: 0,
+    refetchOnMount: true,
   });
-
-  const sortedRankingData = useMemo(
-    () => [...(rankingData ?? [])].sort((a, b) => (b.likeCount ?? 0) - (a.likeCount ?? 0)),
-    [rankingData],
-  );
 
   if (!isAdmin) {
     return (
@@ -46,9 +45,9 @@ const AdminPage = () => {
   }
 
   return (
-    <div className="max-w-container flex flex-col gap-12 p-8">
+    <div className="max-w-container flex flex-col gap-12 px-4 py-8">
       <ProjectSubmissionTable submissions={dashboardData} type="project" />
-      <ProjectSubmissionTable submissions={sortedRankingData} type="vote" />
+      <ProjectSubmissionTable submissions={rankingData} type="vote" />
       <VoteRate />
     </div>
   );
