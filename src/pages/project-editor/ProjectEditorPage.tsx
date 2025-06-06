@@ -12,7 +12,7 @@ import {
   deleteThumbnail,
 } from 'apis/projectEditor';
 import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
-
+import { useToast } from 'hooks/useToast';
 import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
@@ -33,6 +33,7 @@ const ProjectEditorPage = () => {
   const [githubUrl, setGithubUrl] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [overview, setOverview] = useState('');
+  const toast = useToast();
 
   const {
     data: projectData,
@@ -132,10 +133,10 @@ const ProjectEditorPage = () => {
         newFiles.forEach((file) => formData.append('images', file));
         await postPreview(teamId, formData);
       }
-
-      alert('저장 완료!');
+      toast('프로젝트 저장이 완료되었습니다.', 'success');
     } catch (err: any) {
-      alert(err?.response?.data?.message || '저장 중 오류가 발생했습니다.');
+      toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
+      // console.error(err?.response?.data?.message || '저장 중 오류가 발생했습니다.');
     }
   };
 

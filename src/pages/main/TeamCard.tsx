@@ -38,9 +38,9 @@ const TeamCard = ({teamId, teamName, projectName, isLiked} : TeamCardProps) => {
         )}
 
         <div className="relative p-4">
-          <div className="text-[clamp(1rem,1.2vw,1.2rem)] font-semibold text-black">{projectName}</div>
+          <div className="text-[clamp(1rem,1.5vw,1.5rem)] font-semibold text-black">{projectName}</div>
 
-          <div className="text-[clamp(1rem,1.2vw,1.2rem)] text-midGray text-base">{teamName}</div>
+          <div className="text-[clamp(1rem,1.4vw,1.4rem)] text-midGray text-base">{teamName}</div>
 
           <div className="flex justify-end">
             {isLiked ? (

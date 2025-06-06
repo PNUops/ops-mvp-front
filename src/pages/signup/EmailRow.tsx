@@ -4,6 +4,7 @@ import { postEmailVerification } from 'apis/signUp';
 import { useState } from 'react';
 import { EmailVerificationRequestDTO } from 'types/DTO';
 import { isPNUEmail } from 'utils/email';
+import { useToast } from 'hooks/useToast';
 
 interface Props {
   email: string;
@@ -19,27 +20,28 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldo
   const [isFirstSend, setIsFirstSend] = useState(true);
   const [isSendable, setIsSendable] = useState(true);
   const COOLDOWN_SEC = 30;
+  const toast = useToast();
 
   const mutation = useMutation({
     mutationFn: mutationFn,
     onSuccess: () => {
-      alert(`${email}로 인증 메일을 전송했어요`);
+      toast(`${email}로 인증 메일을 전송했어요`, 'success');
       setIsMailSent(true);
       startCooldown();
     },
-    onError: (error) => {
-      alert(`인증 메일 전송에 실패했어요: ${error.message}`);
+    onError: (error: any) => {
+      toast(`인증 메일 전송에 실패했어요: ${error?.response.data.message}`, 'error');
       setIsSendable(true);
     },
   });
 
   const handleSendCode = () => {
     if (!isPNUEmail(email)) {
-      alert('부산대학교 이메일(@pusan.ac.kr)이 아닙니다.');
+      toast('부산대학교 이메일(@pusan.ac.kr)이 아닙니다.', 'info');
       return;
     }
     if (!isSendable) {
-      alert(`인증 메일은 ${COOLDOWN_SEC}초에 한 번만 보낼 수 있어요.`);
+      toast(`인증 메일은 ${COOLDOWN_SEC}초에 한 번만 보낼 수 있어요`, 'info');
       return;
     }
     setIsFirstSend(false);
