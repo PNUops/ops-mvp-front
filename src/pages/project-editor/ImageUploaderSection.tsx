@@ -129,17 +129,22 @@ const ImageUploaderSection = ({
                 )}
                 <button
                   onClick={() => handleRemove(index)}
-                  className="absolute top-1 right-1 rounded-full border border-lightGray bg-whiteGray p-1"
+                  className="border-lightGray bg-whiteGray absolute top-1 right-1 rounded-full border p-1"
                 >
-                  <FiX size={13} className="hover:cursor-pointer text-midGray" />
+                  <FiX size={13} className="text-midGray hover:cursor-pointer" />
                 </button>
               </div>
             ) : (
               <div
                 key={index}
-                className="border-lightGray text-title text-lightGray flex h-[120px] w-full items-center justify-center rounded border border-dashed"
+                className="relative border-lightGray text-title text-lightGray flex h-[120px] w-full items-center justify-center rounded border border-dashed"
               >
                 <AiFillPicture />
+                {index === 0 && (
+                  <span className="absolute bottom-1 left-1 rounded bg-green-100 px-2 py-0.5 text-xs text-green-600">
+                    썸네일
+                  </span>
+                )}
               </div>
             ),
           )}
