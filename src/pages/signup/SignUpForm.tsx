@@ -21,8 +21,8 @@ const SignUpForm = () => {
       toast(`회원가입이 완료되었어요.`, 'success');
       navigate('/signin'); // TODO: 회원가입 완료 시 자동 로그인
     },
-    onError: (error) => {
-      toast(`회원가입에 실패했어요. ${error.message}`, 'error');
+    onError: (error: any) => {
+      toast(`${error?.response.data.message}` || '회원가입에 실패했어요.', 'error');
     },
   });
 
