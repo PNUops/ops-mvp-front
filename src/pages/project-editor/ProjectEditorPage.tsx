@@ -97,6 +97,16 @@ const ProjectEditorPage = () => {
 
   const handleSave = async () => {
     if (!teamId) return;
+    if (!thumbnail || !previews) {
+      if (!thumbnail && !previews) {
+        alert('썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.');
+      } else if (!thumbnail) {
+        alert('썸네일이 업로드 되지 않았어요.');
+      } else {
+        alert('프리뷰 이미지가 업로드 되지 않았어요.');
+      }
+      return;
+    }
 
     try {
       await patchProjectDetails(teamId, {
