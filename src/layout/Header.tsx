@@ -23,9 +23,9 @@ const Header = () => {
 
   return (
     <header className="h-header min-h-header border-lightGray z-20 flex w-full items-center justify-between border-b bg-white px-4">
-      <div className="w-sidebar flex items-center justify-center font-bold">
-        <img className="hover:cursor-pointer" src={logo} alt="대회 로고" onClick={() => navigate('/')} />
-      </div>
+      <Link to="/">
+        <img className="h-10 w-auto" src="/Logo.svg" alt="부산대학교 SW성과관리시스템 로고" />
+      </Link>
       <div className="flex items-center justify-between gap-8">
         {isAdmin ? (
           <div
