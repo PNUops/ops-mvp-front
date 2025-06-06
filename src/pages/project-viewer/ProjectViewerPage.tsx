@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTeamId } from 'hooks/useTeamId';
+import { useUserStore } from 'stores/useUserStore';
 import { useQuery } from '@tanstack/react-query';
 import { getProjectDetails } from 'apis/projectViewer';
 
@@ -12,6 +13,7 @@ import CommentSection from './CommentSection/CommentSection';
 
 const ProjectViewerPage = () => {
   const teamId = useTeamId();
+  const memberId = useUserStore((state) => state.user?.id);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['projectDetails', teamId],
@@ -27,7 +29,12 @@ const ProjectViewerPage = () => {
 
   return (
     <div>
-      <IntroSection teamId={data.teamId} leaderId={data.leaderId} projectName={data.projectName} teamName={data.teamName} />
+      <IntroSection
+        teamId={data.teamId}
+        leaderId={data.leaderId}
+        projectName={data.projectName}
+        teamName={data.teamName}
+      />
       <div className="h-10" />
       <CarouselSection teamId={data.teamId} previewIds={data.previewIds} />
       <div className="h-10" />
@@ -37,7 +44,7 @@ const ProjectViewerPage = () => {
       <div className="h-20" />
       <MediaSection githubUrl={data.githubPath} youtubeUrl={data.youtubePath} />
       <div className="h-20" />
-      <CommentSection teamId={data.teamId} />
+      {typeof memberId === 'number' && <CommentSection teamId={data.teamId} memberId={memberId} />}
     </div>
   );
 };
