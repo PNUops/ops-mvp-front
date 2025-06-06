@@ -1,9 +1,10 @@
 interface Submission {
-  id: number;
+  teamId?: number;
+  rank?: number;
   teamName: string;
   projectName: string;
-  isSubmitted: boolean;
-  likes: number;
+  isSubmitted?: boolean;
+  likeCount?: number;
 }
 
 interface Props {
@@ -30,15 +31,16 @@ const TableBody = ({ submissions, type }: Props) => {
   return (
     <tbody>
       {submissions.map((item: Submission, idx: number) => (
-        <tr key={item.id} className="">
+        <tr key={`${item.teamName}-${item.projectName}-${idx}`}  className="">
           <td className="w-[10%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{idx + 1}</td>
           <td className="w-[20%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{item.teamName}</td>
           <td className="w-[50%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{item.projectName}</td>
           {type === 'vote' ? (
             <td className="w-[20%] border-b border-gray-300 p-2 py-3 pl-4 text-sm">
-              <div className="flex h-[30px] w-[100px] items-center">
-                <span>좋아요&nbsp;&nbsp;</span>
-                <span className="font-bold">{item.likes.toLocaleString()}</span>개
+              <div className="inline-flex items-center gap-1">
+                <span className="min-w-[50px]">좋아요</span>
+                <span className="font-bold">{item.likeCount?.toLocaleString()}</span>
+                <span>개</span>
               </div>
             </td>
           ) : (

@@ -17,16 +17,7 @@ const Header = () => {
   };
 
   const handleAdminPage = () => {
-    console.log('user: ', user);
-    if (!isSignedIn) {
-      alert('로그인 후 이용해주세요.');
-      return;
-    }
-    if (user?.roles?.includes('ROLE_팀장')) {
-      navigate('/monitor');
-      return;
-    }
-    alert('관리자만 접근할 수 있습니다.');
+    navigate('/admin');
     return;
   };
 
@@ -36,13 +27,15 @@ const Header = () => {
         <img className="hover:cursor-pointer" src={logo} alt="대회 로고" onClick={() => navigate('/')} />
       </div>
       <div className="flex items-center justify-between gap-8">
-        <div
-          className="flex items-center gap-2 hover:cursor-pointer"
-          onClick={location.pathname != '/monitor' ? handleAdminPage : undefined}
-        >
-          <BiCog className="text-mainGreen text-exsm cursor-pointer" />
-          <span className="text-exsm">관리자 페이지</span>
-        </div>
+        {isAdmin ? (
+          <div
+            className="flex items-center gap-2 hover:cursor-pointer"
+            onClick={location.pathname != '/admin' ? handleAdminPage : undefined}
+          >
+            <BiCog className="text-mainGreen text-exsm cursor-pointer" />
+            <span className="text-exsm">관리자 페이지</span>
+          </div>
+        ) : null}
         <button
           onClick={isSignedIn ? handleLogout : () => navigate('/signin')}
           className="text-exsm border-lightGray mr-8 rounded-full border px-4 py-2 hover:cursor-pointer"
