@@ -26,8 +26,13 @@ const CommentSection = ({ teamId, memberId }: CommentSectionProps) => {
 
   return (
     <div className="flex flex-col">
-      <CommentFormSection teamId={teamId} />
-      <div className="h-20" />
+      {isSignedIn && (
+        <>
+          <CommentFormSection teamId={teamId} />
+          <div className="h-20" />
+        </>
+      )}
+
       <CommentListSection teamId={teamId} memberId={memberId} />
     </div>
   );
