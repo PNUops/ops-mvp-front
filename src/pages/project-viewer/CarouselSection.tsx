@@ -35,7 +35,10 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
   return (
     <div className="flex items-center justify-center gap-10 px-15">
       <button onClick={goToPrev}>
-        <FaChevronLeft size={35} className="text-midGray hover:text-mainGreen" />
+        <FaChevronLeft
+          size={50}
+          className="text-midGray hover:text-mainGreen rounded-full p-2 hover:cursor-pointer hover:bg-[#D1F3E1]"
+        />
       </button>
 
       <div className="flex flex-col">
@@ -53,7 +56,10 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
         </div>
       </div>
       <button onClick={goToNext}>
-        <FaChevronRight size={35} className="text-midGray hover:text-mainGreen" />
+        <FaChevronRight
+          size={50}
+          className="text-midGray hover:text-mainGreen rounded-full p-2 hover:cursor-pointer hover:bg-[#D1F3E1]"
+        />
       </button>
     </div>
   );
