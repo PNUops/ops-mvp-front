@@ -4,7 +4,7 @@ import { patchEmailVerificationCode } from 'apis/signUp';
 import { useState } from 'react';
 import { EmailVerificationCodeRequestDTO } from 'types/DTO';
 import { formatToMMSS } from 'utils/time';
-
+import { useToast } from 'hooks/useToast';
 interface Props {
   email: string;
   isEmailVerified: boolean;
@@ -25,22 +25,22 @@ const EmailVerifyRow = ({
   mutationFn,
 }: Props) => {
   const [authCode, setAuthCode] = useState('');
-
+  const toast = useToast();
   const mutation = useMutation({
     mutationFn: mutationFn,
     onSuccess: () => {
-      alert(`이메일 인증에 성공했어요`);
+      toast(`이메일 인증이 완료되었어요`, 'success');
       setIsEmailVerified(true);
       stopCooldown();
     },
     onError: (error) => {
-      alert(`이메일 인증에 실패했어요. ${error.message}`);
+      toast(`이메일 인증에 실패했어요. ${error.message}`, 'error');
     },
   });
 
   const handleSendCode = () => {
     if (!isMailSent) {
-      alert('인증코드 전송이 필요합니다.');
+      toast('인증코드를 먼저 전송해주세요.', 'info');
       return;
     }
     mutation.mutate({ email, authCode });

@@ -10,20 +10,21 @@ import { useMutation } from '@tanstack/react-query';
 import PasswordRow from '@pages/signup/PasswordRow';
 import PasswordConfirmRow from '@pages/signup/PasswordConfirmRow';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from 'hooks/useToast';
 
 const PasswordTab = () => {
   const { formState, updateField, formError, validate } = useFindPasswordFormState();
-
+  const toast = useToast();
   const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: patchPasswordReset,
     onSuccess: (data) => {
-      alert(`비밀번호 변경이 완료되었어요.`);
+      toast(`비밀번호 변경이 완료되었어요.`, 'success');
       navigate('/signin');
     },
     onError: (error) => {
-      alert(`비밀번호 변경에 실패했어요. ${error.message}`);
+      toast(`비밀번호 변경에 실패했어요. ${error.message}`, 'error');
     },
   });
 
