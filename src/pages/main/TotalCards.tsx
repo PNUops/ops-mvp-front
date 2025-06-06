@@ -23,7 +23,7 @@ const TotalCards = () => {
 
         <div id="projects" className="flex flex-col gap-4">
             <div className="flex justify-between items-center px-4">
-                <h3 id="projects" className="text-sm md:text-md lg:text-xl font-bold">
+                <h3 id="projects" className="text-sm md:text-md lg:text-title xl:text-title font-bold">
                     현재 투표진행중인 작품</h3>
             </div>
             <div className="absolute z-50
