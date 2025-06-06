@@ -17,7 +17,7 @@ const LeaderSection = () => {
 
   const showLeaderMessage = isLeader && submissionData?.isSubmitted === false;
 
-  // if (!showLeaderMessage) return null;
+  if (!showLeaderMessage) return null;
 
   return (
     <div className="flex w-fit gap-4 rounded-lg bg-white p-3 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
