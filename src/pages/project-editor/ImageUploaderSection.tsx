@@ -24,10 +24,6 @@ const ImageUploaderSection = ({
   previewsToDelete,
   setPreviewsToDelete,
 }: ImageUploaderSectionProps) => {
-  // const images = useMemo(() => {
-  //   const all = thumbnail ? [{ url: thumbnail }, ...previews.filter((p) => p.url !== thumbnail)] : [...previews];
-  //   return all.slice(0, MAX_IMAGES);
-  // }, [thumbnail, previews]);
   const images: (PreviewImage | undefined)[] = useMemo(() => {
     const thumbSlot = thumbnail ? { url: thumbnail } : undefined;
     const result: (PreviewImage | undefined)[] = [thumbSlot, ...previews];
@@ -36,17 +32,27 @@ const ImageUploaderSection = ({
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
     const newPreviews: PreviewImage[] = files.map((file) => ({ url: file }));
-    const nextImages = [...(thumbnail ? [{ url: thumbnail }] : []), ...previews, ...newPreviews].slice(0, MAX_IMAGES);
-    setThumbnail(nextImages[0]?.url);
-    setPreviews(nextImages.slice(1));
+
+    if (!thumbnail) {
+      const first = newPreviews[0];
+      const rest = newPreviews.slice(1);
+      const combinedPreviews = [...previews, ...rest].slice(0, MAX_IMAGES - 1);
+      setThumbnail(first.url);
+      setPreviews(combinedPreviews);
+    } else {
+      const combined = [...previews, ...newPreviews].slice(0, MAX_IMAGES - 1);
+      setPreviews(combined);
+    }
   };
+
 
   const handleRemove = (index: number) => {
     const target = images[index];
     if (!target) return;
 
-    // 썸네일 삭제
     if (index === 0) {
       if (typeof target.url === 'string') {
         setThumbnailToDelete(true);
@@ -55,7 +61,6 @@ const ImageUploaderSection = ({
       return;
     }
 
-    // 프리뷰 삭제
     if (target.id !== undefined) {
       setPreviewsToDelete((prev) => [...prev, target.id!]);
     }
@@ -124,9 +129,9 @@ const ImageUploaderSection = ({
                 )}
                 <button
                   onClick={() => handleRemove(index)}
-                  className="absolute top-1 right-1 rounded-full border border-gray-300 bg-white p-1"
+                  className="absolute top-1 right-1 rounded-full border border-lightGray bg-whiteGray p-1"
                 >
-                  <FiX size={16} className="text-gray-600" />
+                  <FiX size={13} className="hover:cursor-pointer text-midGray" />
                 </button>
               </div>
             ) : (

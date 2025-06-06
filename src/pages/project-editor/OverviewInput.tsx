@@ -5,7 +5,7 @@ interface OverviewInputProps {
   setOverview: (text: string) => void;
 }
 
-const MAX_OVERVIEW = 400;
+const MAX_OVERVIEW = 3000;
 
 const OverviewInput = ({ overview, setOverview }: OverviewInputProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -31,7 +31,7 @@ const OverviewInput = ({ overview, setOverview }: OverviewInputProps) => {
         <textarea
           ref={textareaRef}
           placeholder={`Overview를 입력해주세요. (최대 ${MAX_OVERVIEW}자)`}
-          className="placeholder-lightGray focus:outline-lightGray w-full rounded bg-gray-100 p-5 text-sm"
+          className="placeholder-lightGray focus:outline-lightGray w-full rounded bg-gray-100 px-4 py-3  text-xs"
           value={overview}
           onChange={handleOverviewChange}
         />
