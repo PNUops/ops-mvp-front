@@ -40,17 +40,22 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
           className="text-midGray hover:text-mainGreen rounded-full p-2 hover:cursor-pointer hover:bg-[#D1F3E1]"
         />
       </button>
-
-      <div className="flex flex-col">
+      <div className="flex w-full flex-col items-center">
         <div className="border-midGray relative aspect-[3/2] w-full max-w-[80vh] overflow-hidden rounded border">
-          <img src={imageUrls[currentIndex]} alt="Project image" className="h-full w-full object-cover" />
+          <img
+            src={imageUrls[currentIndex]}
+            alt="Project image"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
         </div>
-        <div className="mt-4 flex justify-center gap-3 px-3">
+        <div className="mt-4 flex w-full max-w-[80vh] justify-center gap-3 px-3">
           {imageUrls.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`h-1 w-full rounded-full ${currentIndex === index ? 'bg-mainGreen' : 'bg-lightGray'}`}
+              className={`hover:bg-[#D1F3E1] rounded-full h-1 flex-1 transition-all duration-200 hover:cursor-pointer ${
+                currentIndex === index ? 'bg-mainGreen' : 'bg-lightGray'
+              }`}
             />
           ))}
         </div>

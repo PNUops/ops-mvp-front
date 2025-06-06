@@ -136,7 +136,6 @@ const ProjectEditorPage = () => {
       toast('프로젝트 저장이 완료되었습니다.', 'success');
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
-      // console.error(err?.response?.data?.message || '저장 중 오류가 발생했습니다.');
     }
   };
 

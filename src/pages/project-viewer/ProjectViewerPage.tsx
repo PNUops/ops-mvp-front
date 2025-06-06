@@ -44,7 +44,7 @@ const ProjectViewerPage = () => {
       <div className="h-20" />
       <MediaSection githubUrl={data.githubPath} youtubeUrl={data.youtubePath} />
       <div className="h-20" />
-      {typeof memberId === 'number' && <CommentSection teamId={data.teamId} memberId={memberId} />}
+      <CommentSection teamId={data.teamId} memberId={memberId ?? -1} />
     </div>
   );
 };
