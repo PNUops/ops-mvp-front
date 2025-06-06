@@ -31,7 +31,7 @@ const Header = () => {
           )}
           {user?.name && (
             <div className="text-exsm">
-              <span className="text-mainGreen">{user.name}</span> 님 환영합니다!
+              <span className="text-mainGreen text-sm">{user.name}</span> 님 환영합니다!
             </div>
           )}
           <button
