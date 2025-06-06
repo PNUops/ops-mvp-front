@@ -8,6 +8,7 @@ import ProjectViewerPage from '@pages/project-viewer/ProjectViewerPage';
 import SignInPage from '@pages/signin/SignInPage';
 import SignUpPage from '@pages/signup/SignUpPage';
 import AdminPage from '@pages/admin/AdminPage';
+import FindPage from '@pages/find/FindPage';
 
 const AppRoutes = () =>
   useRoutes([
@@ -21,6 +22,7 @@ const AppRoutes = () =>
         { path: 'teams/view/:teamId', element: <ProjectViewerPage /> },
         { path: 'teams/edit/:teamId', element: <ProjectEditorPage /> },
         { path: 'admin', element: <AdminPage /> },
+        { path: 'find', element: <FindPage /> },
       ],
     },
   ]);

@@ -5,15 +5,19 @@ import { useMemo } from 'react';
 import { getDashboard } from 'apis/dashboard';
 import { getRanking } from 'apis/ranking';
 import { DashboardTeamResponseDto, TeamLikeResponseDto } from 'types/DTO';
+import useAuth from 'hooks/useAuth';
 
 const AdminPage = () => {
+  const { isAdmin } = useAuth();
   const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeamResponseDto[]>({
     queryKey: ['dashboard'],
     queryFn: getDashboard,
+    enabled: isAdmin,
   });
   const { data: rankingData, isLoading: isRankingLoading } = useQuery<TeamLikeResponseDto[]>({
     queryKey: ['ranking'],
     queryFn: getRanking,
+    enabled: isAdmin,
   });
 
   const sortedRankingData = useMemo(
@@ -21,9 +25,18 @@ const AdminPage = () => {
     [rankingData],
   );
 
+  if (!isAdmin) {
+    return (
+      <div className="mx-auto w-full rounded bg-white p-6 text-center shadow-md">
+        <p className="text-red-500">관리자 권한이 없습니다.</p>
+      </div>
+    );
+  }
+
   if (isDashboardLoading || isRankingLoading) {
     return <p className="text-center text-gray-400">로딩 중...</p>;
   }
+
   if (!dashboardData || !rankingData) {
     return (
       <div className="mx-auto w-full rounded bg-white p-6 text-center shadow-md">
@@ -31,21 +44,12 @@ const AdminPage = () => {
       </div>
     );
   }
+
   return (
     <div className="max-w-container flex flex-col gap-12 p-8">
-      {/* 프로젝트 등록현황 */}
-      <ProjectSubmissionTable submissions={mockSubmissions} type="project" />
-
-      {/* 좋아요 랭킹 */}
-      <ProjectSubmissionTable submissions={sortedByLikes} type="vote" />
-
-      {/* 투표 참여율 */}
-      <VoteRate
-        pieData={pieData}
-        pieColors={pieColors}
-        totalVotes={1000} // 총 투표수
-        participationRate={pieData[0].value} // 참여율
-      />
+      <ProjectSubmissionTable submissions={dashboardData} type="project" />
+      <ProjectSubmissionTable submissions={sortedRankingData} type="vote" />
+      <VoteRate />
     </div>
   );
 };

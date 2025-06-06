@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import EmailRow from './EmailRow';
 import EmailVerifyRow from './EmailVerifyRow';
-import { error } from 'console';
+import { EmailVerificationCodeRequestDTO, EmailVerificationRequestDTO } from 'types/DTO';
 
 interface Props {
   email: string;
@@ -9,9 +9,19 @@ interface Props {
   isEmailVerified: boolean;
   setIsEmailVerified: (value: boolean) => void;
   error?: string;
+  emailVerificationMutationFn: (request: EmailVerificationRequestDTO) => Promise<any>;
+  emailVerificationCodeMutationFn: (request: EmailVerificationCodeRequestDTO) => Promise<any>;
 }
 
-const EmailBlock = ({ email, setEmail, isEmailVerified, setIsEmailVerified, error }: Props) => {
+const EmailBlock = ({
+  email,
+  setEmail,
+  isEmailVerified,
+  setIsEmailVerified,
+  error,
+  emailVerificationMutationFn,
+  emailVerificationCodeMutationFn,
+}: Props) => {
   const EMAIL_VERIFY_COOLDOWN_SEC = 300;
   const [isMailSent, setIsMailSent] = useState(false);
   const [cooldown, setCooldown] = useState(0);
@@ -39,6 +49,7 @@ const EmailBlock = ({ email, setEmail, isEmailVerified, setIsEmailVerified, erro
         setIsMailSent={setIsMailSent}
         startCooldown={startCooldown}
         error={error}
+        mutationFn={emailVerificationMutationFn}
       />
       <EmailVerifyRow
         email={email}
@@ -47,6 +58,7 @@ const EmailBlock = ({ email, setEmail, isEmailVerified, setIsEmailVerified, erro
         isMailSent={isMailSent}
         cooldown={cooldown}
         stopCooldown={stopCooldown}
+        mutationFn={emailVerificationCodeMutationFn}
       />
     </>
   );

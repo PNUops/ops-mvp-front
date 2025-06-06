@@ -1,4 +1,4 @@
-export interface SubmissionStatusDto {
+export interface SubmissionStatusResponseDto {
     teamId: number;
     teamName: string;
     projectName: string;
