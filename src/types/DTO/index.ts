@@ -4,6 +4,6 @@ export * from './dashboardDto';
 export * from './teamsLikeDto';
 export * from './voteRateDto';
 
-export type { DashboardTeam } from './dashboardDto';
-export type { TeamLike } from './teamsLikeDto';
-export type { VoteRate } from './voteRateDto';
+export type { DashboardTeamResponseDto } from './dashboardDto';
+export type { TeamLikeResponseDto } from './teamsLikeDto';
+export type { VoteRateResponseDto } from './voteRateDto';
