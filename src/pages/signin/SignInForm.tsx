@@ -6,11 +6,12 @@ import useAuth from 'hooks/useAuth';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isPNUEmail } from 'utils/email';
+import { useToast } from 'hooks/useToast';
 
 const SignInForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const toast = useToast();
   const { signIn } = useAuth();
   const navigate = useNavigate();
 
@@ -21,19 +22,19 @@ const SignInForm = () => {
       navigate('/');
     },
     onError: (error) => {
-      alert(`로그인 실패: ${error.message}`); // TODO: toast로 바꾸기
+      toast(`로그인 실패: ${error.message}`, 'error');
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isPNUEmail(email)) {
-      alert('부산대학교 이메일(@pusan.ac.kr)이 아닙니다.');
+      toast('부산대학교 이메일(@pusan.ac.kr)이 아닙니다.', 'info');
       return;
     }
 
     if (!password.trim()) {
-      alert('비밀번호가 비어 있습니다.');
+      toast(`비밀번호가 비어 있습니다.`, 'info');
       return;
     }
 
