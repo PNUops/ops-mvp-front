@@ -15,14 +15,9 @@ const LeaderSection = () => {
     enabled: isLeader,
   });
 
-  const fakeSubmission: SubmissionStatusResponseDto = {
-    teamId: 3,
-    teamName: '테스트 팀',
-    projectName: '테스트 프로젝트',
-    isSubmitted: false,
-  };
 
-  const showLeaderMessage = isLeader && fakeSubmission?.isSubmitted === false;
+
+  const showLeaderMessage = isLeader && submissionData?.isSubmitted === false;
 
   if (!showLeaderMessage) return null;
 
@@ -34,7 +29,7 @@ const LeaderSection = () => {
       <Link to={`/teams/edit/${submissionData?.teamId}`}>
         <RoundedButton className="flex w-fit items-center gap-1">
           <TbPencil size={30} />
-          <span className="hidden md:inline">
+          <span className="hidden md:inline break-keep">
             작성하러 가기</span>
         </RoundedButton>
 
