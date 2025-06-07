@@ -6,12 +6,11 @@ interface LeaderProps {
 
 const LeaderMessage = ({ leaderName }: LeaderProps) => {
   return (
-    <div className="text-mainRed flex items-center gap-1">
-      <BiError className="text-4xl" />
-      <span className="text-sm">
-        <strong>{leaderName}</strong> 팀장님
+    <div className="text-mainRed flex items-center gap-1 break-keep">
+      <BiError className="w-10 h-10 flex-shrink-0" />
+      <span className="px-4 text-sm">
+        <strong className="text-xl">{leaderName}</strong> 팀장님, 에디터에서 프로젝트 정보를 작성해 주세요!
       </span>
-      <span className="text-sm">에디터에서 프로젝트 정보를 작성해 주세요!</span>
     </div>
   );
 };
