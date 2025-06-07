@@ -25,10 +25,9 @@ const TotalCards = () => {
         <h3 id="projects" className="lg:text-title xl:text-title text-sm font-bold md:text-base">
           현재 투표진행중인 작품
         </h3>
-        <LeaderSection />
       </div>
 
-      <section className="mx-0 grid max-w-screen gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <section className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-8">
         {isLoading && <LoadingSpinner />}
         {isError && <p>데이터를 불러오지 못했습니다.</p>}
         {teams?.map((team) => (
