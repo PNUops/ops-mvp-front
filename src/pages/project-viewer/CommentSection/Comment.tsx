@@ -81,14 +81,20 @@ const Comment = ({
         </span>
 
         {isEditing ? (
-          <div className="flex flex-col gap-5 transition-all duration-300 ease-in-out">
-            <textarea
-              className="bg-whiteGray placeholder:text-lightGray focus:ring-lightGray h-32 w-full resize-none overflow-y-auto rounded p-3 leading-[1.8] transition-all duration-300 ease-in-out focus:ring focus:outline-none"
-              placeholder="댓글을 입력하세요 (최대 255자)"
-              maxLength={255}
-              value={localDesc}
-              onChange={(e) => setLocalDesc(e.target.value)}
-            />
+          <div className="animate-fade-in flex flex-col gap-5">
+            <div className="bg-whiteGray focus:ring-lightGray flex h-36 flex-col gap-2 rounded p-3 text-sm transition-all duration-300 ease-in-out focus:outline-none">
+              <textarea
+                className="placeholder:text-lightGray w-full flex-1 resize-none focus:outline-none"
+                placeholder="댓글을 입력하세요 (최대 255자)"
+                maxLength={255}
+                value={localDesc}
+                onChange={(e) => setLocalDesc(e.target.value)}
+              />
+              <div className="text-exsm text-midGray text-right">
+                <span className={localDesc.length >= 200 ? 'text-mainRed' : ''}>{localDesc.length}</span> / 255자
+              </div>
+            </div>
+
             <div className="flex justify-end gap-2">
               <button
                 className="bg-mainGreen text-exsm text-whiteGray rounded-full px-5 py-1 transition hover:cursor-pointer hover:bg-emerald-600 focus:bg-emerald-600 focus:outline-none"
@@ -115,9 +121,7 @@ const Comment = ({
             </div>
           </div>
         ) : (
-          <div className="leading-[1.5] break-words text-gray-700 transition-all duration-300 ease-in-out">
-            {comment.description}
-          </div>
+          <div className="break-words text-gray-700 transition-all duration-300 ease-in-out">{comment.description}</div>
         )}
       </div>
       <ConfirmModal
