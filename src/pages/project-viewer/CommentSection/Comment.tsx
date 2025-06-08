@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import ConfirmModal from './ConfirmModal';
-import { GoPencil } from 'react-icons/go';
-import { IoIosRemoveCircleOutline } from 'react-icons/io';
+import { RiPencilFill } from 'react-icons/ri';
+import { IoRemoveCircle } from 'react-icons/io5';
 
 interface CommentProps {
   comment: {
@@ -48,25 +48,29 @@ const Comment = ({
 
   return (
     <>
-      <div className="border-lightGray relative flex flex-col gap-3 border-b p-5 text-sm" ref={editRef}>
+      <div className="relative flex flex-col gap-3 border-b border-gray-100 p-5 text-sm" ref={editRef}>
         <span className="flex justify-between font-bold">
           {comment.memberName}
           {comment.memberId === currentUserId && (
-            <div className="text-midGray flex gap-4">
+            <div className="text-midGray bg-whiteGray flex items-center gap-3 rounded-md px-3">
               <div className="group relative">
                 <button
                   onClick={onStartEdit}
-                  className={`cursor-pointer ${isEditing ? 'text-mainGreen' : 'hover:text-mainGreen'}`}
+                  className={`cursor-pointer ${isEditing ? 'text-mainGreen' : 'hover:text-mainGreen'} text-lightGray focus:text-mainGreen focus:outline-none`}
                 >
-                  <GoPencil size={18} />
+                  <RiPencilFill size={18} />
                 </button>
                 <div className="bg-mainGreen absolute -top-8 left-1/2 -translate-x-1/2 rounded px-2 py-1 text-xs font-normal whitespace-nowrap text-white opacity-0 transition-opacity group-hover:opacity-50">
                   댓글 수정
                 </div>
               </div>
+              <div className="bg-lightGray h-3 w-px" />
               <div className="group relative">
-                <button onClick={() => setShowConfirm(true)} className="cursor-pointer hover:text-red-500">
-                  <IoIosRemoveCircleOutline size={20} />
+                <button
+                  onClick={() => setShowConfirm(true)}
+                  className="text-lightGray hover:text-mainRed focus:text-mainRed cursor-pointer focus:outline-none"
+                >
+                  <IoRemoveCircle size={18} />
                 </button>
                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-red-500 px-2 py-1 text-xs font-normal whitespace-nowrap text-white opacity-0 transition-opacity group-hover:opacity-50">
                   댓글 삭제
@@ -87,8 +91,12 @@ const Comment = ({
             />
             <div className="flex justify-end gap-2">
               <button
-                className="bg-mainGreen text-exsm text-whiteGray rounded-full px-5 py-1 transition hover:cursor-pointer hover:bg-emerald-600"
+                className="bg-mainGreen text-exsm text-whiteGray rounded-full px-5 py-1 transition hover:cursor-pointer hover:bg-emerald-600 focus:bg-emerald-600 focus:outline-none"
                 onClick={() => {
+                  if (localDesc.trim() === comment.description.trim()) {
+                    onCancelEdit();
+                    return;
+                  }
                   setEditedDescription(localDesc);
                   handleEdit();
                 }}
@@ -96,7 +104,7 @@ const Comment = ({
                 저장
               </button>
               <button
-                className="text-exsm border-lightGray text-midGray hover:bg-lightGray rounded-full border px-5 py-1 transition hover:cursor-pointer"
+                className="text-exsm border-lightGray text-midGray hover:bg-lightGray focus:bg-lightGray rounded-full border px-5 py-1 transition hover:cursor-pointer focus:outline-none"
                 onClick={() => {
                   setLocalDesc(comment.description);
                   onCancelEdit();
@@ -107,7 +115,9 @@ const Comment = ({
             </div>
           </div>
         ) : (
-          <div className="leading-[1.8] break-words transition-all duration-300 ease-in-out">{comment.description}</div>
+          <div className="leading-[1.5] break-words text-gray-700 transition-all duration-300 ease-in-out">
+            {comment.description}
+          </div>
         )}
       </div>
       <ConfirmModal

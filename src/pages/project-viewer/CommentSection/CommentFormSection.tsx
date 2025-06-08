@@ -82,7 +82,7 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
       <div className="mt-2 flex justify-end">
         <button
           onClick={handleClick}
-          className="text-mainGreen rounded-full bg-[#D1F3E1] px-10 py-2 font-medium transition-colors duration-200 hover:cursor-pointer hover:bg-[#b2e8cf]"
+          className="text-mainGreen rounded-full bg-[#D1F3E1] px-10 py-2 font-medium transition-colors duration-200 hover:cursor-pointer hover:bg-[#b2e8cf] focus:bg-[#b2e8cf] focus:outline-none"
         >
           등록
         </button>
