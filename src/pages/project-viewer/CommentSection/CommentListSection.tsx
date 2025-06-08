@@ -44,8 +44,6 @@ const CommentListSection = ({ teamId, memberId }: CommentListSectionProps) => {
             key={comment.commentId}
             comment={comment}
             isEditing={editingId === comment.commentId}
-            isMenuOpen={isMenuOpen === comment.commentId}
-            toggleMenu={() => setIsMenuOpen(isMenuOpen === comment.commentId ? null : comment.commentId)}
             handleEdit={() =>
               editMutation.mutate({
                 teamId,
