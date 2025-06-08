@@ -72,7 +72,7 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
           onChange={(e) => setNewComment(e.target.value)}
           maxLength={255}
           placeholder="프로젝트에 대해 댓글을 남겨보세요."
-          className="placeholder-lightGray w-full flex-1 resize-none focus:outline-none"
+          className="placeholder-lightGray w-full flex-1 resize-none p-2 focus:outline-none"
         />
         <div className="text-exsm text-midGray text-right">
           <span className={newComment.length >= 200 ? 'text-mainRed' : ''}>{newComment.length}</span> / 255자
