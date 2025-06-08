@@ -8,8 +8,11 @@ const YoutubeCard = ({ youtubeVidUrl }: YoutubeCardProps) => {
   const embedUrl = formatEmbedUrl(youtubeVidUrl);
 
   if (!embedUrl) {
-    return <div>유효하지 않은 유튜브 링크입니다.</div>;
-    console.log(embedUrl);
+    return (
+      <div className="text-midGray flex h-50 flex-col items-center justify-center gap-5 rounded border border-gray-200">
+        유효하지 않은 유튜브 링크입니다.
+      </div>
+    );
   }
 
   return (

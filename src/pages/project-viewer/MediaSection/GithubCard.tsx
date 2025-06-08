@@ -30,12 +30,21 @@ const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
     if (githubRepoUrl) mutate(githubRepoUrl);
   }, [githubRepoUrl, mutate]);
 
-  if (isPending) return <div>레포지토리를 불러오는 중입니다...</div>;
-  if (isError || !repoData) return <div>유효하지 않은 레포지토리 링크입니다.</div>;
+  if (isPending)
+    return (
+      <div className="text-midGray flex h-20 flex-col items-center justify-center gap-5 rounded border border-gray-200">
+        레포지토리를 불러오는 중입니다.
+      </div>
+    );
+  if (isError || !repoData)
+    return (
+      <div className="text-midGray flex h-20 flex-col items-center justify-center gap-5 rounded border border-gray-200">
+        유효하지 않은 레포지토리 링크입니다.
+      </div>
+    );
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="text-title font-bold">URL</div>
+    <div className="flex flex-col gap-5 overflow-hidden">
       <a
         href={githubRepoUrl}
         target="_blank"
@@ -49,10 +58,12 @@ const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
         />
         <div className="ml-3 flex flex-1 flex-col text-sm">
           <span className="font-semibold">{repoData.name}</span>
-          <span className="max-w-[500px] truncate text-xs text-gray-500">{repoData.description}</span>
+          <span className="hidden w-full max-w-[500px] truncate text-xs text-gray-500 sm:block">
+            {repoData.description}
+          </span>
           <span className="text-xs text-gray-400">{repoData.language}</span>
         </div>
-        <FaGithub className="mx-5 text-xl text-black" />
+        <FaGithub size={30} className="mx-5 shrink-0 text-xl text-black" />
       </a>
     </div>
   );

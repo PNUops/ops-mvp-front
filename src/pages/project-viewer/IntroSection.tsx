@@ -19,8 +19,11 @@ const IntroSection = ({ teamId, leaderId, projectName, teamName }: IntroSectionP
     <>
       <div className="flex items-center gap-10">
         <div className="text-[36px] font-bold">{projectName}</div>
-        {isLeader && (memberId === leaderId) &&  (
-          <button onClick={() => navigate(`/teams/edit/${teamId}`)}className="border-midGray text-exsm flex items-center gap-3 rounded-full border px-5 py-1 text-gray-700 hover:cursor-pointer">
+        {isLeader && memberId === leaderId && (
+          <button
+            onClick={() => navigate(`/teams/edit/${teamId}`)}
+            className="border-midGray text-exsm text-midGray hover:text-mainGreen hover:border-mainGreen flex items-center gap-3 rounded-full border px-5 py-1 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/60"
+          >
             <GoPencil />
             수정하기
           </button>
