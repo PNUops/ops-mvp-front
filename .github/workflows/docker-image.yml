@@ -42,4 +42,5 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            chmod +x ~/pnuops_fe/run.sh
             ~/pnuops_fe/run.sh
