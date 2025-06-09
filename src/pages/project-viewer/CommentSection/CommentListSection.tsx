@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useToast } from 'hooks/useToast';
 import Comment from './Comment';
 import { getCommentsList, deleteComment, editComment } from 'apis/projectViewer';
 import { CommentDto, CommentDeleteRequestDto, CommentEditRequestDto } from 'types/DTO/projectViewerDto';
@@ -11,6 +12,7 @@ interface CommentListSectionProps {
 
 const CommentListSection = ({ teamId, memberId }: CommentListSectionProps) => {
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<number | null>(null);
   const [editedDescription, setEditedDescription] = useState<string>('');
@@ -22,7 +24,9 @@ const CommentListSection = ({ teamId, memberId }: CommentListSectionProps) => {
 
   const deleteMutation = useMutation({
     mutationFn: (request: CommentDeleteRequestDto) => deleteComment(request),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comments', teamId] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments', teamId] }), toast('댓글이 삭제되었어요.');
+    },
   });
 
   const editMutation = useMutation({
@@ -30,6 +34,7 @@ const CommentListSection = ({ teamId, memberId }: CommentListSectionProps) => {
     onSuccess: () => {
       setEditingId(null);
       queryClient.invalidateQueries({ queryKey: ['comments', teamId] });
+      toast('댓글이 편집되었어요.');
     },
   });
 
@@ -44,8 +49,6 @@ const CommentListSection = ({ teamId, memberId }: CommentListSectionProps) => {
             key={comment.commentId}
             comment={comment}
             isEditing={editingId === comment.commentId}
-            isMenuOpen={isMenuOpen === comment.commentId}
-            toggleMenu={() => setIsMenuOpen(isMenuOpen === comment.commentId ? null : comment.commentId)}
             handleEdit={() =>
               editMutation.mutate({
                 teamId,

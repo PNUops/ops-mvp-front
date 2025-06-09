@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from 'hooks/useAuth';
+import { useToast } from 'hooks/useToast';
 import { CommentFormRequestDto, CommentDto } from 'types/DTO/projectViewerDto';
 import { postCommentForm } from 'apis/projectViewer';
 
@@ -16,6 +17,7 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
   const [newComment, setNewComment] = useState('');
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const toast = useToast();
 
   const commentMutation = useMutation<void, Error, string, PreviousComments>({
     mutationFn: (comment) => {
@@ -45,7 +47,10 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
       if (context?.previousComments) {
         queryClient.setQueryData(['comments', teamId], context.previousComments);
       }
-      alert('댓글 등록에 실패했어요.');
+      toast('댓글 등록에 실패했어요.');
+    },
+    onSuccess: () => {
+      toast('댓글이 등록되었어요.');
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['comments', teamId] });
@@ -54,25 +59,32 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
   });
 
   const handleClick = () => {
-    if (!newComment.trim()) return alert('댓글을 입력해주세요.');
+    if (!newComment.trim()) return toast('댓글을 입력해주세요.');
     if (commentMutation.isPending) return;
     commentMutation.mutate(newComment);
   };
 
   return (
     <>
-      <div className="border-midGray flex h-[200px] flex-col justify-between rounded border p-5 text-sm">
+      <div className="ring-lightGray focus-within:ring-midGray flex h-36 flex-col gap-2 rounded p-3 text-sm ring-1 transition-all duration-300 ease-in-out focus-within:ring-1">
         <textarea
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
+          maxLength={255}
           placeholder="프로젝트에 대해 댓글을 남겨보세요."
-          className="placeholder-lightGray mb-1 w-full flex-1 resize-none focus:outline-none"
+          className="placeholder-lightGray w-full flex-1 resize-none p-2 focus:outline-none"
         />
+        <div className="text-exsm text-midGray text-right">
+          <span className={newComment.length >= 200 ? 'text-mainRed' : ''}>{newComment.length}</span> / 255자
+        </div>
+      </div>
+
+      <div className="mt-2 flex justify-end">
         <button
           onClick={handleClick}
-          className="text-mainGreen self-end rounded-full bg-[#D1F3E1] px-15 py-3 font-bold hover:cursor-pointer"
+          className="text-mainGreen rounded-full bg-[#D1F3E1] px-10 py-2 font-medium transition-colors duration-200 hover:cursor-pointer hover:bg-[#b2e8cf] focus:bg-[#b2e8cf] focus:outline-none"
         >
-          {commentMutation.isPending ? '등록 중...' : '등록'}
+          등록
         </button>
       </div>
     </>
