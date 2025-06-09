@@ -22,7 +22,7 @@ const TotalCards = () => {
   return (
     <div id="projects" className="flex flex-col gap-4">
       <div className="my-4 flex items-center justify-between">
-        <h3 id="projects" className="lg:text-title xl:text-title text-sm font-bold md:text-base">
+        <h3 id="projects" className="lg:text-title text-2xl font-bold">
           현재 투표진행중인 작품
         </h3>
         <LeaderSection />
