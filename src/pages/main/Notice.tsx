@@ -1,4 +1,4 @@
-import banner from "@assets/banner.svg"
+import banner from '@assets/banner.svg';
 
 const Notice = () => {
   return (
@@ -7,7 +7,6 @@ const Notice = () => {
            target="_blank">
             <img src={banner} alt="대회 로고" className="cursor-pointer"/>
         </a>
-
     </section>
   );
 };
