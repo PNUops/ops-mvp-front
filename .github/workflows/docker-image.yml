@@ -29,7 +29,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_IMAGE_NAME }}:latest
           build-args: |
-            VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
+            VITE_API_BASE_URL=${{ vars.VITE_API_BASE_URL }}
 
   remote-deploy:
     needs: docker-build-push
