@@ -32,6 +32,7 @@ jobs:
   remote-deploy:
     needs: docker-build-push
     runs-on: ubuntu-latest
+    environment: Deploy Docker with ssh
 
     steps:
       - name: Deploy via SSH
