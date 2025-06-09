@@ -18,5 +18,5 @@ const FindPage = () => {
 export default FindPage;
 
 const TabContainer = ({ children }: { children: ReactNode }) => {
-  return <div className="border-lightGray w-full rounded-md border p-10">{children}</div>;
+  return <div className="border-lightGray w-full rounded-md border px-4 py-6 md:p-10">{children}</div>;
 };
