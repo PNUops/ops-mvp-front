@@ -15,19 +15,24 @@ const LeaderSection = () => {
     enabled: isLeader,
   });
 
+
+
   const showLeaderMessage = isLeader && submissionData?.isSubmitted === false;
 
   if (!showLeaderMessage) return null;
 
   return (
-    <div className="flex w-fit gap-4 rounded-lg bg-white p-3 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+    <div className="flex w-fit items-center gap-4 rounded-lg bg-white p-4
+    shadow-[0_4px_12px_rgba(0,0,0,0.2)] text-sm">
       <LeaderMessage leaderName={user?.name ?? '팀장'} />
 
       <Link to={`/teams/edit/${submissionData?.teamId}`}>
         <RoundedButton className="flex w-fit items-center gap-1">
-          <TbPencil size={20} strokeWidth={2} />
-          작성하러 가기
+          <TbPencil size={30} />
+          <span className="hidden md:inline break-keep">
+            작성하러 가기</span>
         </RoundedButton>
+
       </Link>
     </div>
   );
