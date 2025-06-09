@@ -35,9 +35,9 @@ const ProjectViewerPage = () => {
         projectName={data.projectName}
         teamName={data.teamName}
       />
-      <div className="h-10" />
+      <div className="h-3" />
       <CarouselSection teamId={data.teamId} previewIds={data.previewIds} />
-      <div className="h-10" />
+      <div className="h-7" />
       <LikeSection teamId={data.teamId} isLiked={data.isLiked} />
       <div className="h-20" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} participants={data.participants} />

@@ -20,10 +20,13 @@ const TeamCard = ({teamId, teamName, projectName, isLiked} : TeamCardProps) => {
     return (
       <Link
         to={`/teams/view/${teamId}`}
-        className="border-lightGray flex aspect-[5/6] w-full cursor-pointer flex-col overflow-hidden rounded-xl border shadow-sm transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
+        className="border-lightGray flex aspect-[5/6] w-full cursor-pointer flex-col overflow-hidden rounded-xl border transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
+        style={{
+            boxShadow: "6px 6px 12px rgba(0,0,0,0.1)"
+        }}
       >
         {!imageError ? (
-          <div className="w-full aspect-[3/2] overflow-hidden">
+          <div className="aspect-[3/2] overflow-hidden">
             <img
               src={thumbnailUrl}
               alt="썸네일"
@@ -44,9 +47,9 @@ const TeamCard = ({teamId, teamName, projectName, isLiked} : TeamCardProps) => {
 
           <div className="flex justify-end">
             {isLiked ? (
-              <FaHeart color="red" size="clamp(0.6rem, 2vw, 1.8rem)" />
+              <FaHeart color="red" size="clamp(1.5rem, 2vw, 2rem)" />
             ) : (
-              <FaHeart color="lightGray" size="clamp(0.6rem, 2vw, 1.8rem)" />
+              <FaHeart color="lightGray" size="clamp(1.5rem, 2vw, 2rem)" />
             )}
           </div>
         </div>

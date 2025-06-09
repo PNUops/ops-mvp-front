@@ -9,6 +9,7 @@ interface MediaSectionProps {
 const MediaSection = ({ githubUrl, youtubeUrl }: MediaSectionProps) => {
   return (
     <div className="flex flex-col gap-5">
+      <div className="text-title font-bold">URL</div>
       <GithubCard githubRepoUrl={githubUrl} />
       <YoutubeCard youtubeVidUrl={youtubeUrl} />
     </div>

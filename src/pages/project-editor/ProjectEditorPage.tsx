@@ -17,6 +17,7 @@ import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
+import { useNavigate } from 'react-router-dom';
 
 export interface PreviewImage {
   id?: number;
@@ -34,6 +35,7 @@ const ProjectEditorPage = () => {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [overview, setOverview] = useState('');
   const toast = useToast();
+  const navigate = useNavigate();
 
   const {
     data: projectData,
@@ -99,11 +101,11 @@ const ProjectEditorPage = () => {
     if (!teamId) return;
     if (!thumbnail || !previews) {
       if (!thumbnail && !previews) {
-        alert('썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.');
+        toast('썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.', 'error');
       } else if (!thumbnail) {
-        alert('썸네일이 업로드 되지 않았어요.');
+        toast('썸네일이 업로드 되지 않았어요.', 'error');
       } else {
-        alert('프리뷰 이미지가 업로드 되지 않았어요.');
+        toast('프리뷰 이미지가 업로드 되지 않았어요.', 'error');
       }
       return;
     }
@@ -133,7 +135,8 @@ const ProjectEditorPage = () => {
         newFiles.forEach((file) => formData.append('images', file));
         await postPreview(teamId, formData);
       }
-      toast('프로젝트 저장이 완료되었습니다.', 'success');
+      toast('저장이 완료되었습니다.', 'success');
+      navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
@@ -179,7 +182,10 @@ const ProjectEditorPage = () => {
       <div className="h-20" />
 
       <div className="flex justify-center">
-        <button onClick={handleSave} className="hover:cursor-pointer bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white">
+        <button
+          onClick={handleSave}
+          className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white hover:cursor-pointer"
+        >
           저장
         </button>
       </div>

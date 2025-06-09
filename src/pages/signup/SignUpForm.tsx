@@ -18,7 +18,7 @@ const SignUpForm = () => {
   const mutation = useMutation({
     mutationFn: postSignUp,
     onSuccess: (data) => {
-      toast(`회원가입이 완료되었어요.`, 'success');
+      toast('회원가입이 완료되었어요.', 'success');
       navigate('/signin'); // TODO: 회원가입 완료 시 자동 로그인
     },
     onError: (error: any) => {
@@ -41,49 +41,64 @@ const SignUpForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid w-full grid-cols-[max-content_1fr_max-content] items-center gap-x-4 gap-y-6"
+      className="w-full space-y-6 md:grid md:grid-cols-[max-content_1fr_max-content] md:items-center md:space-y-0 md:gap-x-4 md:gap-y-6"
     >
-      <NameRow value={formState.name} setValue={(val) => updateField('name', val)} error={formError.name} />
-      <StudentNumberRow
-        value={formState.studentNumber}
-        setValue={(val) => updateField('studentNumber', val)}
-        error={formError.studentNumber}
-      />
+      <div className="flex flex-col gap-1 md:contents">
+        <NameRow value={formState.name} setValue={(val) => updateField('name', val)} error={formError.name} />
+      </div>
+
+      <div className="flex flex-col gap-1 md:contents">
+        <StudentNumberRow
+          value={formState.studentNumber}
+          setValue={(val) => updateField('studentNumber', val)}
+          error={formError.studentNumber}
+        />
+      </div>
+
       <Spacer />
 
-      <EmailBlock
-        email={formState.email}
-        setEmail={(val) => updateField('email', val)}
-        isEmailVerified={formState.isEmailVerified}
-        setIsEmailVerified={(val) => updateField('isEmailVerified', val)}
-        error={formError.email}
-        emailVerificationMutationFn={postEmailVerification}
-        emailVerificationCodeMutationFn={patchEmailVerificationCode}
-      />
+      <div className="flex flex-col gap-1 md:contents">
+        <EmailBlock
+          email={formState.email}
+          setEmail={(val) => updateField('email', val)}
+          isEmailVerified={formState.isEmailVerified}
+          setIsEmailVerified={(val) => updateField('isEmailVerified', val)}
+          error={formError.email}
+          emailVerificationMutationFn={postEmailVerification}
+          emailVerificationCodeMutationFn={patchEmailVerificationCode}
+        />
+      </div>
+
       <Spacer />
 
-      <PasswordRow
-        value={formState.password}
-        setValue={(val) => updateField('password', val)}
-        error={formError.password}
-      />
-      <PasswordConfirmRow
-        value={formState.passwordConfirm}
-        setValue={(val) => updateField('passwordConfirm', val)}
-        error={formError.passwordConfirm}
-      />
+      <div className="flex flex-col gap-1 md:contents">
+        <PasswordRow
+          value={formState.password}
+          setValue={(val) => updateField('password', val)}
+          error={formError.password}
+        />
+      </div>
 
-      <div className="col-span-3 mt-8 flex justify-end gap-4">
-        <RoundedButton type="button" onClick={() => navigate(-1)}>
+      <div className="flex flex-col gap-1 md:contents">
+        <PasswordConfirmRow
+          value={formState.passwordConfirm}
+          setValue={(val) => updateField('passwordConfirm', val)}
+          error={formError.passwordConfirm}
+        />
+      </div>
+
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end sm:gap-4 md:col-span-3">
+        <RoundedButton type="button" onClick={() => navigate(-1)} className="w-full sm:w-auto">
           취소
         </RoundedButton>
-        <RoundedButton className="bg-lightGray" type="submit">
+        <RoundedButton className="bg-lightGray w-full sm:w-auto" type="submit">
           가입
         </RoundedButton>
       </div>
     </form>
   );
 };
+
 export default SignUpForm;
 
-const Spacer = () => <div className="col-span-3 h-2" aria-hidden="true" />;
+const Spacer = () => <div className="h-2 md:col-span-3" aria-hidden="true" />;
