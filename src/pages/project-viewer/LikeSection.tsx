@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from 'hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { patchLikeToggle } from 'apis/projectViewer';
-
+import { useToast } from 'hooks/useToast';
 import { FaHeart } from 'react-icons/fa';
 import { sign } from 'crypto';
 
@@ -16,6 +16,7 @@ const LikeSection = ({ teamId, isLiked: initIsLiked }: LikeSectionProps) => {
   const { isSignedIn } = useAuth();
   const [isLiked, setIsLiked] = useState(initIsLiked);
   const navigate = useNavigate();
+  const toast = useToast();
 
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -29,7 +30,7 @@ const LikeSection = ({ teamId, isLiked: initIsLiked }: LikeSectionProps) => {
 
   const handleClick = () => {
     if (!isSignedIn) {
-      alert('로그인이 필요해요.'); // TODO: 토스트 메시지로 바꾸기
+      toast('로그인이 필요해요.', 'info');
       navigate('/signin');
     }
     if (likeMutation.isPending) return;

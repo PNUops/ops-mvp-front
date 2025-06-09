@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from 'hooks/useAuth';
 import { CommentFormRequestDto, CommentDto } from 'types/DTO/projectViewerDto';
 import { postCommentForm } from 'apis/projectViewer';
-
+import { useToast } from 'hooks/useToast';
 interface CommentFormSection {
   teamId: number;
 }
@@ -16,6 +16,7 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
   const [newComment, setNewComment] = useState('');
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const toast = useToast();
 
   const commentMutation = useMutation<void, Error, string, PreviousComments>({
     mutationFn: (comment) => {
@@ -45,7 +46,7 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
       if (context?.previousComments) {
         queryClient.setQueryData(['comments', teamId], context.previousComments);
       }
-      alert('댓글 등록에 실패했어요.');
+      toast('댓글 등록에 실패했어요.', 'error');
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['comments', teamId] });
@@ -54,7 +55,7 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
   });
 
   const handleClick = () => {
-    if (!newComment.trim()) return alert('댓글을 입력해주세요.');
+    if (!newComment.trim()) return toast('댓글을 입력해주세요.', 'info');
     if (commentMutation.isPending) return;
     commentMutation.mutate(newComment);
   };
