@@ -17,6 +17,7 @@ import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
+import { useNavigate } from 'react-router-dom';
 
 export interface PreviewImage {
   id?: number;
@@ -34,6 +35,7 @@ const ProjectEditorPage = () => {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [overview, setOverview] = useState('');
   const toast = useToast();
+  const navigate = useNavigate();
 
   const {
     data: projectData,
@@ -133,7 +135,8 @@ const ProjectEditorPage = () => {
         newFiles.forEach((file) => formData.append('images', file));
         await postPreview(teamId, formData);
       }
-      toast('프로젝트 저장이 완료되었습니다.', 'success');
+      toast('저장이 완료되었습니다.', 'success');
+      navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }

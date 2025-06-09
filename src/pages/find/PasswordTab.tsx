@@ -41,28 +41,34 @@ const PasswordTab = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid w-full grid-cols-[max-content_1fr_max-content] items-center gap-x-4 gap-y-6"
+      className="w-full items-center gap-x-4 gap-y-6 md:grid md:grid-cols-[max-content_1fr_max-content]"
     >
-      <EmailBlock
-        email={formState.email}
-        setEmail={(val) => updateField('email', val)}
-        isEmailVerified={formState.isEmailVerified}
-        setIsEmailVerified={(val) => updateField('isEmailVerified', val)}
-        error={formError.email}
-        emailVerificationMutationFn={postEmailVerificationPasswordReset}
-        emailVerificationCodeMutationFn={patchEmailVerificationCodePasswordReset}
-      />
+      <div className="flex flex-col gap-1 md:contents">
+        <EmailBlock
+          email={formState.email}
+          setEmail={(val) => updateField('email', val)}
+          isEmailVerified={formState.isEmailVerified}
+          setIsEmailVerified={(val) => updateField('isEmailVerified', val)}
+          error={formError.email}
+          emailVerificationMutationFn={postEmailVerificationPasswordReset}
+          emailVerificationCodeMutationFn={patchEmailVerificationCodePasswordReset}
+        />
+      </div>
 
-      <PasswordRow
-        value={formState.password}
-        setValue={(val) => updateField('password', val)}
-        error={formError.password}
-      />
-      <PasswordConfirmRow
-        value={formState.passwordConfirm}
-        setValue={(val) => updateField('passwordConfirm', val)}
-        error={formError.passwordConfirm}
-      />
+      <div className="flex flex-col gap-1 md:contents">
+        <PasswordRow
+          value={formState.password}
+          setValue={(val) => updateField('password', val)}
+          error={formError.password}
+        />
+      </div>
+      <div className="flex flex-col gap-1 md:contents">
+        <PasswordConfirmRow
+          value={formState.passwordConfirm}
+          setValue={(val) => updateField('passwordConfirm', val)}
+          error={formError.passwordConfirm}
+        />
+      </div>
 
       <div className="col-span-3 mt-8 flex justify-center gap-4">
         <RoundedButton type="submit">비밀번호 변경</RoundedButton>
