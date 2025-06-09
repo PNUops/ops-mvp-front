@@ -26,7 +26,7 @@ const VoteRate = () => {
         <>
           <h2 className="mb-4 text-2xl font-bold">투표 참여율</h2>
           <div
-            className="mx-auto w-full rounded bg-white p-6 text-center shadow-md"
+            className="mx-auto w-full min-w-[200px] rounded bg-white p-6 text-center shadow-md"
             style={{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.12)' }}
           >
             <div className="flex justify-center">
@@ -58,7 +58,7 @@ const VoteRate = () => {
                 </Pie>
               </PieChart>
             </div>
-            <p className="-mt-20 text-xl font-bold text-green-600">{voteRate}%</p>
+            <p className="-mt-22 text-xl font-bold text-green-600">{voteRate}%</p>
             <p className="mt-20 text-gray-400">총 투표수</p>
             <p className="text-lg font-bold">
               <span className="text-black">{totalVoteCount}개</span>
