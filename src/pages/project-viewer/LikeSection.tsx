@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from 'hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { patchLikeToggle } from 'apis/projectViewer';
-
+import { useToast } from 'hooks/useToast';
 import { FaHeart } from 'react-icons/fa';
 import { useToast } from 'hooks/useToast';
 
