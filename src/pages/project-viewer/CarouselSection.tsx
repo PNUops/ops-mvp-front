@@ -12,6 +12,7 @@ interface CarouselSectionProps {
 }
 
 const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
+  // TODO: 화살표 반응형 처리 구현
   const {
     data: thumbnailUrl,
     isLoading: isThumbnailLoading,
@@ -68,17 +69,17 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-10 px-15">
+    <div className="flex items-center justify-center md:gap-10">
       {imageUrls.length > 1 && (
         <button onClick={goToPrev} className="focus:outline-none">
           <FaChevronLeft
             size={50}
-            className="text-lightGray hover:text-mainGreen rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25"
+            className="text-lightGray hover:text-mainGreen hidden rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25 sm:block"
           />
         </button>
       )}
       <div className="flex flex-col items-center gap-2">
-        <div className="border-lightGray relative aspect-[3/2] w-[50vw] overflow-hidden rounded border">
+        <div className="border-lightGray relative aspect-[3/2] w-[50vw] max-w-[900px] min-w-[300px] overflow-hidden rounded border">
           {!currentImage || loadFailed ? (
             <div className="text-midGray flex h-full w-full items-center justify-center">
               <AiFillPicture size={40} />
@@ -103,7 +104,7 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
           )}
         </div>
         {imageUrls.length > 1 && (
-          <div className="mt-4 flex w-full max-w-[80vw] justify-center gap-5 px-3">
+          <div className="mt-4 flex w-full max-w-lg justify-center gap-5 px-3 sm:max-w-xl md:max-w-2xl">
             {imageUrls.map((_, index) => (
               <button
                 key={index}
@@ -120,7 +121,7 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
         <button onClick={goToNext} className="focus:outline-none">
           <FaChevronRight
             size={50}
-            className="text-lightGray hover:text-mainGreen rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25"
+            className="text-lightGray hover:text-mainGreen hidden rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25 sm:block"
           />
         </button>
       )}
