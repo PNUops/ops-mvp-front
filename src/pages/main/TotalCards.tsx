@@ -27,8 +27,7 @@ const TotalCards = () => {
       </div>
 
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-7 xl:gap-8">
-        {isLoading && Array.from({ length: 4 }).map((_, i) => <TeamCardSkeleton key={i} />)}
-
+        {isLoading && Array.from({ length: 20 }).map((_, i) => <TeamCardSkeleton key={i} />)}
         {isError && <p>데이터를 불러오지 못했습니다.</p>}
         {teams?.map((team) => (
           <TeamCard
