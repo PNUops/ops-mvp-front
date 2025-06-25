@@ -88,10 +88,10 @@ const SignUpForm = () => {
       </div>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end sm:gap-4 md:col-span-3">
-        <RoundedButton type="button" onClick={() => navigate(-1)} className="w-full sm:w-auto">
+        <RoundedButton type="button" onClick={() => navigate(-1)} className="w-full px-10 sm:w-auto">
           취소
         </RoundedButton>
-        <RoundedButton className="bg-lightGray w-full sm:w-auto" type="submit">
+        <RoundedButton className="bg-lightGray w-full px-10 sm:w-auto" type="submit">
           가입
         </RoundedButton>
       </div>
