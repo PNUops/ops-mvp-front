@@ -7,6 +7,7 @@ interface Props {
 }
 
 const PasswordRow = ({ value, setValue, error }: Props) => {
+  const PASSWORD_PLACEHOLDER = '영어, 숫자, 특수문자 포함 8~16자';
   return (
     <>
       <label className="flex items-center gap-1">
@@ -14,7 +15,7 @@ const PasswordRow = ({ value, setValue, error }: Props) => {
         <span className="text-midGray">비밀번호</span>
       </label>
       <div>
-        <PasswordInput value={value} onChange={(e) => setValue(e.target.value)} />
+        <PasswordInput value={value} onChange={(e) => setValue(e.target.value)} placeholder={PASSWORD_PLACEHOLDER} />
         <p className="text-mainRed mt-1">{error}</p>
       </div>
       <div />
