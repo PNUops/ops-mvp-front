@@ -72,7 +72,7 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldo
         type="button"
         onClick={handleSendCode}
         disabled={mutation.isPending || isEmailVerified}
-        className="border-lightGray hover:bg-lightGray rounded-lg border p-3 px-4"
+        className="border-lightGray hover:bg-lightGray min-w-32 rounded-lg border p-3 px-4"
       >
         {isFirstSend ? '인증코드 전송' : '재전송'}
       </button>
