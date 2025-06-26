@@ -21,8 +21,8 @@ const SignInForm = () => {
       signIn(data.token);
       navigate('/');
     },
-    onError: (error) => {
-      toast(`로그인 실패: ${error.message}`, 'error');
+    onError: (error: any) => {
+      toast(error.response.data.message || '로그인에 실패했어요.', 'error');
     },
   });
 

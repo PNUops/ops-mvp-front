@@ -15,6 +15,7 @@ const StudentNumberRow = ({ value, setValue, error }: Props) => {
       </label>
       <div>
         <Input
+          inputMode="numeric"
           value={value}
           onChange={(e) => {
             const input = e.target.value;

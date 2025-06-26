@@ -1,5 +1,6 @@
 import Input from '@components/Input';
 import RoundedButton from '@components/RoundedButton';
+import Spinner from '@components/Spinner';
 import { useCallback } from 'react';
 
 interface Props {
@@ -11,7 +12,6 @@ interface Props {
 
 const FindEmailForm = ({ studentNumber, setStudentNumber, onSubmit, isLoading }: Props) => {
   const isNumber = useCallback((value: string) => /^\d*$/.test(value), []);
-  // TODO : isLoading 사용하여 RoundedButton에 로딩 스피너 적용시키기
 
   return (
     <div className="flex flex-col gap-8">
@@ -28,8 +28,8 @@ const FindEmailForm = ({ studentNumber, setStudentNumber, onSubmit, isLoading }:
           }}
         />
       </div>
-      <RoundedButton onClick={onSubmit} className="mx-auto">
-        아이디 찾기
+      <RoundedButton onClick={onSubmit} className="mx-auto" disabled={isLoading}>
+        {isLoading ? <Spinner className="inline-block h-5 w-5 align-middle" /> : '아이디 찾기'}
       </RoundedButton>
     </div>
   );

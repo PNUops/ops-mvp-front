@@ -8,7 +8,6 @@ import IntroSection from './IntroSection';
 import CarouselSection from './CarouselSection';
 import LikeSection from './LikeSection';
 import DetailSection from './DetailSection';
-import MediaSection from './MediaSection/MediaSection';
 import CommentSection from './CommentSection/CommentSection';
 
 import {
@@ -60,16 +59,16 @@ const ProjectViewerPage = () => {
         leaderId={data.leaderId}
         projectName={data.projectName}
         teamName={data.teamName}
+        githubUrl={data.githubPath}
+        youtubeUrl={data.youtubePath}
       />
-      <div className="h-5" />
+      <div className="h-10" />
       <CarouselSection teamId={data.teamId} previewIds={data.previewIds} />
-      <div className="h-7" />
+      <div className="h-10" />
       <LikeSection teamId={data.teamId} isLiked={data.isLiked} />
-      <div className="h-20" />
+      <div className="h-10" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} participants={data.participants} />
-      <div className="h-20" />
-      <MediaSection githubUrl={data.githubPath} youtubeUrl={data.youtubePath} />
-      <div className="h-20" />
+      <div className="h-30" />
       <CommentSection teamId={data.teamId} memberId={memberId ?? -1} />
     </div>
   );

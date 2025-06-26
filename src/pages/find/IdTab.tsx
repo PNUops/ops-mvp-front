@@ -10,7 +10,7 @@ const IdTab = () => {
   const [studentNumber, setStudentNumber] = useState('');
   const toast = useToast();
 
-  const { data, refetch, isFetching, isError } = useQuery<FindEmailResponsetDto>({
+  const { data, refetch, isLoading, isError } = useQuery<FindEmailResponsetDto>({
     queryKey: ['findEmail', studentNumber],
     queryFn: () => getFindEmail({ studentId: studentNumber }),
     enabled: false,
@@ -31,7 +31,7 @@ const IdTab = () => {
       studentNumber={studentNumber}
       setStudentNumber={setStudentNumber}
       onSubmit={handleSubmit}
-      isLoading={isFetching}
+      isLoading={isLoading}
     />
   );
 };

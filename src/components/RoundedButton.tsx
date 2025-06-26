@@ -6,7 +6,7 @@ const RoundedButton = ({ className = '', children, ...props }: Props) => {
   return (
     <button
       {...props}
-      className={`border-lightGray hover:bg-mainGreen w-32 rounded-full border p-3 hover:text-white ${className}`}
+      className={`border-lightGray hover:bg-mainGreen min-w-32 rounded-full border p-3 hover:text-white ${className}`}
     >
       {children}
     </button>
