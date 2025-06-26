@@ -9,9 +9,10 @@ import { AiFillPicture } from 'react-icons/ai';
 interface CarouselSectionProps {
   teamId: number;
   previewIds: number[];
+  youtubeUrl: string;
 }
 
-const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
+const CarouselSection = ({ teamId, previewIds, youtubeUrl }: CarouselSectionProps) => {
   // TODO: 화살표 반응형 처리 구현
   const {
     data: thumbnailUrl,
@@ -35,7 +36,7 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
   });
 
   const previewUrls = previewData?.imageUrls ?? [];
-  const imageUrls = thumbnailUrl ? [thumbnailUrl, ...previewUrls] : previewUrls;
+  const imageUrls = [...(!!youtubeUrl ? ['youtube'] : []), ...(thumbnailUrl ? [thumbnailUrl] : []), ...previewUrls];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -54,7 +55,7 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
         URL.revokeObjectURL(thumbnailUrl);
       }
     };
-  }, []);
+  }, [thumbnailUrl]);
 
   const goToPrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? imageUrls.length - 1 : prev - 1));
@@ -80,7 +81,15 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
       )}
       <div className="flex flex-col items-center gap-2">
         <div className="border-lightGray relative aspect-[3/2] w-[50vw] max-w-[900px] min-w-[300px] overflow-hidden rounded border">
-          {!currentImage || loadFailed ? (
+          {currentImage === 'youtube' ? (
+            <iframe
+              src={youtubeUrl.replace('watch?v=', 'embed/')}
+              title="YouTube video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="h-full w-full"
+            />
+          ) : !currentImage || loadFailed ? (
             <div className="text-midGray flex h-full w-full items-center justify-center">
               <AiFillPicture size={40} />
             </div>
@@ -103,6 +112,7 @@ const CarouselSection = ({ teamId, previewIds }: CarouselSectionProps) => {
             </>
           )}
         </div>
+
         {imageUrls.length > 1 && (
           <div className="mt-4 flex w-full max-w-lg justify-center gap-5 px-3 sm:max-w-xl md:max-w-2xl">
             {imageUrls.map((_, index) => (
