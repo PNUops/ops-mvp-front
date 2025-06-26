@@ -28,8 +28,8 @@ const FindEmailForm = ({ studentNumber, setStudentNumber, onSubmit, isLoading }:
           }}
         />
       </div>
-      <RoundedButton onClick={onSubmit} className="mx-auto flex justify-center" disabled={isLoading}>
-        {isLoading ? <Spinner className="inline-block h-5 w-5" /> : '아이디 찾기'}
+      <RoundedButton onClick={onSubmit} className="mx-auto" disabled={isLoading}>
+        {isLoading ? <Spinner className="inline-block h-5 w-5 align-middle" /> : '아이디 찾기'}
       </RoundedButton>
     </div>
   );
