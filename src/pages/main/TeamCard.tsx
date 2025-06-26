@@ -38,8 +38,12 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
       )}
 
       <div className="p-3">
-        <div className="text-[clamp(1rem,1.5vw,1.5rem)] font-semibold text-black">{projectName}</div>
-        <div className="text-midGray text-base text-[clamp(1rem,1.4vw,1.4rem)]">{teamName}</div>
+        <div className="font-semibold text-black text-[clamp(0.85rem,2.5vw,1.2rem)] break-keep overflow-hidden text-ellipsis">
+          {projectName}
+        </div>
+        <div className="text-midGray text-[clamp(0.8rem,2vw,1rem)] truncate overflow-hidden">
+          {teamName}
+        </div>
         <div className="flex justify-end">
           {isLiked ? (
             <FaHeart color="red" size="clamp(1.5rem, 2vw, 2rem)" />
