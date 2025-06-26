@@ -22,36 +22,37 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
         boxShadow: '4px 4px 10px rgba(0,0,0,0.1)',
       }}
     >
-      {!imageError ? (
-        <div className="aspect-[3/2] object-cover">
+      <div className="aspect-[3/2] object-cover relative">
+        {!imageError ? (
           <img
             src={thumbnailUrl}
             alt="썸네일"
             className="h-full w-full object-cover object-center"
             onError={() => setImageError(true)}
           />
-        </div>
-      ) : (
-        <div className="bg-lightGray flex aspect-[3/2] w-full items-center justify-center">
-          <div className="text-midGray flex h-full w-full items-center justify-center text-sm">썸네일</div>
-        </div>
-      )}
-
-      <div className="p-3">
-        <div className="font-semibold text-black text-[clamp(0.85rem,2.5vw,1.2rem)] break-keep overflow-hidden text-ellipsis">
-          {projectName}
-        </div>
-        <div className="text-midGray text-[clamp(0.8rem,2vw,1rem)] truncate overflow-hidden">
-          {teamName}
-        </div>
-        <div className="flex justify-end">
-          {isLiked ? (
-            <FaHeart color="red" size="clamp(1.5rem, 2vw, 2rem)" />
           ) : (
-            <FaHeart color="lightGray" size="clamp(1.5rem, 2vw, 2rem)" />
+          <div className="bg-lightGray flex aspect-[3/2] w-full items-center justify-center">
+          <div className="text-midGray flex h-full w-full items-center justify-center text-sm">썸네일</div>
+          </div>
+          )}
+
+        <div className="absolute top-3 right-3 z-10">
+          {isLiked && (
+            <FaHeart color="red" size="clamp(1.5rem, 2vw, 1.8rem)" />
           )}
         </div>
       </div>
+
+        <div className="p-3">
+          <div
+            className="font-semibold text-black text-[clamp(0.85rem,2.5vw,1.2rem)] break-keep overflow-hidden text-ellipsis">
+            {projectName}
+          </div>
+          <div className="text-midGray text-[clamp(0.8rem,2vw,1rem)] truncate overflow-hidden">
+            {teamName}
+          </div>
+
+        </div>
     </Link>
   );
 };
