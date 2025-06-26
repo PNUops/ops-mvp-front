@@ -60,6 +60,7 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldo
       </label>
       <div>
         <Input
+          name="email"
           disabled={isEmailVerified}
           className="disabled:bg-whiteGray disabled:text-midGray"
           placeholder="example@pusan.ac.kr"
