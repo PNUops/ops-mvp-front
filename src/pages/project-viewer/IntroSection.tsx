@@ -20,7 +20,7 @@ const UrlButton = ({ url }: { url: string }) => (
     href={url}
     target="_blank"
     rel="noopener noreferrer"
-    className="border-mainGreen flex w-100 max-w-100 items-center gap-3 truncate rounded-full border px-3 py-1 focus:outline-none sm:w-auto"
+    className="border-mainGreen flex w-full max-w-100 min-w-50 items-center gap-3 truncate rounded-full border px-3 py-1 focus:outline-none sm:w-auto"
   >
     <IoMdLink className="text-mainGreen shrink-0" />
     <span className="text-exsm hover:text-mainGreen min-w-0 truncate text-gray-700">{url}</span>

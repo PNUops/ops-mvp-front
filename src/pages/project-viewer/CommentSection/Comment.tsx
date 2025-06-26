@@ -56,7 +56,7 @@ const Comment = ({
               <div className="group relative">
                 <button
                   onClick={onStartEdit}
-                  className={`cursor-pointer ${isEditing ? 'text-mainGreen' : 'hover:text-mainGreen'} text-lightGray focus:text-mainGreen focus:outline-none`}
+                  className={`cursor-pointer ${isEditing ? 'text-mainGreen' : 'hover:text-mainGreen'} focus:text-mainGreen text-midGray focus:outline-none`}
                 >
                   <RiPencilFill size={18} />
                 </button>
@@ -64,11 +64,11 @@ const Comment = ({
                   댓글 수정
                 </div>
               </div>
-              <div className="bg-lightGray h-3 w-px" />
+              <div className="bg-lightGray h-4 w-px" />
               <div className="group relative">
                 <button
                   onClick={() => setShowConfirm(true)}
-                  className="text-lightGray hover:text-mainRed focus:text-mainRed cursor-pointer focus:outline-none"
+                  className="text-midGray hover:text-mainRed focus:text-mainRed cursor-pointer focus:outline-none"
                 >
                   <IoRemoveCircle size={18} />
                 </button>
