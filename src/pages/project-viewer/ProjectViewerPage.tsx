@@ -34,6 +34,7 @@ const ProjectViewerPage = () => {
         projectName={data.projectName}
         teamName={data.teamName}
         githubUrl={data.githubPath}
+        youtubeUrl={data.youtubePath}
       />
       <div className="h-10" />
       <CarouselSection teamId={data.teamId} previewIds={data.previewIds} />
