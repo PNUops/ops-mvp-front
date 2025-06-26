@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FiX } from 'react-icons/fi';
 import { AiFillPicture } from 'react-icons/ai';
+import { MdBrokenImage } from 'react-icons/md';
 import { PreviewImage } from './ProjectEditorPage';
 
 interface ImageUploaderSectionProps {
@@ -47,7 +48,6 @@ const ImageUploaderSection = ({
       setPreviews(combined);
     }
   };
-
 
   const handleRemove = (index: number) => {
     const target = images[index];
@@ -117,11 +117,16 @@ const ImageUploaderSection = ({
                 key={index}
                 className="border-lightGray relative flex h-[120px] w-full items-center justify-center overflow-hidden rounded border text-xs text-gray-400"
               >
-                <img
-                  src={getImageSrc(img.url)}
-                  alt={`image-${index}`}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
+                {img.url === 'ERROR' ? (
+                  <MdBrokenImage size={30} className="text-red-300" />
+                ) : (
+                  <img
+                    src={getImageSrc(img.url)}
+                    alt={`image-${index}`}
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                )}
+
                 {index === 0 && (
                   <span className="absolute bottom-1 left-1 rounded bg-green-100 px-2 py-0.5 text-xs text-green-600">
                     썸네일
@@ -137,7 +142,7 @@ const ImageUploaderSection = ({
             ) : (
               <div
                 key={index}
-                className="relative border-lightGray text-title text-lightGray flex h-[120px] w-full items-center justify-center rounded border border-dashed"
+                className="border-lightGray text-title text-lightGray relative flex h-[120px] w-full items-center justify-center rounded border border-dashed"
               >
                 <AiFillPicture />
                 {index === 0 && (

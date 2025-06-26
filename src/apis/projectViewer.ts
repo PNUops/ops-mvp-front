@@ -15,14 +15,20 @@ export const getProjectDetails = async (teamId: number): Promise<ProjectDetailsR
 };
 
 export const getPreviewImages = async (teamId: number, imageIds: number[]): Promise<PreviewImagesResponseDto> => {
-  const imageUrls: string[] = await Promise.all(
-    imageIds.map(async (imageId: number): Promise<string> => {
+  const imageUrls: string[] = [];
+
+  for (const imageId of imageIds) {
+    try {
       const response = await apiClient.get(`/teams/${teamId}/image/${imageId}`, {
         responseType: 'blob',
       });
-      return URL.createObjectURL(response.data);
-    }),
-  );
+      const objectUrl = URL.createObjectURL(response.data);
+      imageUrls.push(objectUrl);
+    } catch (error) {
+      imageUrls.push('ERROR');
+    }
+  }
+
   return { imageUrls };
 };
 
@@ -37,7 +43,7 @@ export const postCommentForm = async ({ teamId, description }: CommentFormReques
   return response.data;
 };
 
-export const deleteComment = async ({teamId, commentId}: CommentDeleteRequestDto) => {
+export const deleteComment = async ({ teamId, commentId }: CommentDeleteRequestDto) => {
   await apiClient.delete(`teams/${teamId}/comments/${commentId}`);
 };
 
