@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { EmailVerificationRequestDTO } from 'types/DTO';
 import { isPNUEmail } from 'utils/email';
 import { useToast } from 'hooks/useToast';
+import Spinner from '@components/Spinner';
 
 interface Props {
   email: string;
@@ -60,6 +61,7 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldo
       </label>
       <div>
         <Input
+          name="email"
           disabled={isEmailVerified}
           className="disabled:bg-whiteGray disabled:text-midGray"
           placeholder="example@pusan.ac.kr"
@@ -72,9 +74,15 @@ const EmailRow = ({ email, setEmail, isEmailVerified, setIsMailSent, startCooldo
         type="button"
         onClick={handleSendCode}
         disabled={mutation.isPending || isEmailVerified}
-        className="border-lightGray hover:bg-lightGray rounded-lg border p-3 px-4"
+        className="border-lightGray hover:bg-lightGray min-w-32 rounded-lg border p-3 px-4"
       >
-        {isFirstSend ? '인증코드 전송' : '재전송'}
+        {mutation.isPending ? (
+          <Spinner className="inline-block h-5 w-5 align-middle" />
+        ) : isFirstSend ? (
+          '인증코드 전송'
+        ) : (
+          '재전송'
+        )}
       </button>
     </>
   );

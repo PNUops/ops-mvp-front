@@ -51,6 +51,7 @@ const EmailVerifyRow = ({
       <label />
       <div className="relative">
         <Input
+          name="emailverify"
           disabled={isEmailVerified}
           className="disabled:bg-whiteGray disabled:text-midGray"
           placeholder="인증코드 입력"

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+
 import { useUserStore } from 'stores/useUserStore';
 import { useTeamId } from 'hooks/useTeamId';
+import { useToast } from 'hooks/useToast';
+
 import { getProjectDetails, getPreviewImages } from 'apis/projectViewer';
 import {
   getThumbnail,
@@ -12,12 +16,10 @@ import {
   deleteThumbnail,
 } from 'apis/projectEditor';
 import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
-import { useToast } from 'hooks/useToast';
 import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
-import { useNavigate } from 'react-router-dom';
 
 export interface PreviewImage {
   id?: number;
@@ -36,6 +38,7 @@ const ProjectEditorPage = () => {
   const [overview, setOverview] = useState('');
   const toast = useToast();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const {
     data: projectData,
@@ -99,14 +102,29 @@ const ProjectEditorPage = () => {
 
   const handleSave = async () => {
     if (!teamId) return;
-    if (!thumbnail || !previews) {
-      if (!thumbnail && !previews) {
-        toast('썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.', 'error');
-      } else if (!thumbnail) {
-        toast('썸네일이 업로드 되지 않았어요.', 'error');
-      } else {
-        toast('프리뷰 이미지가 업로드 되지 않았어요.', 'error');
-      }
+
+    if (!githubUrl) {
+      toast('깃허브 링크가 입력되지 않았어요.', 'error');
+      return;
+    }
+    if (!youtubeUrl) {
+      toast('유튜브 링크가 입력되지 않았어요.', 'error');
+      return;
+    }
+    if (!thumbnail && !previews.length) {
+      toast('썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.', 'error');
+      return;
+    }
+    if (!thumbnail) {
+      toast('썸네일이 업로드 되지 않았어요.', 'error');
+      return;
+    }
+    if (!previews.length) {
+      toast('프리뷰 이미지가 업로드 되지 않았어요.', 'error');
+      return;
+    }
+    if (!overview) {
+      toast('프로젝트 소개글이 작성되지 않았어요.', 'error');
       return;
     }
 
@@ -135,6 +153,10 @@ const ProjectEditorPage = () => {
         newFiles.forEach((file) => formData.append('images', file));
         await postPreview(teamId, formData);
       }
+      queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] });
+      queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] });
+      queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
+      queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       toast('저장이 완료되었습니다.', 'success');
       navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
@@ -184,7 +206,7 @@ const ProjectEditorPage = () => {
       <div className="flex justify-center">
         <button
           onClick={handleSave}
-          className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white hover:cursor-pointer"
+          className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white hover:cursor-pointer hover:bg-green-700 focus:bg-green-400 focus:outline-none"
         >
           저장
         </button>
