@@ -69,7 +69,7 @@ const ProjectViewerPage = () => {
       <div className="h-10" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} participants={data.participants} />
       <div className="h-30" />
-      <CommentSection teamId={data.teamId} memberId={memberId ?? -1} />
+      {memberId != null && <CommentSection teamId={data.teamId} memberId={memberId} />}
     </div>
   );
 };
