@@ -1,9 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useMediaQuery } from '@react-hookz/web';
+
 import { getThumbnail } from 'apis/projectEditor';
 import { getPreviewImages } from 'apis/projectViewer';
 import { PreviewImagesResponseDto } from 'types/DTO/projectViewerDto';
+
+import Spinner from '@components/Spinner';
+
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { FaSadTear } from 'react-icons/fa';
 
@@ -105,9 +109,9 @@ const MediaRenderer = ({
   return (
     <>
       {!imageLoaded && (
-        <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-white">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#D1F3E1] border-t-transparent" />
-        </div>
+      <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-white">
+        <Spinner />
+      </div>
       )}
       <img
         src={currentImage}
