@@ -140,13 +140,12 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl }: CarouselSectionProp
   });
 
   const previewUrls = previewData?.imageUrls ?? [];
-  const imageUrls: string[] = [
-    ...(youtubeUrl ? ['youtube'] : []),
-    ...(thumbnailUrl ? [thumbnailUrl] : []),
-    ...previewUrls,
-  ];
-
   const embedUrl = useMemo(() => getEmbedUrl(youtubeUrl), [youtubeUrl]);
+  const imageUrls: string[] = useMemo(() => {
+    const result = [...(embedUrl ? ['youtube'] : []), ...(thumbnailUrl ? [thumbnailUrl] : []), ...previewUrls];
+    return result;
+  }, [embedUrl, thumbnailUrl, previewUrls]);
+
   const currentImage = useMemo(() => imageUrls[currentIndex] || null, [imageUrls, currentIndex]);
 
   useEffect(() => {
