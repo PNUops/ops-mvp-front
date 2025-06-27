@@ -35,7 +35,7 @@ const TotalCards = () => {
             teamId={team.teamId}
             teamName={team.teamName}
             projectName={team.projectName}
-            isLiked={team.liked}
+            isLiked={team.isLiked}
           />
         ))}
       </section>
