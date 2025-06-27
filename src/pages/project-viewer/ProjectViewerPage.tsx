@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useQuery, QueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTeamId } from 'hooks/useTeamId';
 import { useUserStore } from 'stores/useUserStore';
 import { getProjectDetails } from 'apis/projectViewer';
@@ -22,12 +22,14 @@ import {
 const ProjectViewerPage = () => {
   const teamId = useTeamId();
   const memberId = useUserStore((state) => state.user?.id);
+  const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['projectDetails', teamId],
     queryFn: async () => {
       if (teamId === null) throw new Error('teamId is null');
       return await getProjectDetails(teamId);
+      queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
     },
   });
 
