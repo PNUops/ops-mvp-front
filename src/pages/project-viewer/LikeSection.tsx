@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from 'hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -11,9 +10,8 @@ interface LikeSectionProps {
   isLiked: boolean;
 }
 
-const LikeSection = ({ teamId, isLiked: initIsLiked }: LikeSectionProps) => {
+const LikeSection = ({ teamId, isLiked }: LikeSectionProps) => {
   const { isSignedIn } = useAuth();
-  const [isLiked, setIsLiked] = useState(initIsLiked);
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -22,10 +20,9 @@ const LikeSection = ({ teamId, isLiked: initIsLiked }: LikeSectionProps) => {
   const likeMutation = useMutation({
     mutationFn: (nextIsLiked: boolean) => patchLikeToggle({ teamId, isLiked: nextIsLiked }),
     onSuccess: () => {
-      const nextLiked = !isLiked;
-      setIsLiked((prev) => !prev);
+      queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       queryClient.invalidateQueries({ queryKey: ['teams', user?.id ?? 'guest'] });
-      toast(nextLiked ? '좋아요를 눌렀어요.' : '좋아요를 취소했어요.');
+      toast(!isLiked ? '좋아요를 눌렀어요.' : '좋아요를 취소했어요.');
     },
   });
 
