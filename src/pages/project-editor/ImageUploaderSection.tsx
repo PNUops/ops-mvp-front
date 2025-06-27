@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useToast } from 'hooks/useToast';
 import { FiX } from 'react-icons/fi';
 import { AiFillPicture } from 'react-icons/ai';
 import { MdBrokenImage } from 'react-icons/md';
@@ -25,6 +26,8 @@ const ImageUploaderSection = ({
   previewsToDelete,
   setPreviewsToDelete,
 }: ImageUploaderSectionProps) => {
+  const toast = useToast();
+
   const images: (PreviewImage | undefined)[] = useMemo(() => {
     const thumbSlot = thumbnail ? { url: thumbnail } : undefined;
     const result: (PreviewImage | undefined)[] = [thumbSlot, ...previews];
@@ -34,6 +37,14 @@ const ImageUploaderSection = ({
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
+
+    const currentImageCount = (thumbnail ? 1 : 0) + previews.length;
+    const newImageCount = currentImageCount + files.length;
+
+    if (newImageCount > MAX_IMAGES) {
+      toast(`이미지는 최대 ${MAX_IMAGES}개까지 업로드할 수 있습니다.`, 'error');
+      return;
+    }
 
     const newPreviews: PreviewImage[] = files.map((file) => ({ url: file }));
 
@@ -74,6 +85,15 @@ const ImageUploaderSection = ({
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'));
+
+    const currentImageCount = (thumbnail ? 1 : 0) + previews.length;
+    const newImageCount = currentImageCount + files.length;
+
+    if (newImageCount > MAX_IMAGES) {
+      toast(`이미지는 최대 ${MAX_IMAGES}개까지 업로드할 수 있습니다.`, 'error');
+      return;
+    }
+
     const newPreviews: PreviewImage[] = files.map((file) => ({ url: file }));
     const next = [...(thumbnail ? [{ url: thumbnail }] : []), ...previews, ...newPreviews].slice(0, MAX_IMAGES);
     setThumbnail(next[0]?.url);

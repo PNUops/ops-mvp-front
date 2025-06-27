@@ -5,7 +5,7 @@ import { getThumbnail } from 'apis/projectEditor';
 import { getPreviewImages } from 'apis/projectViewer';
 import { PreviewImagesResponseDto } from 'types/DTO/projectViewerDto';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
-import { AiFillPicture } from 'react-icons/ai';
+import { FaSadTear } from 'react-icons/fa';
 
 interface CarouselSectionProps {
   teamId: number;
@@ -91,8 +91,9 @@ const MediaRenderer = ({
 }) => {
   if (!currentImage || currentImage === 'ERROR') {
     return (
-      <div className="text-midGray flex h-full w-full items-center justify-center">
-        <AiFillPicture size={40} />
+      <div className="text-lightGray border-lightGray flex h-full w-full flex-col items-center justify-center gap-5 border">
+        <FaSadTear size={40} />
+        <span className="text-xs">이미지를 찾을 수 없어요.</span>
       </div>
     );
   }
@@ -113,7 +114,7 @@ const MediaRenderer = ({
         alt="Project image"
         onLoad={() => setImageLoaded(true)}
         onError={() => setLoadFailed(true)}
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${
+        className={`border-lightGray absolute inset-0 h-full w-full border object-cover transition-opacity duration-200 ${
           imageLoaded ? 'opacity-100' : 'opacity-0'
         }`}
       />
