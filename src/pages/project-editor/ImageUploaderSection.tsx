@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useToast } from 'hooks/useToast';
+import { HiInformationCircle } from 'react-icons/hi';
 import { FiX } from 'react-icons/fi';
 import { AiFillPicture } from 'react-icons/ai';
-import { MdBrokenImage } from 'react-icons/md';
+import { MdOutlineFileUpload, MdBrokenImage } from 'react-icons/md';
 import { PreviewImage } from './ProjectEditorPage';
 
 interface ImageUploaderSectionProps {
@@ -109,33 +110,41 @@ const ImageUploaderSection = ({
 
   return (
     <div className="flex gap-10 text-sm">
-      <div className="text-midGray flex w-25 gap-1">
-        <span className="mr-1 text-red-500">*</span>
-        <span>썸네일</span>
+      <div className="flex flex-col items-start gap-3">
+        <div className="text-midGray flex w-25 gap-1">
+          <span className="mr-1 text-red-500">*</span>
+          <span>썸네일</span>
+        </div>
+        <div className="group relative inline-block">
+          <span className="inline-flex cursor-help items-center gap-1 rounded-full bg-sky-50 px-2 py-1 text-xs text-sky-400">
+            <HiInformationCircle /> 가이드
+          </span>
+          <div className="absolute top-full left-1/2 z-10 mt-3 w-max -translate-x-1/2 rounded bg-sky-50 p-3 text-xs text-sky-400 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
+            3:2 비율 (예: 1500×1000)이<br></br>가장 예쁘게 보여져요!
+          </div>
+        </div>
       </div>
-      <div className="flex w-full flex-1 flex-col gap-3 md:flex-row">
+
+      <div className="flex w-full flex-1 flex-col gap-3 xl:flex-row">
         <div
-          className="border-midGray text-midGray flex min-h-[250px] flex-1 flex-col items-center justify-evenly rounded border p-10 text-center"
+          className="border-midGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-between gap-2 rounded border p-6 text-center"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
-          <p>
-            파일을 이곳에 끌어놓아주세요.
-            <br />
-            Drag & Drop images here.
-          </p>
-          <p className="text-midGray my-2">OR</p>
-          <label className="text-mainGreen cursor-pointer rounded-full bg-[#D1F3E1] px-15 py-4 text-sm font-bold">
-            파일 업로드
+          <p className="text-xs sm:inline sm:text-sm">파일을 이곳에 끌어놓아주세요.</p>
+          <p className="text-midGray my-2 text-xs sm:inline sm:text-sm">OR</p>
+          <label className="text-mainGreen flex cursor-pointer rounded-full bg-[#D1F3E1] p-4 text-sm font-bold">
+            <MdOutlineFileUpload className="sm:hidden" />
+            <span className="hidden px-4 sm:inline">파일 업로드</span>
             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
           </label>
         </div>
-        <div className="grid flex-1 grid-cols-3 gap-3 text-center sm:grid-cols-2">
+        <div className="grid flex-1 grid-cols-1 gap-3 text-center sm:grid-cols-2">
           {paddedImages.map((img, index) =>
             img ? (
               <div
                 key={index}
-                className="border-lightGray relative flex h-[120px] w-full items-center justify-center overflow-hidden rounded border text-xs text-gray-400"
+                className="border-lightGray relative flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded border text-xs text-gray-400"
               >
                 {img.url === 'ERROR' ? (
                   <MdBrokenImage size={30} className="text-red-300" />
@@ -162,7 +171,7 @@ const ImageUploaderSection = ({
             ) : (
               <div
                 key={index}
-                className="border-lightGray text-title text-lightGray relative flex h-[120px] w-full items-center justify-center rounded border border-dashed"
+                className="border-lightGray text-title text-lightGray relative flex aspect-[3/2] w-full items-center justify-center rounded border border-dashed"
               >
                 <AiFillPicture />
                 {index === 0 && (
