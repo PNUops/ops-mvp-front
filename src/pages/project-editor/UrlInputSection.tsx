@@ -11,7 +11,7 @@ interface UrlInputSectionProps {
 
 const UrlInputSection = ({ githubUrl, setGithubUrl, youtubeUrl, setYoutubeUrl }: UrlInputSectionProps) => {
   return (
-    <div className="flex gap-10 text-sm">
+    <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
       <div className="text-midGray flex w-25">
         <span className="mr-1 text-red-500">*</span>
         <span>URL</span>
