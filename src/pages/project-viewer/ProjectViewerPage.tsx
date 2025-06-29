@@ -28,9 +28,10 @@ const ProjectViewerPage = () => {
     queryKey: ['projectDetails', teamId],
     queryFn: async () => {
       if (teamId === null) throw new Error('teamId is null');
-      return await getProjectDetails(teamId);
-      queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
+      return getProjectDetails(teamId);
     },
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   if (isLoading) {
@@ -55,7 +56,7 @@ const ProjectViewerPage = () => {
   if (!data) return <div>데이터를 불러올 수 없습니다.</div>;
 
   return (
-    <div>
+    <div className="px-5">
       <IntroSection
         teamId={data.teamId}
         leaderId={data.leaderId}
@@ -70,8 +71,8 @@ const ProjectViewerPage = () => {
       <LikeSection teamId={data.teamId} isLiked={data.isLiked} />
       <div className="h-10" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} participants={data.participants} />
-      <div className="h-30" />
-      {memberId != null && <CommentSection teamId={data.teamId} memberId={memberId} />}
+      <div className="h-28" />
+      <CommentSection teamId={data.teamId} memberId={memberId} />
     </div>
   );
 };

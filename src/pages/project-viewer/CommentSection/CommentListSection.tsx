@@ -25,7 +25,8 @@ const CommentListSection = ({ teamId, memberId }: CommentListSectionProps) => {
   const deleteMutation = useMutation({
     mutationFn: (request: CommentDeleteRequestDto) => deleteComment(request),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', teamId] }), toast('댓글이 삭제되었어요.');
+      queryClient.invalidateQueries({ queryKey: ['comments', teamId] });
+      toast('댓글이 삭제되었어요.');
     },
   });
 

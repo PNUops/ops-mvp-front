@@ -7,7 +7,7 @@ import CommentListSection from './CommentListSection';
 
 interface CommentSectionProps {
   teamId: number;
-  memberId: number;
+  memberId?: number;
 }
 
 const CommentSection = ({ teamId, memberId }: CommentSectionProps) => {
@@ -27,16 +27,15 @@ const CommentSection = ({ teamId, memberId }: CommentSectionProps) => {
   }
 
   return (
-    <div className="flex flex-col">
-      {isSignedIn && (
-        <>
+    <>
+      {memberId !== undefined && (
+        <div className="flex flex-col">
           <CommentFormSection teamId={teamId} />
           <div className="h-20" />
-        </>
+          <CommentListSection teamId={teamId} memberId={memberId} />
+        </div>
       )}
-
-      <CommentListSection teamId={teamId} memberId={memberId} />
-    </div>
+    </>
   );
 };
 
