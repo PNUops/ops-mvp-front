@@ -16,6 +16,8 @@ import {
   deleteThumbnail,
 } from 'apis/projectEditor';
 import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
+
+import { isValidGithubUrl, isValidYoutubeUrl } from './urlValidators';
 import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
@@ -103,36 +105,29 @@ const ProjectEditorPage = () => {
   const handleSave = async () => {
     if (!teamId) return;
 
-    if (!githubUrl) {
-      toast('깃허브 링크가 입력되지 않았어요.', 'error');
-      return;
-    }
-    if (!youtubeUrl) {
-      toast('유튜브 링크가 입력되지 않았어요.', 'error');
-      return;
-    }
-    if (!thumbnail && !previews.length) {
-      toast('썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.', 'error');
-      return;
-    }
-    if (!thumbnail) {
-      toast('썸네일이 업로드 되지 않았어요.', 'error');
-      return;
-    }
-    if (!previews.length) {
-      toast('프리뷰 이미지가 업로드 되지 않았어요.', 'error');
-      return;
-    }
-    if (!overview) {
-      toast('프로젝트 소개글이 작성되지 않았어요.', 'error');
+    const validateProjectInputs = () => {
+      if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
+      if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
+      if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
+      if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
+      if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
+      if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
+      if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
+      if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
+      return null;
+    };
+
+    const errorMessage = validateProjectInputs();
+    if (errorMessage) {
+      toast(errorMessage, 'error');
       return;
     }
 
     try {
       await patchProjectDetails(teamId, {
+        overview,
         githubPath: githubUrl,
         youTubePath: youtubeUrl,
-        overview,
       });
 
       if (thumbnailToDelete) {
@@ -165,7 +160,7 @@ const ProjectEditorPage = () => {
   };
 
   return (
-    <div>
+    <div className="px-5">
       <div className="text-title font-bold">프로젝트 생성</div>
       <div className="h-10" />
 
