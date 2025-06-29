@@ -16,6 +16,8 @@ import {
   deleteThumbnail,
 } from 'apis/projectEditor';
 import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
+
+import { isValidGithubUrl, isValidYoutubeUrl } from './urlValidators';
 import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
@@ -127,12 +129,19 @@ const ProjectEditorPage = () => {
       toast('프로젝트 소개글이 작성되지 않았어요.', 'error');
       return;
     }
-
+    if (!isValidGithubUrl(githubUrl)) {
+      toast('유효한 깃헙 URL을 입력하세요.', 'error');
+      return;
+    }
+    if (!isValidYoutubeUrl(youtubeUrl)) {
+      toast('유효한 유튜브 URL을 입력하세요.', 'error');
+      return;
+    }
     try {
       await patchProjectDetails(teamId, {
+        overview,
         githubPath: githubUrl,
         youTubePath: youtubeUrl,
-        overview,
       });
 
       if (thumbnailToDelete) {
@@ -165,7 +174,7 @@ const ProjectEditorPage = () => {
   };
 
   return (
-    <div>
+    <div className="px-5">
       <div className="text-title font-bold">프로젝트 생성</div>
       <div className="h-10" />
 
