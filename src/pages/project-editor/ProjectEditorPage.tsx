@@ -22,6 +22,7 @@ import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
+import EditorSkeleton from './EditorSkeleton';
 
 export interface PreviewImage {
   id?: number;
@@ -98,7 +99,7 @@ const ProjectEditorPage = () => {
   }, [previewData, projectData]);
 
   if (!teamId) return <div>팀 정보를 불러올 수 없습니다.</div>;
-  if (isProjectLoading) return <div>로딩 중...</div>;
+  if (isProjectLoading) return <EditorSkeleton />;
   if (isProjectError || !projectData) return <div>데이터를 가져오지 못했습니다.</div>;
   if (memberId !== projectData.leaderId) return <div>접근 권한이 없습니다.</div>;
 
@@ -198,10 +199,16 @@ const ProjectEditorPage = () => {
 
       <div className="h-20" />
 
-      <div className="flex justify-center">
+      <div className="flex justify-end gap-5 sm:gap-10">
+        <button
+          onClick={() => navigate(-1)}
+          className="border-mainGreen hover:bg-whiteGray focus:bg-subGreen text-mainGreen rounded-full border px-4 py-2 font-bold hover:cursor-pointer focus:outline-none sm:px-15 sm:py-4"
+        >
+          취소
+        </button>
         <button
           onClick={handleSave}
-          className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white hover:cursor-pointer hover:bg-green-700 focus:bg-green-400 focus:outline-none"
+          className="bg-mainGreen rounded-full px-4 py-2 text-sm font-bold text-white hover:cursor-pointer hover:bg-green-700 focus:bg-green-400 focus:outline-none sm:px-15 sm:py-4"
         >
           저장
         </button>

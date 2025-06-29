@@ -9,7 +9,7 @@ interface IntroSectionProps {
 
 const IntroSection = ({ projectName, teamName, leaderName, participants }: IntroSectionProps) => {
   return (
-    <div className="flex gap-10 text-sm">
+    <div className="flex gap-10 truncate text-sm">
       <div className="text-midGray flex w-25 flex-col gap-3 pl-3">
         <span>프로젝트</span>
         <span>팀명</span>
