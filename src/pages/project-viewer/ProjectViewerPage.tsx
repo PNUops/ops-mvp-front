@@ -56,7 +56,7 @@ const ProjectViewerPage = () => {
   if (!data) return <div>데이터를 불러올 수 없습니다.</div>;
 
   return (
-    <div>
+    <div className="px-5">
       <IntroSection
         teamId={data.teamId}
         leaderId={data.leaderId}
