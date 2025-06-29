@@ -21,9 +21,8 @@ const OverviewInput = ({ overview, setOverview }: OverviewInputProps) => {
     }
   };
 
-  // ring-lightGray focus-within:ring-midGray flex h-36 flex-col gap-2 rounded p-3 text-sm ring-1 transition-all duration-300 ease-in-out focus-within:ring-1"
   return (
-    <div className="flex gap-10 text-sm">
+    <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
       <div className="text-midGray flex w-25 gap-1">
         <span className="mr-1 text-red-500">*</span>
         <span className="w-full">Overview</span>
