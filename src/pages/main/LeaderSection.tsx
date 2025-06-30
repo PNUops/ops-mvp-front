@@ -23,7 +23,7 @@ const LeaderSection = () => {
       <LeaderMessage leaderName={user?.name ?? '팀장'} />
       <Link to={`/teams/edit/${submissionData?.teamId}`}>
         <RoundedButton className="flex items-center gap-1">
-          <TbPencil className="text-xl" />
+          <TbPencil className="text-lg sm:text-xl" />
           <span className="hidden whitespace-nowrap md:inline">작성하러 가기</span>
         </RoundedButton>
       </Link>
