@@ -71,7 +71,9 @@ const PasswordTab = () => {
       </div>
 
       <div className="col-span-3 mt-8 flex justify-center gap-4">
-        <RoundedButton type="submit">비밀번호 변경</RoundedButton>
+        <RoundedButton type="submit" className="min-w-32">
+          비밀번호 변경
+        </RoundedButton>
       </div>
     </form>
   );
