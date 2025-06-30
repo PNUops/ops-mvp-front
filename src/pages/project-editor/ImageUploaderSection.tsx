@@ -127,7 +127,7 @@ const ImageUploaderSection = ({
 
       <div className="flex w-full flex-1 flex-col gap-3 xl:flex-row">
         <div
-          className="border-midGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-between gap-2 rounded border p-6 text-center"
+          className="border-midGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-center gap-2 rounded border p-6 text-center sm:gap-5"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
