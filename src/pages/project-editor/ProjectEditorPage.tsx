@@ -36,6 +36,7 @@ const ProjectEditorPage = () => {
   const [thumbnailToDelete, setThumbnailToDelete] = useState<boolean>(false);
   const [previews, setPreviews] = useState<PreviewImage[]>([]);
   const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
+  const [prodUrl, setProdUrl] = useState<string | null>(null);
   const [githubUrl, setGithubUrl] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [overview, setOverview] = useState('');
@@ -127,6 +128,7 @@ const ProjectEditorPage = () => {
     try {
       await patchProjectDetails(teamId, {
         overview,
+        productionPath: prodUrl,
         githubPath: githubUrl,
         youTubePath: youtubeUrl,
       });
@@ -175,6 +177,8 @@ const ProjectEditorPage = () => {
       <div className="h-15" />
 
       <UrlInput
+        prodUrl={prodUrl}
+        setProdUrl={setProdUrl}
         githubUrl={githubUrl}
         setGithubUrl={setGithubUrl}
         youtubeUrl={youtubeUrl}

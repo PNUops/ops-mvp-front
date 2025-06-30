@@ -13,6 +13,7 @@ interface IntroSectionProps {
   leaderId: number;
   projectName: string;
   teamName: string;
+  prodUrl: string | null;
   githubUrl: string;
   youtubeUrl: string;
 }
@@ -44,7 +45,15 @@ const UrlButton = ({ url }: { url: string }) => {
   );
 };
 
-const IntroSection = ({ teamId, leaderId, projectName, teamName, githubUrl, youtubeUrl }: IntroSectionProps) => {
+const IntroSection = ({
+  teamId,
+  leaderId,
+  projectName,
+  teamName,
+  prodUrl,
+  githubUrl,
+  youtubeUrl,
+}: IntroSectionProps) => {
   const { isLeader } = useAuth();
   const memberId = useUserStore((state) => state.user?.id);
   const navigate = useNavigate();
@@ -70,9 +79,9 @@ const IntroSection = ({ teamId, leaderId, projectName, teamName, githubUrl, yout
       </div>
 
       <div className="flex flex-1 flex-col items-end gap-2 sm:w-auto">
+        {prodUrl && <UrlButton url={prodUrl} />}
         {githubUrl && <UrlButton url={githubUrl} />}
         {youtubeUrl && <UrlButton url={youtubeUrl} />}
-        {youtubeUrl && <UrlButton url="https://personal.url" />}
       </div>
     </div>
   );
