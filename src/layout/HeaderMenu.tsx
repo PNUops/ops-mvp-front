@@ -1,4 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
+import { getAllContests } from 'apis/contests';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const HeaderMenu = () => {
   return (
@@ -11,19 +14,22 @@ export default HeaderMenu;
 
 const HistoryMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { data } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
 
   return (
     <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
       <span className="hover:text-mainGreen cursor-pointer">히스토리</span>
-      {isOpen && (
+      {isOpen && data && (
         <div className="border-subGreen absolute top-full z-50 w-fit border-2 bg-white text-nowrap">
           <ul className="text-base font-normal">
-            <li className="hover:text-mainGreen cursor-pointer px-4 py-2 hover:bg-gray-100">
-              제6회PNU창의융합SW해커톤
-            </li>
-            <li className="hover:text-mainGreen cursor-pointer px-4 py-2 hover:bg-gray-100">
-              제5회PNU창의융합SW해커톤
-            </li>
+            {data?.map((item) => (
+              <Link
+                to={`/contest/${item.contestId}`}
+                className="hover:text-mainGreen block cursor-pointer px-4 py-2 hover:bg-gray-100"
+              >
+                {item.contestName}
+              </Link>
+            ))}
           </ul>
         </div>
       )}
