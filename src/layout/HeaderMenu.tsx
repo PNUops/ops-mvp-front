@@ -18,7 +18,9 @@ const HistoryMenu = () => {
 
   return (
     <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-      <span className="hover:text-mainGreen cursor-pointer">히스토리</span>
+      <Link to="/contest" className="hover:text-mainGreen cursor-pointer">
+        히스토리
+      </Link>
       {isOpen && data && (
         <div className="border-subGreen absolute top-full z-50 w-fit border-2 bg-white text-nowrap">
           <ul className="text-base font-normal">
