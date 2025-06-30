@@ -18,22 +18,22 @@ const HistoryMenu = () => {
 
   return (
     <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-      <Link to="/contest" className="hover:text-mainGreen cursor-pointer text-nowrap">
+      <Link to="/contest" className="hover:text-mainGreen block p-4 text-nowrap">
         히스토리
       </Link>
       {isOpen && data && (
-        <div className="border-subGreen absolute top-full z-50 w-fit border-2 bg-white text-nowrap">
-          <ul className="text-base font-normal">
-            {data?.map((item) => (
+        <ul className="border-subGreen absolute z-50 w-fit border-2 bg-white text-base font-normal text-nowrap">
+          {data?.map((item) => (
+            <li key={item.contestId}>
               <Link
                 to={`/contest/${item.contestId}`}
-                className="hover:text-mainGreen block cursor-pointer px-4 py-2 hover:bg-gray-100"
+                className="hover:text-mainGreen hover:bg-whiteGray block p-4 transition-colors duration-200 ease-in"
               >
                 {item.contestName}
               </Link>
-            ))}
-          </ul>
-        </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
