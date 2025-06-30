@@ -4,7 +4,7 @@ import { BiCog } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useToast } from 'hooks/useToast';
-import { useState } from 'react';
+import HeaderMenu from './HeaderMenu';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -56,26 +56,3 @@ const Header = () => {
 };
 
 export default Header;
-
-const HeaderMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div className="flex-1 font-semibold md:text-lg lg:text-xl">
-      <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-        <span className="hover:text-mainGreen cursor-pointer">히스토리</span>
-        {isOpen && (
-          <div className="border-subGreen absolute top-full z-50 w-fit border-2 bg-white text-nowrap">
-            <ul className="text-base font-normal">
-              <li className="hover:text-mainGreen cursor-pointer px-4 py-2 hover:bg-gray-100">
-                제6회PNU창의융합SW해커톤
-              </li>
-              <li className="hover:text-mainGreen cursor-pointer px-4 py-2 hover:bg-gray-100">
-                제5회PNU창의융합SW해커톤
-              </li>
-            </ul>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
