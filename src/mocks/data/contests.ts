@@ -11,4 +11,14 @@ export const mockContestsResponse: ContestResponseDto[] = [
     contestName: '제5회PNU창의융합SW해커톤',
     updatedAt: '2025-06-20T09:15:45Z',
   },
+  {
+    contestId: 3,
+    contestName: '제4회PNU창의융합SW해커톤',
+    updatedAt: '2025-06-20T09:15:45Z',
+  },
+  {
+    contestId: 4,
+    contestName: '제3회PNU창의융합SW해커톤',
+    updatedAt: '2025-06-20T09:15:45Z',
+  },
 ];
