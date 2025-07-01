@@ -47,7 +47,7 @@ const Header = () => {
             onClick={isSignedIn ? handleLogout : () => navigate('/signin')}
             className="text-exsm border-lightGray rounded-full border px-4 py-2 hover:cursor-pointer"
           >
-            {isSignedIn ? '로그아웃' : '로그인'}
+            {isSignedIn ? '로그아웃' : '로그인 / 회원가입'}
           </button>
         </div>
       </div>

@@ -13,7 +13,7 @@ const FindEmailResult = ({ email }: Props) => {
         입니다.
       </p>
       <Link to={'/signin'}>
-        <RoundedButton>로그인</RoundedButton>
+        <RoundedButton className="min-w-32">로그인</RoundedButton>
       </Link>
     </div>
   );
