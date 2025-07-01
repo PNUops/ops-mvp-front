@@ -28,16 +28,6 @@ const UrlInputSection = ({
       </div>
       <div className="flex flex-1 flex-col gap-3">
         <div className="relative w-full">
-          <RiLink className="text-mainGreen/50 absolute top-1/2 left-5 -translate-y-1/2" size={20} />
-          <input
-            type="url"
-            placeholder="https://your-project.vercel.app (선택)"
-            className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
-            value={prodUrl ?? ''}
-            onChange={(e) => setProdUrl(e.target.value)}
-          />
-        </div>
-        <div className="relative w-full">
           <FaGithub className="absolute top-1/2 left-5 -translate-y-1/2 text-gray-500" size={20} />
           <input
             type="url"
@@ -55,6 +45,16 @@ const UrlInputSection = ({
             className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
             value={youtubeUrl}
             onChange={(e) => setYoutubeUrl(e.target.value)}
+          />
+        </div>
+        <div className="relative w-full">
+          <RiLink className="text-mainGreen/50 absolute top-1/2 left-5 -translate-y-1/2" size={20} />
+          <input
+            type="url"
+            placeholder="https://your-project.vercel.app (선택)"
+            className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
+            value={prodUrl ?? ''}
+            onChange={(e) => setProdUrl(e.target.value)}
           />
         </div>
       </div>
