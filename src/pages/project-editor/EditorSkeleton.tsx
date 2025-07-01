@@ -1,6 +1,6 @@
 import React from 'react';
 
-const EditorSkeleton = () => {
+export const EditorDetailSkeleton = () => {
   return (
     <div className="animate-pulse px-5">
       <div className="h-6 w-40 rounded bg-gray-200" />
@@ -47,4 +47,17 @@ const EditorSkeleton = () => {
   );
 };
 
-export default EditorSkeleton;
+export const EditorMenuSkeleton = () => {
+  return (
+    <div className="relative w-full max-w-sm text-sm">
+      <button className="border-subGreen flex w-full animate-pulse items-center justify-between border-b-2 bg-gray-200 p-4 text-left">
+        <div className="h-4 w-32 rounded bg-gray-300"></div>
+      </button>
+      <ul className="border-subGreen absolute z-10 mt-4 max-h-60 w-full animate-pulse overflow-auto border-2 bg-white shadow-sm">
+        {[...Array(5)].map((_, index) => (
+          <li key={index} className="mb-2 animate-pulse cursor-pointer rounded bg-gray-200 p-4"></li>
+        ))}
+      </ul>
+    </div>
+  );
+};
