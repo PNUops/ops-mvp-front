@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useOutsideClick } from 'hooks/useOutsideClick';
 
 import { getAllContests } from 'apis/contests';
 import { ContestResponseDto } from 'types/DTO';
@@ -14,6 +15,10 @@ interface ContestMenuProps {
 const ContestMenu = ({ options, selectedContestId }: ContestMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const dropdownRef = useRef<HTMLUListElement | null>(null);
+  const closeDropdown = () => setIsOpen(false);
+  useOutsideClick(dropdownRef, closeDropdown);
+
   const selectedContest = options?.find((c) => c.contestId === selectedContestId);
 
   if (!options)
@@ -26,21 +31,24 @@ const ContestMenu = ({ options, selectedContestId }: ContestMenuProps) => {
   return (
     <div className="relative w-full max-w-sm text-sm">
       <button
-        className="border-subGreen flex w-full items-center justify-between border-b-2 p-4 text-left"
+        className="border-lightGray flex w-full items-center justify-between border-b-3 p-4 text-left hover:cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className={selectedContest ? '' : 'text-whiteGray'}>
+        <span className={selectedContest ? '' : 'text-midGray'}>
           {selectedContest?.contestName || '대회를 선택해주세요.'}
         </span>
-        <FaChevronDown className="text-mainGreen" />
+        <FaChevronDown className={`hover:text-[rgb(172,222,191)] ${isOpen ? 'text-mainGreen' : 'text-subGreen'}`} />
       </button>
 
       {isOpen && options && (
-        <ul className="border-subGreen absolute z-10 mt-4 max-h-60 w-full overflow-auto border-2 bg-white shadow-sm">
+        <ul
+          className="border-lightGray absolute z-10 mt-4 max-h-60 w-full overflow-auto rounded-md border bg-white shadow-sm"
+          ref={dropdownRef}
+        >
           {options.map((options) => (
             <li
               key={options.contestId}
-              className={`cursor-pointer p-4 transition-colors duration-150 ${
+              className={`border-whiteGray cursor-pointer border-b-1 p-4 transition-colors duration-200 ease-in-out ${
                 options.contestId === selectedContestId ? 'bg-whiteGray text-mainGreen' : 'hover:bg-whiteGray'
               }`}
               onClick={() => {
