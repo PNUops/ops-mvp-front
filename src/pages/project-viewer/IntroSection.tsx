@@ -26,10 +26,15 @@ const UrlButton = ({ url }: { url: string }) => {
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
       return { icon: <FaYoutube className="text-mainGreen" />, text: 'Youtube' };
     }
-    return { icon: <RiLink className="text-mainGreen" />, text: url };
+    if (url.includes('https://')) {
+      return { icon: <RiLink className="text-mainGreen" />, text: 'Project' };
+    }
+    return undefined;
   };
 
-  const { icon, text } = getIconAndText();
+  const result = getIconAndText();
+  if (!result) return null;
+  const { icon, text } = result;
 
   return (
     <a
