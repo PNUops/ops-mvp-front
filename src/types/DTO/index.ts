@@ -8,3 +8,5 @@ export * from './contestsDto';
 export type { DashboardTeamResponseDto } from './dashboardDto';
 export type { TeamLikeResponseDto } from './teamsLikeDto';
 export type { VoteRateResponseDto } from './voteRateDto';
+export type { PageType } from './adminpageDTO';
+export { PAGE_TYPE } from './adminpageDTO';
