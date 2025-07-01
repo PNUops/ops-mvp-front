@@ -21,7 +21,11 @@ const Header = () => {
     <header className="border-lightGray lg:h-header md:h-header xs:h-8 z-20 flex w-full min-w-[350px] items-center justify-between border-b bg-white px-4 py-2 sm:h-16">
       <div className="mx-auto flex w-full items-center justify-between gap-4 px-4 sm:px-8 md:gap-8 lg:gap-16 lg:px-16">
         <Link to="/">
-          <img className="w-auto max-sm:hidden md:h-9 lg:h-10" src="/Logo.svg" alt="부산대학교 SW성과관리시스템 로고" />
+          <img
+            className="w-auto max-sm:hidden sm:h-8 md:h-9 lg:h-10"
+            src="/Logo.svg"
+            alt="부산대학교 SW성과관리시스템 로고"
+          />
           <img
             className="h-8 w-auto sm:hidden"
             src="/swOpsLogo-sm.png"
