@@ -12,7 +12,7 @@ interface AdminInputSectionProps {
 const AdminInputSection = ({ contestId, contests, projectName, teamName }: AdminInputSectionProps) => {
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-col items-center gap-5 text-sm sm:flex-row sm:gap-10">
+      <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span className="w-full">대회명</span>
@@ -22,7 +22,7 @@ const AdminInputSection = ({ contestId, contests, projectName, teamName }: Admin
         </div>
       </div>
       <div className="h-10" />
-      <div className="flex flex-col items-center gap-5 text-sm sm:flex-row sm:gap-10">
+      <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span className="w-full text-nowrap">프로젝트명</span>
@@ -36,7 +36,7 @@ const AdminInputSection = ({ contestId, contests, projectName, teamName }: Admin
           />
         </div>
       </div>
-      <div className="flex flex-col items-center gap-5 text-sm sm:flex-row sm:gap-10">
+      <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span className="w-full">팀명</span>
