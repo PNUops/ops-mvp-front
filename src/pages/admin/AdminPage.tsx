@@ -26,7 +26,7 @@ const AdminPage = () => {
           <button
             key={tab.value}
             onClick={() => setPage(tab.value)}
-            className={`rounded-lg px-6 py-2 text-lg ${
+            className={`min-w-16 rounded-lg px-4 py-2 text-lg ${
               page === tab.value ? 'bg-subGreen text-black' : 'bg-gray-100 text-gray-400'
             }`}
           >
