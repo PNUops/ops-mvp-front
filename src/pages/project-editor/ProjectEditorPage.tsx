@@ -16,14 +16,16 @@ import {
   deletePreview,
   deleteThumbnail,
 } from 'apis/projectEditor';
+import { getAllContests } from 'apis/contests';
 import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
+import { ContestResponseDto } from 'types/DTO';
 
 import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from './urlValidators';
 import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
-import EditorSkeleton from './EditorSkeleton';
+import { EditorDetailSkeleton, EditorMenuSkeleton } from './EditorSkeleton';
 
 import AdminInputSection from '@pages/admin/AdminInputSection';
 
@@ -79,6 +81,16 @@ const ProjectEditorPage = () => {
     enabled: teamId !== null && !!projectData?.previewIds?.length,
   });
 
+  const {
+    data: contests,
+    isLoading: isContestsLoading,
+    isError: isContestsError,
+  } = useQuery<ContestResponseDto[]>({
+    queryKey: ['contestsInfo'],
+    queryFn: async () => getAllContests(),
+    enabled: isAdmin,
+  });
+
   useEffect(() => {
     if (projectData) {
       setGithubUrl(projectData.githubPath);
@@ -104,13 +116,19 @@ const ProjectEditorPage = () => {
   }, [previewData, projectData]);
 
   if (!teamId) return <div>팀 정보를 불러올 수 없습니다.</div>;
-  if (isProjectLoading) return <EditorSkeleton />;
+
+  if (isProjectLoading) return <EditorDetailSkeleton />;
   if (isProjectError || !projectData) return <div>데이터를 가져오지 못했습니다.</div>;
-  if (memberId !== projectData.leaderId) return <div>접근 권한이 없습니다.</div>;
+
+  const isLeaderOfThisTeam = memberId == projectData.leaderId;
+  if (!isLeader && !isLeaderOfThisTeam && !isAdmin) {
+    return <div>접근 권한이 없습니다.</div>;
+  }
+
+  if (isContestsLoading) return <EditorMenuSkeleton />;
+  if (isContestsError) return <div>데이터를 가져오지 못했습니다.</div>;
 
   const handleSave = async () => {
-    if (!teamId) return;
-
     const validateProjectInputs = () => {
       if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
       if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
@@ -171,13 +189,23 @@ const ProjectEditorPage = () => {
     <div className="px-5">
       <div className="text-title font-bold">프로젝트 생성/수정</div>
       <div className="h-10" />
+      {isAdmin && contests && (
+        <AdminInputSection
+          contestId={0}
+          contests={contests}
+          projectName={projectData.projectName}
+          teamName={projectData.teamName}
+        />
+      )}
 
-      <IntroSection
-        projectName={projectData.projectName}
-        teamName={projectData.teamName}
-        leaderName={projectData.leaderName}
-        participants={projectData.participants}
-      />
+      {isLeader && isLeaderOfThisTeam && (
+        <IntroSection
+          projectName={projectData.projectName}
+          teamName={projectData.teamName}
+          leaderName={projectData.leaderName}
+          participants={projectData.participants}
+        />
+      )}
 
       <div className="h-15" />
 
