@@ -1,5 +1,5 @@
 const NoticeAdminPage = () => {
-  return <></>;
+  return <>공지사항</>;
 };
 
 export default NoticeAdminPage;

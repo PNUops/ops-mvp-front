@@ -1,5 +1,5 @@
 const ContestAdminPage = () => {
-  return <></>;
+  return <>대회관리</>;
 };
 
 export default ContestAdminPage;
