@@ -1,20 +1,22 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+
 import { getAllContests } from 'apis/contests';
+import { ContestResponseDto } from 'types/DTO';
+
 import { FaChevronDown } from 'react-icons/fa';
 
 interface ContestMenuProps {
+  options: ContestResponseDto[];
   selectedContestId?: number;
-  onSelect: (id: number) => void;
 }
 
-const ContestMenu = ({ selectedContestId, onSelect }: ContestMenuProps) => {
+const ContestMenu = ({ options, selectedContestId }: ContestMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: contests, isError } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
 
-  const selectedContest = contests?.find((c) => c.contestId === selectedContestId);
+  const selectedContest = options?.find((c) => c.contestId === selectedContestId);
 
-  if (isError)
+  if (!options)
     return (
       <div className="bg-mainRed/10 border-mainRed text-mainRed rounded-full border px-3 py-1 text-xs">
         다시 시도해주세요.
@@ -28,25 +30,24 @@ const ContestMenu = ({ selectedContestId, onSelect }: ContestMenuProps) => {
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className={selectedContest ? '' : 'text-whiteGray'}>
-          {selectedContest?.contestName || '대회를 선택하시오.'}
+          {selectedContest?.contestName || '대회를 선택해주세요.'}
         </span>
         <FaChevronDown className="text-mainGreen" />
       </button>
 
-      {isOpen && contests && (
+      {isOpen && options && (
         <ul className="border-subGreen absolute z-10 mt-4 max-h-60 w-full overflow-auto border-2 bg-white shadow-sm">
-          {contests.map((contest) => (
+          {options.map((options) => (
             <li
-              key={contest.contestId}
+              key={options.contestId}
               className={`cursor-pointer p-4 transition-colors duration-150 ${
-                contest.contestId === selectedContestId ? 'bg-whiteGray text-mainGreen' : 'hover:bg-whiteGray'
+                options.contestId === selectedContestId ? 'bg-whiteGray text-mainGreen' : 'hover:bg-whiteGray'
               }`}
               onClick={() => {
-                onSelect(contest.contestId);
                 setIsOpen(false);
               }}
             >
-              {contest.contestName}
+              {options.contestName}
             </li>
           ))}
         </ul>
