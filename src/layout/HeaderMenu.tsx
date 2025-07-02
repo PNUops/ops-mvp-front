@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllContests } from 'apis/contests';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import useContestStore from '../stores/useContestStore';
 
 const HeaderMenu = () => {
   return (
@@ -16,12 +15,6 @@ export default HeaderMenu;
 const HistoryMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { data } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
-  const { setSelectedContestId } = useContestStore();
-
-  const handleContestSelect = (contestId: number) => {
-    setSelectedContestId(contestId);
-    setIsOpen(false);
-  };
 
   return (
     <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
@@ -34,7 +27,6 @@ const HistoryMenu = () => {
             <li key={item.contestId}>
               <Link
                 to={`/contest/${item.contestId}`}
-                onClick={() => handleContestSelect(item.contestId)}
                 className="hover:text-mainGreen hover:bg-whiteGray block p-4 transition-colors duration-200 ease-in"
               >
                 {item.contestName}

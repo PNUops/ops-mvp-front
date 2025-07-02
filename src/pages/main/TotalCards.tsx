@@ -1,10 +1,9 @@
 import TeamCard from '@pages/main/TeamCard';
 import { useQuery } from '@tanstack/react-query';
-import { getAllTeams, getCurrentContestTeams, getTeamsByContestId } from '../../apis/teams';
+import { getCurrentContestTeams, getTeamsByContestId } from '../../apis/teams';
 import { TeamListItemResponseDto } from '../../types/DTO/teams/teamListDto';
 import useAuth from 'hooks/useAuth';
 import TeamCardSkeleton from '@pages/main/TeamCardSkeleton';
-import AddTeamCard from '@pages/main/AddTeamCard';
 import { useParams } from 'react-router-dom';
 
 const TotalCards = () => {
@@ -44,7 +43,6 @@ const TotalCards = () => {
             isLiked={team.isLiked}
           />
         ))}
-        <AddTeamCard />
       </section>
     </div>
   );
