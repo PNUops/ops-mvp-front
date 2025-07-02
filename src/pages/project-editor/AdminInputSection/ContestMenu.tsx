@@ -1,27 +1,39 @@
 import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useOutsideClick } from 'hooks/useOutsideClick';
+import { useContestStore } from './contestStore';
 
 import { getAllContests } from 'apis/contests';
 import { ContestResponseDto } from 'types/DTO';
 
+import { EditorMenuSkeleton } from '../EditorSkeleton';
+
 import { FaChevronDown } from 'react-icons/fa';
 
-interface ContestMenuProps {
-  options: ContestResponseDto[];
-  selectedContestId?: number;
-}
-
-const ContestMenu = ({ options, selectedContestId }: ContestMenuProps) => {
+const ContestMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-
   const dropdownRef = useRef<HTMLUListElement | null>(null);
-  const closeDropdown = () => setIsOpen(false);
-  useOutsideClick(dropdownRef, closeDropdown);
 
-  const selectedContest = options?.find((c) => c.contestId === selectedContestId);
+  const {
+    data: contests,
+    isLoading,
+    isError,
+  } = useQuery<ContestResponseDto[]>({
+    queryKey: ['contests'],
+    queryFn: async () => getAllContests(),
+  });
 
-  if (!options)
+  const selectedContestId = useContestStore((state) => state.selectedContestId);
+  const setSelectedContestId = useContestStore((state) => state.setSelectedContestId);
+
+  const selectedContest = contests?.find((c) => c.contestId == selectedContestId);
+
+  useOutsideClick(dropdownRef, () => setIsOpen(false));
+
+  if (isLoading) return <EditorMenuSkeleton />;
+  if (isError) return <div>데이터를 가져오지 못했습니다.</div>;
+
+  if (!contests || contests.length === 0)
     return (
       <div className="bg-mainRed/10 border-mainRed text-mainRed rounded-full border px-3 py-1 text-xs">
         다시 시도해주세요.
@@ -32,7 +44,7 @@ const ContestMenu = ({ options, selectedContestId }: ContestMenuProps) => {
     <div className="relative w-full max-w-sm text-sm">
       <button
         className="border-lightGray flex w-full items-center justify-between border-b-3 p-4 text-left hover:cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen((prev) => !prev)}
       >
         <span className={selectedContest ? '' : 'text-midGray'}>
           {selectedContest?.contestName || '대회를 선택해주세요.'}
@@ -40,22 +52,23 @@ const ContestMenu = ({ options, selectedContestId }: ContestMenuProps) => {
         <FaChevronDown className={`hover:text-[rgb(172,222,191)] ${isOpen ? 'text-mainGreen' : 'text-subGreen'}`} />
       </button>
 
-      {isOpen && options && (
+      {isOpen && contests && (
         <ul
           className="border-lightGray absolute z-10 mt-4 max-h-60 w-full overflow-auto rounded-md border bg-white shadow-sm"
           ref={dropdownRef}
         >
-          {options.map((options) => (
+          {contests.map((contests) => (
             <li
-              key={options.contestId}
+              key={contests.contestId}
               className={`border-whiteGray cursor-pointer border-b-1 p-4 transition-colors duration-200 ease-in-out ${
-                options.contestId === selectedContestId ? 'bg-whiteGray text-mainGreen' : 'hover:bg-whiteGray'
+                contests.contestId === selectedContestId ? 'bg-whiteGray text-mainGreen' : 'hover:bg-whiteGray'
               }`}
               onClick={() => {
+                setSelectedContestId(contests.contestId);
                 setIsOpen(false);
               }}
             >
-              {options.contestName}
+              {contests.contestName}
             </li>
           ))}
         </ul>

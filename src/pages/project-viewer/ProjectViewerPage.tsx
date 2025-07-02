@@ -71,7 +71,7 @@ const ProjectViewerPage = () => {
       <div className="h-10" />
       <LikeSection teamId={data.teamId} isLiked={data.isLiked} />
       <div className="h-10" />
-      <DetailSection overview={data.overview} leaderName={data.leaderName} participants={data.participants} />
+      <DetailSection overview={data.overview} leaderName={data.leaderName} participants={data.teamMembers} />
       <div className="h-28" />
       <CommentSection teamId={data.teamId} memberId={memberId} />
     </div>

@@ -6,6 +6,7 @@ import { useUserStore } from 'stores/useUserStore';
 import useAuth from 'hooks/useAuth';
 import { useTeamId } from 'hooks/useTeamId';
 import { useToast } from 'hooks/useToast';
+import { useContestStore } from './AdminInputSection/contestStore';
 
 import { getProjectDetails, getPreviewImages } from 'apis/projectViewer';
 import {
@@ -16,18 +17,18 @@ import {
   deletePreview,
   deleteThumbnail,
 } from 'apis/projectEditor';
-import { getAllContests } from 'apis/contests';
+
 import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
-import { ContestResponseDto } from 'types/DTO';
 
 import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from './urlValidators';
 import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
-import { EditorDetailSkeleton, EditorMenuSkeleton } from './EditorSkeleton';
+import { EditorDetailSkeleton } from './EditorSkeleton';
 
-import AdminInputSection from '@pages/admin/AdminInputSection';
+import AdminInputSection from '@pages/project-editor/AdminInputSection/AdminInputSection';
+import { useCachedNode } from '@dnd-kit/core/dist/hooks/utilities';
 
 export interface PreviewImage {
   id?: number;
@@ -49,6 +50,9 @@ const ProjectEditorPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const setSelectedContestId = useContestStore((state) => state.setSelectedContestId);
+  const selectedContestId = useContestStore((state) => state.selectedContestId);
 
   const {
     data: projectData,
@@ -81,16 +85,6 @@ const ProjectEditorPage = () => {
     enabled: teamId !== null && !!projectData?.previewIds?.length,
   });
 
-  const {
-    data: contests,
-    isLoading: isContestsLoading,
-    isError: isContestsError,
-  } = useQuery<ContestResponseDto[]>({
-    queryKey: ['contestsInfo'],
-    queryFn: async () => getAllContests(),
-    enabled: isAdmin,
-  });
-
   useEffect(() => {
     if (projectData) {
       setGithubUrl(projectData.githubPath);
@@ -120,15 +114,19 @@ const ProjectEditorPage = () => {
   if (isProjectLoading) return <EditorDetailSkeleton />;
   if (isProjectError || !projectData) return <div>데이터를 가져오지 못했습니다.</div>;
 
-  const isLeaderOfThisTeam = memberId == projectData.leaderId;
-  if (!isLeader && !isLeaderOfThisTeam && !isAdmin) {
+  useEffect(() => {
+    if (projectData?.contestId) {
+      setSelectedContestId(projectData.contestId);
+    }
+  }, [projectData?.contestId, setSelectedContestId]);
+
+  const isLeaderOfThisTeam = isLeader && memberId == projectData.leaderId;
+  if (!isLeaderOfThisTeam && !isAdmin) {
     return <div>접근 권한이 없습니다.</div>;
   }
 
-  if (isContestsLoading) return <EditorMenuSkeleton />;
-  if (isContestsError) return <div>데이터를 가져오지 못했습니다.</div>;
-
   const handleSave = async () => {
+    const contestIdToSubmit = selectedContestId;
     const validateProjectInputs = () => {
       if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
       if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
@@ -150,6 +148,14 @@ const ProjectEditorPage = () => {
 
     try {
       await patchProjectDetails(teamId, {
+        contestId: isAdmin ? (contestIdToSubmit ?? projectData.contestId) : projectData.contestId,
+        // TODO
+        // teamName: isAdmin ? teamName : projectData.teamName,
+        // projectName: isAdmin ? projectName : projectData.projectName,
+        // leaderName: isAdmin ? leaderName : projectData.leaderName,
+        teamName: projectData.teamName,
+        projectName: projectData.projectName,
+        leaderName: projectData.leaderName,
         overview,
         productionPath: prodUrl,
         githubPath: githubUrl,
@@ -179,7 +185,7 @@ const ProjectEditorPage = () => {
       queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
       queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       toast('저장이 완료되었습니다.', 'success');
-      isLeader && navigate(`/teams/view/${teamId}`);
+      isLeaderOfThisTeam && navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
@@ -189,21 +195,14 @@ const ProjectEditorPage = () => {
     <div className="px-5">
       <div className="text-title font-bold">프로젝트 생성/수정</div>
       <div className="h-10" />
-      {isAdmin && contests && (
-        <AdminInputSection
-          contestId={0}
-          contests={contests}
-          projectName={projectData.projectName}
-          teamName={projectData.teamName}
-        />
-      )}
+      {isAdmin && <AdminInputSection projectName={projectData.projectName} teamName={projectData.teamName} />}
 
-      {isLeader && isLeaderOfThisTeam && (
+      {isLeaderOfThisTeam && (
         <IntroSection
           projectName={projectData.projectName}
           teamName={projectData.teamName}
           leaderName={projectData.leaderName}
-          participants={projectData.participants}
+          participants={projectData.teamMembers}
         />
       )}
 

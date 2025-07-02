@@ -1,15 +1,15 @@
-import ContestMenu from '@components/ContestMenu';
+import ContestMenu from './ContestMenu';
+
+import { useContestStore } from './contestStore';
 
 import { ContestResponseDto } from 'types/DTO';
 
 interface AdminInputSectionProps {
-  contestId: number;
-  contests: ContestResponseDto[];
   projectName: string;
   teamName: string;
 }
 
-const AdminInputSection = ({ contestId, contests, projectName, teamName }: AdminInputSectionProps) => {
+const AdminInputSection = ({ projectName, teamName }: AdminInputSectionProps) => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">
@@ -18,7 +18,7 @@ const AdminInputSection = ({ contestId, contests, projectName, teamName }: Admin
           <span className="w-full">대회명</span>
         </div>
         <div className="flex flex-1 flex-col">
-          <ContestMenu options={contests} selectedContestId={0} />
+          <ContestMenu />
         </div>
       </div>
       <div className="h-10" />
