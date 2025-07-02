@@ -7,7 +7,7 @@ import { getRanking } from 'apis/ranking';
 import { DashboardTeamResponseDto, TeamLikeResponseDto } from 'types/DTO';
 import useAuth from 'hooks/useAuth';
 
-const OngoingContestsPage = () => {
+const OngoingContestsTab = () => {
   const { isAdmin } = useAuth();
   const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeamResponseDto[]>({
     queryKey: ['dashboard'],
@@ -52,4 +52,4 @@ const OngoingContestsPage = () => {
   );
 };
 
-export default OngoingContestsPage;
+export default OngoingContestsTab;

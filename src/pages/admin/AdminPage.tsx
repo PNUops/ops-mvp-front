@@ -1,28 +1,35 @@
 import { useState } from 'react';
-import OngoingContestsPage from '@pages/admin/OngoingContestsPage';
-import NoticeAdminPage from '@pages/admin/NoticeAdminPage';
-import ContestAdminPage from '@pages/admin/ContestAdminPage';
-import { PageType, PAGE_TYPE } from 'types/DTO';
+import OngoingContestsTab from '@pages/admin/OngoingContestsTab';
+import NoticeAdminPage from '@pages/admin/NoticeAdminTab';
+import ContestAdminPage from '@pages/admin/ContestAdminTab';
+import { AdminTabType } from 'types/DTO';
 
-const pageTabs: { label: string; value: PageType }[] = [
-  { label: '진행 중 대회', value: PAGE_TYPE.진행중인대회 },
-  { label: '공지사항 관리', value: PAGE_TYPE.공지사항관리 },
-  { label: '대회 관리', value: PAGE_TYPE.대회관리 },
+const adminTabs = [
+  {
+    label: '진행 중 대회',
+    value: AdminTabType.ONGOING,
+    component: <OngoingContestsTab />,
+  },
+  {
+    label: '공지사항 관리',
+    value: AdminTabType.NOTICE,
+    component: <NoticeAdminPage />,
+  },
+  {
+    label: '대회 관리',
+    value: AdminTabType.CONTEST,
+    component: <ContestAdminPage />,
+  },
 ];
 
-const pageComponentMap = {
-  [PAGE_TYPE.진행중인대회]: <OngoingContestsPage />,
-  [PAGE_TYPE.공지사항관리]: <NoticeAdminPage />,
-  [PAGE_TYPE.대회관리]: <ContestAdminPage />,
-};
-
 const AdminPage = () => {
-  const [page, setPage] = useState<PageType>(PAGE_TYPE.진행중인대회);
+  const [page, setPage] = useState<AdminTabType>(AdminTabType.ONGOING);
+  const currentTab = adminTabs.find((tab) => tab.value === page);
 
   return (
     <div>
       <div className="mb-8 flex gap-4">
-        {pageTabs.map((tab) => (
+        {adminTabs.map((tab) => (
           <button
             key={tab.value}
             onClick={() => setPage(tab.value)}
@@ -34,7 +41,7 @@ const AdminPage = () => {
           </button>
         ))}
       </div>
-      {pageComponentMap[page]}
+      {currentTab?.component}
     </div>
   );
 };
