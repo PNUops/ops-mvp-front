@@ -17,6 +17,7 @@ const AppRoutes = () =>
       element: <MainLayout />,
       children: [
         { index: true, element: <MainPage /> },
+        { path: 'contest/:contestId', element: <MainPage /> },
         { path: 'signin', element: <SignInPage /> },
         { path: 'signup', element: <SignUpPage /> },
         { path: 'teams/view/:teamId', element: <ProjectViewerPage /> },
