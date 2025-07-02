@@ -6,7 +6,7 @@ const AddTeamCard = () => {
   return (
     <Link
       to={`/teams`}
-      className="border-whiteGray flex aspect-[5/6] w-full cursor-pointer flex-col overflow-hidden rounded-xl border-[0.2px] transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
+      className="border-lightGray flex aspect-[5/6] w-full cursor-pointer flex-col overflow-hidden rounded-xl border-[0.2px] transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
       style={{
         boxShadow: '4px 4px 10px rgba(0,0,0,0.1)',
       }}
