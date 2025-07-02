@@ -24,5 +24,5 @@ export const mockNotices = [
   }
 ]
 
-export const mockNoticesResponse = () =>
-  new Promise((resolve) => setTimeout(() => resolve(mockNotices), 200));
+export const mockNoticesResponse = (): Promise<{ noticeId: number; title: string; updatedAt: string }[]> =>
+  Promise.resolve(mockNotices);

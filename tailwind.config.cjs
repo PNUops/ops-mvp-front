@@ -12,7 +12,7 @@ const theme = {
   extend: {
     colors: {
       mainGreen: OPS_COLOR.mainGreen,
-      mainGreen: OPS_COLOR.mainGreen,
+      lightGreen: OPS_COLOR.lightGreen,
       midGray: OPS_COLOR.midGray,
       lightGray: OPS_COLOR.lightGray,
       whiteGray: OPS_COLOR.whiteGray,

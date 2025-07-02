@@ -1,6 +1,7 @@
 export const OPS_COLOR = {
   mainBlue: '#005BAA',
   mainGreen: '#00A651',
+  lightGreen: '#D1F3E1',
   midGray: '#979797', // Gray_middle
   lightGray: '#E2E2E2', // Gray_light
   whiteGray: '#F9F9F9', // Gray_extra_light
