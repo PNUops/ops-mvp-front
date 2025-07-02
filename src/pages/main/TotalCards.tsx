@@ -4,6 +4,7 @@ import { getAllTeams } from '../../apis/teams';
 import { TeamListItemResponseDto } from '../../types/DTO/teams/teamListDto';
 import useAuth from 'hooks/useAuth';
 import TeamCardSkeleton from '@pages/main/TeamCardSkeleton';
+import AddTeamCard from '@pages/main/AddTeamCard';
 
 const TotalCards = () => {
   const { user } = useAuth();
@@ -38,6 +39,7 @@ const TotalCards = () => {
             isLiked={team.isLiked}
           />
         ))}
+        <AddTeamCard />
       </section>
     </div>
   );
