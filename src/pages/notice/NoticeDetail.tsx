@@ -1,10 +1,14 @@
-
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getNoticeDetail } from 'apis/notices';
 import { AiFillNotification } from "react-icons/ai";
+import { useEffect } from 'react';
 
 const NoticeDetail = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
+
   const { noticeId } = useParams();
   const { data: notice, isLoading, isError } = useQuery({
     queryKey: ['noticeDetail', noticeId],

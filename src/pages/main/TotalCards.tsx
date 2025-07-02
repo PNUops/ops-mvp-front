@@ -1,20 +1,25 @@
 import TeamCard from '@pages/main/TeamCard';
 import { useQuery } from '@tanstack/react-query';
-import { getAllTeams } from '../../apis/teams';
+import { getAllTeams, getCurrentContestTeams, getTeamsByContestId } from '../../apis/teams';
 import { TeamListItemResponseDto } from '../../types/DTO/teams/teamListDto';
 import useAuth from 'hooks/useAuth';
 import TeamCardSkeleton from '@pages/main/TeamCardSkeleton';
 import AddTeamCard from '@pages/main/AddTeamCard';
+import { useParams } from 'react-router-dom';
 
 const TotalCards = () => {
   const { user } = useAuth();
+  const { contestId } = useParams();
   const {
     data: teams,
     isLoading,
     isError,
   } = useQuery<TeamListItemResponseDto[]>({
     queryKey: ['teams', user?.id ?? 'guest'],
-    queryFn: getAllTeams,
+    queryFn: () =>
+      contestId
+        ? getTeamsByContestId(Number(contestId))
+        : getCurrentContestTeams(),
     staleTime: 1000 * 60 * 15, // stale 시간: 15분
     gcTime: 1000 * 60 * 15, // 캐시 삭제 기간 : 15분 간격
   });

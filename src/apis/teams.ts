@@ -11,3 +11,13 @@ export const getSubmissionStatus = async (): Promise<SubmissionStatusResponseDto
     const res = await apiClient.get("/teams/submission-status");
     return res.data;
 }
+
+export const getCurrentContestTeams = async (): Promise<TeamListItemResponseDto[]> => {
+    const { data } = await apiClient.get('/contests/current');
+    return data;
+};
+
+export const getTeamsByContestId = async (contestId: number): Promise<TeamListItemResponseDto[]> => {
+    const { data } = await apiClient.get(`/contests/${contestId}`);
+    return data;
+};
