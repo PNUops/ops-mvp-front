@@ -21,13 +21,13 @@ interface IntroSectionProps {
 const UrlButton = ({ url }: { url: string }) => {
   const getIconAndText = () => {
     if (url.includes('github.com')) {
-      return { icon: <FaGithub className="text-mainGreen" />, text: 'GitHub' };
+      return { icon: <FaGithub className="text-black" />, text: 'GitHub' };
     }
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      return { icon: <FaYoutube className="text-mainGreen" />, text: 'Youtube' };
+      return { icon: <FaYoutube className="text-red-500" />, text: 'Youtube' };
     }
     if (url.includes('https://')) {
-      return { icon: <RiLink className="text-mainGreen" />, text: 'Project' };
+      return { icon: <RiLink className="text-mainGreen" />, text: '프로젝트 보러가기' };
     }
     return undefined;
   };
@@ -41,11 +41,11 @@ const UrlButton = ({ url }: { url: string }) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="border-mainGreen flex w-40 max-w-40 min-w-40 items-center justify-around gap-3 truncate rounded-full border px-3 py-1 focus:outline-none sm:w-auto"
+      className="border-lightGray hover:border-mainGreen inline-flex w-45 items-center gap-2 rounded-full border px-4 py-1 transition-colors duration-200 hover:bg-[#D1F3E1]/60 focus:outline-none"
     >
       <span className="shrink-0">{icon}</span>
-      <span className="text-exsm hover:text-mainGreen w-20 truncate text-gray-700">{text}</span>
-      <FiExternalLink className="text-subGreen" />
+      <span className="text-xs whitespace-nowrap text-gray-700">{text}</span>
+      <FiExternalLink className="text-lightGray ml-auto shrink-0" />
     </a>
   );
 };
@@ -64,10 +64,10 @@ const IntroSection = ({
   const navigate = useNavigate();
 
   return (
-    <div className="flex w-full flex-wrap gap-4">
+    <div className="flex w-full flex-wrap items-start gap-4">
       <div className="flex justify-start gap-5">
         <div className="flex min-w-0 flex-col gap-2">
-          <div className="min-w-0 text-[28px] font-bold sm:text-[36px]">{projectName}</div>
+          <div className="text-title min-w-0 leading-none font-bold">{projectName}</div>
           <div className="text-smbold font-bold text-[#4B5563]">{teamName}</div>
         </div>
         {isLeader && memberId === leaderId && (
@@ -83,7 +83,7 @@ const IntroSection = ({
         )}
       </div>
 
-      <div className="flex flex-1 flex-col items-end gap-2 sm:w-auto">
+      <div className="flex w-full flex-1 flex-col items-end gap-2">
         {prodUrl && <UrlButton url={prodUrl} />}
         {githubUrl && <UrlButton url={githubUrl} />}
         {youtubeUrl && <UrlButton url={youtubeUrl} />}

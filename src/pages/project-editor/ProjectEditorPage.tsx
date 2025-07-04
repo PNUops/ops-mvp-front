@@ -28,8 +28,6 @@ import OverviewInput from './OverviewInput';
 import { EditorDetailSkeleton } from './EditorSkeleton';
 
 import AdminInputSection from '@pages/project-editor/AdminInputSection/AdminInputSection';
-import { useCachedNode } from '@dnd-kit/core/dist/hooks/utilities';
-
 export interface PreviewImage {
   id?: number;
   url: string | File;
