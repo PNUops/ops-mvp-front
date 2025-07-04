@@ -25,8 +25,6 @@ import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
 import EditorSkeleton from './EditorSkeleton';
 
-import AdminInputSection from '@pages/admin/AdminInputSection';
-
 export interface PreviewImage {
   id?: number;
   url: string | File;
