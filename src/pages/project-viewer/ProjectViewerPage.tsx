@@ -62,6 +62,7 @@ const ProjectViewerPage = () => {
         leaderId={data.leaderId}
         projectName={data.projectName}
         teamName={data.teamName}
+        prodUrl={data.productionPath}
         githubUrl={data.githubPath}
         youtubeUrl={data.youtubePath}
       />

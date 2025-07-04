@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import ConfirmModal from './ConfirmModal';
+import CommentConfirmModal from './CommentConfirmModal';
 import { RiPencilFill } from 'react-icons/ri';
 import { IoRemoveCircle } from 'react-icons/io5';
 
@@ -124,7 +124,7 @@ const Comment = ({
           <div className="break-words text-gray-700 transition-all duration-300 ease-in-out">{comment.description}</div>
         )}
       </div>
-      <ConfirmModal
+      <CommentConfirmModal
         isOpen={showConfirm}
         onConfirm={() => {
           handleDelete();
