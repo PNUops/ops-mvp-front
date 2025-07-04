@@ -27,7 +27,7 @@ const UrlButton = ({ url }: { url: string }) => {
       return { icon: <FaYoutube className="text-red-500" />, text: 'Youtube' };
     }
     if (url.includes('https://')) {
-      return { icon: <RiLink className="text-mainGreen" />, text: 'Project 보러가기' };
+      return { icon: <RiLink className="text-mainGreen" />, text: '프로젝트 보러가기' };
     }
     return undefined;
   };
@@ -41,11 +41,11 @@ const UrlButton = ({ url }: { url: string }) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="border-subGreen hover:border-mainGreen inline-flex w-45 items-center gap-2 rounded-full border px-4 py-1 transition-colors duration-200 hover:bg-[#D1F3E1]/60 focus:outline-none"
+      className="border-lightGray hover:border-mainGreen inline-flex w-45 items-center gap-2 rounded-full border px-4 py-1 transition-colors duration-200 hover:bg-[#D1F3E1]/60 focus:outline-none"
     >
       <span className="shrink-0">{icon}</span>
       <span className="text-xs whitespace-nowrap text-gray-700">{text}</span>
-      <FiExternalLink className="text-subGreen ml-auto shrink-0" />
+      <FiExternalLink className="text-lightGray ml-auto shrink-0" />
     </a>
   );
 };
