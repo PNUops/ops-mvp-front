@@ -1,28 +1,41 @@
 import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import { getAllContests } from 'apis/contests';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import Table from '@components/Table';
-
-const contestRows = [
-  {
-    id: 1,
-    data: ['25.06.30 14:00', '제6회PNU창의융합SW해커톤'],
-  },
-  {
-    id: 2,
-    data: ['25.06.30 13:58', '제5회PNU창의융합SW해커톤'],
-  },
-];
-
-const projectRows = Array.from({ length: 20 }, (_, i) => ({
-  id: i + 1,
-  data: [String(i + 1), '팀명', '작품명'],
-}));
+import { postAllContests, deleteContest } from 'apis/contests';
+import { ContestResponseDto } from 'types/DTO';
 
 const ContestAdminTab = () => {
-  const { data } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
-  console.log(data);
+  const { data, refetch } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
+  const [contestList, setContestList] = useState<ContestResponseDto[]>([]);
+  const [contestName, setContestName] = useState<string>('');
+
+  const handleAddContest = async () => {
+    try {
+      await postAllContests(contestName);
+      await refetch();
+      setContestName('');
+    } catch (error) {
+      console.log(error);
+      setContestName('');
+    }
+  };
+
+  const handleDeleteContest = async (contestId: number) => {
+    try {
+      await deleteContest(contestId);
+      await refetch();
+      console.log(contestId);
+    } catch {}
+  };
+
+  useEffect(() => {
+    if (data != undefined) {
+      setContestList(data);
+    }
+  }, [data]);
 
   return (
     <div className="max-w-container flex flex-col gap-12 px-4 py-8">
@@ -34,18 +47,33 @@ const ContestAdminTab = () => {
             { label: '편집일시', width: '20%' },
             { label: '대회명', width: '50%' },
           ]}
-          rows={contestRows}
-          actions={() => (
+          rows={contestList ?? []}
+          actions={(row) => (
             <>
-              <Button className="bg-mainRed h-[35px] w-full min-w-[70px]">삭제하기</Button>
+              <Button
+                className="bg-mainRed h-[35px] w-full min-w-[70px]"
+                onClick={async () => {
+                  await handleDeleteContest(row.contestId);
+                }}
+              >
+                삭제하기
+              </Button>
               <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]">수정하기</Button>
             </>
           )}
         />
 
         <div className="mt-8 flex w-full justify-between">
-          <Input type="text" placeholder="대회명을 입력하세요." className="bg-whiteGray mx-4 h-12 w-[70%] rounded-lg" />
-          <Button className="bg-mainBlue h-12 w-[20%] min-w-[130px]">대회 생성하기</Button>
+          <Input
+            type="text"
+            value={contestName}
+            onChange={(e) => setContestName(e.target.value)}
+            placeholder="대회명을 입력하세요."
+            className="bg-whiteGray mx-4 h-12 w-[70%] rounded-lg"
+          />
+          <Button className="bg-mainBlue h-12 w-[20%] min-w-[130px]" onClick={handleAddContest}>
+            대회 생성하기
+          </Button>
         </div>
       </section>
 
@@ -58,7 +86,7 @@ const ContestAdminTab = () => {
             { label: '팀명', width: '30%' },
             { label: '작품명', width: '30%' },
           ]}
-          rows={projectRows}
+          rows={[]}
           actions={() => (
             <>
               <Button className="bg-mainRed h-[35px] w-full min-w-[70px]">삭제하기</Button>
