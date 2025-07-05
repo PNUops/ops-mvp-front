@@ -7,7 +7,6 @@ type EditModalProps = {
   editId: number;
 };
 
-// 메인 컴포넌트
 const EditModal = ({ closeModal, editId }: EditModalProps) => {
   const { contestName, setContestName, isLoading, handleEdit } = useEditContest(editId, closeModal);
 
