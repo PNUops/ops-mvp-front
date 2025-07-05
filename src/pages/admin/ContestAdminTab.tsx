@@ -8,6 +8,7 @@ import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { getAllTeams, deleteTeams } from 'apis/teams';
 import { IoIosArrowDown } from 'react-icons/io';
+import { useToast } from 'hooks/useToast';
 
 type HistoryProps = {
   contestName: string;
@@ -51,6 +52,7 @@ const ContestAdminTab = () => {
   const [currentContestName, setCurrentContest] = useState<string>('불러오는 중...');
   const [currentContestId, setCurrentContestId] = useState<number>(1);
   const [contestTeam, setContestTeam] = useState<TeamListItemResponseDto[]>([]);
+  const toast = useToast();
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -64,6 +66,10 @@ const ContestAdminTab = () => {
   }, [data]);
 
   const handleAddContest = async () => {
+    if (contestName == '') {
+      toast('대회명이 비어있습니다.', 'error');
+      return;
+    }
     try {
       await postAllContests(contestName);
       await refetch();
