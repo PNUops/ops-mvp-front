@@ -7,12 +7,6 @@ import useTeamList from 'hooks/useTeamList';
 
 const MainPage = () => {
   const { data: teams, isLoading, isError } = useTeamList('current');
-
-  const location = useLocation();
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [location.pathname]);
-
   return (
     <div className="flex flex-col gap-6 sm:gap-10">
       <Notice />
