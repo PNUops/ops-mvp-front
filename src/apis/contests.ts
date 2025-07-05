@@ -26,3 +26,8 @@ export const deleteContest = async (contestId_: number) => {
   mockContestsResponse.push(...newList);
   return newList;
 };
+
+export const patchContest = async (contestId: number, contestName: string) => {
+  // const res = await apiClient.patch(`/contests/${contestId}`, contestName);
+  // return res.data;
+};

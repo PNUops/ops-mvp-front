@@ -9,7 +9,8 @@ import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { getAllTeams, deleteTeams } from 'apis/teams';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useToast } from 'hooks/useToast';
-import DeleteInfoModal from './DeleteInfoModal';
+import DeleteInfoModal from '@pages/admin/DeleteInfoModal';
+import EditModal from '@pages/admin/EditModal';
 
 type HistoryProps = {
   contestName: string;
@@ -54,6 +55,8 @@ const ContestAdminTab = () => {
   const [currentContestId, setCurrentContestId] = useState<number>(1);
   const [contestTeam, setContestTeam] = useState<TeamListItemResponseDto[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [editId, setEditId] = useState<number>(99999);
   const toast = useToast();
 
   useEffect(() => {
@@ -116,11 +119,18 @@ const ContestAdminTab = () => {
     }
   };
 
+  const EditContest = (contestId: number) => {
+    setIsEdit(true);
+    setEditId(contestId);
+  };
+
   const closeModal = () => setIsModalOpen(false);
+  const closeEdit = () => setIsEdit(false);
 
   return (
     <div className="max-w-container flex flex-col gap-12 px-4 py-8">
       {isModalOpen && <DeleteInfoModal closeModal={closeModal} />}
+      {isEdit && <EditModal closeModal={closeEdit} editId={editId} />}
       <section className="mb-8 min-w-[350px]">
         <h2 className="mb-8 text-2xl font-bold">대회 목록</h2>
         <Table<ContestResponseDto>
@@ -144,7 +154,9 @@ const ContestAdminTab = () => {
               >
                 삭제하기
               </Button>
-              <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]">수정하기</Button>
+              <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]" onClick={() => EditContest(row.contestId)}>
+                수정하기
+              </Button>
             </>
           )}
         />
