@@ -18,9 +18,9 @@ const HistoryMenu = () => {
 
   return (
     <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-      <Link to="/contest" className="hover:text-mainGreen block p-4 text-nowrap">
+      <button type="button" className="hover:text-mainGreen block p-4 text-nowrap" onClick={() => setIsOpen(!isOpen)}>
         히스토리
-      </Link>
+      </button>
       {isOpen && data && (
         <ul className="border-subGreen absolute z-50 w-fit border-2 bg-white text-base font-normal text-nowrap">
           {data?.map((item) => (
