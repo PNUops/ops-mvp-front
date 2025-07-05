@@ -1,5 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-import { getAllContests } from 'apis/contests';
+import useContests from 'hooks/useContests';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -14,7 +13,7 @@ export default HeaderMenu;
 
 const HistoryMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
+  const { data } = useContests();
 
   return (
     <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
