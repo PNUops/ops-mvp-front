@@ -5,6 +5,37 @@ import Input from '@components/Input';
 import Button from '@components/Button';
 import Table from '@components/Table';
 import { ContestResponseDto } from 'types/DTO';
+import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
+import { getAllTeams } from 'apis/teams';
+
+type HistoryProps = {
+  contestName: string;
+  handleContestName: (contestName_: string) => void;
+};
+const HistoryMenu = ({ contestName, handleContestName }: HistoryProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { data } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
+
+  return (
+    <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
+      <button className="hover:text-mainGreen pb-4">{contestName}</button>
+      {isOpen && data && (
+        <ul className="border-subGreen absolute z-50 w-fit border-2 bg-white text-base font-normal text-nowrap">
+          {data?.map((item) => (
+            <li key={item.contestId}>
+              <button
+                onClick={() => handleContestName(item.contestName)}
+                className="hover:text-mainGreen hover:bg-whiteGray block p-4 transition-colors duration-200 ease-in"
+              >
+                {item.contestName}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
 
 const ContestAdminTab = () => {
   const { data, refetch } = useQuery({
@@ -12,6 +43,14 @@ const ContestAdminTab = () => {
     queryFn: getAllContests,
   });
   const [contestName, setContestName] = useState<string>('');
+  const [currentContest, setCurrentContest] = useState<string>('불러오는 중...');
+  const [contestTeam, setContestTeam] = useState<TeamListItemResponseDto[]>([]);
+
+  useEffect(() => {
+    if (data && data[0]) {
+      setCurrentContest(data[0].contestName);
+    }
+  }, [data]);
 
   const handleAddContest = async () => {
     try {
@@ -29,6 +68,10 @@ const ContestAdminTab = () => {
       console.log('delete');
       await refetch();
     } catch {}
+  };
+
+  const handleContestName = (currentContest: string) => {
+    setCurrentContest(currentContest);
   };
 
   return (
@@ -75,7 +118,10 @@ const ContestAdminTab = () => {
       </section>
 
       <section className="min-w-[350px]">
-        <h2 className="mb-8 text-2xl font-bold">대회별 프로젝트 목록</h2>
+        <div className="mb-8 flex">
+          <h2 className="mr-16 text-2xl font-bold">대회별 프로젝트 목록</h2>
+          <HistoryMenu contestName={currentContest} handleContestName={handleContestName} />
+        </div>
 
         <Table
           columns={[
