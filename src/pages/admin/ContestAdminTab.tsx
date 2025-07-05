@@ -10,7 +10,7 @@ import { getAllTeams } from 'apis/teams';
 
 type HistoryProps = {
   contestName: string;
-  handleContestName: (contestName_: string) => void;
+  handleContestName: (contestName_: string, contestId: number) => void;
 };
 const HistoryMenu = ({ contestName, handleContestName }: HistoryProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +24,7 @@ const HistoryMenu = ({ contestName, handleContestName }: HistoryProps) => {
           {data?.map((item) => (
             <li key={item.contestId}>
               <button
-                onClick={() => handleContestName(item.contestName)}
+                onClick={() => handleContestName(item.contestName, item.contestId)}
                 className="hover:text-mainGreen hover:bg-whiteGray block p-4 transition-colors duration-200 ease-in"
               >
                 {item.contestName}
@@ -43,13 +43,18 @@ const ContestAdminTab = () => {
     queryFn: getAllContests,
   });
   const [contestName, setContestName] = useState<string>('');
-  const [currentContest, setCurrentContest] = useState<string>('불러오는 중...');
+  const [currentContestName, setCurrentContest] = useState<string>('불러오는 중...');
   const [contestTeam, setContestTeam] = useState<TeamListItemResponseDto[]>([]);
 
   useEffect(() => {
-    if (data && data[0]) {
-      setCurrentContest(data[0].contestName);
-    }
+    const fetchTeams = async () => {
+      if (data && data[0]) {
+        setCurrentContest(data[0].contestName);
+        const teams = await getAllTeams(data[0].contestId);
+        setContestTeam(teams);
+      }
+    };
+    fetchTeams();
   }, [data]);
 
   const handleAddContest = async () => {
@@ -70,8 +75,10 @@ const ContestAdminTab = () => {
     } catch {}
   };
 
-  const handleContestName = (currentContest: string) => {
-    setCurrentContest(currentContest);
+  const handleContestName = async (contestName: string, contestId: number) => {
+    setCurrentContest(contestName);
+    const teams = await getAllTeams(contestId);
+    setContestTeam(teams);
   };
 
   return (
@@ -120,16 +127,16 @@ const ContestAdminTab = () => {
       <section className="min-w-[350px]">
         <div className="mb-8 flex">
           <h2 className="mr-16 text-2xl font-bold">대회별 프로젝트 목록</h2>
-          <HistoryMenu contestName={currentContest} handleContestName={handleContestName} />
+          <HistoryMenu contestName={currentContestName} handleContestName={handleContestName} />
         </div>
 
         <Table
           columns={[
-            { label: '순번', width: '10%', key: 'order' },
+            { label: '순번', width: '10%', key: 'teamId' },
             { label: '팀명', width: '30%', key: 'teamName' },
             { label: '작품명', width: '30%', key: 'projectName' },
           ]}
-          rows={[]}
+          rows={contestTeam || []}
           actions={() => (
             <>
               <Button className="bg-mainRed h-[35px] w-full min-w-[70px]">삭제하기</Button>
