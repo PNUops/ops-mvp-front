@@ -21,7 +21,7 @@ const AppRoutes = () =>
         { path: 'signup', element: <SignUpPage /> },
         { path: 'teams/view/:teamId', element: <ProjectViewerPage /> },
         { path: 'teams/edit/:teamId', element: <ProjectEditorPage /> },
-        { path: 'admin', element: <AdminPage /> },
+        { path: 'admin/:tab', element: <AdminPage /> },
         { path: 'find', element: <FindPage /> },
       ],
     },
