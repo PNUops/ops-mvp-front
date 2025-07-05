@@ -9,6 +9,7 @@ import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { getAllTeams, deleteTeams } from 'apis/teams';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useToast } from 'hooks/useToast';
+import DeleteInfoModal from './DeleteInfoModal';
 
 type HistoryProps = {
   contestName: string;
@@ -52,6 +53,7 @@ const ContestAdminTab = () => {
   const [currentContestName, setCurrentContest] = useState<string>('불러오는 중...');
   const [currentContestId, setCurrentContestId] = useState<number>(1);
   const [contestTeam, setContestTeam] = useState<TeamListItemResponseDto[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -74,6 +76,7 @@ const ContestAdminTab = () => {
       await postAllContests(contestName);
       await refetch();
       setContestName('');
+      toast('대회가 추가되었습니다.', 'success');
     } catch (error) {
       setContestName('');
     }
@@ -81,10 +84,18 @@ const ContestAdminTab = () => {
 
   const handleDeleteContest = async (contestId: number) => {
     try {
+      const teams = await getAllTeams(contestId);
+      if (teams.length != 0) {
+        setIsModalOpen(true);
+        // toast('대회 내 팀이 남아있으면 삭제할 수 없습니다.', 'info');
+        return;
+      }
       await deleteContest(contestId);
-      console.log('delete');
+      toast('대회가 삭제되었습니다.', 'success');
       await refetch();
-    } catch {}
+    } catch {
+      toast('대회 삭제가 안되었습니다.', 'error');
+    }
   };
 
   const handleContestName = async (contestName: string, contestId: number) => {
@@ -99,13 +110,17 @@ const ContestAdminTab = () => {
       await deleteTeams(teamId);
       const teams = await getAllTeams(currentContestId);
       setContestTeam(teams);
+      toast('팀이 삭제되었습니다.', 'success');
     } catch {
-      console.log('error');
+      toast('팀 삭제가 안되었습니다.', 'error');
     }
   };
 
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className="max-w-container flex flex-col gap-12 px-4 py-8">
+      {isModalOpen && <DeleteInfoModal closeModal={closeModal} />}
       <section className="mb-8 min-w-[350px]">
         <h2 className="mb-8 text-2xl font-bold">대회 목록</h2>
         <Table<ContestResponseDto>
