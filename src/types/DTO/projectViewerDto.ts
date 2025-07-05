@@ -7,6 +7,7 @@ export interface ProjectDetailsResponseDto {
   leaderName: string;
   participants: string[];
   previewIds: number[];
+  productionPath: string | null;
   githubPath: string;
   youtubePath: string;
   isLiked: boolean;
