@@ -22,9 +22,22 @@ const adminTabs = [
   },
 ];
 
+function getInitialTab(): AdminTabType {
+  const currentTab = localStorage.getItem('adminTab');
+  if (currentTab !== null && !isNaN(Number(currentTab)) && Object.values(AdminTabType).includes(Number(currentTab))) {
+    return Number(currentTab) as AdminTabType;
+  }
+  return AdminTabType.ONGOING;
+}
+
 const AdminPage = () => {
-  const [page, setPage] = useState<AdminTabType>(AdminTabType.ONGOING);
+  const [page, setPage] = useState<AdminTabType>(getInitialTab);
   const currentTab = adminTabs.find((tab) => tab.value === page);
+
+  function handleTabClick(tabValue: AdminTabType) {
+    setPage(tabValue);
+    localStorage.setItem('adminTab', tabValue.toString());
+  }
 
   return (
     <div>
@@ -32,7 +45,7 @@ const AdminPage = () => {
         {adminTabs.map((tab) => (
           <button
             key={tab.value}
-            onClick={() => setPage(tab.value)}
+            onClick={() => handleTabClick(tab.value)}
             className={`min-w-16 rounded-lg px-4 py-2 text-lg ${
               page === tab.value ? 'bg-subGreen text-black' : 'bg-gray-100 text-gray-400'
             }`}
