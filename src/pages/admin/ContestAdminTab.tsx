@@ -6,36 +6,36 @@ import Button from '@components/Button';
 import Table from '@components/Table';
 import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
-import { getAllTeams, deleteTeams } from 'apis/teams';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useToast } from 'hooks/useToast';
 import DeleteInfoModal from '@pages/admin/DeleteInfoModal';
 import EditModal from '@pages/admin/EditModal';
+import useContestAdmin from 'hooks/useContestAdmin';
 
-type HistoryProps = {
+type HistoryMenuProps = {
   contestName: string;
-  handleContestName: (contestName_: string, contestId: number) => void;
+  onContestChange: (contestName: string, contestId: number) => void;
 };
-const HistoryMenu = ({ contestName, handleContestName }: HistoryProps) => {
+
+const HistoryMenu = ({ contestName, onContestChange }: HistoryMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
+  const { data: contests } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
 
   return (
     <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
       <div className="hover:text-mainGreen flex pt-1 pb-4">
-        <button className="">{contestName}</button>
+        <button>{contestName}</button>
         <IoIosArrowDown className="text-mainGreen text-2xl" />
       </div>
 
-      {isOpen && data && (
+      {isOpen && contests && (
         <ul className="border-subGreen absolute z-50 w-fit border-2 bg-white text-base font-normal text-nowrap">
-          {data?.map((item) => (
-            <li key={item.contestId}>
+          {contests.map((contest) => (
+            <li key={contest.contestId}>
               <button
-                onClick={() => handleContestName(item.contestName, item.contestId)}
-                className="hover:text-mainGreen hover:bg-whiteGray block w-[100%] p-4 transition-colors duration-200 ease-in"
+                onClick={() => onContestChange(contest.contestName, contest.contestId)}
+                className="hover:text-mainGreen hover:bg-whiteGray block w-full p-4 transition-colors duration-200 ease-in"
               >
-                {item.contestName}
+                {contest.contestName}
               </button>
             </li>
           ))}
@@ -45,92 +45,26 @@ const HistoryMenu = ({ contestName, handleContestName }: HistoryProps) => {
   );
 };
 
+// 메인 컴포넌트
 const ContestAdminTab = () => {
-  const { data, refetch } = useQuery({
-    queryKey: ['contests'],
-    queryFn: getAllContests,
-  });
-  const [contestName, setContestName] = useState<string>('');
-  const [currentContestName, setCurrentContest] = useState<string>('불러오는 중...');
-  const [currentContestId, setCurrentContestId] = useState<number>(1);
-  const [contestTeam, setContestTeam] = useState<TeamListItemResponseDto[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [editId, setEditId] = useState<number>(99999);
-  const toast = useToast();
-
-  useEffect(() => {
-    const fetchTeams = async () => {
-      if (data && data[0]) {
-        setCurrentContest(data[0].contestName);
-        const teams = await getAllTeams(data[0].contestId);
-        setContestTeam(teams);
-      }
-    };
-    fetchTeams();
-  }, [data]);
-
-  const handleAddContest = async () => {
-    if (contestName == '') {
-      toast('대회명이 비어있습니다.', 'error');
-      return;
-    }
-    try {
-      await postAllContests(contestName);
-      await refetch();
-      setContestName('');
-      toast('대회가 추가되었습니다.', 'success');
-    } catch (error) {
-      setContestName('');
-    }
-  };
-
-  const handleDeleteContest = async (contestId: number) => {
-    try {
-      const teams = await getAllTeams(contestId);
-      if (teams.length != 0) {
-        setIsModalOpen(true);
-        // toast('대회 내 팀이 남아있으면 삭제할 수 없습니다.', 'info');
-        return;
-      }
-      await deleteContest(contestId);
-      toast('대회가 삭제되었습니다.', 'success');
-      await refetch();
-    } catch {
-      toast('대회 삭제가 안되었습니다.', 'error');
-    }
-  };
-
-  const handleContestName = async (contestName: string, contestId: number) => {
-    setCurrentContest(contestName);
-    setCurrentContestId(contestId);
-    const teams = await getAllTeams(contestId);
-    setContestTeam(teams);
-  };
-
-  const handleDeleteTeams = async (teamId: number) => {
-    try {
-      await deleteTeams(teamId);
-      const teams = await getAllTeams(currentContestId);
-      setContestTeam(teams);
-      toast('팀이 삭제되었습니다.', 'success');
-    } catch {
-      toast('팀 삭제가 안되었습니다.', 'error');
-    }
-  };
-
-  const EditContest = (contestId: number) => {
-    setIsEdit(true);
-    setEditId(contestId);
-  };
-
-  const closeModal = () => setIsModalOpen(false);
-  const closeEdit = () => setIsEdit(false);
+  const {
+    state,
+    contests,
+    handleAddContest,
+    handleDeleteContest,
+    handleContestChange,
+    handleDeleteTeam,
+    closeDeleteModal,
+    openEditModal,
+    closeEditModal,
+    setContestName,
+  } = useContestAdmin();
 
   return (
     <div className="max-w-container flex flex-col gap-12 px-4 py-8">
-      {isModalOpen && <DeleteInfoModal closeModal={closeModal} />}
-      {isEdit && <EditModal closeModal={closeEdit} editId={editId} />}
+      {state.isModalOpen && <DeleteInfoModal closeModal={closeDeleteModal} />}
+      {state.isEditModalOpen && <EditModal closeModal={closeEditModal} editId={state.editContestId} />}
+
       <section className="mb-8 min-w-[350px]">
         <h2 className="mb-8 text-2xl font-bold">대회 목록</h2>
         <Table<ContestResponseDto>
@@ -143,27 +77,29 @@ const ContestAdminTab = () => {
             },
             { label: '대회명', width: '50%', key: 'contestName' },
           ]}
-          rows={data ?? []}
+          rows={contests ?? []}
           actions={(row) => (
             <>
               <Button
                 className="bg-mainRed h-[35px] w-full min-w-[70px]"
-                onClick={async () => {
-                  await handleDeleteContest(row.contestId);
-                }}
+                onClick={() => handleDeleteContest(row.contestId)}
               >
                 삭제하기
               </Button>
-              <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]" onClick={() => EditContest(row.contestId)}>
+              <Button
+                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
+                onClick={() => openEditModal(row.contestId)}
+              >
                 수정하기
               </Button>
             </>
           )}
         />
+
         <div className="mt-8 flex w-full justify-between">
           <Input
             type="text"
-            value={contestName}
+            value={state.contestName}
             onChange={(e) => setContestName(e.target.value)}
             placeholder="대회명을 입력하세요."
             className="bg-whiteGray mx-4 h-12 w-[70%] rounded-lg"
@@ -177,7 +113,7 @@ const ContestAdminTab = () => {
       <section className="min-w-[350px]">
         <div className="mb-8 flex">
           <h2 className="mr-16 text-2xl font-bold">대회별 프로젝트 목록</h2>
-          <HistoryMenu contestName={currentContestName} handleContestName={handleContestName} />
+          <HistoryMenu contestName={state.currentContestName} onContestChange={handleContestChange} />
         </div>
 
         <Table<TeamListItemResponseDto>
@@ -186,10 +122,10 @@ const ContestAdminTab = () => {
             { label: '팀명', width: '30%', key: 'teamName' },
             { label: '작품명', width: '30%', key: 'projectName' },
           ]}
-          rows={contestTeam || []}
+          rows={state.contestTeams}
           actions={(row) => (
             <>
-              <Button className="bg-mainRed h-[35px] w-full min-w-[70px]" onClick={() => handleDeleteTeams(row.teamId)}>
+              <Button className="bg-mainRed h-[35px] w-full min-w-[70px]" onClick={() => handleDeleteTeam(row.teamId)}>
                 삭제하기
               </Button>
               <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]">수정하기</Button>

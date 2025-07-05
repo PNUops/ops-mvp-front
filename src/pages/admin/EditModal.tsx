@@ -1,30 +1,16 @@
-import { useState } from 'react';
 import Button from '@components/Button';
 import Input from '@components/Input';
-import { patchContest } from 'apis/contests';
-import { useToast } from 'hooks/useToast';
+import useEditContest from 'hooks/useEditContest';
 
-type ModalProps = {
+type EditModalProps = {
   closeModal: () => void;
   editId: number;
 };
 
-const EditModal = ({ closeModal, editId }: ModalProps) => {
-  const [contestName, setContestName] = useState<string>('');
-  const toast = useToast();
+// 메인 컴포넌트
+const EditModal = ({ closeModal, editId }: EditModalProps) => {
+  const { contestName, setContestName, isLoading, handleEdit } = useEditContest(editId, closeModal);
 
-  const handleEdit = async () => {
-    if (contestName == '') {
-      toast('수정할 대회명이 비어있습니다.', 'error');
-      return;
-    }
-    try {
-      await patchContest(editId, contestName);
-      closeModal();
-    } catch {
-      toast('수정하기 못했습니다.', 'error');
-    }
-  };
   return (
     <div onClick={closeModal} className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center">
       <div
@@ -38,12 +24,13 @@ const EditModal = ({ closeModal, editId }: ModalProps) => {
             onChange={(e) => setContestName(e.target.value)}
             placeholder="대회명을 입력하세요."
             className="bg-whiteGray mx-4 h-12 w-[70%] rounded-lg"
+            disabled={isLoading}
           />
-          <Button className="bg-mainBlue h-12 w-[20%] min-w-[130px]" onClick={handleEdit}>
-            대회 수정하기
+          <Button className="bg-mainBlue h-12 w-[20%] min-w-[130px]" onClick={handleEdit} disabled={isLoading}>
+            {isLoading ? '수정 중...' : '대회 수정하기'}
           </Button>
         </div>
-        <Button className="bg-mainBlue w-[100px]" onClick={closeModal}>
+        <Button className="bg-mainBlue w-[100px]" onClick={closeModal} disabled={isLoading}>
           닫기
         </Button>
       </div>

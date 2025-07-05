@@ -30,4 +30,10 @@ export const deleteContest = async (contestId_: number) => {
 export const patchContest = async (contestId: number, contestName: string) => {
   // const res = await apiClient.patch(`/contests/${contestId}`, contestName);
   // return res.data;
+  const contest = mockContestsResponse.find((c) => c.contestId === contestId);
+  if (contest) {
+    contest.contestName = contestName;
+    contest.updatedAt = new Date().toISOString();
+  }
+  return contest;
 };
