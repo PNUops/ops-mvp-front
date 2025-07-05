@@ -1,22 +1,9 @@
 import TeamCard from '@pages/main/TeamCard';
-import { useQuery } from '@tanstack/react-query';
-import { getAllTeams } from '../../apis/teams';
-import { TeamListItemResponseDto } from '../../types/DTO/teams/teamListDto';
-import useAuth from 'hooks/useAuth';
 import TeamCardSkeleton from '@pages/main/TeamCardSkeleton';
+import useTeamList from 'hooks/useTeamList';
 
 const TotalCards = () => {
-  const { user } = useAuth();
-  const {
-    data: teams,
-    isLoading,
-    isError,
-  } = useQuery<TeamListItemResponseDto[]>({
-    queryKey: ['teams', user?.id ?? 'guest'],
-    queryFn: getAllTeams,
-    staleTime: 1000 * 60 * 15, // stale 시간: 15분
-    gcTime: 1000 * 60 * 15, // 캐시 삭제 기간 : 15분 간격
-  });
+  const { data: teams, isLoading, isError } = useTeamList('current');
 
   return (
     <div id="projects" className="flex flex-col gap-4">
