@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
-import { getAllContests, postAllContests, deleteContest } from 'apis/contests';
+import { useState } from 'react';
+import { getAllContests } from 'apis/contests';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import Table from '@components/Table';
@@ -45,7 +45,6 @@ const HistoryMenu = ({ contestName, onContestChange }: HistoryMenuProps) => {
   );
 };
 
-// 메인 컴포넌트
 const ContestAdminTab = () => {
   const {
     state,

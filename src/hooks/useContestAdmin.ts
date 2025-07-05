@@ -109,7 +109,6 @@ const useContestAdmin = () => {
     }
   };
 
-  const openDeleteModal = () => setState((prev) => ({ ...prev, isModalOpen: true }));
   const closeDeleteModal = () => setState((prev) => ({ ...prev, isModalOpen: false }));
   const openEditModal = (contestId: number) =>
     setState((prev) => ({
@@ -128,7 +127,6 @@ const useContestAdmin = () => {
     handleContestChange,
     handleDeleteTeam,
     closeDeleteModal,
-    openDeleteModal,
     openEditModal,
     closeEditModal,
     setContestName: (name: string) => setState((prev) => ({ ...prev, contestName: name })),
