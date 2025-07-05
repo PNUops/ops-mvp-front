@@ -32,7 +32,7 @@ const HistoryMenu = ({ contestName, handleContestName }: HistoryProps) => {
             <li key={item.contestId}>
               <button
                 onClick={() => handleContestName(item.contestName, item.contestId)}
-                className="hover:text-mainGreen hover:bg-whiteGray block p-4 transition-colors duration-200 ease-in"
+                className="hover:text-mainGreen hover:bg-whiteGray block w-[100%] p-4 transition-colors duration-200 ease-in"
               >
                 {item.contestName}
               </button>
