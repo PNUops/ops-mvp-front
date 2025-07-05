@@ -2,7 +2,7 @@ import apiClient from './apiClient';
 import { mockContestsResponse } from 'mocks/data/contests';
 
 export const getAllContests = async () => {
-  return mockContestsResponse;
+  return [...mockContestsResponse];
 };
 
 export const postAllContests = async (contestName: string) => {

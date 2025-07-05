@@ -1,15 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import { getAllContests } from 'apis/contests';
+import { getAllContests, postAllContests, deleteContest } from 'apis/contests';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import Table from '@components/Table';
-import { postAllContests, deleteContest } from 'apis/contests';
 import { ContestResponseDto } from 'types/DTO';
 
 const ContestAdminTab = () => {
-  const { data, refetch } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
-  const [contestList, setContestList] = useState<ContestResponseDto[]>([]);
+  const { data, refetch } = useQuery({
+    queryKey: ['contests'],
+    queryFn: getAllContests,
+  });
   const [contestName, setContestName] = useState<string>('');
 
   const handleAddContest = async () => {
@@ -18,7 +19,6 @@ const ContestAdminTab = () => {
       await refetch();
       setContestName('');
     } catch (error) {
-      console.log(error);
       setContestName('');
     }
   };
@@ -26,28 +26,26 @@ const ContestAdminTab = () => {
   const handleDeleteContest = async (contestId: number) => {
     try {
       await deleteContest(contestId);
+      console.log('delete');
       await refetch();
-      console.log(contestId);
     } catch {}
   };
-
-  useEffect(() => {
-    if (data != undefined) {
-      setContestList(data);
-    }
-  }, [data]);
 
   return (
     <div className="max-w-container flex flex-col gap-12 px-4 py-8">
       <section className="mb-8 min-w-[350px]">
         <h2 className="mb-8 text-2xl font-bold">대회 목록</h2>
-
-        <Table
+        <Table<ContestResponseDto>
           columns={[
-            { label: '편집일시', width: '20%' },
-            { label: '대회명', width: '50%' },
+            {
+              label: '편집일시',
+              width: '20%',
+              key: 'updatedAt',
+              render: (row) => row.updatedAt.replace('T', ' ').slice(0, 16),
+            },
+            { label: '대회명', width: '50%', key: 'contestName' },
           ]}
-          rows={contestList ?? []}
+          rows={data ?? []}
           actions={(row) => (
             <>
               <Button
@@ -62,7 +60,6 @@ const ContestAdminTab = () => {
             </>
           )}
         />
-
         <div className="mt-8 flex w-full justify-between">
           <Input
             type="text"
@@ -82,9 +79,9 @@ const ContestAdminTab = () => {
 
         <Table
           columns={[
-            { label: '순번', width: '10%' },
-            { label: '팀명', width: '30%' },
-            { label: '작품명', width: '30%' },
+            { label: '순번', width: '10%', key: 'order' },
+            { label: '팀명', width: '30%', key: 'teamName' },
+            { label: '작품명', width: '30%', key: 'projectName' },
           ]}
           rows={[]}
           actions={() => (
