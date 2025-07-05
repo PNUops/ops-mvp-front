@@ -6,7 +6,8 @@ import Button from '@components/Button';
 import Table from '@components/Table';
 import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
-import { getAllTeams } from 'apis/teams';
+import { getAllTeams, deleteTeams } from 'apis/teams';
+import { IoIosArrowDown } from 'react-icons/io';
 
 type HistoryProps = {
   contestName: string;
@@ -18,7 +19,11 @@ const HistoryMenu = ({ contestName, handleContestName }: HistoryProps) => {
 
   return (
     <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-      <button className="hover:text-mainGreen pb-4">{contestName}</button>
+      <div className="hover:text-mainGreen flex pt-1 pb-4">
+        <button className="">{contestName}</button>
+        <IoIosArrowDown className="text-mainGreen text-2xl" />
+      </div>
+
       {isOpen && data && (
         <ul className="border-subGreen absolute z-50 w-fit border-2 bg-white text-base font-normal text-nowrap">
           {data?.map((item) => (
@@ -44,6 +49,7 @@ const ContestAdminTab = () => {
   });
   const [contestName, setContestName] = useState<string>('');
   const [currentContestName, setCurrentContest] = useState<string>('불러오는 중...');
+  const [currentContestId, setCurrentContestId] = useState<number>(1);
   const [contestTeam, setContestTeam] = useState<TeamListItemResponseDto[]>([]);
 
   useEffect(() => {
@@ -77,8 +83,19 @@ const ContestAdminTab = () => {
 
   const handleContestName = async (contestName: string, contestId: number) => {
     setCurrentContest(contestName);
+    setCurrentContestId(contestId);
     const teams = await getAllTeams(contestId);
     setContestTeam(teams);
+  };
+
+  const handleDeleteTeams = async (teamId: number) => {
+    try {
+      await deleteTeams(teamId);
+      const teams = await getAllTeams(currentContestId);
+      setContestTeam(teams);
+    } catch {
+      console.log('error');
+    }
   };
 
   return (
@@ -130,16 +147,18 @@ const ContestAdminTab = () => {
           <HistoryMenu contestName={currentContestName} handleContestName={handleContestName} />
         </div>
 
-        <Table
+        <Table<TeamListItemResponseDto>
           columns={[
             { label: '순번', width: '10%', key: 'teamId' },
             { label: '팀명', width: '30%', key: 'teamName' },
             { label: '작품명', width: '30%', key: 'projectName' },
           ]}
           rows={contestTeam || []}
-          actions={() => (
+          actions={(row) => (
             <>
-              <Button className="bg-mainRed h-[35px] w-full min-w-[70px]">삭제하기</Button>
+              <Button className="bg-mainRed h-[35px] w-full min-w-[70px]" onClick={() => handleDeleteTeams(row.teamId)}>
+                삭제하기
+              </Button>
               <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]">수정하기</Button>
             </>
           )}

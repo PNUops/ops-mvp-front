@@ -7,17 +7,7 @@ export const getAllTeams = async (contestId: number): Promise<TeamListItemRespon
   // const res = await apiClient.get(`/contests/${contestId}/teams`);
   // return res.data;
   if (contestId === 1) {
-    return mockTeamsResponse;
-  }
-  if (contestId === 2) {
-    return [
-      {
-        teamId: 3,
-        teamName: 'team3',
-        projectName: 'team3 Project',
-        isLiked: false,
-      },
-    ];
+    return [...mockTeamsResponse];
   }
   return [];
 };
@@ -25,4 +15,13 @@ export const getAllTeams = async (contestId: number): Promise<TeamListItemRespon
 export const getSubmissionStatus = async (): Promise<SubmissionStatusResponseDto> => {
   const res = await apiClient.get('/teams/submission-status');
   return res.data;
+};
+
+export const deleteTeams = async (teamId_: number) => {
+  // const res = await apiClient.delete(`teams/${teamId}`);
+  // return res.data;
+  const newList = mockTeamsResponse.filter((team) => team.teamId !== teamId_);
+  mockTeamsResponse.length = 0;
+  mockTeamsResponse.push(...newList);
+  return newList;
 };
