@@ -1,11 +1,12 @@
 import Button from '@components/Button';
-import RoundedButton from '@components/RoundedButton';
 import Table from '@components/Table';
 import { useQuery } from '@tanstack/react-query';
 import { getNotices } from 'apis/notices';
+import { useNavigate } from 'react-router-dom';
 import { NoticeResponseDto } from 'types/DTO/notices/NoticeResponseDto';
 
 const ManageNoticeListTab = () => {
+  const navigate = useNavigate();
   const { data: notices, isError } = useQuery({
     queryKey: ['notices'],
     queryFn: getNotices,
@@ -32,13 +33,22 @@ const ManageNoticeListTab = () => {
               <Button className="bg-mainRed h-[35px] w-full min-w-[70px]" onClick={() => {}}>
                 삭제하기
               </Button>
-              <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]" onClick={() => {}}>
+              <Button
+                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
+                onClick={() => {
+                  navigate(`/admin/notice/edit/${row.noticeId}`);
+                }}
+              >
                 수정하기
               </Button>
             </>
           )}
         />
-        <button type="submit" className="bg-mainBlue mx-auto w-fit rounded-lg px-6 py-3 text-lg text-white">
+        <button
+          type="submit"
+          className="bg-mainBlue mx-auto w-fit rounded-lg px-6 py-3 text-lg text-white"
+          onClick={() => navigate('/admin/notice/create')}
+        >
           공지사항 추가하기
         </button>
       </section>
