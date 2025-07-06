@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getNotices } from 'apis/notices';
 import { NoticeResponseDto } from 'types/DTO/notices/NoticeResponseDto';
 
-const ManageNoticeListSection = () => {
+const ManageNoticeListTab = () => {
   const { data: notices, isError } = useQuery({
     queryKey: ['notices'],
     queryFn: getNotices,
@@ -46,4 +46,4 @@ const ManageNoticeListSection = () => {
   );
 };
 
-export default ManageNoticeListSection;
+export default ManageNoticeListTab;
