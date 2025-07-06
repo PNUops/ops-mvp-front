@@ -22,3 +22,8 @@ export const patchNotice = async (noticeId: number, request: NoticeRequestDto) =
   const { data } = await apiClient.patch(`/notices/${noticeId}`, request);
   return data;
 };
+
+export const deleteNotice = async (noticeId: number) => {
+  const { data } = await apiClient.delete(`/notices/${noticeId}`);
+  return data;
+};
