@@ -11,7 +11,7 @@ interface Props {
   onGoBack: () => void;
 }
 
-const NoticeEditSection = ({ noticeId, onGoBack }: Props) => {
+const NoticeCreateSection = ({ noticeId, onGoBack }: Props) => {
   const toast = useToast();
 
   const [title, setTitle] = useState('');
@@ -60,4 +60,4 @@ const NoticeEditSection = ({ noticeId, onGoBack }: Props) => {
   );
 };
 
-export default NoticeEditSection;
+export default NoticeCreateSection;
