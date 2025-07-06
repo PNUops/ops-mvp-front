@@ -1,15 +1,29 @@
 import Button from '@components/Button';
 import Table from '@components/Table';
-import { useQuery } from '@tanstack/react-query';
-import { getNotices } from 'apis/notices';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { deleteNotice, getNotices } from 'apis/notices';
+import { useToast } from 'hooks/useToast';
 import { useNavigate } from 'react-router-dom';
 import { NoticeResponseDto } from 'types/DTO/notices/NoticeResponseDto';
 
 const ManageNoticeListTab = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const { data: notices, isError } = useQuery({
     queryKey: ['notices'],
     queryFn: getNotices,
+  });
+
+  const mutation = useMutation({
+    mutationFn: async (noticeId: number) => {
+      deleteNotice(noticeId);
+    },
+    onError: () => {
+      toast('공지사항 삭제에 실패했습니다.', 'error');
+    },
+    onSuccess: () => {
+      toast('공지사항이 삭제되었습니다.', 'error');
+    },
   });
 
   return (
@@ -30,7 +44,12 @@ const ManageNoticeListTab = () => {
           rows={notices ?? []}
           actions={(row) => (
             <>
-              <Button className="bg-mainRed h-[35px] w-full min-w-[70px]" onClick={() => {}}>
+              <Button
+                className="bg-mainRed h-[35px] w-full min-w-[70px]"
+                onClick={() => {
+                  mutation.mutate(row.noticeId);
+                }}
+              >
                 삭제하기
               </Button>
               <Button
