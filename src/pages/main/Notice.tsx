@@ -1,12 +1,11 @@
 import banner from '@assets/banner.svg';
+import NoticeList from '@pages/main/NoticeList';
 import { useQuery } from '@tanstack/react-query';
 import { getNotices } from '../../apis/notices';
-import { Link } from 'react-router-dom';
-import { AiOutlineNotification } from "react-icons/ai";
+import NoticeListSkeleton from '@pages/main/NoticeListSkeleton';
 
 const Notice = () => {
-
-  const { data: notices } = useQuery<{ noticeId: number; title: string; updatedAt: string }[]>({
+  const { data: notices, isLoading, isError } = useQuery({
     queryKey: ['notices'],
     queryFn: getNotices,
   });
@@ -18,30 +17,10 @@ const Notice = () => {
       <a href={BANNER_URL} target="_blank" className="flex min-h-25">
         <img src={banner} alt="대회 로고" className="flex cursor-pointer object-cover object-left" />
       </a>
-
-      <div className="bg-white rounded-lg shadow p-4">
-        <ul>
-          {notices?.map((notice) => (
-            <li key={notice.noticeId}
-                className="flex items-center justify-between hover:bg-gray-100 rounded px-2 py-1 transition">
-              <AiOutlineNotification className="mr-2"/>
-              <Link to={`/notices/${notice.noticeId}`} className="flex-1 truncate">
-                {notice.title}
-              </Link>
-
-              <span className="ml-4 text-xs text-gray-400">
-                {new Date(notice.updatedAt).toLocaleString('ko-KR', {
-                  year: '2-digit',
-                  month: '2-digit',
-                  day: '2-digit',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {isLoading && <NoticeListSkeleton />}
+      {isError && <div>공지사항을 불러올 수 없습니다.</div>}
+      {!isLoading && !isError && notices && (
+      <NoticeList />)}
     </div>
   );
 };

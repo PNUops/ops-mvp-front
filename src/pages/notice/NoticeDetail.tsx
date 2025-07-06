@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getNoticeDetail } from 'apis/notices';
 import { AiOutlineNotification } from "react-icons/ai";
 import { useEffect } from 'react';
+import NoticeDetailSkeleton from './NoticeDetailSkeleton';
 
 const NoticeDetail = () => {
   useEffect(() => {
@@ -16,14 +17,14 @@ const NoticeDetail = () => {
     enabled: !!noticeId,
   });
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading) return <NoticeDetailSkeleton />;
   if (isError || !notice) {
     return <div>공지사항을 찾을 수 없습니다.</div>;
   }
 
 
   return (
-    <div className="max-w mx-auto">
+  <div className="max-w mx-auto">
       <h1 className="text-2xl font-bold mb-6">공지사항</h1>
       <div className="flex items-center bg-whiteGray rounded px-4 py-5 mb-2">
         <AiOutlineNotification className="mr-4" />
