@@ -22,12 +22,12 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
         boxShadow: '4px 4px 10px rgba(0,0,0,0.1)',
       }}
     >
-      <div className="aspect-[3/2] object-cover relative">
+      <div className="aspect-[3/2] object-cover relative overflow-hidden">
         {!imageError ? (
           <img
             src={thumbnailUrl}
             alt="썸네일"
-            className="h-full w-full object-cover object-center"
+            className="w-full h-full object-cover object-center"
             onError={() => setImageError(true)}
           />
           ) : (
