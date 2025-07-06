@@ -3,15 +3,17 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useToast } from 'hooks/useToast';
 import useAuth from 'hooks/useAuth';
 import { useMutation } from '@tanstack/react-query';
-import { getGoogleOAuthCallback } from 'apis/auth';
+import { getGoogleOAuthCallback } from 'apis/oauth';
 
 const GoogleOAuthCallback = () => {
   const [searchParams] = useSearchParams();
+  const code = searchParams.get('code');
+
   const toast = useToast();
   const navigate = useNavigate();
   const { signIn } = useAuth();
 
-  const mutation = useMutation({
+  const googleSignInMutation = useMutation({
     mutationFn: (code: string) => getGoogleOAuthCallback(code),
     onSuccess: (data) => {
       signIn(data.token);
@@ -19,20 +21,17 @@ const GoogleOAuthCallback = () => {
       navigate('/');
     },
     onError: (error: any) => {
-      toast(error.response?.data?.message || '구글 로그인에 실패했습니다.', 'error');
-      navigate('/login');
+      const errorMessage = error.response?.data?.message || error.message || '구글 로그인에 실패했습니다.';
+      toast(errorMessage, 'error');
+      navigate('/signin');
     },
   });
 
   useEffect(() => {
-    const code = searchParams.get('code');
-    if (!code) {
-      toast('인가 코드가 없습니다.', 'error');
-      navigate('/login');
-      return;
+    if (code) {
+      googleSignInMutation.mutate(code);
     }
-    mutation.mutate(code);
-  }, [searchParams, mutation, toast, navigate]);
+  }, [code]);
 
   return <div className="p-10 text-center text-lg font-semibold">로그인 중입니다...</div>;
 };
