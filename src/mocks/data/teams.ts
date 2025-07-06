@@ -139,3 +139,18 @@ export const mockTeamLeaderMessage = {
   projectName: 'team1 Project',
   isSubmitted: false,
 };
+
+export const mockTeamsResponse = [
+  {
+    teamId: 1,
+    teamName: 'team1',
+    projectName: 'team1 Project',
+    isLiked: false,
+  },
+  {
+    teamId: 2,
+    teamName: 'team2',
+    projectName: 'team2 Project',
+    isLiked: false,
+  },
+];

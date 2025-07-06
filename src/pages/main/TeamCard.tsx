@@ -22,12 +22,12 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
         boxShadow: '4px 4px 10px rgba(0,0,0,0.1)',
       }}
     >
-      <div className="aspect-[3/2] object-cover relative">
+      <div className="aspect-[3/2] object-cover relative overflow-hidden">
         {!imageError ? (
           <img
             src={thumbnailUrl}
             alt="썸네일"
-            className="h-full w-full object-cover object-center"
+            className="object-cover object-center"
             onError={() => setImageError(true)}
           />
           ) : (
@@ -45,7 +45,7 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
 
         <div className="p-3">
           <div
-            className="font-semibold text-black text-[clamp(0.85rem,2.5vw,1.2rem)] break-keep overflow-hidden text-ellipsis">
+            className="font-semibold text-black text-[clamp(0.85rem,2.5vw,1.5rem)] break-keep overflow-hidden text-ellipsis">
             {projectName}
           </div>
           <div className="text-midGray text-[clamp(0.8rem,2vw,1rem)] truncate overflow-hidden">
