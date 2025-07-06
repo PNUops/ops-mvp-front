@@ -9,6 +9,7 @@ import SignInPage from '@pages/signin/SignInPage';
 import SignUpPage from '@pages/signup/SignUpPage';
 import AdminPage from '@pages/admin/AdminPage';
 import FindPage from '@pages/find/FindPage';
+import GoogleOAuthCallback from '@pages/signin/SocialSignIn/GoogleOAuthCallback';
 
 const AppRoutes = () =>
   useRoutes([
@@ -23,6 +24,7 @@ const AppRoutes = () =>
         { path: 'teams/edit/:teamId', element: <ProjectEditorPage /> },
         { path: 'admin', element: <AdminPage /> },
         { path: 'find', element: <FindPage /> },
+        { path: 'oauth/google/callback', element: <GoogleOAuthCallback /> },
       ],
     },
   ]);
