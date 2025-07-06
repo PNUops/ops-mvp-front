@@ -4,7 +4,6 @@ import AdminTabs from '@route/AdminTabs';
 const AdminPage = () => {
   const adminTabs = AdminTabs;
   const { pathname } = useLocation();
-  const lastSegment = pathname.split('/').pop();
 
   return (
     <div>
@@ -14,7 +13,7 @@ const AdminPage = () => {
             key={tab.path}
             to={`/admin/${tab.path}`}
             className={`min-w-16 rounded-lg px-4 py-2 text-lg ${
-              lastSegment === tab.path ? 'bg-subGreen text-black' : 'bg-gray-100 text-gray-400'
+              pathname.includes(tab.path ?? '') ? 'bg-subGreen text-black' : 'bg-gray-100 text-gray-400'
             }`}
           >
             {tab.handle.label}
