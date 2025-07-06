@@ -1,29 +1,26 @@
 import { ReactNode } from 'react';
 
-interface Column {
+interface Column<T> {
   label: string;
   width?: string;
+  key: string;
+  render?: (row: T) => ReactNode;
 }
 
-interface Row {
-  id: string | number;
-  data: (string | ReactNode)[];
+interface Props<T> {
+  columns: Column<T>[];
+  rows: T[];
+  actions?: (row: T) => ReactNode;
 }
 
-interface Props {
-  columns: Column[];
-  rows: Row[];
-  actions?: (row: Row) => ReactNode;
-}
-
-const Table = ({ columns, rows, actions }: Props) => {
+function Table<T>({ columns, rows, actions }: Props<T>) {
   return (
     <table className="w-full border-collapse bg-white">
       <thead className="bg-gray-100">
         <tr>
-          {columns.map((col, i) => (
+          {columns.map((col) => (
             <th
-              key={i}
+              key={col.key}
               className={`border-r border-b border-gray-300 p-2 text-sm ${col.width ? `w-[${col.width}]` : ''}`}
             >
               {col.label}
@@ -33,23 +30,34 @@ const Table = ({ columns, rows, actions }: Props) => {
         </tr>
       </thead>
       <tbody>
-        {rows.map((row) => (
-          <tr key={row.id}>
-            {row.data.map((cell, i) => (
-              <td key={i} className="border-r border-b border-gray-300 p-2 text-sm">
-                {cell}
-              </td>
-            ))}
-            {actions && (
-              <td className="border-b border-gray-300 p-2 text-sm">
-                <div className="flex justify-center gap-2">{actions(row)}</div>
-              </td>
-            )}
+        {rows.length === 0 ? (
+          <tr>
+            <td
+              colSpan={columns.length + (actions ? 1 : 0)}
+              className="border-b border-gray-300 p-8 text-center text-gray-500"
+            >
+              데이터가 없습니다.
+            </td>
           </tr>
-        ))}
+        ) : (
+          rows.map((row, index) => (
+            <tr key={index}>
+              {columns.map((col) => (
+                <td key={col.key} className="border-r border-b border-gray-300 p-2 text-sm">
+                  {col.render ? col.render(row) : (row as any)[col.key]}
+                </td>
+              ))}
+              {actions && (
+                <td className="border-b border-gray-300 p-2 text-sm">
+                  <div className="flex justify-center gap-2">{actions(row)}</div>
+                </td>
+              )}
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );
-};
+}
 
 export default Table;
