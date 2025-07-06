@@ -1,6 +1,5 @@
 import banner from '@assets/banner.svg';
 import { useQuery } from '@tanstack/react-query';
-import { getAllContests } from 'apis/contests';
 import { getNotices } from '../../apis/notices';
 import { Link } from 'react-router-dom';
 import { AiOutlineNotification } from "react-icons/ai";

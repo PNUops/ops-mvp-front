@@ -27,7 +27,7 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
           <img
             src={thumbnailUrl}
             alt="썸네일"
-            className="w-full h-fullobject-cover object-center"
+            className="w-full h-full object-cover object-center"
             onError={() => setImageError(true)}
           />
           ) : (
