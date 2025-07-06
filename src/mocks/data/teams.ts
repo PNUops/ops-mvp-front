@@ -12,31 +12,145 @@ export const mockTeamDetail = {
 
 export const mockTeamsMain = [
   {
-    teamId: 1,
-    teamName: "team1",
-    projectName: "team1 Project",
+    teamId: 5,
+    teamName: '5. DeepDive',
+    projectName: 'CodeMentor',
     isLiked: false,
-    thumbnail: undefined,
   },
   {
-    teamId: 2,
-    teamName: "team2",
-    projectName: "team2 Project",
+    teamId: 15,
+    teamName: '15. FutureLabs',
+    projectName: 'Eduverse',
     isLiked: true,
-    thumbnail: undefined,
+  },
+  {
+    teamId: 1,
+    teamName: '1. ByteBusters',
+    projectName: 'MediConnect',
+    isLiked: true,
+  },
+  {
+    teamId: 19,
+    teamName: '19. ByteBusters',
+    projectName: 'MediConnect',
+    isLiked: true,
+  },
+  {
+    teamId: 13,
+    teamName: '13. GreenTech',
+    projectName: 'AquaGuard',
+    isLiked: true,
+  },
+  {
+    teamId: 20,
+    teamName: '20. PixelPerfect',
+    projectName: 'Artify',
+    isLiked: false,
+  },
+  {
+    teamId: 12,
+    teamName: '12. NextStep',
+    projectName: 'SkillUp',
+    isLiked: false,
+  },
+  {
+    teamId: 17,
+    teamName: '17. ImpactCreators',
+    projectName: 'EcoLife',
+    isLiked: false,
+  },
+  {
+    teamId: 8,
+    teamName: '8. FrontierTech',
+    projectName: 'AeroGuard',
+    isLiked: true,
+  },
+  {
+    teamId: 7,
+    teamName: '7. ConnectUp',
+    projectName: 'LocalLink',
+    isLiked: true,
   },
   {
     teamId: 3,
-    teamName: "PNU OPS",
-    projectName: "OPs Bakery",
+    teamName: '3. QuantumLeap',
+    projectName: 'FinAdvisor',
     isLiked: true,
-    thumbnail: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
   },
-]
+  {
+    teamId: 11,
+    teamName: '11. InnoVision',
+    projectName: 'FashionAI',
+    isLiked: false,
+  },
+  {
+    teamId: 6,
+    teamName: '6. MindSpark',
+    projectName: 'StoryCrafter',
+    isLiked: false,
+  },
+  {
+    teamId: 14,
+    teamName: '14. SmartSolutions',
+    projectName: 'BizFlow',
+    isLiked: false,
+  },
+  {
+    teamId: 10,
+    teamName: '10. DreamWeavers',
+    projectName: 'HomeSphere',
+    isLiked: false,
+  },
+  {
+    teamId: 18,
+    teamName: '18. HealthBridge',
+    projectName: 'NutriTrack',
+    isLiked: true,
+  },
+  {
+    teamId: 4,
+    teamName: '4. SyncFlow',
+    projectName: 'TravelMate',
+    isLiked: false,
+  },
+  {
+    teamId: 16,
+    teamName: '16. GlobalConnect',
+    projectName: 'LinguaBridge',
+    isLiked: true,
+  },
+  {
+    teamId: 9,
+    teamName: '9. SynergyLabs',
+    projectName: 'WorkFlowX',
+    isLiked: false,
+  },
+  {
+    teamId: 2,
+    teamName: '2. PixelPerfect',
+    projectName: 'Artify',
+    isLiked: false,
+  },
+];
 
 export const mockTeamLeaderMessage = {
   teamId: 1,
-  teamName: "team1",
-  projectName: "team1 Project",
+  teamName: 'team1',
+  projectName: 'team1 Project',
   isSubmitted: false,
-}
+};
+
+export const mockTeamsResponse = [
+  {
+    teamId: 1,
+    teamName: 'team1',
+    projectName: 'team1 Project',
+    isLiked: false,
+  },
+  {
+    teamId: 2,
+    teamName: 'team2',
+    projectName: 'team2 Project',
+    isLiked: false,
+  },
+];

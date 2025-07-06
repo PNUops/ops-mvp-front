@@ -25,10 +25,8 @@ import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
+import AdminInputSection from './AdminInputSection/AdminInputSection';
 import { EditorDetailSkeleton } from './EditorSkeleton';
-
-import AdminInputSection from '@pages/project-editor/AdminInputSection/AdminInputSection';
-import { useCachedNode } from '@dnd-kit/core/dist/hooks/utilities';
 
 export interface PreviewImage {
   id?: number;
