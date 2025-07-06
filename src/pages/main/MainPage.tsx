@@ -2,7 +2,7 @@ import Notice from '@pages/main/Notice';
 import TotalCards from '@pages/main/TotalCards';
 import LeaderSection from '@pages/main/LeaderSection';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 const MainPage = () => {
 
