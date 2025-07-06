@@ -1,14 +1,16 @@
 import { useState } from 'react';
+
+import { TeamMember } from 'types/DTO/projectViewerDto';
 import { FaCrown } from 'react-icons/fa6';
 import { IoEllipsisHorizontal, IoPerson } from 'react-icons/io5';
 
 interface DetailSectionProps {
   overview?: string;
   leaderName: string;
-  participants: string[];
+  teamMembers: TeamMember[];
 }
 
-const DetailSection = ({ overview, leaderName, participants }: DetailSectionProps) => {
+const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps) => {
   const hasOverview = overview?.trim();
   const safeOverview = overview ?? '';
   const INIT_LENGTH = 500;
@@ -48,9 +50,9 @@ const DetailSection = ({ overview, leaderName, participants }: DetailSectionProp
         <div className="flex items-start gap-3 sm:items-center">
           <IoPerson className="mt-2 shrink-0 text-blue-400 sm:mt-0" size={20} />
           <div className="flex flex-wrap gap-2 sm:gap-3">
-            {participants.map((name, index) => (
+            {teamMembers.map((member, index) => (
               <span key={index} className="bg-whiteGray rounded-full px-3 py-1 text-sm whitespace-nowrap">
-                {name}
+                {member.teamMemberName}
               </span>
             ))}
           </div>

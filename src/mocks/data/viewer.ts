@@ -23,14 +23,20 @@ export const team_images = [
 ];
 
 export const project_view = {
-  teamId: 123,
-  leaderId: 42,
+  contestId: 1,
+  contestName: '제6회PNU창의융합SW해커톤',
+  teamId: 1,
+  leaderId: 2,
   teamName: 'PNU OPS',
   projectName: 'Ops Bakery',
   overview:
     '오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. 오래된 개발 서적으로 빵을 만드는 프로젝트입니다. ',
   leaderName: '홍지연',
-  participants: ['문여원', '신예준', '양라윤', '이지민', '홍길동', '문상훈'],
+  teamMembers: [
+    { teamMemberId: 1, teamMemberName: '김철수' },
+    { teamMemberId: 2, teamMemberName: '박영희' },
+    { teamMemberId: 3, teamMemberName: '최민수' },
+  ],
   previewIds: 2,
   githubPath: 'https://github.com/facebook/react',
   youTubePath: 'https://youtu.be/Ywd6jylpd_g?si=y8DoDwtBbVpj3_bo',

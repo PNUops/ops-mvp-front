@@ -2,8 +2,8 @@ import apiClient from './apiClient';
 import {
   ProjectDetailsResponseDto,
   PreviewImagesResponseDto,
-  LikeRequestDto,
-  CommentFormRequestDto,
+  LikeUpdateRequestDto,
+  CommentCreateRequestDto,
   CommentDeleteRequestDto,
   CommentEditRequestDto,
   CommentDto,
@@ -32,13 +32,13 @@ export const getPreviewImages = async (teamId: number, imageIds: number[]): Prom
   return { imageUrls };
 };
 
-export const patchLikeToggle = async (request: LikeRequestDto) => {
+export const patchLikeToggle = async (request: LikeUpdateRequestDto) => {
   const { teamId, isLiked } = request;
   const response = await apiClient.patch(`/teams/${teamId}/like`, { isLiked });
   return response.data;
 };
 
-export const postCommentForm = async ({ teamId, description }: CommentFormRequestDto) => {
+export const postCommentForm = async ({ teamId, description }: CommentCreateRequestDto) => {
   const response = await apiClient.post(`/teams/${teamId}/comments`, { description });
   return response.data;
 };

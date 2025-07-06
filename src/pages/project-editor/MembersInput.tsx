@@ -1,23 +1,25 @@
 import { useState } from 'react';
+
+import { TeamMember } from 'types/DTO/projectViewerDto';
+
 import { IoIosAdd, IoIosRemove } from 'react-icons/io';
-import { IoPerson } from 'react-icons/io5';
+import { IoPersonOutline } from 'react-icons/io5';
 
 interface MembersInputProps {
-  memberList: string[];
-  onMemberChange: (index: number, name: string) => void;
-  onMemberAdd: (name: string) => void;
-  onMemberRemove: (index: number) => void;
+  teamMembers: TeamMember[];
   max: number;
+  onMemberAdd: (newMemberName: string) => void;
+  onMemberRemove: (index: number) => void;
 }
 
-const MembersInput = ({ memberList, onMemberChange, onMemberAdd, onMemberRemove, max }: MembersInputProps) => {
+const MembersInput = ({ teamMembers, max, onMemberAdd, onMemberRemove }: MembersInputProps) => {
   const [newMember, setNewMember] = useState('');
 
   return (
     <div className="flex flex-1 flex-col gap-3">
       <div className="flex gap-3">
         <div className="relative flex-1">
-          <IoPerson className="text-midGray absolute top-1/2 left-5 -translate-y-1/2" size={20} />
+          <IoPersonOutline className="text-midGray absolute top-1/2 left-5 -translate-y-1/2" size={20} />
           <input
             type="text"
             className="placeholder-lightGray focus:outline-lightGray w-full rounded bg-gray-100 py-3 pr-10 pl-15 text-sm text-black focus:outline-1"
@@ -25,7 +27,7 @@ const MembersInput = ({ memberList, onMemberChange, onMemberAdd, onMemberRemove,
             value={newMember}
             onChange={(e) => setNewMember(e.target.value)}
           />
-          {newMember.trim().length > 0 && memberList.length < max && (
+          {newMember.trim().length > 0 && teamMembers.length < max && (
             <button
               onClick={() => {
                 onMemberAdd(newMember.trim());
@@ -39,15 +41,15 @@ const MembersInput = ({ memberList, onMemberChange, onMemberAdd, onMemberRemove,
         </div>
         <div className="flex-1" />
       </div>
-      {memberList.filter((m) => m.trim() !== '').length > 0 && (
-        <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-2">
-          {memberList.map(
+      {teamMembers.filter((member) => member.teamMemberName.trim() !== '').length > 0 && (
+        <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-3">
+          {teamMembers.map(
             (member, index) =>
-              member.trim() !== '' && (
+              member.teamMemberName.trim() !== '' && (
                 <div key={index} className="relative w-full">
-                  <IoPerson className="text-mainGreen absolute top-1/2 left-5 -translate-y-1/2" size={20} />
-                  <div className="border-mainGreen w-full rounded border py-3 pr-10 pl-15 text-sm text-black">
-                    {member}
+                  <IoPersonOutline className="text-mainGreen absolute top-1/2 left-5 -translate-y-1/2" size={20} />
+                  <div className="border-mainGreen w-full truncate rounded border py-3 pr-10 pl-15 text-sm text-black">
+                    {member.teamMemberName}
                   </div>
                   <button onClick={() => onMemberRemove(index)} className="absolute top-1/2 right-3 -translate-y-1/2">
                     <IoIosRemove className="text-mainGreen rounded p-1" size={30} />

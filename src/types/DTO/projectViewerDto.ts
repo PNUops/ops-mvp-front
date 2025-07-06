@@ -1,3 +1,8 @@
+export interface TeamMember {
+  teamMemberId: number;
+  teamMemberName: string;
+}
+
 export interface ProjectDetailsResponseDto {
   contestId: number;
   contestName: string;
@@ -7,11 +12,11 @@ export interface ProjectDetailsResponseDto {
   projectName: string;
   overview: string;
   leaderName: string;
-  teamMembers: string[];
+  teamMembers: TeamMember[]; // WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의
   previewIds: number[];
   productionPath: string | null;
   githubPath: string;
-  youtubePath: string;
+  youTubePath: string;
   isLiked: boolean;
 }
 
