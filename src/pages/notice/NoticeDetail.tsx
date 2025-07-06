@@ -24,7 +24,7 @@ const NoticeDetail = () => {
 
 
   return (
-    <div className="max-w mx-auto">
+  <div className="max-w mx-auto">
       <h1 className="text-2xl font-bold mb-6">공지사항</h1>
       <div className="flex items-center bg-whiteGray rounded px-4 py-5 mb-2">
         <AiOutlineNotification className="mr-4" />
