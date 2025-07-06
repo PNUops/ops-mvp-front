@@ -101,7 +101,8 @@ const ProjectEditorPage = () => {
       //   { teamMemberId: 3, teamMemberName: '최민수' },
       // ]);
       setGithubUrl(projectData.githubPath);
-      setYoutubeUrl(projectData.youTubePath);
+      setYoutubeUrl(projectData.youtubePath);
+      setProdUrl(projectData.productionPath);
       setOverview(projectData.overview);
     }
   }, [projectData]);
