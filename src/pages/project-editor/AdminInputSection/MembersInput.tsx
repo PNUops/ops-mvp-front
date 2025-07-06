@@ -1,7 +1,5 @@
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import { TeamMember } from 'types/DTO/projectViewerDto';
-
 import { IoIosAdd, IoIosRemove } from 'react-icons/io';
 import { IoPersonOutline } from 'react-icons/io5';
 
@@ -14,52 +12,76 @@ interface MembersInputProps {
 const MAX_MEMBERS = 6;
 
 const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInputProps) => {
-  const [newMember, setNewMember] = useState('');
+  const [inputs, setInputs] = useState<string[]>(
+    Array.from({ length: MAX_MEMBERS }, (_, i) => teamMembers[i]?.teamMemberName || ''),
+  );
+  const [added, setAdded] = useState<boolean[]>(
+    Array.from({ length: MAX_MEMBERS }, (_, i) => !!teamMembers[i]?.teamMemberName),
+  );
+
+  const handleInputChange = (idx: number, value: string) => {
+    setInputs((inputs) => inputs.map((v, i) => (i === idx ? value : v)));
+  };
+
+  const handleAdd = (idx: number) => {
+    if (!inputs[idx].trim()) return;
+    setAdded((added) => added.map((a, i) => (i === idx ? true : a)));
+    onMemberAdd(inputs[idx].trim());
+  };
+
+  const handleRemove = (idx: number) => {
+    setInputs((inputs) => inputs.map((v, i) => (i === idx ? '' : v)));
+    setAdded((added) => added.map((a, i) => (i === idx ? false : a)));
+    onMemberRemove(idx);
+  };
+
+  useEffect(() => {
+    setInputs(Array.from({ length: MAX_MEMBERS }, (_, i) => teamMembers[i]?.teamMemberName || ''));
+    setAdded(Array.from({ length: MAX_MEMBERS }, (_, i) => !!teamMembers[i]?.teamMemberName));
+  }, [teamMembers]);
 
   return (
-    <div className="flex flex-1 flex-col gap-3">
-      <div className="flex gap-3">
-        <div className="relative flex-1">
-          <IoPersonOutline className="text-midGray absolute top-1/2 left-5 -translate-y-1/2" size={20} />
+    <div className="grid w-full grid-cols-1 gap-3 text-sm md:grid-cols-2">
+      {Array.from({ length: MAX_MEMBERS }).map((_, idx) => (
+        <div
+          key={idx}
+          className={`relative flex items-center gap-1 rounded border px-4 py-2 text-sm ${added[idx] ? 'border-mainGreen' : 'border-gray-300'}`}
+        >
+          <IoPersonOutline className={`${added[idx] ? 'text-mainGreen' : 'text-lightGray'} mr-2`} size={20} />
           <input
             type="text"
-            className="placeholder-lightGray focus:outline-lightGray w-full rounded bg-gray-100 py-3 pr-10 pl-15 text-sm text-black focus:outline-1"
-            placeholder="팀원의 이름"
-            value={newMember}
-            onChange={(e) => setNewMember(e.target.value)}
+            className="placeholder:text-lightGray flex-1 bg-transparent focus:outline-none"
+            placeholder="참가자를 입력해주세요."
+            value={inputs[idx]}
+            onChange={(e) => handleInputChange(idx, e.target.value)}
+            disabled={added[idx]}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !added[idx] && inputs[idx].trim()) handleAdd(idx);
+            }}
           />
-          {newMember.trim().length > 0 && teamMembers.length < MAX_MEMBERS && (
+          {!added[idx] && (
             <button
-              onClick={() => {
-                onMemberAdd(newMember.trim());
-                setNewMember('');
-              }}
-              className="absolute top-1/2 right-3 -translate-y-1/2 text-white"
+              type="button"
+              onClick={() => handleAdd(idx)}
+              className={`${inputs[idx].trim() ? 'text-mainGreen' : 'text-lightGray'}`}
+              disabled={!inputs[idx].trim()}
+              aria-label="Add member"
             >
-              <IoIosAdd className="text-mainGreen rounded p-1" size={30} />
+              <IoIosAdd size={24} />
+            </button>
+          )}
+          {added[idx] && (
+            <button
+              type="button"
+              onClick={() => handleRemove(idx)}
+              className="text-mainGreen"
+              aria-label="Remove member"
+            >
+              <IoIosRemove size={24} />
             </button>
           )}
         </div>
-        <div className="flex-1" />
-      </div>
-      {teamMembers.filter((member) => member.teamMemberName.trim() !== '').length > 0 && (
-        <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-3">
-          {teamMembers.map(
-            (member, index) =>
-              member.teamMemberName.trim() !== '' && (
-                <div key={index} className="relative w-full">
-                  <IoPersonOutline className="text-mainGreen absolute top-1/2 left-5 -translate-y-1/2" size={20} />
-                  <div className="border-mainGreen w-full truncate rounded border py-3 pr-10 pl-15 text-sm text-black">
-                    {member.teamMemberName}
-                  </div>
-                  <button onClick={() => onMemberRemove(index)} className="absolute top-1/2 right-3 -translate-y-1/2">
-                    <IoIosRemove className="text-mainGreen rounded p-1" size={30} />
-                  </button>
-                </div>
-              ),
-          )}
-        </div>
-      )}
+      ))}
     </div>
   );
 };
