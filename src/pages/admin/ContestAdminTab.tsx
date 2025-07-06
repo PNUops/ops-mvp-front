@@ -29,7 +29,7 @@ const HistoryMenu = ({ contestName, onContestChange }: HistoryMenuProps) => {
 
       {isOpen && contests && (
         <ul className="border-subGreen absolute z-50 w-fit border-2 bg-white text-base font-normal text-nowrap">
-          {contests.map((contest) => (
+          {contests.map((contest: ContestResponseDto) => (
             <li key={contest.contestId}>
               <button
                 onClick={() => onContestChange(contest.contestName, contest.contestId)}

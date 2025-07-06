@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { getAllContests, postAllContests, deleteContest } from 'apis/contests';
 import { getAllTeams, deleteTeams } from 'apis/teams';
@@ -26,30 +26,40 @@ const useContestAdmin = () => {
     editContestId: 0,
   });
 
-  const { data: contests, refetch } = useQuery({
+  const { data: contests, refetch: refetchContests } = useQuery({
     queryKey: ['contests'],
     queryFn: getAllContests,
+    staleTime: 0,
+  });
+
+  const { data: currentTeams, refetch: refetchTeams } = useQuery({
+    queryKey: ['teams', state.currentContestId],
+    queryFn: async () => {
+      const teams = await getAllTeams(state.currentContestId);
+      return teams.sort((a, b) => a.teamId - b.teamId);
+    },
+    enabled: state.currentContestId > 0,
   });
 
   const toast = useToast();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    const loadInitialData = async () => {
-      if (contests?.[0]) {
-        const firstContest = contests[0];
-        const teams = await getAllTeams(firstContest.contestId);
+    if (contests?.[0] && state.currentContestName === '불러오는 중...') {
+      const firstContest = contests[0];
+      setState((prev) => ({
+        ...prev,
+        currentContestName: firstContest.contestName,
+        currentContestId: firstContest.contestId,
+      }));
+    }
+  }, [contests, state.currentContestName]);
 
-        setState((prev) => ({
-          ...prev,
-          currentContestName: firstContest.contestName,
-          currentContestId: firstContest.contestId,
-          contestTeams: teams,
-        }));
-      }
-    };
-
-    loadInitialData();
-  }, [contests]);
+  useEffect(() => {
+    if (currentTeams) {
+      setState((prev) => ({ ...prev, contestTeams: currentTeams }));
+    }
+  }, [currentTeams]);
 
   const handleAddContest = async () => {
     if (!state.contestName.trim()) {
@@ -59,12 +69,14 @@ const useContestAdmin = () => {
 
     try {
       await postAllContests(state.contestName);
-      await refetch();
+      console.log('대회 추가 후 캐시 무효화');
+      await queryClient.invalidateQueries({ queryKey: ['contests'] });
       setState((prev) => ({ ...prev, contestName: '' }));
       toast('대회가 추가되었습니다.', 'success');
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || '대회 추가에 실패했습니다.';
+      toast(errorMessage, 'error');
       setState((prev) => ({ ...prev, contestName: '' }));
-      toast('대회 추가에 실패했습니다.', 'error');
     }
   };
 
@@ -77,35 +89,36 @@ const useContestAdmin = () => {
       }
 
       await deleteContest(contestId);
-      await refetch();
+      console.log('대회 삭제 후 캐시 무효화');
+      await queryClient.invalidateQueries({ queryKey: ['contests'] });
       toast('대회가 삭제되었습니다.', 'success');
-    } catch (error) {
-      toast('대회 삭제에 실패했습니다.', 'error');
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || '대회 삭제에 실패했습니다.';
+      toast(errorMessage, 'error');
     }
   };
 
   const handleContestChange = async (contestName: string, contestId: number) => {
     try {
-      const teams = await getAllTeams(contestId);
       setState((prev) => ({
         ...prev,
         currentContestName: contestName,
         currentContestId: contestId,
-        contestTeams: teams,
       }));
-    } catch (error) {
-      toast('팀 정보를 불러오는데 실패했습니다.', 'error');
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || '팀 정보를 불러오는데 실패했습니다.';
+      toast(errorMessage, 'error');
     }
   };
 
   const handleDeleteTeam = async (teamId: number) => {
     try {
       await deleteTeams(teamId);
-      const teams = await getAllTeams(state.currentContestId);
-      setState((prev) => ({ ...prev, contestTeams: teams }));
+      await queryClient.invalidateQueries({ queryKey: ['teams'] });
       toast('팀이 삭제되었습니다.', 'success');
-    } catch (error) {
-      toast('팀 삭제에 실패했습니다.', 'error');
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || '팀 삭제에 실패했습니다.';
+      toast(errorMessage, 'error');
     }
   };
 

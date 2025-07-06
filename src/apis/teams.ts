@@ -4,12 +4,8 @@ import apiClient from './apiClient';
 import { mockTeamsResponse } from 'mocks/data/teams';
 
 export const getAllTeams = async (contestId: number): Promise<TeamListItemResponseDto[]> => {
-  // const res = await apiClient.get(`/contests/${contestId}/teams`);
-  // return res.data;
-  if (contestId === 1) {
-    return [...mockTeamsResponse];
-  }
-  return [];
+  const res = await apiClient.get(`/contests/${contestId}/teams`);
+  return res.data;
 };
 
 export const getSubmissionStatus = async (): Promise<SubmissionStatusResponseDto> => {
@@ -18,10 +14,6 @@ export const getSubmissionStatus = async (): Promise<SubmissionStatusResponseDto
 };
 
 export const deleteTeams = async (teamId_: number) => {
-  // const res = await apiClient.delete(`teams/${teamId}`);
-  // return res.data;
-  const newList = mockTeamsResponse.filter((team) => team.teamId !== teamId_);
-  mockTeamsResponse.length = 0;
-  mockTeamsResponse.push(...newList);
-  return newList;
+  const res = await apiClient.delete(`/teams/${teamId_}`);
+  return res.data;
 };

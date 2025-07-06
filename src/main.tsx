@@ -9,7 +9,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from 'stores/queryClient';
 import { Toaster } from '@components/Toaster';
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' && import.meta.env.VITE_USE_MSW === 'true') {
   await worker.start();
 }
 
