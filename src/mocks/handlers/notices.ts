@@ -1,4 +1,4 @@
-import { mockNotices } from '@mocks/data/notices';
+import { mockNoticeDetail, mockNotices } from '@mocks/data/notices';
 import { http, HttpResponse } from 'msw';
 
 const base = import.meta.env.VITE_API_BASE_URL ?? '';
@@ -8,6 +8,6 @@ export const noticesHandler = [
     return HttpResponse.json(mockNotices);
   }),
   http.get(`${base}/api/notices/:noticeId`, () => {
-    return HttpResponse.json(mockNotices);
+    return HttpResponse.json(mockNoticeDetail);
   }),
 ];
