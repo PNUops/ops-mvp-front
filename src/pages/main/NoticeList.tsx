@@ -25,15 +25,7 @@ const NoticeList = () => {
               {notice.title}
             </Link>
 
-            <span className="ml-4 text-xs text-gray-400">
-                  {new Date(notice.updatedAt).toLocaleString('ko-KR', {
-                    year: '2-digit',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </span>
+            <span className="text-right text-xs text-midGray truncate">{notice.updatedAt}</span>
           </li>
         ))}
       </ul>
