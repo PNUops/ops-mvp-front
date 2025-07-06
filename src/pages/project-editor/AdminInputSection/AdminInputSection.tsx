@@ -1,7 +1,7 @@
 import { TeamMember } from 'types/DTO/projectViewerDto';
 
 import ContestMenu from './ContestMenu';
-import MembersInput from '../MembersInput';
+import MembersInput from './MembersInput';
 
 interface AdminInputSectionProps {
   contestId: number | null;
@@ -61,13 +61,13 @@ const AdminInputSection = ({
           />
         </div>
       </div>
-      <div className="flex flex-col gap-5 border text-sm sm:flex-row sm:items-start sm:gap-10">
+      <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-start sm:gap-10">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span className="w-full">참가자</span>
         </div>
         <div className="flex flex-1 flex-col">
-          <MembersInput teamMembers={teamMembers} max={5} onMemberAdd={onMemberAdd} onMemberRemove={onMemberRemove} />
+          <MembersInput teamMembers={teamMembers} onMemberAdd={onMemberAdd} onMemberRemove={onMemberRemove} />
         </div>
       </div>
     </div>

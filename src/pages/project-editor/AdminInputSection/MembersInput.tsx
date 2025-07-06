@@ -7,12 +7,13 @@ import { IoPersonOutline } from 'react-icons/io5';
 
 interface MembersInputProps {
   teamMembers: TeamMember[];
-  max: number;
   onMemberAdd: (newMemberName: string) => void;
   onMemberRemove: (index: number) => void;
 }
 
-const MembersInput = ({ teamMembers, max, onMemberAdd, onMemberRemove }: MembersInputProps) => {
+const MAX_MEMBERS = 6;
+
+const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInputProps) => {
   const [newMember, setNewMember] = useState('');
 
   return (
@@ -27,7 +28,7 @@ const MembersInput = ({ teamMembers, max, onMemberAdd, onMemberRemove }: Members
             value={newMember}
             onChange={(e) => setNewMember(e.target.value)}
           />
-          {newMember.trim().length > 0 && teamMembers.length < max && (
+          {newMember.trim().length > 0 && teamMembers.length < MAX_MEMBERS && (
             <button
               onClick={() => {
                 onMemberAdd(newMember.trim());

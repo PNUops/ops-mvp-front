@@ -29,7 +29,7 @@ import OverviewInput from './OverviewInput';
 import { EditorDetailSkeleton } from './EditorSkeleton';
 
 import AdminInputSection from '@pages/project-editor/AdminInputSection/AdminInputSection';
-import MembersInput from './MembersInput';
+import MembersInput from './AdminInputSection/MembersInput';
 
 export interface PreviewImage {
   id?: number;
@@ -94,12 +94,12 @@ const ProjectEditorPage = () => {
       setTeamName(projectData.teamName);
       setProjectName(projectData.projectName);
       setLeaderName(projectData.leaderName);
-      // setTeamMembers(projectData.teamMembers);
-      setTeamMembers([
-        { teamMemberId: 1, teamMemberName: '김철수' },
-        { teamMemberId: 2, teamMemberName: '박영희' },
-        { teamMemberId: 3, teamMemberName: '최민수' },
-      ]);
+      setTeamMembers(projectData.teamMembers);
+      // setTeamMembers([
+      //   { teamMemberId: 1, teamMemberName: '김철수' },
+      //   { teamMemberId: 2, teamMemberName: '박영희' },
+      //   { teamMemberId: 3, teamMemberName: '최민수' },
+      // ]);
       setGithubUrl(projectData.githubPath);
       setYoutubeUrl(projectData.youTubePath);
       setOverview(projectData.overview);
