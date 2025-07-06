@@ -10,7 +10,7 @@ type ContestAdminState = {
   currentContestName: string;
   currentContestId: number;
   contestTeams: TeamListItemResponseDto[];
-  isModalOpen: boolean;
+  // isModalOpen: boolean;
   isEditModalOpen: boolean;
   editContestId: number;
 };
@@ -21,7 +21,7 @@ const useContestAdmin = () => {
     currentContestName: '불러오는 중...',
     currentContestId: 1,
     contestTeams: [],
-    isModalOpen: false,
+    // isModalOpen: false,
     isEditModalOpen: false,
     editContestId: 0,
   });
@@ -84,7 +84,7 @@ const useContestAdmin = () => {
     try {
       const teams = await getAllTeams(contestId);
       if (teams.length > 0) {
-        setState((prev) => ({ ...prev, isModalOpen: true }));
+        toast('팀이 남아있으면 삭제할 수 없습니다.', 'info');
         return;
       }
 
