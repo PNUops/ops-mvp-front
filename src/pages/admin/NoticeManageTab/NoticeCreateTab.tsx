@@ -27,7 +27,7 @@ const NoticeCreateTab = () => {
 
   return (
     <section className="flex flex-col gap-8">
-      <h3 className="text-2xl font-bold">공지사항 생성</h3>
+      <h3 className="text-2xl font-bold">공지사항 작성</h3>
       <div className="grid grid-cols-[max-content_1fr] gap-x-8 gap-y-4">
         <label htmlFor="title" className="m-2">
           제목
