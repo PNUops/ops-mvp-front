@@ -46,24 +46,26 @@ const SignInForm = () => {
 
   return (
     <>
-      <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit}>
-        <Input placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
-        <div className="h-2" />
-        <button type="submit" className="bg-mainBlue rounded-lg p-3 text-lg font-bold text-white">
-          로그인
-        </button>
-        {/* <button
+      <div className="flex w-full flex-col gap-4">
+        <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit}>
+          <Input placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
+          <div className="h-2" />
+          <button type="submit" className="bg-mainBlue rounded-lg p-3 text-lg font-bold text-white">
+            로그인
+          </button>
+          {/* <button
           onClick={() => navigate('/signup')}
           type="button"
           className="border-midGray rounded-lg border p-3 text-lg font-bold"
         >
           회원가입
         </button> */}
-      </form>
-      <Divider />
-      <div className="flex w-full justify-center">
-        <GoogleSignInButton />
+        </form>
+        <Divider />
+        <div className="flex w-full justify-center">
+          <GoogleSignInButton />
+        </div>
       </div>
     </>
   );
