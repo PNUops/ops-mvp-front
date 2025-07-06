@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { useUserStore } from 'stores/useUserStore';
+import useAuth from 'hooks/useAuth';
 import { useTeamId } from 'hooks/useTeamId';
 import { useToast } from 'hooks/useToast';
 
@@ -17,7 +18,7 @@ import {
 } from 'apis/projectEditor';
 import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
 
-import { isValidGithubUrl, isValidYoutubeUrl } from './urlValidators';
+import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from './urlValidators';
 import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
@@ -30,12 +31,14 @@ export interface PreviewImage {
 }
 
 const ProjectEditorPage = () => {
+  const { isAdmin, isLeader } = useAuth();
   const memberId = useUserStore((state) => state.user?.id);
   const teamId = useTeamId();
   const [thumbnail, setThumbnail] = useState<string | File | undefined>();
   const [thumbnailToDelete, setThumbnailToDelete] = useState<boolean>(false);
   const [previews, setPreviews] = useState<PreviewImage[]>([]);
   const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
+  const [prodUrl, setProdUrl] = useState<string | null>(null);
   const [githubUrl, setGithubUrl] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [overview, setOverview] = useState('');
@@ -113,6 +116,7 @@ const ProjectEditorPage = () => {
       if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
       if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
       if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
+      if (prodUrl && !isValidProjectUrl(prodUrl)) return '유효한 프로젝트 주소를 입력하세요.';
       if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
       if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
       return null;
@@ -127,6 +131,7 @@ const ProjectEditorPage = () => {
     try {
       await patchProjectDetails(teamId, {
         overview,
+        productionPath: prodUrl,
         githubPath: githubUrl,
         youTubePath: youtubeUrl,
       });
@@ -154,7 +159,7 @@ const ProjectEditorPage = () => {
       queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
       queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       toast('저장이 완료되었습니다.', 'success');
-      navigate(`/teams/view/${teamId}`);
+      isLeader && navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
@@ -162,7 +167,7 @@ const ProjectEditorPage = () => {
 
   return (
     <div className="px-5">
-      <div className="text-title font-bold">프로젝트 생성</div>
+      <div className="text-title font-bold">프로젝트 생성/수정</div>
       <div className="h-10" />
 
       <IntroSection
@@ -175,6 +180,8 @@ const ProjectEditorPage = () => {
       <div className="h-15" />
 
       <UrlInput
+        prodUrl={prodUrl}
+        setProdUrl={setProdUrl}
         githubUrl={githubUrl}
         setGithubUrl={setGithubUrl}
         youtubeUrl={youtubeUrl}

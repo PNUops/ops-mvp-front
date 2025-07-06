@@ -33,3 +33,12 @@ export const isValidYoutubeUrl = (url: string) => {
     return false;
   }
 };
+
+export const isValidProjectUrl = (url: string): boolean => {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' && parsed.hostname.includes('.');
+  } catch {
+    return false;
+  }
+};

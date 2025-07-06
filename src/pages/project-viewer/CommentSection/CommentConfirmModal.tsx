@@ -1,14 +1,14 @@
 import { RxCross2 } from 'react-icons/rx';
 import { FaRegTrashAlt } from 'react-icons/fa';
 
-interface ConfirmModalProps {
+interface CommentConfirmModalProps {
   isOpen: boolean;
   onConfirm: () => void;
   onCancel: () => void;
-  message?: string; // optional 커스텀 메시지
+  message?: string;
 }
 
-const ConfirmModal = ({ isOpen, onConfirm, onCancel, message }: ConfirmModalProps) => {
+const CommentConfirmModal = ({ isOpen, onConfirm, onCancel, message }: CommentConfirmModalProps) => {
   if (!isOpen) return null;
 
   return (
@@ -51,4 +51,4 @@ const ConfirmModal = ({ isOpen, onConfirm, onCancel, message }: ConfirmModalProp
   );
 };
 
-export default ConfirmModal;
+export default CommentConfirmModal;
