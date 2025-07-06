@@ -1,8 +1,10 @@
 import googleIconUrl from '@assets/google-icon.png';
 
 const GoogleSignInButton = () => {
+  const GOOGLE_SERVER_REDIRECT_URI = `${import.meta.env.VITE_API_BASE_URL}/oauth/google`;
+
   const handleGoogleSignIn = () => {
-    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/oauth/google`;
+    window.location.href = GOOGLE_SERVER_REDIRECT_URI;
   };
 
   return (
