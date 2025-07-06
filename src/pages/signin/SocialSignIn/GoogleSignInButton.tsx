@@ -1,10 +1,18 @@
 import googleIconUrl from '@assets/google-icon.png';
 
+import { useToast } from 'hooks/useToast';
+
 const GoogleSignInButton = () => {
-  const GOOGLE_SERVER_REDIRECT_URI = `${import.meta.env.VITE_API_BASE_URL}/oauth/google`;
+  const GOOGLE_REDIRECT_URL = `${import.meta.env.VITE_API_BASE_URL}/api/oauth/google`;
+
+  const toast = useToast();
 
   const handleGoogleSignIn = () => {
-    window.location.href = GOOGLE_SERVER_REDIRECT_URI;
+    try {
+      window.location.href = GOOGLE_REDIRECT_URL;
+    } catch {
+      toast('구글 로그인 도중 오류가 발생했어요.', 'error');
+    }
   };
 
   return (
