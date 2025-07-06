@@ -9,6 +9,8 @@ import SignInPage from '@pages/signin/SignInPage';
 import SignUpPage from '@pages/signup/SignUpPage';
 import AdminPage from '@pages/admin/AdminPage';
 import FindPage from '@pages/find/FindPage';
+import Notice from '@pages/main/Notice';
+import NoticeDetail from '@pages/notice/NoticeDetail';
 
 const AppRoutes = () =>
   useRoutes([
@@ -17,12 +19,14 @@ const AppRoutes = () =>
       element: <MainLayout />,
       children: [
         { index: true, element: <MainPage /> },
+        { path: 'contest/:contestId', element: <MainPage /> },
         { path: 'signin', element: <SignInPage /> },
         { path: 'signup', element: <SignUpPage /> },
         { path: 'teams/view/:teamId', element: <ProjectViewerPage /> },
         { path: 'teams/edit/:teamId', element: <ProjectEditorPage /> },
         { path: 'admin/:tab', element: <AdminPage /> },
         { path: 'find', element: <FindPage /> },
+        { path: 'notices/:noticeId', element: <NoticeDetail />}
       ],
     },
   ]);
