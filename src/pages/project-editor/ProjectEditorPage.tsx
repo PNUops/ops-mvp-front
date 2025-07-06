@@ -95,11 +95,6 @@ const ProjectEditorPage = () => {
       setProjectName(projectData.projectName);
       setLeaderName(projectData.leaderName);
       setTeamMembers(projectData.teamMembers);
-      // setTeamMembers([
-      //   { teamMemberId: 1, teamMemberName: '김철수' },
-      //   { teamMemberId: 2, teamMemberName: '박영희' },
-      //   { teamMemberId: 3, teamMemberName: '최민수' },
-      // ]);
       setGithubUrl(projectData.githubPath);
       setYoutubeUrl(projectData.youtubePath);
       setProdUrl(projectData.productionPath);
@@ -136,6 +131,10 @@ const ProjectEditorPage = () => {
   const handleSave = async () => {
     const contestIdToSubmit = contestId;
     const validateProjectInputs = () => {
+      if (isAdmin) {
+        if (!projectName) return '프로젝트명이 입력되지 않았어요.';
+        if (!teamName) return '팀명이 입력되지 않았어요.';
+      }
       if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
       if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
       if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
@@ -157,14 +156,9 @@ const ProjectEditorPage = () => {
     try {
       await patchProjectDetails(teamId, {
         contestId: isAdmin ? (contestIdToSubmit ?? projectData.contestId) : projectData.contestId,
-        // TODO
-        // contestId: contestId,
-        // teamName: isAdmin ? teamName : projectData.teamName,
-        // projectName: isAdmin ? projectName : projectData.projectName,
-        // leaderName: isAdmin ? leaderName : projectData.leaderName,
-        teamName: projectData.teamName,
-        projectName: projectData.projectName,
-        leaderName: projectData.leaderName,
+        teamName: isAdmin ? teamName : projectData.teamName,
+        projectName: isAdmin ? projectName : projectData.projectName,
+        leaderName: isAdmin ? leaderName : projectData.leaderName,
         overview,
         productionPath: prodUrl,
         githubPath: githubUrl,
@@ -230,8 +224,10 @@ const ProjectEditorPage = () => {
         <AdminInputSection
           contestId={contestId}
           setContestId={setContestId}
-          projectName={projectData.projectName}
-          teamName={projectData.teamName}
+          projectName={projectName}
+          setProjectName={setProjectName}
+          teamName={teamName}
+          setTeamName={setTeamName}
           teamMembers={teamMembers}
           onMemberAdd={onMemberAdd}
           onMemberRemove={onMemberRemove}

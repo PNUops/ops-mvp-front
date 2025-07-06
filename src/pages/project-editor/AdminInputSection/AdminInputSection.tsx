@@ -7,7 +7,9 @@ interface AdminInputSectionProps {
   contestId: number | null;
   setContestId: (id: number) => void;
   projectName: string;
+  setProjectName: (projectName: string) => void;
   teamName: string;
+  setTeamName: (teamName: string) => void;
   teamMembers: TeamMember[];
   onMemberAdd: (newMemberName: string) => void;
   onMemberRemove: (index: number) => void;
@@ -17,7 +19,9 @@ const AdminInputSection = ({
   contestId,
   setContestId,
   projectName,
+  setProjectName,
   teamName,
+  setTeamName,
   teamMembers,
   onMemberAdd,
   onMemberRemove,
@@ -42,6 +46,7 @@ const AdminInputSection = ({
           <input
             type="text"
             value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
             placeholder="프로젝트 이름을 입력해주세요."
             className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 px-5 py-3 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
           />
@@ -56,6 +61,7 @@ const AdminInputSection = ({
           <input
             type="text"
             value={teamName}
+            onChange={(e) => setTeamName(e.target.value)}
             placeholder="팀 이름을 입력해주세요."
             className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 px-5 py-3 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
           />
