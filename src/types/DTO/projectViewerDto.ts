@@ -16,7 +16,7 @@ export interface ProjectDetailsResponseDto {
   previewIds: number[];
   productionPath: string | null;
   githubPath: string;
-  youtubePath: string;
+  youtubePath: string; // TODO: 필드명 바꾸기
   isLiked: boolean;
 }
 
