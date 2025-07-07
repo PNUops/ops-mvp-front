@@ -133,11 +133,14 @@ const ProjectEditorPage = () => {
         if (!projectName) return '프로젝트명이 입력되지 않았어요.';
         if (!teamName) return '팀명이 입력되지 않았어요.';
       }
+      if (isLeaderOfThisTeam) {
+        if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
+        if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
+        if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
+      }
       if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
       if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
-      if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
-      if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
-      if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
+
       if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
       if (prodUrl && !isValidProjectUrl(prodUrl)) return '유효한 프로젝트 주소를 입력하세요.';
       if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
@@ -253,7 +256,7 @@ const ProjectEditorPage = () => {
         youtubeUrl={youtubeUrl}
         setYoutubeUrl={setYoutubeUrl}
       />
-      {isAdmin && (
+      {isLeaderOfThisTeam && (
         <>
           <div className="h-15" />
           <ImageUploaderSection
