@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useOutsideClick } from 'hooks/useOutsideClick';
-import { useContestStore } from './contestStore';
 
 import { getAllContests } from 'apis/contests';
 import { ContestResponseDto } from 'types/DTO';
@@ -10,7 +9,12 @@ import { EditorMenuSkeleton } from '../EditorSkeleton';
 
 import { FaChevronDown } from 'react-icons/fa';
 
-const ContestMenu = () => {
+interface ContestMenuProps {
+  value: number | null;
+  onChange: (id: number) => void;
+}
+
+const ContestMenu = ({ value, onChange }: ContestMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLUListElement | null>(null);
 
@@ -23,10 +27,7 @@ const ContestMenu = () => {
     queryFn: async () => getAllContests(),
   });
 
-  const selectedContestId = useContestStore((state) => state.selectedContestId);
-  const setSelectedContestId = useContestStore((state) => state.setSelectedContestId);
-
-  const selectedContest = contests?.find((c) => c.contestId == selectedContestId);
+  const selectedContest = contests?.find((c) => c.contestId == value);
 
   useOutsideClick(dropdownRef, () => setIsOpen(false));
 
@@ -43,13 +44,13 @@ const ContestMenu = () => {
   return (
     <div className="relative w-full max-w-sm text-sm">
       <button
-        className="border-lightGray flex w-full items-center justify-between border-b-3 p-4 text-left hover:cursor-pointer"
+        className="border-lightGray flex w-full items-center justify-between rounded-md border-2 px-5 py-3 text-left hover:cursor-pointer"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <span className={selectedContest ? '' : 'text-midGray'}>
           {selectedContest?.contestName || '대회를 선택해주세요.'}
         </span>
-        <FaChevronDown className={`hover:text-[rgb(172,222,191)] ${isOpen ? 'text-mainGreen' : 'text-subGreen'}`} />
+        <FaChevronDown className={`hover:text-[rgb(172,222,191)] ${isOpen ? 'text-mainGreen' : 'text-lightGray'}`} />
       </button>
 
       {isOpen && contests && (
@@ -61,10 +62,10 @@ const ContestMenu = () => {
             <li
               key={contests.contestId}
               className={`border-whiteGray cursor-pointer border-b-1 p-4 transition-colors duration-200 ease-in-out ${
-                contests.contestId === selectedContestId ? 'bg-whiteGray text-mainGreen' : 'hover:bg-whiteGray'
+                contests.contestId === value ? 'bg-whiteGray text-mainGreen' : 'hover:bg-whiteGray'
               }`}
               onClick={() => {
-                setSelectedContestId(contests.contestId);
+                onChange(contests.contestId);
                 setIsOpen(false);
               }}
             >
