@@ -10,6 +10,7 @@ import Spinner from '@components/Spinner';
 
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { FaSadTear } from 'react-icons/fa';
+import { CgSandClock } from 'react-icons/cg';
 
 interface CarouselSectionProps {
   teamId: number;
@@ -106,12 +107,21 @@ const MediaRenderer = ({
     return <iframe src={embedUrl} title="Youtube Iframe" allowFullScreen className="absolute inset-0 h-full w-full" />;
   }
 
+  if (currentImage === 'ERROR_409') {
+    return (
+      <div className="text-lightGray border-lightGray flex h-full w-full flex-col items-center justify-center gap-5 border">
+        <CgSandClock size={40} />
+        <span className="text-xs">서버에서 이미지 변환 중입니다. 나중에 시도해 주세요.</span>
+      </div>
+    );
+  }
+
   return (
     <>
       {!imageLoaded && (
-      <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-white">
-        <Spinner />
-      </div>
+        <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-white">
+          <Spinner />
+        </div>
       )}
       <img
         src={currentImage}

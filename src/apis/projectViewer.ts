@@ -24,8 +24,12 @@ export const getPreviewImages = async (teamId: number, imageIds: number[]): Prom
       });
       const objectUrl = URL.createObjectURL(response.data);
       imageUrls.push(objectUrl);
-    } catch (error) {
-      imageUrls.push('ERROR');
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        imageUrls.push('ERROR_409');
+      } else {
+        imageUrls.push('ERROR');
+      }
     }
   }
 

@@ -7,10 +7,17 @@ export const patchProjectDetails = async (teamId: number, body: ProjectDetailsEd
 };
 
 export const getThumbnail = async (teamId: number): Promise<string> => {
-  const response = await apiClient.get(`/teams/${teamId}/image/thumbnail`, {
-    responseType: 'blob',
-  });
-  return URL.createObjectURL(response.data);
+  try {
+    const response = await apiClient.get(`/teams/${teamId}/image/thumbnail`, {
+      responseType: 'blob',
+    });
+    return URL.createObjectURL(response.data);
+  } catch (error: any) {
+    if (error.response?.status === 409) {
+      throw new Error('Thumbnail 409 Error');
+    }
+    throw error;
+  }
 };
 
 export const postThumbnail = async (teamId: number, formData: FormData) => {
