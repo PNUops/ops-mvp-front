@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { getAllContests } from 'apis/contests';
 import Input from '@components/Input';
@@ -58,6 +59,7 @@ const ContestAdminTab = () => {
     closeEditModal,
     setContestName,
   } = useContestAdmin();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -127,13 +129,23 @@ const ContestAdminTab = () => {
               <Button className="bg-mainRed h-[35px] w-full min-w-[70px]" onClick={() => handleDeleteTeam(row.teamId)}>
                 삭제하기
               </Button>
-              <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]">수정하기</Button>
+              <Button
+                onClick={() => navigate(`/teams/edit/${row.teamId}`)}
+                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
+              >
+                수정하기
+              </Button>
             </>
           )}
         />
 
         <div className="mt-8 flex w-full flex-row-reverse">
-          <Button className="bg-mainBlue h-12 w-[20%] min-w-[130px]">프로젝트 생성하기</Button>
+          <Button
+            onClick={() => navigate(`/admin/contest/create/${state.currentContestId}`)}
+            className="bg-mainBlue h-12 w-[20%] min-w-[130px]"
+          >
+            프로젝트 생성하기
+          </Button>
         </div>
       </section>
     </>

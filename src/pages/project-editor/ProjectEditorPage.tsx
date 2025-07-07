@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import useAuth from 'hooks/useAuth';
-import { useTeamId } from 'hooks/useTeamId';
+import { useTeamId } from 'hooks/useId';
 import { useToast } from 'hooks/useToast';
 
 import { getProjectDetails, getPreviewImages } from 'apis/projectViewer';
@@ -94,7 +94,7 @@ const ProjectEditorPage = () => {
       setLeaderName(projectData.leaderName);
       setTeamMembers(projectData.teamMembers);
       setGithubUrl(projectData.githubPath);
-      setYoutubeUrl(projectData.youTubePath);
+      setYoutubeUrl(projectData.youtubePath);
       setProdUrl(projectData.productionPath);
       setOverview(projectData.overview);
     }
@@ -200,7 +200,7 @@ const ProjectEditorPage = () => {
       queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
       queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       toast('저장이 완료되었습니다.', 'success');
-      isLeaderOfThisTeam && navigate(`/teams/view/${teamId}`);
+      (isLeaderOfThisTeam || isAdmin) && navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
@@ -226,6 +226,8 @@ const ProjectEditorPage = () => {
           setProjectName={setProjectName}
           teamName={teamName}
           setTeamName={setTeamName}
+          leaderName={leaderName}
+          setLeaderName={setLeaderName}
           teamMembers={teamMembers}
           onMemberAdd={onMemberAdd}
           onMemberRemove={onMemberRemove}

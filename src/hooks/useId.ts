@@ -5,3 +5,9 @@ export const useTeamId = (): number | null => {
   const parsedTeamId = Number(teamId);
   return !teamId || isNaN(parsedTeamId) ? null : parsedTeamId;
 };
+
+export const useContestId = (): number | null => {
+  const { contestId } = useParams<{ contestId: string }>();
+  const parsedContestId = Number(contestId);
+  return !contestId || isNaN(parsedContestId) ? null : parsedContestId;
+};

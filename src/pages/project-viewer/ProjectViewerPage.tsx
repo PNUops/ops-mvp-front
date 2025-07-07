@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useTeamId } from 'hooks/useTeamId';
+import { useTeamId } from 'hooks/useId';
 import { useUserStore } from 'stores/useUserStore';
 import { getProjectDetails } from 'apis/projectViewer';
 
@@ -64,10 +64,10 @@ const ProjectViewerPage = () => {
         teamName={data.teamName}
         prodUrl={data.productionPath}
         githubUrl={data.githubPath}
-        youtubeUrl={data.youTubePath}
+        youtubeUrl={data.youtubePath}
       />
       <div className="h-10" />
-      <CarouselSection teamId={data.teamId} previewIds={data.previewIds} youtubeUrl={data.youTubePath} />
+      <CarouselSection teamId={data.teamId} previewIds={data.previewIds} youtubeUrl={data.youtubePath} />
       <div className="h-10" />
       <LikeSection teamId={data.teamId} isLiked={data.isLiked} />
       <div className="h-10" />
