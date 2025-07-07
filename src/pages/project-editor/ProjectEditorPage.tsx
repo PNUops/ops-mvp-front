@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { useUserStore } from 'stores/useUserStore';
 import useAuth from 'hooks/useAuth';
 import { useTeamId } from 'hooks/useTeamId';
 import { useToast } from 'hooks/useToast';
@@ -15,15 +14,20 @@ import {
   postThumbnail,
   deletePreview,
   deleteThumbnail,
+  postMember,
+  deleteMember,
 } from 'apis/projectEditor';
-import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
+
+import { TeamMember, ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
 
 import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from './urlValidators';
 import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
-import EditorSkeleton from './EditorSkeleton';
+import { EditorDetailSkeleton } from './EditorSkeleton';
+
+import AdminInputSection from '@pages/project-editor/AdminInputSection/AdminInputSection';
 
 export interface PreviewImage {
   id?: number;
@@ -31,13 +35,18 @@ export interface PreviewImage {
 }
 
 const ProjectEditorPage = () => {
-  const { isAdmin, isLeader } = useAuth();
-  const memberId = useUserStore((state) => state.user?.id);
+  const { user, isAdmin, isLeader } = useAuth();
+  const memberId = user?.id;
   const teamId = useTeamId();
+  const [contestId, setContestId] = useState<number | null>(null);
+  const [teamName, setTeamName] = useState('');
+  const [projectName, setProjectName] = useState('');
+  const [leaderName, setLeaderName] = useState('');
   const [thumbnail, setThumbnail] = useState<string | File | undefined>();
   const [thumbnailToDelete, setThumbnailToDelete] = useState<boolean>(false);
   const [previews, setPreviews] = useState<PreviewImage[]>([]);
   const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [prodUrl, setProdUrl] = useState<string | null>(null);
   const [githubUrl, setGithubUrl] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
@@ -79,8 +88,14 @@ const ProjectEditorPage = () => {
 
   useEffect(() => {
     if (projectData) {
+      setContestId(projectData.contestId);
+      setTeamName(projectData.teamName);
+      setProjectName(projectData.projectName);
+      setLeaderName(projectData.leaderName);
+      setTeamMembers(projectData.teamMembers);
       setGithubUrl(projectData.githubPath);
       setYoutubeUrl(projectData.youtubePath);
+      setProdUrl(projectData.productionPath);
       setOverview(projectData.overview);
     }
   }, [projectData]);
@@ -102,14 +117,22 @@ const ProjectEditorPage = () => {
   }, [previewData, projectData]);
 
   if (!teamId) return <div>팀 정보를 불러올 수 없습니다.</div>;
-  if (isProjectLoading) return <EditorSkeleton />;
+
+  if (isProjectLoading) return <EditorDetailSkeleton />;
   if (isProjectError || !projectData) return <div>데이터를 가져오지 못했습니다.</div>;
-  if (memberId !== projectData.leaderId) return <div>접근 권한이 없습니다.</div>;
+
+  const isLeaderOfThisTeam = isLeader && memberId == projectData.leaderId;
+  if (!isLeaderOfThisTeam && !isAdmin) {
+    return <div>접근 권한이 없습니다.</div>;
+  }
 
   const handleSave = async () => {
-    if (!teamId) return;
-
+    const contestIdToSubmit = contestId;
     const validateProjectInputs = () => {
+      if (isAdmin) {
+        if (!projectName) return '프로젝트명이 입력되지 않았어요.';
+        if (!teamName) return '팀명이 입력되지 않았어요.';
+      }
       if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
       if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
       if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
@@ -130,11 +153,29 @@ const ProjectEditorPage = () => {
 
     try {
       await patchProjectDetails(teamId, {
+        contestId: isAdmin ? (contestIdToSubmit ?? projectData.contestId) : projectData.contestId,
+        teamName: isAdmin ? teamName : projectData.teamName,
+        projectName: isAdmin ? projectName : projectData.projectName,
+        leaderName: isAdmin ? leaderName : projectData.leaderName,
         overview,
         productionPath: prodUrl,
         githubPath: githubUrl,
         youTubePath: youtubeUrl,
       });
+
+      const addedMembers = teamMembers.filter(
+        (member) => !projectData.teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
+      );
+      const removedMembers = projectData.teamMembers.filter(
+        (member) => !teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
+      );
+
+      const addMemberPromises = addedMembers.map(async (member) => await postMember(teamId, member.teamMemberName));
+      const removeMemberPromises = removedMembers.map(
+        async (member) => await deleteMember(teamId, member.teamMemberId),
+      );
+
+      await Promise.all([...addMemberPromises, ...removeMemberPromises]);
 
       if (thumbnailToDelete) {
         await deleteThumbnail(teamId);
@@ -159,23 +200,46 @@ const ProjectEditorPage = () => {
       queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
       queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       toast('저장이 완료되었습니다.', 'success');
-      isLeader && navigate(`/teams/view/${teamId}`);
+      isLeaderOfThisTeam && navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
+  };
+
+  const onMemberAdd = (newMemberName: string) => {
+    setTeamMembers((prevMembers) => [...prevMembers, { teamMemberId: Date.now(), teamMemberName: newMemberName }]);
+  };
+
+  const onMemberRemove = (index: number) => {
+    setTeamMembers((prevMembers) => prevMembers.filter((_, idx) => idx !== index));
   };
 
   return (
     <div className="px-5">
       <div className="text-title font-bold">프로젝트 생성/수정</div>
       <div className="h-10" />
+      {isAdmin && (
+        <AdminInputSection
+          contestId={contestId}
+          setContestId={setContestId}
+          projectName={projectName}
+          setProjectName={setProjectName}
+          teamName={teamName}
+          setTeamName={setTeamName}
+          teamMembers={teamMembers}
+          onMemberAdd={onMemberAdd}
+          onMemberRemove={onMemberRemove}
+        />
+      )}
 
-      <IntroSection
-        projectName={projectData.projectName}
-        teamName={projectData.teamName}
-        leaderName={projectData.leaderName}
-        participants={projectData.participants}
-      />
+      {isLeaderOfThisTeam && (
+        <IntroSection
+          projectName={projectName}
+          teamName={teamName}
+          leaderName={leaderName}
+          teamMembers={teamMembers} // WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의
+        />
+      )}
 
       <div className="h-15" />
 

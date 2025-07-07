@@ -1,10 +1,20 @@
-import { useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import './index.css';
-import AppRoutes from '@route/AppRoutes';
+import { useLocation } from 'react-router-dom';
+import { Toaster } from '@components/Toaster';
 
-const App = () => {
-  const routes = AppRoutes();
-  return <>{routes}</>;
+const App = ({ children }: { children?: ReactNode }) => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [pathname]);
+
+  return (
+    <>
+      {children}
+      <Toaster />
+    </>
+  );
 };
 
 export default App;

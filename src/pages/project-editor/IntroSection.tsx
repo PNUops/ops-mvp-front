@@ -1,13 +1,15 @@
 import React from 'react';
 
+import { TeamMember } from 'types/DTO/projectViewerDto';
+
 interface IntroSectionProps {
   projectName: string;
   teamName: string;
   leaderName: string;
-  participants: string[];
+  teamMembers: TeamMember[];
 }
 
-const IntroSection = ({ projectName, teamName, leaderName, participants }: IntroSectionProps) => {
+const IntroSection = ({ projectName, teamName, leaderName, teamMembers }: IntroSectionProps) => {
   return (
     <div className="flex gap-10 truncate text-sm">
       <div className="text-midGray flex w-25 flex-col gap-3 pl-3">
@@ -21,8 +23,8 @@ const IntroSection = ({ projectName, teamName, leaderName, participants }: Intro
         <span>{teamName}</span>
         <span>{leaderName}</span>
         <div className="flex flex-wrap gap-x-3">
-          {participants.map((name, index) => (
-            <span key={index}>{name}</span>
+          {teamMembers.map((member, index) => (
+            <span key={index}>{member.teamMemberName}</span>
           ))}
         </div>
       </div>

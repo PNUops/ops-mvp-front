@@ -30,12 +30,7 @@ const NoticeDetail = () => {
         <AiOutlineNotification className="mr-4" />
         <span className="font-semibold text-base flex-1">{notice.title}</span>
       </div>
-      <div className="text-right text-midGray mb-6">
-        {new Date(notice.updatedAt).toLocaleString('ko-KR', {
-          year: 'numeric', month: '2-digit', day: '2-digit',
-          hour: '2-digit', minute: '2-digit', weekday: 'long'
-        })}
-      </div>
+      <div className="text-right text-midGray mb-6">{notice.updatedAt}</div>
       <div className="bg-subGreen rounded p-6 leading-relaxed whitespace-pre-line">
         {notice.description}
       </div>

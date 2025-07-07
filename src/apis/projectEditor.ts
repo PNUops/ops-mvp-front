@@ -1,5 +1,5 @@
 import apiClient from './apiClient';
-import { ProjectDetailsEditDto, PreviewDeleteRequestDto } from 'types/DTO/projectEditorDto';
+import { ProjectDetailsEditDto, PreviewDeleteRequestDto, TeamMemberCreateRequestDto } from 'types/DTO/projectEditorDto';
 
 export const patchProjectDetails = async (teamId: number, body: ProjectDetailsEditDto) => {
   const response = await apiClient.patch(`/teams/${teamId}`, body);
@@ -34,5 +34,15 @@ export const postPreview = async (teamId: number, formData: FormData) => {
 
 export const deletePreview = async (teamId: number, body: PreviewDeleteRequestDto) => {
   const response = await apiClient.delete(`/teams/${teamId}/image`, { data: body });
+  return response.data;
+};
+
+export const postMember = async (teamId: number, teamMemberName: string) => {
+  const response = await apiClient.post(`/teams/${teamId}/members`, teamMemberName);
+  return response.data;
+};
+
+export const deleteMember = async (teamId: number, memberId: number) => {
+  const response = await apiClient.delete(`/teams/${teamId}/members/${memberId}`);
   return response.data;
 };

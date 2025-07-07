@@ -3,17 +3,6 @@ import { SubmissionStatusResponseDto } from '../types/DTO/teams/submissionStatus
 import apiClient from './apiClient';
 import { mockTeamsResponse } from 'mocks/data/teams';
 
-
-export const getCurrentContestTeams = async (): Promise<TeamListItemResponseDto[]> => {
-    const { data } = await apiClient.get('/contests/current/teams');
-    return data;
-};
-
-export const getTeamsByContestId = async (contestId: number): Promise<TeamListItemResponseDto[]> => {
-    const { data } = await apiClient.get(`/contests/${contestId}/teams`);
-    return data;
-};
-
 export const getAllTeams = async (contestId: number): Promise<TeamListItemResponseDto[]> => {
   const res = await apiClient.get(`/contests/${contestId}/teams`);
   return res.data;

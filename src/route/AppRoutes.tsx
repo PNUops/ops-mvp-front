@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom';
+import { createBrowserRouter, useRoutes } from 'react-router-dom';
 
 import MainLayout from '@layout/MainLayout';
 
@@ -9,24 +9,31 @@ import SignInPage from '@pages/signin/SignInPage';
 import SignUpPage from '@pages/signup/SignUpPage';
 import AdminPage from '@pages/admin/AdminPage';
 import FindPage from '@pages/find/FindPage';
-import Notice from '@pages/main/Notice';
+import GoogleOAuthCallback from '@pages/signin/SocialSignIn/GoogleOAuthCallback';
 import NoticeDetail from '@pages/notice/NoticeDetail';
+import ContestPage from '@pages/contest/ContestPage';
+import AdminTabs from './AdminTabs';
 
 const AppRoutes = () =>
-  useRoutes([
+  createBrowserRouter([
     {
       path: '/',
       element: <MainLayout />,
       children: [
         { index: true, element: <MainPage /> },
-        { path: 'contest/:contestId', element: <MainPage /> },
+        { path: 'contest/:contestId', element: <ContestPage /> },
         { path: 'signin', element: <SignInPage /> },
         { path: 'signup', element: <SignUpPage /> },
         { path: 'teams/view/:teamId', element: <ProjectViewerPage /> },
         { path: 'teams/edit/:teamId', element: <ProjectEditorPage /> },
-        { path: 'admin/:tab', element: <AdminPage /> },
+        {
+          path: 'admin',
+          element: <AdminPage />,
+          children: AdminTabs,
+        },
         { path: 'find', element: <FindPage /> },
-        { path: 'notices/:noticeId', element: <NoticeDetail />}
+        { path: 'oauth/google/callback', element: <GoogleOAuthCallback /> },
+        { path: 'notices/:noticeId', element: <NoticeDetail /> },
       ],
     },
   ]);
