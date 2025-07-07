@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from 'hooks/useAuth';
 import { useToast } from 'hooks/useToast';
-import { CommentFormRequestDto, CommentDto } from 'types/DTO/projectViewerDto';
+import { CommentCreateRequestDto, CommentDto } from 'types/DTO/projectViewerDto';
 import { postCommentForm } from 'apis/projectViewer';
 interface CommentFormSection {
   teamId: number;
@@ -20,7 +20,7 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
 
   const commentMutation = useMutation<void, Error, string, PreviousComments>({
     mutationFn: (comment) => {
-      const requestDto: CommentFormRequestDto = {
+      const requestDto: CommentCreateRequestDto = {
         teamId,
         description: comment,
       };

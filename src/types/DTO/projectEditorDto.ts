@@ -1,4 +1,8 @@
 export interface ProjectDetailsEditDto {
+  contestId: number;
+  teamName: string;
+  projectName: string;
+  leaderName: string;
   overview: string;
   productionPath: string | null;
   githubPath: string;
@@ -7,4 +11,8 @@ export interface ProjectDetailsEditDto {
 
 export interface PreviewDeleteRequestDto {
   imageIds: number[];
+}
+
+export interface TeamMemberCreateRequestDto {
+  teamMemberName: string;
 }
