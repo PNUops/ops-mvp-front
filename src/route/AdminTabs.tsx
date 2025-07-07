@@ -4,6 +4,7 @@ import OngoingContestsTab from '@pages/admin/OngoingContestsTab';
 import ManageNoticeListTab from '@pages/admin/NoticeManageTab/ManageNoticeListTab';
 import NoticeCreateTab from '@pages/admin/NoticeManageTab/NoticeCreateTab';
 import NoticeEditTab from '@pages/admin/NoticeManageTab/NoticeEditTab';
+import ProjectEditorPage from '@pages/project-editor/ProjectEditorPage';
 
 const AdminTabs: RouteObject[] = [
   { index: true, path: 'ongoing', element: <OngoingContestsTab />, handle: { label: '진행 중 대회' } },
@@ -19,7 +20,14 @@ const AdminTabs: RouteObject[] = [
       { path: 'create', element: <NoticeCreateTab /> },
     ],
   },
-  { path: 'contest', element: <ContestAdminTab />, handle: { label: '대회 관리' } },
+  {
+    path: 'contest',
+    handle: { label: '대회 관리' },
+    children: [
+      { index: true, element: <ContestAdminTab /> },
+      { path: 'create/:contestId', element: <ProjectEditorPage /> },
+    ],
+  },
 ];
 
 export default AdminTabs;

@@ -10,6 +10,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import DeleteInfoModal from '@pages/admin/DeleteInfoModal';
 import EditModal from '@pages/admin/EditModal';
 import useContestAdmin from 'hooks/useContestAdmin';
+import { useNavigate } from 'react-router-dom';
 
 type HistoryMenuProps = {
   contestName: string;
@@ -58,6 +59,7 @@ const ContestAdminTab = () => {
     closeEditModal,
     setContestName,
   } = useContestAdmin();
+  const navigate = useNavigate();
 
   return (
     <div className="max-w-container flex flex-col gap-12 px-4 py-8">
@@ -133,7 +135,12 @@ const ContestAdminTab = () => {
         />
 
         <div className="mt-8 flex w-full flex-row-reverse">
-          <Button className="bg-mainBlue h-12 w-[20%] min-w-[130px]">프로젝트 생성하기</Button>
+          <Button
+            className="bg-mainBlue h-12 w-[20%] min-w-[130px]"
+            onClick={() => navigate(`/admin/contest/create/${state.currentContestId}`)}
+          >
+            프로젝트 생성하기
+          </Button>
         </div>
       </section>
     </div>
