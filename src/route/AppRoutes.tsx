@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom';
+import { createBrowserRouter, useRoutes } from 'react-router-dom';
 
 import MainLayout from '@layout/MainLayout';
 
@@ -11,9 +11,10 @@ import AdminPage from '@pages/admin/AdminPage';
 import FindPage from '@pages/find/FindPage';
 import NoticeDetail from '@pages/notice/NoticeDetail';
 import ContestPage from '@pages/contest/ContestPage';
+import AdminTabs from './AdminTabs';
 
 const AppRoutes = () =>
-  useRoutes([
+  createBrowserRouter([
     {
       path: '/',
       element: <MainLayout />,
@@ -24,7 +25,11 @@ const AppRoutes = () =>
         { path: 'signup', element: <SignUpPage /> },
         { path: 'teams/view/:teamId', element: <ProjectViewerPage /> },
         { path: 'teams/edit/:teamId', element: <ProjectEditorPage /> },
-        { path: 'admin/:tab', element: <AdminPage /> },
+        {
+          path: 'admin',
+          element: <AdminPage />,
+          children: AdminTabs,
+        },
         { path: 'find', element: <FindPage /> },
         { path: 'notices/:noticeId', element: <NoticeDetail /> },
       ],
