@@ -41,10 +41,6 @@ const ProjectCreatorPage = () => {
   const [teamName, setTeamName] = useState('');
   const [projectName, setProjectName] = useState('');
   const [leaderName, setLeaderName] = useState('');
-  const [thumbnail, setThumbnail] = useState<string | File | undefined>();
-  const [thumbnailToDelete, setThumbnailToDelete] = useState<boolean>(false);
-  const [previews, setPreviews] = useState<PreviewImage[]>([]);
-  const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [prodUrl, setProdUrl] = useState<string | null>(null);
   const [githubUrl, setGithubUrl] = useState('');
@@ -71,12 +67,10 @@ const ProjectCreatorPage = () => {
       if (isAdmin) {
         if (!projectName) return '프로젝트명이 입력되지 않았어요.';
         if (!teamName) return '팀명이 입력되지 않았어요.';
+        if (!leaderName) return '팀장명이 입력되지 않았어요.';
       }
       if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
       if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
-      // if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
-      // if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
-      // if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
       if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
       if (prodUrl && !isValidProjectUrl(prodUrl)) return '유효한 프로젝트 주소를 입력하세요.';
       if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
@@ -84,9 +78,6 @@ const ProjectCreatorPage = () => {
       return null;
     };
 
-    //       productionPath: 'https://swedu.pusan.ac.kr
-    //       githubPath: 'https://github.com/2025-PNU-SW-Hackathon
-    //       youTubePath: 'https://youtu.be/CYoK_cuG8lU?si=Ql7WWbzy8wgIpawI
     const errorMessage = validateProjectInputs();
     if (errorMessage) {
       toast(errorMessage, 'error');
@@ -105,44 +96,8 @@ const ProjectCreatorPage = () => {
         youTubePath: youtubeUrl,
       });
 
-      // const addedMembers = teamMembers.filter(
-      //   (member) => !projectData.teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
-      // );
-      // const removedMembers = projectData.teamMembers.filter(
-      //   (member) => !teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
-      // );
-
-      // const addMemberPromises = addedMembers.map(async (member) => await postMember(teamId, member.teamMemberName));
-      // const removeMemberPromises = removedMembers.map(
-      //   async (member) => await deleteMember(teamId, member.teamMemberId),
-      // );
-
-      // await Promise.all([...addMemberPromises, ...removeMemberPromises]);
-
-      // if (thumbnailToDelete) {
-      //   await deleteThumbnail(teamId);
-      // }
-      // if (thumbnail instanceof File) {
-      //   const formData = new FormData();
-      //   formData.append('image', thumbnail);
-      //   await postThumbnail(teamId, formData);
-      // }
-
-      // if (previewsToDelete.length > 0) {
-      //   await deletePreview(teamId, { imageIds: previewsToDelete });
-      // }
-      // const newFiles = previews.filter((p) => p.url instanceof File).map((p) => p.url as File);
-      // if (newFiles.length > 0) {
-      //   const formData = new FormData();
-      //   newFiles.forEach((file) => formData.append('images', file));
-      //   await postPreview(teamId, formData);
-      // }
-      // queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] });
-      // queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] });
-      // queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
-      // queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       toast('저장이 완료되었습니다.', 'success');
-      // isLeaderOfThisTeam && navigate(`/teams/view/${teamId}`);
+      // isAdmin && navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
