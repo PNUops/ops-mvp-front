@@ -7,7 +7,7 @@ import Table from '@components/Table';
 import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { IoIosArrowDown } from 'react-icons/io';
-import DeleteInfoModal from '@pages/admin/DeleteInfoModal';
+// import DeleteInfoModal from '@pages/admin/DeleteInfoModal';
 import EditModal from '@pages/admin/EditModal';
 import useContestAdmin from 'hooks/useContestAdmin';
 
@@ -29,7 +29,7 @@ const HistoryMenu = ({ contestName, onContestChange }: HistoryMenuProps) => {
 
       {isOpen && contests && (
         <ul className="border-subGreen absolute z-50 w-fit border-2 bg-white text-base font-normal text-nowrap">
-          {contests.map((contest) => (
+          {contests.map((contest: ContestResponseDto) => (
             <li key={contest.contestId}>
               <button
                 onClick={() => onContestChange(contest.contestName, contest.contestId)}
@@ -53,7 +53,7 @@ const ContestAdminTab = () => {
     handleDeleteContest,
     handleContestChange,
     handleDeleteTeam,
-    closeDeleteModal,
+    // closeDeleteModal,
     openEditModal,
     closeEditModal,
     setContestName,
@@ -61,7 +61,7 @@ const ContestAdminTab = () => {
 
   return (
     <div className="max-w-container flex flex-col gap-12 px-4 py-8">
-      {state.isModalOpen && <DeleteInfoModal closeModal={closeDeleteModal} />}
+      {/* {state.isModalOpen && <DeleteInfoModal closeModal={closeDeleteModal} />} */}
       {state.isEditModalOpen && <EditModal closeModal={closeEditModal} editId={state.editContestId} />}
 
       <section className="mb-8 min-w-[350px]">
