@@ -5,7 +5,11 @@ import { getNotices } from '../../apis/notices';
 import NoticeListSkeleton from '@pages/main/NoticeListSkeleton';
 
 const Notice = () => {
-  const { data: notices, isLoading, isError } = useQuery({
+  const {
+    data: notices,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['notices'],
     queryFn: getNotices,
   });
@@ -19,8 +23,7 @@ const Notice = () => {
       </a>
       {isLoading && <NoticeListSkeleton />}
       {isError && <div>공지사항을 불러올 수 없습니다.</div>}
-      {!isLoading && !isError && notices && (
-      <NoticeList />)}
+      {!isLoading && !isError && notices && <NoticeList notices={notices} />}
     </div>
   );
 };
