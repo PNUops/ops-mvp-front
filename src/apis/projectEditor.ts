@@ -46,3 +46,8 @@ export const deleteMember = async (teamId: number, memberId: number) => {
   const response = await apiClient.delete(`/teams/${teamId}/members/${memberId}`);
   return response.data;
 };
+
+export const createProjectDetails = async (body: ProjectDetailsEditDto) => {
+  const response = await apiClient.post('/teams', body);
+  return response.data;
+};
