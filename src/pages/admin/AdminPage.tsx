@@ -1,12 +1,22 @@
 import { Outlet, Link, useParams, useResolvedPath, useLocation } from 'react-router-dom';
 import AdminTabs from '@route/AdminTabs';
+import useAuth from 'hooks/useAuth';
 
 const AdminPage = () => {
+  const { isAdmin } = useAuth();
   const adminTabs = AdminTabs;
   const { pathname } = useLocation();
 
+  if (!isAdmin) {
+    return (
+      <div className="w-full rounded bg-white p-6 text-center shadow-md">
+        <p className="text-mainRed text-xl">관리자 권한이 없습니다.</p>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <>
       <div className="mb-8 flex gap-4">
         {adminTabs.map((tab) => (
           <Link
@@ -23,7 +33,7 @@ const AdminPage = () => {
       <div className="flex flex-col gap-12 px-4 py-8">
         <Outlet />
       </div>
-    </div>
+    </>
   );
 };
 

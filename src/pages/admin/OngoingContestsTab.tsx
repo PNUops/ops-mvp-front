@@ -8,29 +8,18 @@ import { DashboardTeamResponseDto, TeamLikeResponseDto } from 'types/DTO';
 import useAuth from 'hooks/useAuth';
 
 const OngoingContestsTab = () => {
-  const { isAdmin } = useAuth();
   const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeamResponseDto[]>({
     queryKey: ['dashboard'],
     queryFn: getDashboard,
-    enabled: isAdmin,
     staleTime: 0,
     refetchOnMount: true,
   });
   const { data: rankingData, isLoading: isRankingLoading } = useQuery<TeamLikeResponseDto[]>({
     queryKey: ['ranking'],
     queryFn: getRanking,
-    enabled: isAdmin,
     staleTime: 0,
     refetchOnMount: true,
   });
-
-  if (!isAdmin) {
-    return (
-      <div className="mx-auto w-full rounded bg-white p-6 text-center shadow-md">
-        <p className="text-red-500">관리자 권한이 없습니다.</p>
-      </div>
-    );
-  }
 
   if (isDashboardLoading || isRankingLoading) {
     return <p className="text-center text-gray-400">로딩 중...</p>;
