@@ -20,7 +20,9 @@ const AdminPage = () => {
           </Link>
         ))}
       </div>
-      <Outlet />
+      <div className="flex flex-col gap-12 px-4 py-8">
+        <Outlet />
+      </div>
     </div>
   );
 };

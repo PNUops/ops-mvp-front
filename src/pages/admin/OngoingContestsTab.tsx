@@ -44,11 +44,11 @@ const OngoingContestsTab = () => {
     );
   }
   return (
-    <div className="max-w-container flex flex-col gap-12 px-4 py-8">
+    <>
       <ProjectSubmissionTable submissions={dashboardData} type="project" />
       <ProjectSubmissionTable submissions={rankingData} type="vote" />
       <VoteRate />
-    </div>
+    </>
   );
 };
 
