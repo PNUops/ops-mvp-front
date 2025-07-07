@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { useUserStore } from 'stores/useUserStore';
 import useAuth from 'hooks/useAuth';
 import { useTeamId } from 'hooks/useTeamId';
 import { useToast } from 'hooks/useToast';
@@ -29,7 +28,6 @@ import OverviewInput from './OverviewInput';
 import { EditorDetailSkeleton } from './EditorSkeleton';
 
 import AdminInputSection from '@pages/project-editor/AdminInputSection/AdminInputSection';
-import MembersInput from './AdminInputSection/MembersInput';
 
 export interface PreviewImage {
   id?: number;

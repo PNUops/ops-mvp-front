@@ -9,6 +9,7 @@ import SignInPage from '@pages/signin/SignInPage';
 import SignUpPage from '@pages/signup/SignUpPage';
 import AdminPage from '@pages/admin/AdminPage';
 import FindPage from '@pages/find/FindPage';
+import GoogleOAuthCallback from '@pages/signin/SocialSignIn/GoogleOAuthCallback';
 import NoticeDetail from '@pages/notice/NoticeDetail';
 import ContestPage from '@pages/contest/ContestPage';
 import AdminTabs from './AdminTabs';
@@ -31,6 +32,7 @@ const AppRoutes = () =>
           children: AdminTabs,
         },
         { path: 'find', element: <FindPage /> },
+        { path: 'oauth/google/callback', element: <GoogleOAuthCallback /> },
         { path: 'notices/:noticeId', element: <NoticeDetail /> },
       ],
     },
