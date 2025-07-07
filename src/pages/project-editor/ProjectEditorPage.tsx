@@ -253,18 +253,20 @@ const ProjectEditorPage = () => {
         youtubeUrl={youtubeUrl}
         setYoutubeUrl={setYoutubeUrl}
       />
-
-      <div className="h-15" />
-
-      <ImageUploaderSection
-        thumbnail={thumbnail}
-        setThumbnail={setThumbnail}
-        previews={previews}
-        setPreviews={setPreviews}
-        setThumbnailToDelete={setThumbnailToDelete}
-        previewsToDelete={previewsToDelete}
-        setPreviewsToDelete={setPreviewsToDelete}
-      />
+      {isAdmin && (
+        <>
+          <div className="h-15" />
+          <ImageUploaderSection
+            thumbnail={thumbnail}
+            setThumbnail={setThumbnail}
+            previews={previews}
+            setPreviews={setPreviews}
+            setThumbnailToDelete={setThumbnailToDelete}
+            previewsToDelete={previewsToDelete}
+            setPreviewsToDelete={setPreviewsToDelete}
+          />
+        </>
+      )}
 
       <div className="h-15" />
 

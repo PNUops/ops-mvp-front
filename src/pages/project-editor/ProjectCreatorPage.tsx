@@ -187,18 +187,6 @@ const ProjectCreatorPage = () => {
 
       <div className="h-15" />
 
-      <ImageUploaderSection
-        thumbnail={thumbnail}
-        setThumbnail={setThumbnail}
-        previews={previews}
-        setPreviews={setPreviews}
-        setThumbnailToDelete={setThumbnailToDelete}
-        previewsToDelete={previewsToDelete}
-        setPreviewsToDelete={setPreviewsToDelete}
-      />
-
-      <div className="h-15" />
-
       <OverviewInput overview={overview} setOverview={setOverview} />
 
       <div className="h-20" />
