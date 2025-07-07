@@ -1,4 +1,4 @@
-import googleIconUrl from '@assets/google-icon.png';
+import googleIconUrl from '@assets/google-icon.svg';
 
 import { useToast } from 'hooks/useToast';
 
