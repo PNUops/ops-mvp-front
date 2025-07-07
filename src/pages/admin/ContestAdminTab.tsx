@@ -60,7 +60,7 @@ const ContestAdminTab = () => {
   } = useContestAdmin();
 
   return (
-    <div className="max-w-container flex flex-col gap-12 px-4 py-8">
+    <>
       {/* {state.isModalOpen && <DeleteInfoModal closeModal={closeDeleteModal} />} */}
       {state.isEditModalOpen && <EditModal closeModal={closeEditModal} editId={state.editContestId} />}
 
@@ -136,7 +136,7 @@ const ContestAdminTab = () => {
           <Button className="bg-mainBlue h-12 w-[20%] min-w-[130px]">프로젝트 생성하기</Button>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 
