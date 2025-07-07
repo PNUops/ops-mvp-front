@@ -134,7 +134,7 @@ const ProjectEditorPage = () => {
       setLeaderName(projectData.leaderName);
       setTeamMembers(projectData.teamMembers);
       setGithubUrl(projectData.githubPath);
-      setYoutubeUrl(projectData.youtubePath);
+      setYoutubeUrl(projectData.youTubePath);
       setProdUrl(projectData.productionPath);
       setOverview(projectData.overview);
     }
