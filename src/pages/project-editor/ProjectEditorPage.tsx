@@ -5,18 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from 'hooks/useAuth';
 import { useTeamId } from 'hooks/useId';
 import { useToast } from 'hooks/useToast';
+import useProjectData from 'hooks/useProjectData';
+import useImages from 'hooks/useImages';
+import useImagesUpdate from 'hooks/useImagesUpdate';
 
 import { getProjectDetails, getPreviewImages } from 'apis/projectViewer';
-import {
-  getThumbnail,
-  patchProjectDetails,
-  postPreview,
-  postThumbnail,
-  deletePreview,
-  deleteThumbnail,
-  postMember,
-  deleteMember,
-} from 'apis/projectEditor';
+import { getThumbnail, patchProjectDetails, postMember, deleteMember } from 'apis/projectEditor';
 
 import { TeamMember, ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
 
@@ -31,66 +25,63 @@ import AdminInputSection from '@pages/project-editor/AdminInputSection/AdminInpu
 
 export interface PreviewImage {
   id?: number;
-  url: string | File;
+  url: string;
 }
 
 const ProjectEditorPage = () => {
   const { user, isAdmin, isLeader } = useAuth();
   const memberId = user?.id;
   const teamId = useTeamId();
+
   const [contestId, setContestId] = useState<number | null>(null);
   const [teamName, setTeamName] = useState('');
   const [projectName, setProjectName] = useState('');
   const [leaderName, setLeaderName] = useState('');
-  const [thumbnail, setThumbnail] = useState<string | File | undefined>();
-  const [thumbnailToDelete, setThumbnailToDelete] = useState<boolean>(false);
-  const [previews, setPreviews] = useState<PreviewImage[]>([]);
-  const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
+
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [prodUrl, setProdUrl] = useState<string | null>(null);
   const [githubUrl, setGithubUrl] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [overview, setOverview] = useState('');
+
+  const [currentThumbnail, setCurrentThumbnail] = useState<string | null>(null);
+  const [thumbnailToUpload, setThumbnailToUpload] = useState<File | null>(null);
+  const [thumbnailToDelete, setThumbnailToDelete] = useState<boolean>(false);
+
+  const [currentPreviews, setCurrentPreviews] = useState<PreviewImage[]>([]);
+  const [previewImagesToUpload, setPreviewImagesToUpload] = useState<File[]>([]);
+  const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
+
   const toast = useToast();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  if (!teamId) return <div>팀 정보를 불러올 수 없습니다.</div>;
+
+  const { projectData, isProjectDataLoading, isProjectDataError } = useProjectData(teamId);
+
   const {
-    data: projectData,
-    isLoading: isProjectLoading,
-    isError: isProjectError,
-  } = useQuery<ProjectDetailsResponseDto>({
-    queryKey: ['projectEditorInfo', teamId],
-    queryFn: async () => {
-      if (teamId === null) throw new Error('teamId is null');
-      return await getProjectDetails(teamId);
-    },
-    enabled: teamId !== null,
-  });
+    thumbnailImage: fetchedThumbnailUrl,
+    isThumbnailImageLoading,
+    isThumbnailImageError,
+    previewImages: fetchedPreviewData,
+    isPreviewImagesLoading,
+    isPreviewImagesError,
+  } = useImages(teamId, projectData?.previewIds || []);
 
-  const { data: thumbnailUrl } = useQuery({
-    queryKey: ['thumbnail', teamId],
-    queryFn: async () => {
-      if (teamId === null) throw new Error('teamId is null');
-      return await getThumbnail(teamId);
-    },
-    enabled: teamId !== null,
-  });
-
-  const { data: previewData } = useQuery({
-    queryKey: ['previewImages', teamId, projectData?.previewIds],
-    queryFn: async () => {
-      if (teamId === null || !projectData?.previewIds) throw new Error('previewIds 없음');
-      return await getPreviewImages(teamId, projectData.previewIds);
-    },
-    enabled: teamId !== null && !!projectData?.previewIds?.length,
-  });
+  const { updateImages } = useImagesUpdate(
+    teamId,
+    thumbnailToUpload,
+    thumbnailToDelete,
+    previewImagesToUpload,
+    previewsToDelete,
+  );
 
   useEffect(() => {
     if (projectData) {
       setContestId(projectData.contestId);
-      setTeamName(projectData.teamName);
       setProjectName(projectData.projectName);
+      setTeamName(projectData.teamName);
       setLeaderName(projectData.leaderName);
       setTeamMembers(projectData.teamMembers);
       setGithubUrl(projectData.githubPath);
@@ -101,25 +92,25 @@ const ProjectEditorPage = () => {
   }, [projectData]);
 
   useEffect(() => {
-    if (thumbnailUrl && typeof thumbnailUrl === 'string') {
-      setThumbnail(thumbnailUrl);
+    if (fetchedThumbnailUrl) {
+      setCurrentThumbnail(fetchedThumbnailUrl);
     }
-  }, [thumbnailUrl]);
+  }, [fetchedThumbnailUrl]);
 
   useEffect(() => {
-    if (previewData?.imageUrls && projectData?.previewIds) {
-      const paired = previewData.imageUrls.map((url, index) => ({
+    if (fetchedPreviewData?.imageUrls && projectData?.previewIds) {
+      const pairedPreviews: PreviewImage[] = fetchedPreviewData.imageUrls.map((url, index) => ({
         id: projectData.previewIds?.[index],
         url,
       }));
-      setPreviews(paired);
+      setCurrentPreviews(pairedPreviews);
     }
-  }, [previewData, projectData]);
+  }, [fetchedPreviewData, projectData]);
 
-  if (!teamId) return <div>팀 정보를 불러올 수 없습니다.</div>;
-
-  if (isProjectLoading) return <EditorDetailSkeleton />;
-  if (isProjectError || !projectData) return <div>데이터를 가져오지 못했습니다.</div>;
+  if (isProjectDataLoading || isThumbnailImageLoading || isPreviewImagesLoading) return <EditorDetailSkeleton />;
+  if (isProjectDataError || !projectData || isThumbnailImageError || isPreviewImagesError) {
+    return <div>데이터를 불러오지 못했습니다.</div>;
+  }
 
   const isLeaderOfThisTeam = isLeader && memberId == projectData.leaderId;
   if (!isLeaderOfThisTeam && !isAdmin) {
@@ -128,15 +119,16 @@ const ProjectEditorPage = () => {
 
   const handleSave = async () => {
     const contestIdToSubmit = contestId;
+
     const validateProjectInputs = () => {
       if (isAdmin) {
         if (!projectName) return '프로젝트명이 입력되지 않았어요.';
         if (!teamName) return '팀명이 입력되지 않았어요.';
       }
       if (isLeaderOfThisTeam) {
-        if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
-        if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
-        if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
+        if (!currentThumbnail && !currentPreviews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
+        if (!currentThumbnail) return '썸네일이 업로드 되지 않았어요.';
+        if (!currentPreviews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
       }
       if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
       if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
@@ -182,28 +174,6 @@ const ProjectEditorPage = () => {
 
       await Promise.all([...addMemberPromises, ...removeMemberPromises]);
 
-      if (thumbnailToDelete) {
-        await deleteThumbnail(teamId);
-      }
-      if (thumbnail instanceof File) {
-        const formData = new FormData();
-        formData.append('image', thumbnail);
-        await postThumbnail(teamId, formData);
-      }
-
-      if (previewsToDelete.length > 0) {
-        await deletePreview(teamId, { imageIds: previewsToDelete });
-      }
-      const newFiles = previews.filter((p) => p.url instanceof File).map((p) => p.url as File);
-      if (newFiles.length > 0) {
-        const formData = new FormData();
-        newFiles.forEach((file) => formData.append('images', file));
-        await postPreview(teamId, formData);
-      }
-      queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] });
-      queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] });
-      queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
-      queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       toast('저장이 완료되었습니다.', 'success');
       (isLeaderOfThisTeam || isAdmin) && navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
@@ -261,15 +231,15 @@ const ProjectEditorPage = () => {
       {isLeaderOfThisTeam && (
         <>
           <div className="h-15" />
-          <ImageUploaderSection
-            thumbnail={thumbnail}
-            setThumbnail={setThumbnail}
+          {/* <ImageUploaderSection
+            thumbnail={currentThumbnail}
+            setCurrentThumbnail={setCurrentThumbnail}
             previews={previews}
             setPreviews={setPreviews}
             setThumbnailToDelete={setThumbnailToDelete}
             previewsToDelete={previewsToDelete}
             setPreviewsToDelete={setPreviewsToDelete}
-          />
+          /> */}
         </>
       )}
 
