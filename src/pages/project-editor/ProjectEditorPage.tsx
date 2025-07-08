@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import useAuth from 'hooks/useAuth';
-import { useTeamId } from 'hooks/useTeamId';
+import { useTeamId } from 'hooks/useId';
 import { useToast } from 'hooks/useToast';
 
 import { getProjectDetails, getPreviewImages } from 'apis/projectViewer';
@@ -133,11 +133,14 @@ const ProjectEditorPage = () => {
         if (!projectName) return '프로젝트명이 입력되지 않았어요.';
         if (!teamName) return '팀명이 입력되지 않았어요.';
       }
+      if (isLeaderOfThisTeam) {
+        if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
+        if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
+        if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
+      }
       if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
       if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
-      if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
-      if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
-      if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
+
       if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
       if (prodUrl && !isValidProjectUrl(prodUrl)) return '유효한 프로젝트 주소를 입력하세요.';
       if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
@@ -200,7 +203,7 @@ const ProjectEditorPage = () => {
       queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
       queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       toast('저장이 완료되었습니다.', 'success');
-      isLeaderOfThisTeam && navigate(`/teams/view/${teamId}`);
+      (isLeaderOfThisTeam || isAdmin) && navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
@@ -226,6 +229,8 @@ const ProjectEditorPage = () => {
           setProjectName={setProjectName}
           teamName={teamName}
           setTeamName={setTeamName}
+          leaderName={leaderName}
+          setLeaderName={setLeaderName}
           teamMembers={teamMembers}
           onMemberAdd={onMemberAdd}
           onMemberRemove={onMemberRemove}
@@ -251,18 +256,20 @@ const ProjectEditorPage = () => {
         youtubeUrl={youtubeUrl}
         setYoutubeUrl={setYoutubeUrl}
       />
-
-      <div className="h-15" />
-
-      <ImageUploaderSection
-        thumbnail={thumbnail}
-        setThumbnail={setThumbnail}
-        previews={previews}
-        setPreviews={setPreviews}
-        setThumbnailToDelete={setThumbnailToDelete}
-        previewsToDelete={previewsToDelete}
-        setPreviewsToDelete={setPreviewsToDelete}
-      />
+      {isLeaderOfThisTeam && (
+        <>
+          <div className="h-15" />
+          <ImageUploaderSection
+            thumbnail={thumbnail}
+            setThumbnail={setThumbnail}
+            previews={previews}
+            setPreviews={setPreviews}
+            setThumbnailToDelete={setThumbnailToDelete}
+            previewsToDelete={previewsToDelete}
+            setPreviewsToDelete={setPreviewsToDelete}
+          />
+        </>
+      )}
 
       <div className="h-15" />
 

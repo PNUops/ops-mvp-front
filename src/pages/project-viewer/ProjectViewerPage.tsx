@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useTeamId } from 'hooks/useTeamId';
+import { useTeamId } from 'hooks/useId';
 import { useUserStore } from 'stores/useUserStore';
 import { getProjectDetails } from 'apis/projectViewer';
 
@@ -58,6 +58,7 @@ const ProjectViewerPage = () => {
   return (
     <div className="px-5">
       <IntroSection
+        contestId={data.contestId}
         teamId={data.teamId}
         leaderId={data.leaderId}
         projectName={data.projectName}

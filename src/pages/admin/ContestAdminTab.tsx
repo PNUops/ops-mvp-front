@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useToast } from 'hooks/useToast';
 import { getAllContests } from 'apis/contests';
+import { createProjectDetails } from 'apis/projectEditor';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import Table from '@components/Table';
@@ -53,11 +56,14 @@ const ContestAdminTab = () => {
     handleDeleteContest,
     handleContestChange,
     handleDeleteTeam,
+    handleCreateTeam,
     // closeDeleteModal,
     openEditModal,
     closeEditModal,
     setContestName,
   } = useContestAdmin();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   return (
     <>
@@ -124,16 +130,37 @@ const ContestAdminTab = () => {
           rows={state.contestTeams}
           actions={(row) => (
             <>
-              <Button className="bg-mainRed h-[35px] w-full min-w-[70px]" onClick={() => handleDeleteTeam(row.teamId)}>
+              <Button
+                className="bg-mainRed h-[35px] w-full min-w-[70px]"
+                onClick={() => {
+                  if (state.currentContestId == 1)
+                    toast('현재 진행 중인 대회의 프로젝트를 삭제할 수 없습니다.', 'error');
+                  state.currentContestId !== 1 && handleDeleteTeam(row.teamId);
+                }}
+              >
                 삭제하기
               </Button>
-              <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]">수정하기</Button>
+              <Button
+                onClick={() => {
+                  if (state.currentContestId == 1)
+                    toast('현재 진행 중인 대회의 프로젝트를 수정할 수 없습니다.', 'info');
+                  state.currentContestId !== 1 && navigate(`/teams/edit/${row.teamId}`);
+                }}
+                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
+              >
+                수정하기
+              </Button>
             </>
           )}
         />
 
         <div className="mt-8 flex w-full flex-row-reverse">
-          <Button className="bg-mainBlue h-12 w-[20%] min-w-[130px]">프로젝트 생성하기</Button>
+          <Button
+            onClick={() => handleCreateTeam(state.currentContestId)}
+            className="bg-mainBlue h-12 w-[20%] min-w-[130px]"
+          >
+            프로젝트 생성하기
+          </Button>
         </div>
       </section>
     </>

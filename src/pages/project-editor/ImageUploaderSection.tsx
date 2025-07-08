@@ -148,6 +148,13 @@ const ImageUploaderSection = ({
               >
                 {img.url === 'ERROR' ? (
                   <MdBrokenImage size={30} className="text-red-300" />
+                ) : img.url === 'ERROR_409' ? (
+                  <div className="text-lightGray border-lightGray flex h-full w-full flex-col items-center justify-center gap-5 border">
+                    <MdBrokenImage size={30} className="text-red-300" />
+                    <span className="text-xs">
+                      서버에서 이미지 변환 중입니다.<br></br>나중에 시도해 주세요.
+                    </span>
+                  </div>
                 ) : (
                   <img
                     src={getImageSrc(img.url)}

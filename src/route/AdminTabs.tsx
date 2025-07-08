@@ -19,7 +19,11 @@ const AdminTabs: RouteObject[] = [
       { path: 'create', element: <NoticeCreateTab /> },
     ],
   },
-  { path: 'contest', element: <ContestAdminTab />, handle: { label: '대회 관리' } },
+  {
+    path: 'contest',
+    handle: { label: '대회 관리' },
+    children: [{ index: true, element: <ContestAdminTab /> }],
+  },
 ];
 
 export default AdminTabs;

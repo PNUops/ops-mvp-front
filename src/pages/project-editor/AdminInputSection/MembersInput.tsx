@@ -41,7 +41,7 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
   }, [teamMembers]);
 
   return (
-    <div className="grid w-full grid-cols-1 gap-3 text-sm md:grid-cols-2">
+    <div className="grid w-full grid-cols-1 gap-3 text-sm lg:grid-cols-2">
       {Array.from({ length: MAX_MEMBERS }).map((_, idx) => (
         <div
           key={idx}
