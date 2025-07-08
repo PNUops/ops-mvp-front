@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useToast } from 'hooks/useToast';
 import { getAllContests } from 'apis/contests';
+import { createProjectDetails } from 'apis/projectEditor';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import Table from '@components/Table';
@@ -54,12 +56,14 @@ const ContestAdminTab = () => {
     handleDeleteContest,
     handleContestChange,
     handleDeleteTeam,
+    handleCreateTeam,
     // closeDeleteModal,
     openEditModal,
     closeEditModal,
     setContestName,
   } = useContestAdmin();
   const navigate = useNavigate();
+  const toast = useToast();
 
   return (
     <>
@@ -141,7 +145,8 @@ const ContestAdminTab = () => {
 
         <div className="mt-8 flex w-full flex-row-reverse">
           <Button
-            onClick={() => navigate(`/admin/contest/create/${state.currentContestId}`)}
+            // onClick={() => navigate(`/admin/contest/create/${state.currentContestId}`)}
+            onClick={() => handleCreateTeam(state.currentContestId)}
             className="bg-mainBlue h-12 w-[20%] min-w-[130px]"
           >
             프로젝트 생성하기

@@ -62,42 +62,54 @@ const ProjectCreatorPage = () => {
     }
   }, [contestIdFromParams]);
 
-  const handleSave = async () => {
-    const validateProjectInputs = () => {
-      if (isAdmin) {
-        if (!projectName) return '프로젝트명이 입력되지 않았어요.';
-        if (!teamName) return '팀명이 입력되지 않았어요.';
-        if (!leaderName) return '팀장명이 입력되지 않았어요.';
-      }
-      if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
-      if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
-      if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
-      if (prodUrl && !isValidProjectUrl(prodUrl)) return '유효한 프로젝트 주소를 입력하세요.';
-      if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
-      if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
-      return null;
-    };
+  if (!contestId) return <div>생성할 프로젝트 소속을 찾을 수 없습니다.</div>;
 
-    const errorMessage = validateProjectInputs();
-    if (errorMessage) {
-      toast(errorMessage, 'error');
-      return;
-    }
+  const handleSave = async () => {
+    // const validateProjectInputs = () => {
+    //   if (isAdmin) {
+    //     if (!projectName) return '프로젝트명이 입력되지 않았어요.';
+    //     if (!teamName) return '팀명이 입력되지 않았어요.';
+    //     if (!leaderName) return '팀장명이 입력되지 않았어요.';
+    //   }
+    //   if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
+    //   if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
+    //   if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
+    //   if (prodUrl && !isValidProjectUrl(prodUrl)) return '유효한 프로젝트 주소를 입력하세요.';
+    //   if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
+    //   if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
+    //   return null;
+    // };
+
+    // const errorMessage = validateProjectInputs();
+    // if (errorMessage) {
+    //   toast(errorMessage, 'error');
+    //   return;
+    // }
 
     try {
-      await createProjectDetails({
-        contestId: contestId ?? 0,
-        teamName: teamName,
-        projectName: projectName,
-        leaderName: leaderName,
-        overview,
-        productionPath: prodUrl,
-        githubPath: githubUrl,
-        youTubePath: youtubeUrl,
+      // await createProjectDetails({
+      //   contestId: contestId,
+      //   teamName: teamName,
+      //   projectName: projectName,
+      //   leaderName: leaderName,
+      //   overview,
+      //   productionPath: prodUrl,
+      //   githubPath: githubUrl,
+      //   youTubePath: youtubeUrl,
+      // });
+      const response = await createProjectDetails({
+        contestId: contestId,
+        teamName: '팀 이름',
+        projectName: '프로젝트 이름',
+        leaderName: '팀장 이름',
+        overview: '프로젝트 소개글',
+        productionPath: '',
+        githubPath: 'https://github.com/2025-PNU-SW-Hackathon',
+        youTubePath: 'https://youtu.be/CYoK_cuG8lU',
       });
-
+      const createdTeamId = response.teamId;
       toast('저장이 완료되었습니다.', 'success');
-      // isAdmin && navigate(`/teams/view/${teamId}`);
+      isAdmin && navigate(`/teams/edit/${createdTeamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
