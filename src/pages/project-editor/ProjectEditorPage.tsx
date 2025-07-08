@@ -173,7 +173,9 @@ const ProjectEditorPage = () => {
         (member) => !teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
       );
 
-      const addMemberPromises = addedMembers.map(async (member) => await postMember(teamId, member.teamMemberName));
+      const addMemberPromises = addedMembers.map(
+        async (member) => await postMember(teamId, { teamMemberName: member.teamMemberName }),
+      );
       const removeMemberPromises = removedMembers.map(
         async (member) => await deleteMember(teamId, member.teamMemberId),
       );
