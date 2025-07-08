@@ -44,8 +44,8 @@ export const deletePreview = async (teamId: number, body: PreviewDeleteRequestDt
   return response.data;
 };
 
-export const postMember = async (teamId: number, teamMemberName: string) => {
-  const response = await apiClient.post(`/teams/${teamId}/members`, teamMemberName);
+export const postMember = async (teamId: number, body: TeamMemberCreateRequestDto) => {
+  const response = await apiClient.post(`/teams/${teamId}/members`, body);
   return response.data;
 };
 
