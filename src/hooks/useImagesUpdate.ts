@@ -65,11 +65,11 @@ const useImagesUpdate = (
   const updateImages = async () => {
     try {
       if (isThumbnailDeleted) {
-        await deleteThumbnailMutate(teamId);
+        deleteThumbnailMutate(teamId);
       }
 
       if (previewImageIdsToDelete.length > 0) {
-        await deletePreviewsMutate({ teamId, previewImageIdsToDelete });
+        deletePreviewsMutate({ teamId, previewImageIdsToDelete });
       }
 
       if (thumbnailImageToUpload) {
@@ -79,7 +79,7 @@ const useImagesUpdate = (
           return;
         }
         const thumbnailFormData = createImageFormData(thumbnailImageToUpload);
-        await uploadThumbnailMutate({ teamId, thumbnailImageToUpload: thumbnailFormData });
+        uploadThumbnailMutate({ teamId, thumbnailImageToUpload: thumbnailFormData });
       }
 
       if (previewImagesToUpload.length > 0) {
@@ -89,7 +89,7 @@ const useImagesUpdate = (
           return;
         }
         const previewsFormData = createImageFormData(previewImagesToUpload);
-        await uploadPreviewsMutate({ teamId, previewImagesToUpload: previewsFormData });
+        uploadPreviewsMutate({ teamId, previewImagesToUpload: previewsFormData });
       }
     } catch (error) {
       toast('이미지 업데이트 중 알 수 없는 오류가 발생했어요', 'error');
