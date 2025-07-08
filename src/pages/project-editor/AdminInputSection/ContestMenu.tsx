@@ -51,10 +51,12 @@ const ContestMenu = ({ value, onChange }: ContestMenuProps) => {
         onClick={() => {
           if (selectedContest?.contestId == 1) {
             toast('현재 진행 중인 대회의 프로젝트의 소속을 변경할 수 없습니다.', 'info');
+          } else {
+            toast('프로젝트 소속 대회를 변경할 수 없습니다.', 'info');
           }
-          if (selectedContest?.contestId !== 1) {
-            setIsOpen((prev) => !prev);
-          }
+          // if (selectedContest?.contestId !== 1) {
+          //   setIsOpen((prev) => !prev);
+          // }
         }}
       >
         <span className={selectedContest ? '' : 'text-midGray'}>
