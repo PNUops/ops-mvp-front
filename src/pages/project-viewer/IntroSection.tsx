@@ -9,6 +9,7 @@ import { RiLink } from 'react-icons/ri';
 import { FiExternalLink } from 'react-icons/fi';
 
 interface IntroSectionProps {
+  contestId: number;
   teamId: number;
   leaderId: number;
   projectName: string;
@@ -51,6 +52,7 @@ const UrlButton = ({ url }: { url: string }) => {
 };
 
 const IntroSection = ({
+  contestId,
   teamId,
   leaderId,
   projectName,
@@ -59,8 +61,9 @@ const IntroSection = ({
   githubUrl,
   youtubeUrl,
 }: IntroSectionProps) => {
-  const { isLeader } = useAuth();
+  const { isLeader, isAdmin } = useAuth();
   const memberId = useUserStore((state) => state.user?.id);
+  const isLeaderOfThisTeam = isLeader && memberId == leaderId;
   const navigate = useNavigate();
 
   return (
@@ -70,7 +73,7 @@ const IntroSection = ({
           <div className="text-title min-w-0 leading-none font-bold">{projectName}</div>
           <div className="text-smbold font-bold text-[#4B5563]">{teamName}</div>
         </div>
-        {isLeader && memberId === leaderId && (
+        {(isLeaderOfThisTeam || (isAdmin && contestId !== 1)) && (
           <div className="flex pt-3">
             <button
               onClick={() => navigate(`/teams/edit/${teamId}`)}

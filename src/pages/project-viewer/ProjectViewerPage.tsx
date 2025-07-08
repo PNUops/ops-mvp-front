@@ -58,6 +58,7 @@ const ProjectViewerPage = () => {
   return (
     <div className="px-5">
       <IntroSection
+        contestId={data.contestId}
         teamId={data.teamId}
         leaderId={data.leaderId}
         projectName={data.projectName}
