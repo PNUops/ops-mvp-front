@@ -16,7 +16,7 @@ export interface ProjectDetailsResponseDto {
   previewIds: number[];
   productionPath: string | null;
   githubPath: string;
-  youtubePath: string;
+  youTubePath: string;
   isLiked: boolean;
 }
 
