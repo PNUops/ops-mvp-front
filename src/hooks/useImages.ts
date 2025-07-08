@@ -22,10 +22,10 @@ const useImages = (teamId: number, previewImageIds: number[]) => {
     isLoading: isPreviewImagesLoading,
     isError: isPreviewImagesError,
   } = useQuery({
-    queryKey: ['previewImages', teamId, previewImageIds],
+    queryKey: ['previewImages', teamId],
     queryFn: async () => {
       if (teamId === null || !previewImageIds) throw new Error('previewIds 없음');
-      return await getPreviewImages(teamId, previewImageIds);
+      return await getPreviewImages(teamId, previewImageIds); // TODO: 개별 이미지 요청에 대해 처리 가능하도록
     },
     enabled: teamId !== null && !!previewImageIds.length,
   });
