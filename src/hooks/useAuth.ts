@@ -5,7 +5,7 @@ import { getUserFromToken } from 'utils/token';
 
 const useAuth = () => {
   const { user, setUser } = useUserStore();
-  const { token, setToken, clearToken, initToken } = useTokenStore();
+  const { token, setToken, clearToken } = useTokenStore();
 
   const isSignedIn = !!user && !!token;
   const isLeader = isSignedIn && user?.roles?.includes('ROLE_팀장');
