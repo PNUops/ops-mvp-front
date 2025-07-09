@@ -16,3 +16,8 @@ export interface PreviewDeleteRequestDto {
 export interface TeamMemberCreateRequestDto {
   teamMemberName: string;
 }
+
+export interface PreviewImage {
+  id?: number;
+  url: string;
+}

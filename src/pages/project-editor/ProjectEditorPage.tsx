@@ -14,7 +14,7 @@ import { getThumbnail, patchProjectDetails, postMember, deleteMember } from 'api
 
 import { TeamMember, ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
 
-import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from './urlValidators';
+import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from 'utils/urls';
 import IntroSection from './IntroSection';
 import UrlInput from './UrlInputSection';
 import ImageUploaderSection from './ImageUploaderSection';
@@ -69,13 +69,13 @@ const ProjectEditorPage = () => {
     isPreviewImagesError,
   } = useImages(teamId, projectData?.previewIds || []);
 
-  const { updateImages } = useImagesUpdate(
-    teamId,
-    thumbnailToUpload,
-    thumbnailToDelete,
-    previewImagesToUpload,
-    previewsToDelete,
-  );
+  // const { updateImages } = useImagesUpdate(
+  //   teamId,
+  //   thumbnailToUpload,
+  //   thumbnailToDelete,
+  //   previewImagesToUpload,
+  //   previewsToDelete,
+  // );
 
   useEffect(() => {
     if (projectData) {
@@ -91,21 +91,21 @@ const ProjectEditorPage = () => {
     }
   }, [projectData]);
 
-  useEffect(() => {
-    if (fetchedThumbnailUrl) {
-      setCurrentThumbnail(fetchedThumbnailUrl);
-    }
-  }, [fetchedThumbnailUrl]);
+  // useEffect(() => {
+  //   if (fetchedThumbnailUrl) {
+  //     setCurrentThumbnail(fetchedThumbnailUrl);
+  //   }
+  // }, [fetchedThumbnailUrl]);
 
-  useEffect(() => {
-    if (fetchedPreviewData?.imageUrls && projectData?.previewIds) {
-      const pairedPreviews: PreviewImage[] = fetchedPreviewData.imageUrls.map((url, index) => ({
-        id: projectData.previewIds?.[index],
-        url,
-      }));
-      setCurrentPreviews(pairedPreviews);
-    }
-  }, [fetchedPreviewData, projectData]);
+  // useEffect(() => {
+  //   if (fetchedPreviewData?.imageUrls && projectData?.previewIds) {
+  //     const pairedPreviews: PreviewImage[] = fetchedPreviewData.imageUrls.map((url, index) => ({
+  //       id: projectData.previewIds?.[index],
+  //       url,
+  //     }));
+  //     setCurrentPreviews(pairedPreviews);
+  //   }
+  // }, [fetchedPreviewData, projectData]);
 
   if (isProjectDataLoading || isThumbnailImageLoading || isPreviewImagesLoading) return <EditorDetailSkeleton />;
   if (isProjectDataError || !projectData || isThumbnailImageError || isPreviewImagesError) {

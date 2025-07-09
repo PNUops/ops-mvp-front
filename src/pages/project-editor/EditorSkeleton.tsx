@@ -61,3 +61,17 @@ export const EditorMenuSkeleton = () => {
     </div>
   );
 };
+
+export const ImageUploaderSectionSkeleton = () => (
+  <div className="flex w-full flex-1 animate-pulse flex-col gap-3 xl:flex-row">
+    <div className="border-midGray flex flex-1 flex-col items-center justify-center gap-2 rounded border bg-gray-200 p-6 text-center sm:gap-5">
+      <div className="mb-2 h-6 w-32 rounded bg-gray-300"></div>
+      <div className="h-4 w-20 rounded bg-gray-300"></div>
+    </div>
+    <div className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-2">
+      {[...Array(6)].map((_, i) => (
+        <div key={i} className="border-lightGray aspect-[3/2] w-full rounded border bg-gray-200" />
+      ))}
+    </div>
+  </div>
+);

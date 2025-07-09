@@ -9,9 +9,20 @@ const useDeleteThumbnail = () => {
   const [queryClient, toast] = [useQueryClient(), useToast()];
 
   return useMutation({
-    mutationFn: (teamId: number) => deleteThumbnail(teamId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['thumbnailImage'] }),
-    onError: () => toast('썸네일 삭제에 실패했어요.', 'error'),
+    mutationFn: ({ teamId }: { teamId: number }) => deleteThumbnail(teamId),
+    onSuccess: (_, variables) => queryClient.invalidateQueries({ queryKey: ['thumbnailImage', variables.teamId] }),
+    onError: (error: any, variables) => {
+      let errorMessage = '알 수 없는 오류로 썸네일 이미지 삭제에 실패했어요';
+
+      if (error && error.response && error.response.status) {
+        errorMessage = error.response.data?.message;
+      } else if (error && error.message && error.message.includes('Network Error')) {
+        errorMessage = '네트워크 연결 상태를 확인해주세요.';
+      }
+
+      toast(errorMessage, 'error');
+      console.error(`썸네일 이미지 삭제 실패 (Team ID: ${variables.teamId}):`, error);
+    },
   });
 };
 
@@ -21,8 +32,19 @@ const useUploadThumbnail = () => {
   return useMutation({
     mutationFn: ({ teamId, thumbnailImageToUpload }: { teamId: number; thumbnailImageToUpload: FormData }) =>
       postThumbnail(teamId, thumbnailImageToUpload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['thumbnailImage'] }),
-    onError: () => toast('썸네일 업로드에 실패했어요.', 'error'),
+    onSuccess: (_, variables) => queryClient.invalidateQueries({ queryKey: ['thumbnailImage', variables.teamId] }),
+    onError: (error: any, variables) => {
+      let errorMessage = '알 수 없는 오류로 썸네일 이미지 업로드에 실패했어요';
+
+      if (error && error.response && error.response.status) {
+        errorMessage = error.response.data?.message;
+      } else if (error && error.message && error.message.includes('Network Error')) {
+        errorMessage = '네트워크 연결 상태를 확인해주세요.';
+      }
+
+      toast(errorMessage, 'error');
+      console.error(`썸네일 이미지 업로드 실패 (Team ID: ${variables.teamId}):`, error);
+    },
   });
 };
 
@@ -32,8 +54,19 @@ const useDeletePreviews = () => {
   return useMutation({
     mutationFn: ({ teamId, previewImageIdsToDelete }: { teamId: number; previewImageIdsToDelete: number[] }) =>
       deletePreview(teamId, { imageIds: previewImageIdsToDelete }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['previewImages'] }),
-    onError: () => toast('프리뷰 이미지 삭제에 실패했어요.', 'error'),
+    onSuccess: (_, variables) => queryClient.invalidateQueries({ queryKey: ['previewImages', variables.teamId] }),
+    onError: (error: any, variables) => {
+      let errorMessage = '알 수 없는 오류로 프리뷰 이미지 삭제에 실패했어요';
+
+      if (error && error.response && error.response.status) {
+        errorMessage = error.response.data?.message;
+      } else if (error && error.message && error.message.includes('Network Error')) {
+        errorMessage = '네트워크 연결 상태를 확인해주세요.';
+      }
+
+      toast(errorMessage, 'error');
+      console.error(`프리뷰 이미지 삭제 실패 (Team ID: ${variables.teamId}):`, error);
+    },
   });
 };
 
@@ -43,33 +76,54 @@ const useUploadPreviews = () => {
   return useMutation({
     mutationFn: ({ teamId, previewImagesToUpload }: { teamId: number; previewImagesToUpload: FormData }) =>
       postPreview(teamId, previewImagesToUpload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['previewImages'] }),
-    onError: () => toast('프리뷰 이미지 업로드에 실패했어요.', 'error'),
+    onSuccess: (_, variables) => queryClient.invalidateQueries({ queryKey: ['previewImages', variables.teamId] }),
+    onError: (error: any, variables) => {
+      let errorMessage = '알 수 없는 오류로 프리뷰 이미지 업로드에 실패했어요';
+
+      if (error && error.response && error.response.status) {
+        errorMessage = error.response.data?.message;
+      } else if (error && error.message && error.message.includes('Network Error')) {
+        errorMessage = '네트워크 연결 상태를 확인해주세요.';
+      }
+
+      toast(errorMessage, 'error');
+      console.error(`프리뷰 이미지 업로드 실패 (Team ID: ${variables.teamId}):`, error);
+    },
   });
 };
 
-const useImagesUpdate = (
-  teamId: number,
-  thumbnailImageToUpload: File | null,
-  isThumbnailDeleted: boolean,
-  previewImagesToUpload: File[],
-  previewImageIdsToDelete: number[],
-) => {
+interface UpdateImagesParams {
+  teamId: number;
+  thumbnailImageToUpload: File | null;
+  isThumbnailDeleted: boolean;
+  previewImagesToUpload: File[];
+  previewImageIdsToDelete: number[];
+}
+
+const useImagesUpdate = () => {
   const toast = useToast();
 
-  const { mutate: deleteThumbnailMutate } = useDeleteThumbnail();
-  const { mutate: uploadThumbnailMutate } = useUploadThumbnail();
-  const { mutate: deletePreviewsMutate } = useDeletePreviews();
-  const { mutate: uploadPreviewsMutate } = useUploadPreviews();
+  const { mutateAsync: deleteThumbnailMutate } = useDeleteThumbnail();
+  const { mutateAsync: uploadThumbnailMutate } = useUploadThumbnail();
+  const { mutateAsync: deletePreviewsMutate } = useDeletePreviews();
+  const { mutateAsync: uploadPreviewsMutate } = useUploadPreviews();
 
-  const updateImages = async () => {
+  const updateImages = async ({
+    teamId,
+    thumbnailImageToUpload,
+    isThumbnailDeleted,
+    previewImagesToUpload,
+    previewImageIdsToDelete,
+  }: UpdateImagesParams) => {
     try {
+      const promises: Promise<any>[] = [];
+
       if (isThumbnailDeleted) {
-        deleteThumbnailMutate(teamId);
+        promises.push(deleteThumbnailMutate({ teamId }));
       }
 
       if (previewImageIdsToDelete.length > 0) {
-        deletePreviewsMutate({ teamId, previewImageIdsToDelete });
+        promises.push(deletePreviewsMutate({ teamId, previewImageIdsToDelete }));
       }
 
       if (thumbnailImageToUpload) {
@@ -79,7 +133,7 @@ const useImagesUpdate = (
           return;
         }
         const thumbnailFormData = createImageFormData(thumbnailImageToUpload);
-        uploadThumbnailMutate({ teamId, thumbnailImageToUpload: thumbnailFormData });
+        promises.push(uploadThumbnailMutate({ teamId, thumbnailImageToUpload: thumbnailFormData }));
       }
 
       if (previewImagesToUpload.length > 0) {
@@ -89,10 +143,13 @@ const useImagesUpdate = (
           return;
         }
         const previewsFormData = createImageFormData(previewImagesToUpload);
-        uploadPreviewsMutate({ teamId, previewImagesToUpload: previewsFormData });
+        promises.push(uploadPreviewsMutate({ teamId, previewImagesToUpload: previewsFormData }));
       }
+
+      await Promise.all(promises);
     } catch (error) {
       toast('이미지 업데이트 중 알 수 없는 오류가 발생했어요', 'error');
+      throw error;
     }
   };
   return { updateImages };
