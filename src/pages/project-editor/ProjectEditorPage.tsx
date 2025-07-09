@@ -132,6 +132,7 @@ const ProjectEditorPage = () => {
       if (isAdmin) {
         if (!projectName) return '프로젝트명이 입력되지 않았어요.';
         if (!teamName) return '팀명이 입력되지 않았어요.';
+        if (!leaderName) return '팀장명이 입력되지 않았어요.';
         if (contestId !== 1 && !overview) return '프로젝트 소개글이 작성되지 않았어요.';
       }
       if (isLeaderOfThisTeam) {
@@ -142,7 +143,7 @@ const ProjectEditorPage = () => {
         if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
         if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
       }
-
+      if (teamMembers.length < 1) return '등록된 팀원이 없어요';
       if (prodUrl && !isValidProjectUrl(prodUrl)) return '유효한 프로젝트 주소를 입력하세요.';
       if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
       if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
@@ -211,13 +212,19 @@ const ProjectEditorPage = () => {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
   };
+  console.log('teamMembers', teamMembers);
+  console.log('setTeamMembers', setTeamMembers);
 
   const onMemberAdd = (newMemberName: string) => {
     setTeamMembers((prevMembers) => [...prevMembers, { teamMemberId: Date.now(), teamMemberName: newMemberName }]);
+    console.log('teamMembers', teamMembers);
+    console.log('setTeamMembers', setTeamMembers);
   };
 
   const onMemberRemove = (index: number) => {
     setTeamMembers((prevMembers) => prevMembers.filter((_, idx) => idx !== index));
+    console.log('teamMembers', teamMembers);
+    console.log('setTeamMembers', setTeamMembers);
   };
 
   return (
