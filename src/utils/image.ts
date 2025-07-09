@@ -27,11 +27,11 @@ export const imageValidator = (images: File | File[]): ImageValidateResult => {
       imageValidateResult.message.push('유효하지 않은 파일 객체예요');
       return imageValidateResult;
     }
-    if (image.size > MAX_IMG_SIZE) {
-      imageValidateResult.isValid = false;
-      imageValidateResult.message.push(`이미지 파일의 크기가 ${MAX_IMG_SIZE}를 초과해요`);
-      return imageValidateResult;
-    }
+    // if (image.size > MAX_IMG_SIZE) {
+    //   imageValidateResult.isValid = false;
+    //   imageValidateResult.message.push(`이미지 파일의 크기가 ${MAX_IMG_SIZE}B를 초과해요`);
+    //   return imageValidateResult;
+    // }
     if (!ALLOWED_MIME_TYPES.includes(image.type)) {
       imageValidateResult.isValid = false;
       imageValidateResult.message.push(`${image.type}은 허용되지 않는 파일 형식이에요`);
