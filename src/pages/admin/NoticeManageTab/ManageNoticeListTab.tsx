@@ -1,6 +1,6 @@
 import Button from '@components/Button';
 import Table from '@components/Table';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteNotice, getNotices } from 'apis/notices';
 import { useToast } from 'hooks/useToast';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ const ManageNoticeListTab = () => {
     queryFn: getNotices,
   });
 
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (noticeId: number) => {
       deleteNotice(noticeId);
@@ -23,6 +24,7 @@ const ManageNoticeListTab = () => {
     },
     onSuccess: () => {
       toast('공지사항이 삭제되었습니다.', 'error');
+      queryClient.invalidateQueries({ queryKey: ['notices'] });
     },
   });
 
