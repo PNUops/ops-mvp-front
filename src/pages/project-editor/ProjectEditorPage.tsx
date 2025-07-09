@@ -132,6 +132,7 @@ const ProjectEditorPage = () => {
       if (isAdmin) {
         if (!projectName) return '프로젝트명이 입력되지 않았어요.';
         if (!teamName) return '팀명이 입력되지 않았어요.';
+        if (contestId !== 1 && !overview) return '프로젝트 소개글이 작성되지 않았어요.';
       }
       if (isLeaderOfThisTeam) {
         if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
