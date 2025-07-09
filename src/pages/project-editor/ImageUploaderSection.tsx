@@ -159,7 +159,7 @@ const ImageUploaderSection = ({
                   <img
                     src={getImageSrc(img.url)}
                     alt={`image-${index}`}
-                    className="absolute inset-0 h-full w-full object-cover"
+                    className="absolute inset-0 h-full w-full object-cover object-top"
                   />
                 )}
 
