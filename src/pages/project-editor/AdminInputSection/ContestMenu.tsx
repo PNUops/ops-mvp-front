@@ -75,6 +75,10 @@ const ContestMenu = ({ value, onChange }: ContestMenuProps) => {
                 contests.contestId === value ? 'bg-whiteGray text-mainGreen' : 'hover:bg-whiteGray'
               }`}
               onClick={() => {
+                if (contests.contestId === 1) {
+                  toast('현재 진행 중인 대회로 소속을 변경할 수 없어요', 'info');
+                  return;
+                }
                 onChange(contests.contestId);
                 setIsOpen(false);
               }}
