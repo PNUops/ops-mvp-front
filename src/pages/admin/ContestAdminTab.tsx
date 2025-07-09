@@ -85,16 +85,10 @@ const ContestAdminTab = () => {
           rows={contests ?? []}
           actions={(row) => (
             <>
-              <Button
-                className="bg-mainRed h-[35px] w-full min-w-[70px]"
-                onClick={() => handleDeleteContest(row.contestId)}
-              >
+              <Button className="bg-mainRed h-[35px] w-full" onClick={() => handleDeleteContest(row.contestId)}>
                 삭제하기
               </Button>
-              <Button
-                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
-                onClick={() => openEditModal(row.contestId)}
-              >
+              <Button className="bg-mainGreen h-[35px] w-full" onClick={() => openEditModal(row.contestId)}>
                 수정하기
               </Button>
             </>
@@ -131,7 +125,7 @@ const ContestAdminTab = () => {
           actions={(row) => (
             <>
               <Button
-                className="bg-mainRed h-[35px] w-full min-w-[70px]"
+                className="bg-mainRed h-[35px] w-full"
                 onClick={() => {
                   if (state.currentContestId == 1)
                     toast('현재 진행 중인 대회의 프로젝트를 삭제할 수 없습니다.', 'error');
@@ -146,7 +140,7 @@ const ContestAdminTab = () => {
                     toast('현재 진행 중인 대회의 프로젝트를 수정할 수 없습니다.', 'info');
                   state.currentContestId !== 1 && navigate(`/teams/edit/${row.teamId}`);
                 }}
-                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
+                className="bg-mainGreen h-[35px] w-full"
               >
                 수정하기
               </Button>
@@ -157,7 +151,7 @@ const ContestAdminTab = () => {
         <div className="mt-8 flex w-full flex-row-reverse">
           <Button
             onClick={() => handleCreateTeam(state.currentContestId)}
-            className="bg-mainBlue h-12 w-[20%] min-w-[130px]"
+            className="bg-mainBlue h-12 w-[20%] min-w-[160px]"
           >
             프로젝트 생성하기
           </Button>

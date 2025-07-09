@@ -45,7 +45,7 @@ const ManageNoticeListTab = () => {
           actions={(row) => (
             <>
               <Button
-                className="bg-mainRed h-[35px] w-full min-w-[70px]"
+                className="bg-mainRed h-[35px] w-full"
                 onClick={() => {
                   mutation.mutate(row.noticeId);
                 }}
@@ -53,7 +53,7 @@ const ManageNoticeListTab = () => {
                 삭제하기
               </Button>
               <Button
-                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
+                className="bg-mainGreen h-[35px] w-full"
                 onClick={() => {
                   navigate(`/admin/notice/edit/${row.noticeId}`);
                 }}
