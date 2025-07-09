@@ -47,22 +47,20 @@ const ContestMenu = ({ value, onChange }: ContestMenuProps) => {
   return (
     <div className="relative w-full max-w-sm text-sm">
       <button
-        className="border-lightGray flex w-full items-center justify-between rounded-md border-2 px-5 py-3 text-left hover:cursor-pointer"
+        className="border-lightGray focus:ring-subGreen focus:border-subGreen flex w-full items-center justify-between rounded-md border-2 px-5 py-3 text-left duration-150 hover:cursor-pointer focus:outline-none"
         onClick={() => {
           if (selectedContest?.contestId == 1) {
             toast('현재 진행 중인 대회의 프로젝트의 소속을 변경할 수 없습니다.', 'info');
-          } else {
-            toast('프로젝트 소속 대회를 변경할 수 없습니다.', 'info');
           }
-          // if (selectedContest?.contestId !== 1) {
-          //   setIsOpen((prev) => !prev);
-          // }
+          if (selectedContest?.contestId !== 1) {
+            setIsOpen((prev) => !prev);
+          }
         }}
       >
         <span className={selectedContest ? '' : 'text-midGray'}>
           {selectedContest?.contestName || '대회를 선택해주세요.'}
         </span>
-        <FaChevronDown className={`hover:text-[rgb(172,222,191)] ${isOpen ? 'text-mainGreen' : 'text-lightGray'}`} />
+        <FaChevronDown className={`${isOpen ? 'text-subGreen' : 'text-lightGray'}`} />
       </button>
 
       {isOpen && contests && (
