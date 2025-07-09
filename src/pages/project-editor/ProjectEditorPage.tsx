@@ -222,7 +222,7 @@ const ProjectEditorPage = () => {
 
   return (
     <div className="px-5">
-      <div className="text-title font-bold">프로젝트 생성/수정</div>
+      <div className="text-title font-bold">프로젝트 {contestId !== 1 ? '생성/수정' : '수정'}</div>
       <div className="h-10" />
       {isAdmin && contestId !== 1 && (
         <AdminInputSection
