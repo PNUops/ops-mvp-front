@@ -35,7 +35,10 @@ const HistoryMenu = ({ contestName, onContestChange }: HistoryMenuProps) => {
           {contests.map((contest: ContestResponseDto) => (
             <li key={contest.contestId}>
               <button
-                onClick={() => onContestChange(contest.contestName, contest.contestId)}
+                onClick={() => {
+                  onContestChange(contest.contestName, contest.contestId);
+                  setIsOpen(false);
+                }}
                 className="hover:text-mainGreen hover:bg-whiteGray block w-full p-4 transition-colors duration-200 ease-in"
               >
                 {contest.contestName}
