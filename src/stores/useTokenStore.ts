@@ -3,6 +3,7 @@ import { getAccessToken, removeAccessToken, writeAccessToken } from 'utils/token
 
 type TokenState = {
   token: string | null;
+  isTokenInit: boolean;
   setToken: (token: string) => void;
   clearToken: () => void;
   initToken: () => void;
@@ -10,6 +11,7 @@ type TokenState = {
 
 export const useTokenStore = create<TokenState>((set) => ({
   token: null,
+  isTokenInit: false,
   setToken: (token: string) => {
     writeAccessToken(token);
     set({ token });
@@ -20,6 +22,6 @@ export const useTokenStore = create<TokenState>((set) => ({
   },
   initToken: () => {
     const token = getAccessToken();
-    set({ token });
+    set({ token, isTokenInit: true });
   },
 }));
