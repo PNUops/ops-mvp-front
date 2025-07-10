@@ -5,10 +5,9 @@ import { CommentDto } from 'types/DTO/projectViewerDto';
 
 interface CommentListSectionProps {
   teamId: number;
-  memberId: number;
 }
 
-const CommentListSection = ({ teamId, memberId }: CommentListSectionProps) => {
+const CommentListSection = ({ teamId }: CommentListSectionProps) => {
   const { data: comments = [] } = useQuery<CommentDto[]>({
     queryKey: ['comments', teamId],
     queryFn: () => getCommentsList(teamId),
