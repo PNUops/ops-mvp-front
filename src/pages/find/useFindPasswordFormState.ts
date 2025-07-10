@@ -32,7 +32,8 @@ export const useFindPasswordFormState = () => {
     const errors: SignUpFormError = {};
     if (!isPNUEmail(formState.email)) errors.email = '부산대학교 이메일(@pusan.ac.kr)이 아닙니다.';
     else if (!formState.isEmailVerified) errors.email = '이메일 인증이 필요합니다.';
-    if (!isValidPassword(formState.password)) errors.password = '8~16자, 영어, 숫자, 특수문자를 포함하여야 합니다.';
+    if (!isValidPassword(formState.password))
+      errors.password = '8~16자, 영어, 숫자, 특수문자(@$!%*#?&~)를 포함하여야 합니다.';
     if (formState.password !== formState.passwordConfirm) errors.passwordConfirm = '비밀번호가 일치하지 않습니다.';
     return errors;
   };
