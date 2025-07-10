@@ -56,7 +56,6 @@ const ContestAdminTab = () => {
     handleDeleteContest,
     handleContestChange,
     handleDeleteTeam,
-    handleCreateTeam,
     // closeDeleteModal,
     openEditModal,
     closeEditModal,
@@ -64,6 +63,8 @@ const ContestAdminTab = () => {
   } = useContestAdmin();
   const navigate = useNavigate();
   const toast = useToast();
+
+  console.log(contests);
 
   return (
     <>
@@ -145,7 +146,14 @@ const ContestAdminTab = () => {
 
         <div className="mt-8 flex w-full flex-row-reverse">
           <Button
-            onClick={() => handleCreateTeam(state.currentContestId)}
+            onClick={() => {
+              if (state.currentContestId === 1) {
+                toast('현재 진행 중인 대회의 프로젝트를 생성할 수 없어요');
+                if (contests?.length === 1) toast('대회 생성 후 프로젝트 생성해주세요');
+                return;
+              }
+              navigate(`/admin/contest/create/${state.currentContestId}`);
+            }}
             className="bg-mainBlue h-12 w-[20%] min-w-[130px]"
           >
             프로젝트 생성하기
