@@ -148,7 +148,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl }: CarouselSectionProp
   });
 
   const { data: previewData } = useQuery<PreviewImagesResponseDto>({
-    queryKey: ['previewImages', teamId, previewIds],
+    queryKey: ['previewImages', teamId],
     queryFn: () => getPreviewImages(teamId, previewIds),
     enabled: previewIds.length > 0,
   });
