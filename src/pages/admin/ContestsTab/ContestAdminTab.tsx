@@ -10,8 +10,8 @@ import Table from '@components/Table';
 import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { IoIosArrowDown } from 'react-icons/io';
-// import DeleteInfoModal from '@pages/admin/DeleteInfoModal';
-import EditModal from '@pages/admin/EditModal';
+import DeleteModal from './DeleteModal';
+import EditModal from '@pages/admin/ContestsTab/EditModal';
 import useContestAdmin from 'hooks/useContestAdmin';
 
 type HistoryMenuProps = {
@@ -53,21 +53,25 @@ const ContestAdminTab = () => {
     state,
     contests,
     handleAddContest,
-    handleDeleteContest,
     handleContestChange,
-    handleDeleteTeam,
     handleCreateTeam,
-    // closeDeleteModal,
+    openDeleteModal,
+    closeDeleteModal,
     openEditModal,
     closeEditModal,
     setContestName,
+    deleteModal,
+    handleDelete,
   } = useContestAdmin();
   const navigate = useNavigate();
   const toast = useToast();
 
   return (
     <>
-      {/* {state.isModalOpen && <DeleteInfoModal closeModal={closeDeleteModal} />} */}
+      {state.isDeleteModalOpen && (
+        <DeleteModal closeDeleteModal={closeDeleteModal} handleDelete={handleDelete} type={deleteModal.type} />
+      )}
+
       {state.isEditModalOpen && <EditModal closeModal={closeEditModal} editId={state.editContestId} />}
 
       <section className="mb-8 min-w-[350px]">
@@ -87,7 +91,7 @@ const ContestAdminTab = () => {
             <>
               <Button
                 className="bg-mainRed h-[35px] w-full min-w-[70px]"
-                onClick={() => handleDeleteContest(row.contestId)}
+                onClick={() => openDeleteModal('contest', row.contestId)}
               >
                 삭제하기
               </Button>
@@ -135,7 +139,7 @@ const ContestAdminTab = () => {
                 onClick={() => {
                   if (state.currentContestId == 1)
                     toast('현재 진행 중인 대회의 프로젝트를 삭제할 수 없습니다.', 'error');
-                  state.currentContestId !== 1 && handleDeleteTeam(row.teamId);
+                  else openDeleteModal('team', row.teamId);
                 }}
               >
                 삭제하기
@@ -144,7 +148,7 @@ const ContestAdminTab = () => {
                 onClick={() => {
                   if (state.currentContestId == 1)
                     toast('현재 진행 중인 대회의 프로젝트를 수정할 수 없습니다.', 'info');
-                  state.currentContestId !== 1 && navigate(`/teams/edit/${row.teamId}`);
+                  else navigate(`/teams/edit/${row.teamId}`);
                 }}
                 className="bg-mainGreen h-[35px] w-full min-w-[70px]"
               >
