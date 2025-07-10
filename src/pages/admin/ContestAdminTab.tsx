@@ -31,7 +31,7 @@ const HistoryMenu = ({ contestName, onContestChange }: HistoryMenuProps) => {
             onContestChange(selectedContest.contestName, selectedContest.contestId);
           }
         }}
-        className="border-subGreen appearance-none rounded border-b-2 bg-white px-4 py-2 pr-10 text-nowrap focus:outline-none"
+        className="border-subGreen cursor-pointer appearance-none rounded border-b-2 bg-white px-4 py-2 pr-10 text-nowrap focus:outline-none"
       >
         {contests?.map((contest: ContestResponseDto) => (
           <option key={contest.contestId} value={contest.contestName}>
