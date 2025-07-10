@@ -39,7 +39,7 @@ const ManageNoticeListTab = () => {
               label: '편집일시',
               width: '20%',
               key: 'updatedAt',
-              render: (row) => row.updatedAt.replace('T', ' ').slice(0, 16),
+              render: (row) => row.updatedAt,
             },
             { label: '제목', width: '50%', key: 'title' },
           ]}
