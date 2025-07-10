@@ -125,36 +125,6 @@ const useContestAdmin = () => {
     }
   };
 
-  const handleCreateTeam = async (teamId: number) => {
-    try {
-      // await createProjectDetails({
-      //   contestId: contestId,
-      //   teamName: teamName,
-      //   projectName: projectName,
-      //   leaderName: leaderName,
-      //   overview,
-      //   productionPath: prodUrl,
-      //   githubPath: githubUrl,
-      //   youTubePath: youtubeUrl,
-      // });
-      const response = await createProjectDetails({
-        contestId: teamId,
-        teamName: '팀 이름',
-        projectName: '프로젝트 이름',
-        leaderName: '팀장 이름',
-        overview: '프로젝트 소개글',
-        productionPath: '',
-        githubPath: 'https://github.com/2025-PNU-SW-Hackathon',
-        youTubePath: 'https://youtu.be/CYoK_cuG8lU',
-      });
-      const createdTeamId = response.teamId;
-      toast('저장이 완료되었습니다.', 'success');
-      navigate(`/teams/edit/${createdTeamId}`);
-    } catch (err: any) {
-      toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
-    }
-  };
-
   const closeDeleteModal = () => setState((prev) => ({ ...prev, isModalOpen: false }));
   const openEditModal = (contestId: number) =>
     setState((prev) => ({
@@ -170,7 +140,6 @@ const useContestAdmin = () => {
     toast,
     handleAddContest,
     handleDeleteContest,
-    handleCreateTeam,
     handleContestChange,
     handleDeleteTeam,
     closeDeleteModal,
