@@ -40,8 +40,8 @@ const ProjectBasicForm = ({ initialContestId, onSuccess }: ProjectBasicFormProps
       if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
       if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
       if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
-      if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
       if (productionUrl && !isValidProjectUrl(productionUrl)) return '유효한 프로젝트 주소를 입력하세요.';
+      if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
 
       return null;
     };
