@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { RiLink } from 'react-icons/ri';
 import { FaGithub, FaYoutube } from 'react-icons/fa';
 
-interface UrlInputSectionProps {
+interface UrlInputProps {
   prodUrl: string | null;
   setProdUrl: (value: string) => void;
   githubUrl: string;
@@ -12,14 +12,7 @@ interface UrlInputSectionProps {
   setYoutubeUrl: (value: string) => void;
 }
 
-const UrlInputSection = ({
-  prodUrl,
-  setProdUrl,
-  githubUrl,
-  setGithubUrl,
-  youtubeUrl,
-  setYoutubeUrl,
-}: UrlInputSectionProps) => {
+const UrlInput = ({ prodUrl, setProdUrl, githubUrl, setGithubUrl, youtubeUrl, setYoutubeUrl }: UrlInputProps) => {
   return (
     <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
       <div className="text-midGray flex w-25">
@@ -62,4 +55,4 @@ const UrlInputSection = ({
   );
 };
 
-export default UrlInputSection;
+export default UrlInput;

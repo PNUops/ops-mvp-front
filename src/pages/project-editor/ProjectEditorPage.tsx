@@ -18,21 +18,17 @@ import {
   deleteMember,
 } from 'apis/projectEditor';
 
-import { TeamMember, ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
+import { TeamMember, ProjectDetailsResponseDto, PreviewImage } from 'types/DTO/projectViewerDto';
 
 import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from './urlValidators';
 import IntroSection from './IntroSection';
-import UrlInput from './UrlInputSection';
+import UrlInput from './UrlInput';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
 import { EditorDetailSkeleton } from './EditorSkeleton';
 
-import AdminInputSection from '@pages/project-editor/AdminInputSection/AdminInputSection';
-
-export interface PreviewImage {
-  id?: number;
-  url: string | File;
-}
+import AdminEditSection from '@pages/project-editor/AdminEditSection/AdminEditSection';
+import MembersInput from './AdminEditSection/MembersInput';
 
 const ProjectEditorPage = () => {
   const { user, isAdmin, isLeader } = useAuth();
@@ -212,8 +208,6 @@ const ProjectEditorPage = () => {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
   };
-  console.log('teamMembers', teamMembers);
-  console.log('setTeamMembers', setTeamMembers);
 
   const onMemberAdd = (newMemberName: string) => {
     setTeamMembers((prevMembers) => [...prevMembers, { teamMemberId: Date.now(), teamMemberName: newMemberName }]);
@@ -232,19 +226,20 @@ const ProjectEditorPage = () => {
       <div className="text-title font-bold">프로젝트 {contestId !== 1 ? '생성/수정' : '수정'}</div>
       <div className="h-10" />
       {isAdmin && contestId !== 1 && (
-        <AdminInputSection
-          contestId={contestId}
-          setContestId={setContestId}
-          projectName={projectName}
-          setProjectName={setProjectName}
-          teamName={teamName}
-          setTeamName={setTeamName}
-          leaderName={leaderName}
-          setLeaderName={setLeaderName}
-          teamMembers={teamMembers}
-          onMemberAdd={onMemberAdd}
-          onMemberRemove={onMemberRemove}
-        />
+        <>
+          <AdminEditSection
+            contestId={contestId}
+            setContestId={setContestId}
+            projectName={projectName}
+            setProjectName={setProjectName}
+            teamName={teamName}
+            setTeamName={setTeamName}
+            leaderName={leaderName}
+            setLeaderName={setLeaderName}
+          />
+          <div className="h-15" />
+          <MembersInput teamMembers={teamMembers} onMemberAdd={onMemberAdd} onMemberRemove={onMemberRemove} />
+        </>
       )}
 
       {(isLeaderOfThisTeam || (isAdmin && contestId === 1)) && (
