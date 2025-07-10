@@ -64,8 +64,6 @@ const ContestAdminTab = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  console.log(contests);
-
   return (
     <>
       {/* {state.isModalOpen && <DeleteInfoModal closeModal={closeDeleteModal} />} */}
