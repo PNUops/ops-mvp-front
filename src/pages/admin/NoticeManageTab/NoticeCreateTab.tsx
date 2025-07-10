@@ -1,7 +1,7 @@
 import Input from '@components/Input';
 import RoundedButton from '@components/RoundedButton';
 import TextArea from '@components/TextArea';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postCreateNotice } from 'apis/notices';
 import useGoBack from 'hooks/useGoBack';
 import { useToast } from 'hooks/useToast';
@@ -14,10 +14,12 @@ const NoticeCreateTab = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
+  const queryClient = useQueryClient();
   const createMutation = useMutation({
     mutationFn: () => postCreateNotice({ title, description }),
     onSuccess: () => {
       toast(`공지사항이 작성 되었어요.`, 'success');
+      queryClient.invalidateQueries({ queryKey: ['notices'] });
       goBack();
     },
     onError: () => toast(`공지사항 작성에 실패했어요.`, 'error'),

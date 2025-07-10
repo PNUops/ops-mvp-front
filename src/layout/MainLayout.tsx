@@ -3,10 +3,11 @@ import Footer from './Footer';
 import FullContainer from './FullContainer';
 import { Toaster } from '@components/Toaster';
 import useAuthInit from 'hooks/useAuthInit';
+import useScrollToTop from 'hooks/useScrollToTop';
 
 const MainLayout = () => {
   const { isAuthInit } = useAuthInit();
-
+  useScrollToTop();
   if (!isAuthInit) return <></>;
   return (
     <>
