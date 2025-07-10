@@ -116,7 +116,7 @@ const Comment = ({ comment }: CommentProps) => {
               <button
                 className="bg-mainGreen text-exsm text-whiteGray rounded-full px-5 py-1 transition hover:cursor-pointer hover:bg-emerald-600 focus:bg-emerald-600 focus:outline-none"
                 onClick={() => {
-                  if (editedDescription.trim() === description.trim()) {
+                  if (editedDescription.trim() === description.trim() || !editedDescription) {
                     setIsEditing(false);
                     return;
                   }
