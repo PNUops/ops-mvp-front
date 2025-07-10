@@ -71,11 +71,13 @@ const ProjectDetailForm = ({ teamId }: ProjectDetailFormProps) => {
         await postPreview(teamId, formData);
       }
 
+      toast('세부 정보 등록이 완료되었습니다', 'success');
+      setTimeout(() => navigate(`/teams/view/${teamId}`), 300);
       queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] });
       queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
     } catch (err: any) {
-      toast('세부 정보 등록에 실패했어요. 수정 페이지에서 다시 시도해주세요.', 'error');
+      toast('일부 정보 등록에 실패했어요. 수정 페이지에서 다시 시도해주세요.', 'error');
       setTimeout(() => navigate(`/teams/edit/${teamId}`), 300);
     }
   };
