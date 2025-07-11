@@ -1,10 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useToast } from 'hooks/useToast';
+
+import { PreviewImage } from './ProjectEditorPage';
+
 import { HiInformationCircle } from 'react-icons/hi';
 import { FiX } from 'react-icons/fi';
 import { AiFillPicture } from 'react-icons/ai';
 import { MdOutlineFileUpload, MdBrokenImage } from 'react-icons/md';
-import { PreviewImage } from './ProjectEditorPage';
+import { CgSandClock } from 'react-icons/cg';
 
 interface ImageUploaderSectionProps {
   thumbnail: string | File | undefined;
@@ -113,7 +116,7 @@ const ImageUploaderSection = ({
       <div className="flex flex-col items-start gap-3">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
-          <span>썸네일</span>
+          <span>이미지</span>
         </div>
         <div className="group relative inline-block">
           <span className="inline-flex cursor-help items-center gap-1 rounded-full bg-sky-50 px-2 py-1 text-xs text-sky-400">
@@ -127,7 +130,7 @@ const ImageUploaderSection = ({
 
       <div className="flex w-full flex-1 flex-col gap-3 xl:flex-row">
         <div
-          className="border-midGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-center gap-2 rounded border p-6 text-center sm:gap-5"
+          className="border-lightGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-center gap-2 rounded border p-6 text-center sm:gap-5"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
@@ -144,15 +147,15 @@ const ImageUploaderSection = ({
             img ? (
               <div
                 key={index}
-                className="border-lightGray relative flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded border text-xs text-gray-400"
+                className="border-lightGray text-lightGray relative flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded border text-xs"
               >
-                {img.url === 'ERROR' ? (
+                {img.url === 'ERROR_ETC' ? (
                   <MdBrokenImage size={30} className="text-red-300" />
                 ) : img.url === 'ERROR_409' ? (
-                  <div className="text-lightGray border-lightGray flex h-full w-full flex-col items-center justify-center gap-5 border">
-                    <MdBrokenImage size={30} className="text-red-300" />
+                  <div className="text-lightGray flex h-full w-full animate-pulse flex-col items-center justify-center gap-5">
+                    <CgSandClock size={25} />
                     <span className="text-xs">
-                      서버에서 이미지 변환 중입니다.<br></br>나중에 시도해 주세요.
+                      서버에서 이미지를 압축 중이에요<br></br>조금만 기다려주세요!
                     </span>
                   </div>
                 ) : (
