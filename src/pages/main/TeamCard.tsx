@@ -17,7 +17,7 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
   return (
     <Link
       to={`/teams/view/${teamId}`}
-      className="border-none flex aspect-[7/8] w-full cursor-pointer flex-col overflow-hidden transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
+      className="border-none flex aspect-[7/8] rounded-sm w-full cursor-pointer flex-col overflow-hidden transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
 
     >
       <div className="aspect-[3/2] flex-shrink-0 object-cover relative overflow-hidden">
@@ -43,10 +43,10 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
 
         <div className="p-3">
           <div
-            className="font-semibold text-black text-[clamp(0.85rem,2vw,1.5rem)] leading-tight">
+            className="font-semibold text-black text-[clamp(0.85rem,2vw,1.3rem)] leading-tight line-clamp-2">
             {projectName}
           </div>
-          <div className="py-2 text-midGray text-[clamp(0.8rem,1.8vw,0.85rem)] truncate overflow-hidden">
+          <div className="py-2 text-midGray text-[clamp(0.8rem,1.8vw,1rem)] truncate overflow-hidden">
             {teamName}
           </div>
 
