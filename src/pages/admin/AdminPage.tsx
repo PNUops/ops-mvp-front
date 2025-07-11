@@ -22,7 +22,7 @@ const AdminPage = () => {
           <Link
             key={tab.path}
             to={`/admin/${tab.path}`}
-            className={`min-w-16 rounded-lg px-4 py-2 text-lg ${
+            className={`flex min-w-[137px] justify-center rounded-lg px-4 py-2 text-lg ${
               pathname.includes(tab.path ?? '') ? 'bg-subGreen text-black' : 'bg-gray-100 text-gray-400'
             }`}
           >
