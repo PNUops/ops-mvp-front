@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import type { Query } from '@tanstack/react-query';
 
 import useAuth from 'hooks/useAuth';
 import { useTeamId } from 'hooks/useId';
@@ -18,7 +19,7 @@ import {
   deleteMember,
 } from 'apis/projectEditor';
 
-import { TeamMember, ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
+import { TeamMember, PreviewImagesResponseDto, ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
 
 import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from './urlValidators';
 import IntroSection from './IntroSection';
@@ -68,22 +69,31 @@ const ProjectEditorPage = () => {
     enabled: teamId !== null,
   });
 
-  const { data: thumbnailUrl } = useQuery({
+  const { data: thumbnailUrl } = useQuery<string>({
     queryKey: ['thumbnail', teamId],
     queryFn: async () => {
       if (teamId === null) throw new Error('teamId is null');
       return await getThumbnail(teamId);
     },
     enabled: teamId !== null,
+    refetchInterval: (query) => {
+      const shouldRefetch = query.state.data === 'THUMBNAIL_ERR_409';
+      return shouldRefetch ? 1500 : false;
+    },
   });
 
-  const { data: previewData } = useQuery({
+  const { data: previewData } = useQuery<PreviewImagesResponseDto>({
     queryKey: ['previewImages', teamId, projectData?.previewIds],
     queryFn: async () => {
       if (teamId === null || !projectData?.previewIds) throw new Error('previewIds 없음');
       return await getPreviewImages(teamId, projectData.previewIds);
     },
     enabled: teamId !== null && !!projectData?.previewIds?.length,
+    refetchInterval: (query) => {
+      const data = query.state.data;
+      const shouldRefetch = data?.imageUrls?.every((url) => url === 'PREVIEW_ERR_409') ?? false;
+      return shouldRefetch ? 1500 : false;
+    },
   });
 
   useEffect(() => {
@@ -215,14 +225,10 @@ const ProjectEditorPage = () => {
 
   const onMemberAdd = (newMemberName: string) => {
     setTeamMembers((prevMembers) => [...prevMembers, { teamMemberId: Date.now(), teamMemberName: newMemberName }]);
-    console.log('teamMembers', teamMembers);
-    console.log('setTeamMembers', setTeamMembers);
   };
 
   const onMemberRemove = (index: number) => {
     setTeamMembers((prevMembers) => prevMembers.filter((_, idx) => idx !== index));
-    console.log('teamMembers', teamMembers);
-    console.log('setTeamMembers', setTeamMembers);
   };
 
   return (
