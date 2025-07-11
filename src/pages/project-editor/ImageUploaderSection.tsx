@@ -4,7 +4,7 @@ import { HiInformationCircle } from 'react-icons/hi';
 import { FiX } from 'react-icons/fi';
 import { AiFillPicture } from 'react-icons/ai';
 import { MdOutlineFileUpload, MdBrokenImage } from 'react-icons/md';
-import { PreviewImage } from './ProjectEditorPage';
+import { PreviewImage } from 'types/DTO/projectViewerDto';
 
 interface ImageUploaderSectionProps {
   thumbnail: string | File | undefined;
@@ -159,7 +159,7 @@ const ImageUploaderSection = ({
                   <img
                     src={getImageSrc(img.url)}
                     alt={`image-${index}`}
-                    className="absolute inset-0 h-full w-full object-cover object-top"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
                 )}
 
