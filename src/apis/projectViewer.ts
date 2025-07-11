@@ -27,8 +27,10 @@ export const getPreviewImages = async (teamId: number, imageIds: number[]): Prom
     } catch (error: any) {
       if (error.response?.status === 409) {
         imageUrls.push('ERROR_409');
+      } else if (error.response?.status === 404) {
+        imageUrls.push('ERROR_404');
       } else {
-        imageUrls.push('ERROR');
+        imageUrls.push('ERROR_ETC');
       }
     }
   }

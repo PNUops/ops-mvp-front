@@ -14,9 +14,12 @@ export const getThumbnail = async (teamId: number): Promise<string> => {
     return URL.createObjectURL(response.data);
   } catch (error: any) {
     if (error.response?.status === 409) {
-      throw new Error('Thumbnail 409 Error');
+      return 'ERROR_409';
+    } else if (error.response?.status === 404) {
+      return 'ERROR_404';
+    } else {
+      return 'ERROR_ETC';
     }
-    throw error;
   }
 };
 
