@@ -14,11 +14,11 @@ export const getThumbnail = async (teamId: number): Promise<string> => {
     return URL.createObjectURL(response.data);
   } catch (error: any) {
     if (error.response?.status === 409) {
-      return 'ERROR_409';
+      return 'THUMBNAIL_ERR_409';
     } else if (error.response?.status === 404) {
-      return 'ERROR_404';
+      return 'THUMBNAIL_ERR_404';
     } else {
-      return 'ERROR_ETC';
+      return 'THUMBNAIL_ERR_ETC';
     }
   }
 };

@@ -26,11 +26,11 @@ export const getPreviewImages = async (teamId: number, imageIds: number[]): Prom
       imageUrls.push(objectUrl);
     } catch (error: any) {
       if (error.response?.status === 409) {
-        imageUrls.push('ERROR_409');
+        imageUrls.push('PREVIEW_ERR_409');
       } else if (error.response?.status === 404) {
-        imageUrls.push('ERROR_404');
+        imageUrls.push('PREVIEW_ERR_404');
       } else {
-        imageUrls.push('ERROR_ETC');
+        imageUrls.push('PREVIEW_ERR_ETC');
       }
     }
   }
