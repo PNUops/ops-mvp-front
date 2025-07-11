@@ -73,7 +73,7 @@ const IntroSection = ({
           <div className="text-title min-w-0 leading-none font-bold">{projectName}</div>
           <div className="text-smbold font-bold text-[#4B5563]">{teamName}</div>
         </div>
-        {(isLeaderOfThisTeam || (isAdmin && contestId !== 1)) && (
+        {(isLeaderOfThisTeam || isAdmin) && (
           <div className="flex pt-3">
             <button
               onClick={() => navigate(`/teams/edit/${teamId}`)}

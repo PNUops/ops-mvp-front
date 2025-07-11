@@ -39,7 +39,7 @@ const ManageNoticeListTab = () => {
               label: '편집일시',
               width: '20%',
               key: 'updatedAt',
-              render: (row) => row.updatedAt.replace('T', ' ').slice(0, 16),
+              render: (row) => row.updatedAt,
             },
             { label: '제목', width: '50%', key: 'title' },
           ]}
@@ -47,7 +47,7 @@ const ManageNoticeListTab = () => {
           actions={(row) => (
             <>
               <Button
-                className="bg-mainRed h-[35px] w-full min-w-[70px]"
+                className="bg-mainRed h-[35px] w-full"
                 onClick={() => {
                   mutation.mutate(row.noticeId);
                 }}
@@ -55,7 +55,7 @@ const ManageNoticeListTab = () => {
                 삭제하기
               </Button>
               <Button
-                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
+                className="bg-mainGreen h-[35px] w-full"
                 onClick={() => {
                   navigate(`/admin/notice/edit/${row.noticeId}`);
                 }}
