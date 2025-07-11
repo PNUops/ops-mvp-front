@@ -10,9 +10,9 @@ import Table from '@components/Table';
 import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { IoIosArrowDown } from 'react-icons/io';
-import DeleteModal from './DeleteModal';
 import EditModal from '@pages/admin/ContestsTab/EditModal';
 import useContestAdmin from 'hooks/useContestAdmin';
+import CommentConfirmModal from '@pages/project-viewer/CommentSection/CommentConfirmModal';
 
 type HistoryMenuProps = {
   contestName: string;
@@ -68,10 +68,12 @@ const ContestAdminTab = () => {
 
   return (
     <>
-      {state.isDeleteModalOpen && (
-        <DeleteModal closeDeleteModal={closeDeleteModal} handleDelete={handleDelete} type={deleteModal.type} />
-      )}
-
+      <CommentConfirmModal
+        isOpen={state.isDeleteModalOpen}
+        onConfirm={handleDelete}
+        onCancel={closeDeleteModal}
+        message={`삭제한 ${deleteModal.type == 'contest' ? '대회' : '팀'}은 복구할 수 없습니다.`}
+      />
       {state.isEditModalOpen && <EditModal closeModal={closeEditModal} editId={state.editContestId} />}
 
       <section className="mb-8 min-w-[350px]">
