@@ -33,7 +33,8 @@ const ImageUploaderSection = ({
   const toast = useToast();
 
   const images: (PreviewImage | undefined)[] = useMemo(() => {
-    const thumbSlot = thumbnail ? { url: thumbnail } : undefined;
+    const isInvalidThumbnail = thumbnail === 'THUMBNAIL_ERR_404';
+    const thumbSlot = !isInvalidThumbnail && thumbnail ? { url: thumbnail } : undefined;
     const result: (PreviewImage | undefined)[] = [thumbSlot, ...previews];
     return result.slice(0, MAX_IMAGES);
   }, [thumbnail, previews]);
