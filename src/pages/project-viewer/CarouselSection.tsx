@@ -94,7 +94,7 @@ const MediaRenderer = ({
   setImageLoaded: (loaded: boolean) => void;
   setLoadFailed: (failed: boolean) => void;
 }) => {
-  if (!currentImage || currentImage === 'ERROR') {
+  if (!currentImage || currentImage === 'ERROR_ETC') {
     return (
       <div className="text-lightGray border-lightGray flex h-full w-full flex-col items-center justify-center gap-5 border">
         <FaSadTear size={40} />
@@ -109,9 +109,11 @@ const MediaRenderer = ({
 
   if (currentImage === 'ERROR_409') {
     return (
-      <div className="text-lightGray border-lightGray flex h-full w-full flex-col items-center justify-center gap-5 border">
+      <div className="text-lightGray border-lightGray flex h-full w-full animate-pulse flex-col items-center justify-center gap-5 border">
         <CgSandClock size={40} />
-        <span className="text-xs">서버에서 이미지 변환 중입니다. 나중에 시도해 주세요.</span>
+        <span className="text-center text-xs">
+          서버에서 이미지를 압축 중이에요<br></br>조금만 기다려주세요!
+        </span>
       </div>
     );
   }

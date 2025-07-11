@@ -154,7 +154,7 @@ const ImageUploaderSection = ({
                 ) : img.url === 'ERROR_409' ? (
                   <div className="text-lightGray flex h-full w-full animate-pulse flex-col items-center justify-center gap-5">
                     <CgSandClock size={25} />
-                    <span className="text-xs">
+                    <span className="text-center text-xs">
                       서버에서 이미지를 압축 중이에요<br></br>조금만 기다려주세요!
                     </span>
                   </div>
