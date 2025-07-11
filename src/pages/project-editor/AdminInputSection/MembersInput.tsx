@@ -51,7 +51,7 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
           <input
             type="text"
             className="placeholder:text-lightGray flex-1 bg-transparent focus:outline-none"
-            placeholder="참가자를 입력해주세요."
+            placeholder="팀원명을 입력해주세요."
             value={inputs[idx]}
             onChange={(e) => handleInputChange(idx, e.target.value)}
             disabled={added[idx]}

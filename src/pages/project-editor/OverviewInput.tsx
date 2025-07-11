@@ -21,6 +21,11 @@ const OverviewInput = ({ overview, setOverview }: OverviewInputProps) => {
     }
   };
 
+  const handleOverviewBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    const trimmed = e.target.value.trim();
+    setOverview(trimmed);
+  };
+
   return (
     <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
       <div className="text-midGray flex w-25 gap-1">
@@ -34,6 +39,7 @@ const OverviewInput = ({ overview, setOverview }: OverviewInputProps) => {
           className="placeholder-lightGray ring-lightGray h-40 max-h-40 min-h-40 w-full resize-none overflow-auto rounded bg-gray-100 px-4 py-3 text-sm transition-all duration-300 ease-in-out focus-within:ring-1 focus:outline-none"
           value={overview ?? ''}
           onChange={handleOverviewChange}
+          onBlur={handleOverviewBlur}
         />
         <div className={`text-right text-xs ${overview?.length === MAX_OVERVIEW ? 'text-red-500' : 'text-gray-500'}`}>
           {overview?.length} / {MAX_OVERVIEW}자

@@ -21,7 +21,7 @@ const LikeSection = ({ teamId, isLiked }: LikeSectionProps) => {
     mutationFn: (nextIsLiked: boolean) => patchLikeToggle({ teamId, isLiked: nextIsLiked }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
-      queryClient.invalidateQueries({ queryKey: ['teams', user?.id ?? 'guest'] });
+      queryClient.invalidateQueries({ queryKey: ['teams', 'current', user?.id ?? 'guest'] });
       toast(!isLiked ? '좋아요를 눌렀어요.' : '좋아요를 취소했어요.');
     },
   });
