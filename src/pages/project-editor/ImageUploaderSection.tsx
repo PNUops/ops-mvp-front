@@ -149,9 +149,9 @@ const ImageUploaderSection = ({
                 key={index}
                 className="border-lightGray text-lightGray relative flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded border text-xs"
               >
-                {img.url === 'ERROR_ETC' ? (
+                {img.url === 'THUMBNAIL_ERR_ETC' || img.url === 'PREVIEW_ERR_ETC' ? (
                   <MdBrokenImage size={30} className="text-red-300" />
-                ) : img.url === 'ERROR_409' ? (
+                ) : img.url === 'THUMBNAIL_ERR_409' || img.url === 'PREVIEW_ERR_409' ? (
                   <div className="text-lightGray flex h-full w-full animate-pulse flex-col items-center justify-center gap-5">
                     <CgSandClock size={25} />
                     <span className="text-center text-xs">
