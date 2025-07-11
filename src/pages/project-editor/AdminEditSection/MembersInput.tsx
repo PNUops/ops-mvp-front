@@ -69,7 +69,7 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
                 <button
                   type="button"
                   onClick={() => handleAdd(idx)}
-                  className={`${inputs[idx].trim() ? 'text-mainGreen' : 'text-lightGray'}`}
+                  className={`focus:outline-none ${inputs[idx].trim() ? 'text-mainGreen' : 'text-lightGray'}`}
                   disabled={!inputs[idx].trim()}
                   aria-label="Add member"
                 >
@@ -80,7 +80,7 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
                 <button
                   type="button"
                   onClick={() => handleRemove(idx)}
-                  className="text-mainGreen"
+                  className="text-mainGreen focus:outline-none"
                   aria-label="Remove member"
                 >
                   <IoIosRemove size={24} />
