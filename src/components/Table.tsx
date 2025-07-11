@@ -21,7 +21,7 @@ function Table<T>({ columns, rows, actions }: Props<T>) {
           {columns.map((col) => (
             <th
               key={col.key}
-              className={`border-r border-b border-gray-300 p-2 text-sm ${col.width ? `w-[${col.width}]` : ''}`}
+              className={`border-r border-b border-gray-300 p-2 text-left text-sm ${col.width ? `w-[${col.width}]` : ''}`}
             >
               {col.label}
             </th>
