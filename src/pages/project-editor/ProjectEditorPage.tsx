@@ -212,8 +212,6 @@ const ProjectEditorPage = () => {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
   };
-  console.log('teamMembers', teamMembers);
-  console.log('setTeamMembers', setTeamMembers);
 
   const onMemberAdd = (newMemberName: string) => {
     setTeamMembers((prevMembers) => [...prevMembers, { teamMemberId: Date.now(), teamMemberName: newMemberName }]);
