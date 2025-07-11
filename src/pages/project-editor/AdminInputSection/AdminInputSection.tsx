@@ -89,7 +89,7 @@ const AdminInputSection = ({
       <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-start sm:gap-10">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
-          <span className="w-full">참가자</span>
+          <span className="w-full">팀원</span>
         </div>
         <div className="flex flex-1 flex-col">
           <MembersInput teamMembers={teamMembers} onMemberAdd={onMemberAdd} onMemberRemove={onMemberRemove} />

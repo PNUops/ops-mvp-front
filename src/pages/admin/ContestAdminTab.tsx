@@ -120,23 +120,12 @@ const ContestAdminTab = () => {
           rows={state.contestTeams}
           actions={(row) => (
             <>
-              <Button
-                className="bg-mainRed h-[35px] w-full"
-                onClick={() => {
-                  if (state.currentContestId == 1)
-                    toast('현재 진행 중인 대회의 프로젝트를 삭제할 수 없습니다.', 'error');
-                  state.currentContestId !== 1 && handleDeleteTeam(row.teamId);
-                }}
-              >
+              <Button className="bg-mainRed h-[35px] w-full min-w-[70px]" onClick={() => handleDeleteTeam(row.teamId)}>
                 삭제하기
               </Button>
               <Button
-                onClick={() => {
-                  if (state.currentContestId == 1)
-                    toast('현재 진행 중인 대회의 프로젝트를 수정할 수 없습니다.', 'info');
-                  state.currentContestId !== 1 && navigate(`/teams/edit/${row.teamId}`);
-                }}
-                className="bg-mainGreen h-[35px] w-full"
+                onClick={() => navigate(`/teams/edit/${row.teamId}`)}
+                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
               >
                 수정하기
               </Button>

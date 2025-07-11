@@ -132,16 +132,18 @@ const ProjectEditorPage = () => {
       if (isAdmin) {
         if (!projectName) return '프로젝트명이 입력되지 않았어요.';
         if (!teamName) return '팀명이 입력되지 않았어요.';
+        if (!leaderName) return '팀장명이 입력되지 않았어요.';
+        if (contestId !== 1 && !overview) return '프로젝트 소개글이 작성되지 않았어요.';
       }
       if (isLeaderOfThisTeam) {
         if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
         if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
         if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
+        if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
+        if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
+        if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
       }
-      if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
-      if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
-
-      if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
+      if (teamMembers.length < 1) return '등록된 팀원이 없어요';
       if (prodUrl && !isValidProjectUrl(prodUrl)) return '유효한 프로젝트 주소를 입력하세요.';
       if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
       if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
@@ -210,20 +212,26 @@ const ProjectEditorPage = () => {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
   };
+  console.log('teamMembers', teamMembers);
+  console.log('setTeamMembers', setTeamMembers);
 
   const onMemberAdd = (newMemberName: string) => {
     setTeamMembers((prevMembers) => [...prevMembers, { teamMemberId: Date.now(), teamMemberName: newMemberName }]);
+    console.log('teamMembers', teamMembers);
+    console.log('setTeamMembers', setTeamMembers);
   };
 
   const onMemberRemove = (index: number) => {
     setTeamMembers((prevMembers) => prevMembers.filter((_, idx) => idx !== index));
+    console.log('teamMembers', teamMembers);
+    console.log('setTeamMembers', setTeamMembers);
   };
 
   return (
     <div className="px-5">
-      <div className="text-title font-bold">프로젝트 생성/수정</div>
+      <div className="text-title font-bold">프로젝트 {contestId !== 1 ? '생성/수정' : '수정'}</div>
       <div className="h-10" />
-      {isAdmin && (
+      {isAdmin && contestId !== 1 && (
         <AdminInputSection
           contestId={contestId}
           setContestId={setContestId}
@@ -239,7 +247,7 @@ const ProjectEditorPage = () => {
         />
       )}
 
-      {isLeaderOfThisTeam && (
+      {(isLeaderOfThisTeam || (isAdmin && contestId === 1)) && (
         <IntroSection
           projectName={projectName}
           teamName={teamName}
@@ -258,27 +266,22 @@ const ProjectEditorPage = () => {
         youtubeUrl={youtubeUrl}
         setYoutubeUrl={setYoutubeUrl}
       />
-      {isLeaderOfThisTeam && (
-        <>
-          <div className="h-15" />
-          <ImageUploaderSection
-            thumbnail={thumbnail}
-            setThumbnail={setThumbnail}
-            previews={previews}
-            setPreviews={setPreviews}
-            setThumbnailToDelete={setThumbnailToDelete}
-            previewsToDelete={previewsToDelete}
-            setPreviewsToDelete={setPreviewsToDelete}
-          />
-        </>
-      )}
 
       <div className="h-15" />
 
+      <ImageUploaderSection
+        thumbnail={thumbnail}
+        setThumbnail={setThumbnail}
+        previews={previews}
+        setPreviews={setPreviews}
+        setThumbnailToDelete={setThumbnailToDelete}
+        previewsToDelete={previewsToDelete}
+        setPreviewsToDelete={setPreviewsToDelete}
+      />
+
+      <div className="h-15" />
       <OverviewInput overview={overview} setOverview={setOverview} />
-
       <div className="h-20" />
-
       <div className="flex justify-end gap-5 sm:gap-10">
         <button
           onClick={() => navigate(-1)}
