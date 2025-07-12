@@ -2,6 +2,7 @@ import Notice from '@pages/main/Notice';
 import LeaderSection from '@pages/main/LeaderSection';
 import TeamCardGrid from '@pages/main/TeamCardGrid';
 import useTeamList from 'hooks/useTeamList';
+import TeamCardSkeleton from '@pages/main/TeamCardSkeleton';
 
 const MainPage = () => {
   const { data: teams, isLoading, isError } = useTeamList('current');
@@ -14,7 +15,7 @@ const MainPage = () => {
         <TeamCardGrid teams={teams} isLoading={isLoading} isError={isError} />
       </div>
     </div>
-  );
+);
 };
 
 export default MainPage;

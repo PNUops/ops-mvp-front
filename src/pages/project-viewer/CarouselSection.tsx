@@ -11,12 +11,16 @@ import Spinner from '@components/Spinner';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { FaSadTear } from 'react-icons/fa';
 import { CgSandClock } from 'react-icons/cg';
+import { CiNoWaitingSign } from 'react-icons/ci';
 
 interface CarouselSectionProps {
   teamId: number;
   previewIds: number[];
   youtubeUrl: string;
+  isEditor: boolean;
 }
+
+const ERROR_CODES = ['ERROR_ETC', 'THUMBNAIL_ERR_404', 'PREVIEW_ERR_404', 'THUMBNAIL_ERR_409', 'PREVIEW_ERR_409'];
 
 const getEmbedUrl = (url: string) => {
   try {
@@ -81,39 +85,71 @@ const IndicatorDots = ({
   </>
 );
 
+const ErrorMessage = ({ icon: Icon, message }: { icon: React.ElementType; message: React.ReactNode }) => (
+  <div className="text-lightGray border-lightGray flex h-full w-full animate-pulse flex-col items-center justify-center gap-5 border">
+    <Icon size={40} />
+    <span className="text-center text-xs">{message}</span>
+  </div>
+);
+
 const MediaRenderer = ({
   currentImage,
   embedUrl,
   imageLoaded,
   setImageLoaded,
   setLoadFailed,
+  isEditor,
 }: {
   currentImage: string | null;
   embedUrl: string | null;
   imageLoaded: boolean;
   setImageLoaded: (loaded: boolean) => void;
   setLoadFailed: (failed: boolean) => void;
+  isEditor: boolean;
 }) => {
-  if (!currentImage || currentImage === 'ERROR') {
-    return (
-      <div className="text-lightGray border-lightGray flex h-full w-full flex-col items-center justify-center gap-5 border">
-        <FaSadTear size={40} />
-        <span className="text-xs">이미지를 찾을 수 없어요.</span>
-      </div>
-    );
-  }
-
   if (currentImage === 'youtube' && embedUrl) {
     return <iframe src={embedUrl} title="Youtube Iframe" allowFullScreen className="absolute inset-0 h-full w-full" />;
   }
 
-  if (currentImage === 'ERROR_409') {
-    return (
-      <div className="text-lightGray border-lightGray flex h-full w-full flex-col items-center justify-center gap-5 border">
-        <CgSandClock size={40} />
-        <span className="text-xs">서버에서 이미지 변환 중입니다. 나중에 시도해 주세요.</span>
-      </div>
-    );
+  const errorMap: Record<string, { icon: React.ElementType; message: React.ReactNode }> = {
+    ERROR_ETC: {
+      icon: FaSadTear,
+      message: '이미지를 찾을 수 없어요',
+    },
+    THUMBNAIL_ERR_404: {
+      icon: CiNoWaitingSign,
+      message: '썸네일이 아직 업로드 되지 않았어요',
+    },
+    PREVIEW_ERR_404: {
+      icon: CiNoWaitingSign,
+      message: '프리뷰 이미지가 아직 업로드 되지 않았어요',
+    },
+    THUMBNAIL_ERR_409: {
+      icon: CgSandClock,
+      message: (
+        <>
+          서버에서 이미지를 압축 중이에요
+          <br />
+          조금만 기다려주세요!
+        </>
+      ),
+    },
+    PREVIEW_ERR_409: {
+      icon: CgSandClock,
+      message: (
+        <>
+          서버에서 이미지를 압축 중이에요
+          <br />
+          조금만 기다려주세요!
+        </>
+      ),
+    },
+  };
+
+  if (!currentImage || ERROR_CODES.includes(currentImage)) {
+    if (!isEditor) return null;
+    const { icon, message } = currentImage ? errorMap[currentImage] : errorMap['ERROR_ETC'];
+    return <ErrorMessage icon={icon} message={message} />;
   }
 
   return (
@@ -128,7 +164,7 @@ const MediaRenderer = ({
         alt="Project image"
         onLoad={() => setImageLoaded(true)}
         onError={() => setLoadFailed(true)}
-        className={`border-lightGray absolute inset-0 h-full w-full border object-cover object-top transition-opacity duration-200 ${
+        className={`border-lightGray absolute inset-0 h-full w-full border object-cover transition-opacity duration-200 ${
           imageLoaded ? 'opacity-100' : 'opacity-0'
         }`}
       />
@@ -136,7 +172,7 @@ const MediaRenderer = ({
   );
 };
 
-const CarouselSection = ({ teamId, previewIds, youtubeUrl }: CarouselSectionProps) => {
+const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselSectionProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [loadFailed, setLoadFailed] = useState(false);
@@ -145,22 +181,31 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl }: CarouselSectionProp
   const { data: thumbnailUrl } = useQuery<string>({
     queryKey: ['thumbnail', teamId],
     queryFn: () => getThumbnail(teamId),
+    refetchInterval: (query) => (query.state.data === 'ERROR_409' ? 1500 : false),
   });
 
   const { data: previewData } = useQuery<PreviewImagesResponseDto>({
-    queryKey: ['previewImages', teamId, previewIds],
+    queryKey: ['previewImages', teamId],
     queryFn: () => getPreviewImages(teamId, previewIds),
     enabled: previewIds.length > 0,
+    refetchInterval: (query) => {
+      const data = query.state.data;
+      const shouldRefetch = data?.imageUrls?.every((url) => url === 'ERROR_409') ?? false;
+      return shouldRefetch ? 1500 : false;
+    },
   });
 
   const previewUrls = previewData?.imageUrls ?? [];
   const embedUrl = useMemo(() => getEmbedUrl(youtubeUrl), [youtubeUrl]);
-  const imageUrls: string[] = useMemo(() => {
-    const result = [...(embedUrl ? ['youtube'] : []), ...(thumbnailUrl ? [thumbnailUrl] : []), ...previewUrls];
-    return result;
+  const rawImageUrls = useMemo(() => {
+    return [...(embedUrl ? ['youtube'] : []), ...(thumbnailUrl ? [thumbnailUrl] : []), ...previewUrls];
   }, [embedUrl, thumbnailUrl, previewUrls]);
 
-  const currentImage = useMemo(() => imageUrls[currentIndex] || null, [imageUrls, currentIndex]);
+  const visibleImageUrls = useMemo(() => {
+    return isEditor ? rawImageUrls : rawImageUrls.filter((url) => !ERROR_CODES.includes(url));
+  }, [rawImageUrls, isEditor]);
+
+  const currentImage = useMemo(() => visibleImageUrls[currentIndex] || null, [visibleImageUrls, currentIndex]);
 
   useEffect(() => {
     setImageLoaded(false);
@@ -175,14 +220,14 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl }: CarouselSectionProp
     };
   }, [thumbnailUrl]);
 
-  const goToPrev = () => setCurrentIndex((prev) => (prev === 0 ? imageUrls.length - 1 : prev - 1));
-  const goToNext = () => setCurrentIndex((prev) => (prev === imageUrls.length - 1 ? 0 : prev + 1));
+  const goToPrev = () => setCurrentIndex((prev) => (prev === 0 ? visibleImageUrls.length - 1 : prev - 1));
+  const goToNext = () => setCurrentIndex((prev) => (prev === visibleImageUrls.length - 1 ? 0 : prev + 1));
   const goToSlide = (index: number) => setCurrentIndex(index);
 
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center justify-center md:gap-10">
-        {imageUrls.length > 1 && !isMobile && <ArrowButton direction="left" onClick={goToPrev} />}
+        {visibleImageUrls.length > 1 && !isMobile && <ArrowButton direction="left" onClick={goToPrev} />}
 
         <div className="border-lightGray relative aspect-[3/2] w-[50vw] max-w-[900px] min-w-[300px] overflow-hidden rounded">
           <MediaRenderer
@@ -191,20 +236,21 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl }: CarouselSectionProp
             imageLoaded={imageLoaded}
             setImageLoaded={setImageLoaded}
             setLoadFailed={setLoadFailed}
+            isEditor={isEditor}
           />
         </div>
 
-        {imageUrls.length > 1 && !isMobile && <ArrowButton direction="right" onClick={goToNext} />}
+        {visibleImageUrls.length > 1 && !isMobile && <ArrowButton direction="right" onClick={goToNext} />}
       </div>
 
-      {imageUrls.length > 1 && (
+      {visibleImageUrls.length > 1 && (
         <div
           className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-[50vw] max-w-[900px] min-w-[300px] px-3`}
         >
           {isMobile && <ArrowButton direction="left" onClick={goToPrev} size={40} />}
 
           <div className="flex gap-5">
-            <IndicatorDots count={imageUrls.length} currentIndex={currentIndex} onClick={goToSlide} />
+            <IndicatorDots count={visibleImageUrls.length} currentIndex={currentIndex} onClick={goToSlide} />
           </div>
 
           {isMobile && <ArrowButton direction="right" onClick={goToNext} size={40} />}

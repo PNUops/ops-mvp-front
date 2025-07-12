@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import type { Query } from '@tanstack/react-query';
 
 import useAuth from 'hooks/useAuth';
-import { useTeamId } from 'hooks/useId';
+import { useContestId, useTeamId } from 'hooks/useId';
 import { useToast } from 'hooks/useToast';
 
 import { getProjectDetails, getPreviewImages } from 'apis/projectViewer';
 import {
+  createProjectDetails,
   getThumbnail,
   patchProjectDetails,
   postPreview,
@@ -18,27 +20,37 @@ import {
   deleteMember,
 } from 'apis/projectEditor';
 
-import { TeamMember, ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
+import {
+  TeamMember,
+  PreviewImagesResponseDto,
+  ProjectDetailsResponseDto,
+  PreviewImage,
+} from 'types/DTO/projectViewerDto';
 
 import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from './urlValidators';
 import IntroSection from './IntroSection';
-import UrlInput from './UrlInputSection';
+import UrlInput from './UrlInput';
 import ImageUploaderSection from './ImageUploaderSection';
 import OverviewInput from './OverviewInput';
 import { EditorDetailSkeleton } from './EditorSkeleton';
 
-import AdminInputSection from '@pages/project-editor/AdminInputSection/AdminInputSection';
+import AdminEditSection from '@pages/project-editor/AdminEditSection/AdminEditSection';
+import MembersInput from './AdminEditSection/MembersInput';
 
-export interface PreviewImage {
-  id?: number;
-  url: string | File;
+interface ProjectEditorPageProps {
+  mode: 'edit' | 'create';
 }
 
-const ProjectEditorPage = () => {
+const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   const { user, isAdmin, isLeader } = useAuth();
   const memberId = user?.id;
   const teamId = useTeamId();
-  const [contestId, setContestId] = useState<number | null>(null);
+  const initialContestId = useContestId();
+
+  const isEditMode = mode === 'edit';
+  const isCreateMode = mode === 'create';
+
+  const [contestId, setContestId] = useState<number | null>(initialContestId ?? null);
   const [teamName, setTeamName] = useState('');
   const [projectName, setProjectName] = useState('');
   const [leaderName, setLeaderName] = useState('');
@@ -48,7 +60,7 @@ const ProjectEditorPage = () => {
   const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const teamMembersRef = useRef<TeamMember[]>(teamMembers);
-  const [prodUrl, setProdUrl] = useState<string | null>(null);
+  const [productionUrl, setProductionUrl] = useState<string | null>(null);
   const [githubUrl, setGithubUrl] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [overview, setOverview] = useState('');
@@ -66,25 +78,34 @@ const ProjectEditorPage = () => {
       if (teamId === null) throw new Error('teamId is null');
       return await getProjectDetails(teamId);
     },
-    enabled: teamId !== null,
+    enabled: isEditMode && teamId !== null,
   });
 
-  const { data: thumbnailUrl } = useQuery({
+  const { data: thumbnailUrl } = useQuery<string>({
     queryKey: ['thumbnail', teamId],
     queryFn: async () => {
       if (teamId === null) throw new Error('teamId is null');
       return await getThumbnail(teamId);
     },
     enabled: teamId !== null,
+    refetchInterval: (query) => {
+      const shouldRefetch = query.state.data === 'THUMBNAIL_ERR_409';
+      return shouldRefetch ? 1500 : false;
+    },
   });
 
-  const { data: previewData } = useQuery({
+  const { data: previewData } = useQuery<PreviewImagesResponseDto>({
     queryKey: ['previewImages', teamId, projectData?.previewIds],
     queryFn: async () => {
       if (teamId === null || !projectData?.previewIds) throw new Error('previewIds 없음');
       return await getPreviewImages(teamId, projectData.previewIds);
     },
     enabled: teamId !== null && !!projectData?.previewIds?.length,
+    refetchInterval: (query) => {
+      const data = query.state.data;
+      const shouldRefetch = data?.imageUrls?.every((url) => url === 'PREVIEW_ERR_409') ?? false;
+      return shouldRefetch ? 1500 : false;
+    },
   });
 
   useEffect(() => {
@@ -96,7 +117,7 @@ const ProjectEditorPage = () => {
       setTeamMembers(projectData.teamMembers);
       setGithubUrl(projectData.githubPath);
       setYoutubeUrl(projectData.youTubePath);
-      setProdUrl(projectData.productionPath);
+      setProductionUrl(projectData.productionPath);
       setOverview(projectData.overview);
     }
   }, [projectData]);
@@ -121,91 +142,122 @@ const ProjectEditorPage = () => {
     teamMembersRef.current = teamMembers;
   }, [teamMembers]);
 
-  if (!teamId) return <div>팀 정보를 불러올 수 없습니다.</div>;
+  if ((isCreateMode && !initialContestId) || (isEditMode && !contestId))
+    return <div>프로젝트의 대회 소속을 불러올 수 없습니다.</div>;
+  if (!teamId && isEditMode) return <div>팀 정보를 불러올 수 없습니다.</div>;
 
   if (isProjectLoading) return <EditorDetailSkeleton />;
-  if (isProjectError || !projectData) return <div>데이터를 가져오지 못했습니다.</div>;
+  if ((isProjectError || !projectData) && isEditMode) return <div>데이터를 가져오지 못했습니다.</div>;
 
-  const isLeaderOfThisTeam = isLeader && memberId == projectData.leaderId;
+  const isLeaderOfThisTeam = isLeader && isEditMode && projectData && memberId === projectData.leaderId;
   if (!isLeaderOfThisTeam && !isAdmin) {
     return <div>접근 권한이 없습니다.</div>;
   }
 
-  const handleSave = async () => {
-    const contestIdToSubmit = contestId;
-    const validateProjectInputs = () => {
-      if (isAdmin) {
-        if (!projectName) return '프로젝트명이 입력되지 않았어요.';
-        if (!teamName) return '팀명이 입력되지 않았어요.';
-        if (!leaderName) return '팀장명이 입력되지 않았어요.';
-        if (contestId !== 1 && !overview) return '프로젝트 소개글이 작성되지 않았어요.';
-      }
-      if (isLeaderOfThisTeam) {
-        if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
-        if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
-        if (!previews.length) return '프리뷰 이미지가 업로드 되지 않았어요.';
-        if (!githubUrl) return '깃허브 링크가 입력되지 않았어요.';
-        if (!youtubeUrl) return '유튜브 링크가 입력되지 않았어요.';
-        if (!overview) return '프로젝트 소개글이 작성되지 않았어요.';
-      }
-      if (teamMembers.length < 1) return '등록된 팀원이 없어요';
-      if (prodUrl && !isValidProjectUrl(prodUrl)) return '유효한 프로젝트 주소를 입력하세요.';
-      if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
-      if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
-      return null;
-    };
+  const isEmpty = (value?: string | null) => !value || value.trim() === '';
 
-    const errorMessage = validateProjectInputs();
+  const validateCommonFields = () => {
+    if (teamMembers.length < 1) return '등록된 팀원이 없어요.';
+    if (productionUrl && !isValidProjectUrl(productionUrl)) return '유효한 프로젝트 주소를 입력하세요.';
+    if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
+    if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
+  };
+
+  const validateCreateInputs = () => {
+    if (contestId === null) return '대회 종류를 설정해야 해요.';
+    if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요.';
+    if (isEmpty(teamName)) return '팀명이 입력되지 않았어요.';
+    if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요.';
+    if (isEmpty(githubUrl)) return '깃허브 링크가 입력되지 않았어요.';
+    if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
+    if (isEmpty(youtubeUrl)) return '유튜브 링크가 입력되지 않았어요.';
+    if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
+    if (productionUrl && !isValidProjectUrl(productionUrl)) return '유효한 프로젝트 주소를 입력하세요.';
+    if (isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요.';
+    if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
+    if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
+    if (previews.length === 0) return '프리뷰 이미지가 업로드 되지 않았어요.';
+    return validateCommonFields();
+  };
+
+  const validateEditInputs = () => {
+    if (isAdmin) {
+      if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요.';
+      if (isEmpty(teamName)) return '팀명이 입력되지 않았어요.';
+      if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요.';
+      if (contestId !== 1 && isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요.';
+    }
+
+    if (isLeaderOfThisTeam) {
+      if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
+      if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
+      if (previews.length === 0) return '프리뷰 이미지가 업로드 되지 않았어요.';
+      if (isEmpty(githubUrl)) return '깃허브 링크가 입력되지 않았어요.';
+      if (isEmpty(youtubeUrl)) return '유튜브 링크가 입력되지 않았어요.';
+      if (isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요.';
+    }
+
+    return validateCommonFields();
+  };
+
+  const validateInputs = () => {
+    if (isCreateMode) return validateCreateInputs();
+    if (isEditMode) return validateEditInputs();
+    return null;
+  };
+
+  const handleEdit = async () => {
+    const errorMessage = validateInputs();
     if (errorMessage) {
       toast(errorMessage, 'error');
       return;
     }
 
     try {
-      await patchProjectDetails(teamId, {
-        contestId: isAdmin ? (contestIdToSubmit ?? projectData.contestId) : projectData.contestId,
-        teamName: isAdmin ? teamName : projectData.teamName,
-        projectName: isAdmin ? projectName : projectData.projectName,
-        leaderName: isAdmin ? leaderName : projectData.leaderName,
+      await patchProjectDetails(teamId!, {
+        contestId: isAdmin ? (contestId !== null ? contestId : projectData!.contestId) : projectData!.contestId,
+        teamName: isAdmin ? teamName : projectData!.teamName,
+        projectName: isAdmin ? projectName : projectData!.projectName,
+        leaderName: isAdmin ? leaderName : projectData!.leaderName,
         overview,
-        productionPath: prodUrl,
+        productionPath: productionUrl,
         githubPath: githubUrl,
         youTubePath: youtubeUrl,
       });
 
       const addedMembers = teamMembers.filter(
-        (member) => !projectData.teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
+        (member) => !projectData!.teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
       );
-      const removedMembers = projectData.teamMembers.filter(
+      const removedMembers = projectData!.teamMembers.filter(
         (member) => !teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
       );
 
       const addMemberPromises = addedMembers.map(
-        async (member) => await postMember(teamId, { teamMemberName: member.teamMemberName }),
+        async (member) => await postMember(teamId!, { teamMemberName: member.teamMemberName }),
       );
       const removeMemberPromises = removedMembers.map(
-        async (member) => await deleteMember(teamId, member.teamMemberId),
+        async (member) => await deleteMember(teamId!, member.teamMemberId),
       );
 
       await Promise.all([...addMemberPromises, ...removeMemberPromises]);
 
       if (thumbnailToDelete) {
-        await deleteThumbnail(teamId);
+        await deleteThumbnail(teamId!);
       }
       if (thumbnail instanceof File) {
         const formData = new FormData();
         formData.append('image', thumbnail);
-        await postThumbnail(teamId, formData);
+        await postThumbnail(teamId!, formData);
       }
 
       if (previewsToDelete.length > 0) {
-        await deletePreview(teamId, { imageIds: previewsToDelete });
+        await deletePreview(teamId!, { imageIds: previewsToDelete });
       }
       const newFiles = previews.filter((p) => p.url instanceof File).map((p) => p.url as File);
       if (newFiles.length > 0) {
         const formData = new FormData();
         newFiles.forEach((file) => formData.append('images', file));
-        await postPreview(teamId, formData);
+        await postPreview(teamId!, formData);
       }
       queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] });
       queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] });
@@ -217,64 +269,100 @@ const ProjectEditorPage = () => {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
     }
   };
-  console.log('teamMembers', teamMembers);
-  console.log('setTeamMembers', setTeamMembers);
 
-  const onMemberAdd = (newMemberName: string) => {
-    const trimmedName = newMemberName.trim();
-    const normalized = trimmedName.toLowerCase();
-
-    const removedOriginalMembers = projectData.teamMembers.filter(
-      (original) => !teamMembers.some((current) => current.teamMemberId === original.teamMemberId),
-    );
-    const removedNames = removedOriginalMembers.map((m) => m.teamMemberName.toLowerCase());
-
-    const isDuplicate = teamMembers.some(
-      (member) => member.teamMemberName.toLowerCase() === normalized && !removedNames.includes(normalized),
-    );
-
-    if (isDuplicate) {
-      toast(`팀원 "${trimmedName}" 은(는) 이미 존재해요`, 'error');
+  const handleCreate = async () => {
+    const errorMessage = validateInputs();
+    if (errorMessage) {
+      toast(errorMessage, 'error');
       return;
     }
 
-    const generateUniqueId = () => Date.now() + Math.floor(Math.random() * 1000);
+    try {
+      const response = await createProjectDetails({
+        contestId: contestId!,
+        projectName,
+        teamName,
+        leaderName,
+        githubPath: githubUrl,
+        youTubePath: youtubeUrl,
+        productionPath: productionUrl,
+        overview,
+      });
 
-    const newMember = {
-      teamMemberId: generateUniqueId(),
-      teamMemberName: trimmedName,
-    };
+      const createdTeamId = response.teamId;
+      queryClient.invalidateQueries({ queryKey: ['projectDetails'] });
+      toast('기본 정보 등록에 성공했어요');
 
-    setTeamMembers((prev) => [...prev, newMember]);
-    toast(`팀원 "${trimmedName}" 을(를) 추가했어요`, 'success');
+      const postDetailTasks: Promise<any>[] = [];
+
+      const addMemberPromises = teamMembers.map((member) =>
+        postMember(createdTeamId, { teamMemberName: member.teamMemberName }),
+      );
+      postDetailTasks.push(...addMemberPromises);
+
+      if (thumbnail instanceof File) {
+        const formData = new FormData();
+        formData.append('image', thumbnail);
+        postDetailTasks.push(postThumbnail(createdTeamId, formData));
+      }
+
+      const newFiles = previews.filter((p) => p.url instanceof File).map((p) => p.url as File);
+      if (newFiles.length > 0) {
+        const formData = new FormData();
+        newFiles.forEach((file) => formData.append('images', file));
+        postDetailTasks.push(postPreview(createdTeamId, formData));
+      }
+
+      await Promise.all(postDetailTasks);
+
+      toast('세부 정보 등록이 완료되었습니다', 'success');
+      setTimeout(() => navigate(`/teams/view/${createdTeamId}`), 300);
+
+      queryClient.invalidateQueries({ queryKey: ['projectDetails', createdTeamId] });
+      queryClient.invalidateQueries({ queryKey: ['thumbnail', createdTeamId] });
+      queryClient.invalidateQueries({ queryKey: ['previewImages', createdTeamId] });
+    } catch (err: any) {
+      toast(err?.response?.data?.message || '생성 도중 실패했어요', 'error');
+      setTimeout(() => navigate(`/admin/contest`), 300);
+    }
   };
 
-  const onMemberRemove = (teamMemberId: number) => {
-    const member = teamMembersRef.current.find((m) => m.teamMemberId === teamMemberId);
-    if (!member) return;
+  const onMemberAdd = (newMemberName: string) => {
+    setTeamMembers((prevMembers) => [...prevMembers, { teamMemberId: Date.now(), teamMemberName: newMemberName }]);
+  };
 
-    setTeamMembers((prev) => prev.filter((m) => m.teamMemberId !== teamMemberId));
-    toast(`팀원 "${member.teamMemberName}" 을(를) 삭제했어요`, 'info');
+  const onMemberRemove = (index: number) => {
+    setTeamMembers((prevMembers) => prevMembers.filter((_, idx) => idx !== index));
+  };
+
+  const handleSave = () => {
+    if (isCreateMode) {
+      handleCreate();
+    }
+    if (isEditMode) {
+      handleEdit();
+    }
   };
 
   return (
     <div className="px-5">
-      <div className="text-title font-bold">프로젝트 {contestId !== 1 ? '생성/수정' : '수정'}</div>
+      <div className="text-title font-bold">{isEditMode ? '프로젝트 수정' : '프로젝트 생성'}</div>
       <div className="h-10" />
       {isAdmin && contestId !== 1 && (
-        <AdminInputSection
-          contestId={contestId}
-          setContestId={setContestId}
-          projectName={projectName}
-          setProjectName={setProjectName}
-          teamName={teamName}
-          setTeamName={setTeamName}
-          leaderName={leaderName}
-          setLeaderName={setLeaderName}
-          teamMembers={teamMembers}
-          onMemberAdd={onMemberAdd}
-          onMemberRemove={onMemberRemove}
-        />
+        <>
+          <AdminEditSection
+            contestId={contestId}
+            setContestId={setContestId}
+            projectName={projectName}
+            setProjectName={setProjectName}
+            teamName={teamName}
+            setTeamName={setTeamName}
+            leaderName={leaderName}
+            setLeaderName={setLeaderName}
+          />
+          <div className="h-15" />
+          <MembersInput teamMembers={teamMembers} onMemberAdd={onMemberAdd} onMemberRemove={onMemberRemove} />
+        </>
       )}
 
       {(isLeaderOfThisTeam || (isAdmin && contestId === 1)) && (
@@ -289,8 +377,8 @@ const ProjectEditorPage = () => {
       <div className="h-15" />
 
       <UrlInput
-        prodUrl={prodUrl}
-        setProdUrl={setProdUrl}
+        productionUrl={productionUrl}
+        setProductionUrl={setProductionUrl}
         githubUrl={githubUrl}
         setGithubUrl={setGithubUrl}
         youtubeUrl={youtubeUrl}
