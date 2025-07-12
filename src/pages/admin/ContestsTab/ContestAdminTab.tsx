@@ -70,7 +70,7 @@ const ContestAdminTab = () => {
         onCancel={closeDeleteModal}
         message={`삭제한 ${deleteModal.type == 'contest' ? '대회' : '팀'}은 복구할 수 없습니다.`}
       />
-      {state.isEditModalOpen && <EditModal closeModal={closeEditModal} editId={state.editContestId} />}
+      <EditModal isOpen={state.isEditModalOpen} closeModal={closeEditModal} editId={state.editContestId} />
 
       <section className="mb-8 min-w-[350px]">
         <h2 className="mb-8 text-2xl font-bold">대회 목록</h2>
