@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useToast } from 'hooks/useToast';
+import { imageValidator } from 'utils/image';
 
 import { PreviewImage } from './ProjectEditorPage';
 
@@ -33,15 +34,22 @@ const ImageUploaderSection = ({
   const toast = useToast();
 
   const images: (PreviewImage | undefined)[] = useMemo(() => {
-    const isInvalidThumbnail = thumbnail === 'THUMBNAIL_ERR_404';
-    const thumbSlot = !isInvalidThumbnail && thumbnail ? { url: thumbnail } : undefined;
+    const isEmptyThumbnail = !thumbnail || thumbnail === 'THUMBNAIL_ERR_404';
+    const thumbSlot = isEmptyThumbnail ? undefined : { url: thumbnail };
     const result: (PreviewImage | undefined)[] = [thumbSlot, ...previews];
     return result.slice(0, MAX_IMAGES);
   }, [thumbnail, previews]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
+    e.target.value = '';
     if (files.length === 0) return;
+
+    const validate = imageValidator(files);
+    if (!validate.isValid) {
+      validate.message.forEach((msg) => toast(msg, 'error'));
+      return;
+    }
 
     const currentImageCount = (thumbnail ? 1 : 0) + previews.length;
     const newImageCount = currentImageCount + files.length;
@@ -52,17 +60,30 @@ const ImageUploaderSection = ({
     }
 
     const newPreviews: PreviewImage[] = files.map((file) => ({ url: file }));
+    if (newPreviews.length === 0) {
+      toast('업로드할 수 있는 이미지가 없어요', 'info');
+      return;
+    }
 
-    if (!thumbnail) {
+    const MAX_PREVIEWS = MAX_IMAGES - 1;
+    const isEmptyThumbnail = !thumbnail || thumbnail === 'THUMBNAIL_ERR_404';
+
+    if (isEmptyThumbnail) {
       const first = newPreviews[0];
+      if (!first) {
+        toast('썸네일로 사용할 수 있는 이미지가 없어요', 'error');
+        return;
+      }
       const rest = newPreviews.slice(1);
-      const combinedPreviews = [...previews, ...rest].slice(0, MAX_IMAGES - 1);
+      const combinedPreviews = [...previews, ...rest].slice(0, MAX_PREVIEWS);
       setThumbnail(first.url);
       setPreviews(combinedPreviews);
     } else {
-      const combined = [...previews, ...newPreviews].slice(0, MAX_IMAGES - 1);
+      const combined = [...previews, ...newPreviews].slice(0, MAX_PREVIEWS);
       setPreviews(combined);
     }
+
+    toast('썸네일 이미지가 업로드 되었어요', 'success');
   };
 
   const handleRemove = (index: number) => {
@@ -74,22 +95,32 @@ const ImageUploaderSection = ({
         setThumbnailToDelete(true);
       }
       setThumbnail(undefined);
+      toast('썸네일 이미지를 삭제했어요', 'info');
       return;
     }
 
     if (target.id !== undefined) {
       setPreviewsToDelete((prev) => [...prev, target.id!]);
     }
+
     const next = images
       .filter((_, i) => i !== index)
       .filter((img, i) => i !== 0 && img !== undefined) as PreviewImage[];
 
     setPreviews(next);
+    toast('프리뷰 이미지를 삭제했어요', 'info');
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'));
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length === 0) return;
+
+    const validate = imageValidator(files);
+    if (!validate.isValid) {
+      validate.message.forEach((msg) => toast(msg, 'error'));
+      return;
+    }
 
     const currentImageCount = (thumbnail ? 1 : 0) + previews.length;
     const newImageCount = currentImageCount + files.length;
@@ -100,9 +131,30 @@ const ImageUploaderSection = ({
     }
 
     const newPreviews: PreviewImage[] = files.map((file) => ({ url: file }));
-    const next = [...(thumbnail ? [{ url: thumbnail }] : []), ...previews, ...newPreviews].slice(0, MAX_IMAGES);
-    setThumbnail(next[0]?.url);
-    setPreviews(next.slice(1));
+    if (newPreviews.length === 0) {
+      toast('업로드할 수 있는 이미지가 없어요', 'info');
+      return;
+    }
+
+    const MAX_PREVIEWS = MAX_IMAGES - 1;
+    const isEmptyThumbnail = !thumbnail || thumbnail === 'THUMBNAIL_ERR_404';
+
+    if (isEmptyThumbnail) {
+      const first = newPreviews[0];
+      if (!first) {
+        toast('썸네일로 사용할 수 있는 이미지가 없어요', 'error');
+        return;
+      }
+      const rest = newPreviews.slice(1);
+      const combinedPreviews = [...previews, ...rest].slice(0, MAX_PREVIEWS);
+      setThumbnail(first.url);
+      setPreviews(combinedPreviews);
+    } else {
+      const combined = [...previews, ...newPreviews].slice(0, MAX_PREVIEWS);
+      setPreviews(combined);
+    }
+
+    toast('프리뷰 이미지가 업로드 되었어요', 'success');
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => e.preventDefault();
