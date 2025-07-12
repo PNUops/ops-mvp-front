@@ -7,13 +7,18 @@ import { getAllTeams, deleteTeams } from 'apis/teams';
 import { useToast } from 'hooks/useToast';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 
+type DeleteModalState = {
+  type: 'contest' | 'team' | null;
+  targetId: number | null;
+};
+
 type ContestAdminState = {
   contestName: string;
   currentContestName: string;
   currentContestId: number;
   contestTeams: TeamListItemResponseDto[];
-  // isModalOpen: boolean;
   isEditModalOpen: boolean;
+  isDeleteModalOpen: boolean;
   editContestId: number;
 };
 
@@ -23,9 +28,14 @@ const useContestAdmin = () => {
     currentContestName: '불러오는 중...',
     currentContestId: 1,
     contestTeams: [],
-    // isModalOpen: false,
     isEditModalOpen: false,
+    isDeleteModalOpen: false,
     editContestId: 0,
+  });
+
+  const [deleteModal, setDeleteModal] = useState<DeleteModalState>({
+    type: null,
+    targetId: null,
   });
 
   const { data: contests, refetch: refetchContests } = useQuery({
@@ -83,24 +93,6 @@ const useContestAdmin = () => {
     }
   };
 
-  const handleDeleteContest = async (contestId: number) => {
-    try {
-      const teams = await getAllTeams(contestId);
-      if (teams.length > 0) {
-        toast('팀이 남아있으면 삭제할 수 없습니다.', 'info');
-        return;
-      }
-
-      await deleteContest(contestId);
-      console.log('대회 삭제 후 캐시 무효화');
-      await queryClient.invalidateQueries({ queryKey: ['contests'] });
-      toast('대회가 삭제되었습니다.', 'success');
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || '대회 삭제에 실패했습니다.';
-      toast(errorMessage, 'error');
-    }
-  };
-
   const handleContestChange = async (contestName: string, contestId: number) => {
     try {
       setState((prev) => ({
@@ -110,6 +102,22 @@ const useContestAdmin = () => {
       }));
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || '팀 정보를 불러오는데 실패했습니다.';
+      toast(errorMessage, 'error');
+    }
+  };
+
+  const handleDeleteContest = async (contestId: number) => {
+    try {
+      const teams = await getAllTeams(contestId);
+      if (teams.length > 0) {
+        toast('팀이 남아있으면 삭제할 수 없습니다.', 'info');
+        return;
+      }
+      await deleteContest(contestId);
+      await queryClient.invalidateQueries({ queryKey: ['contests'] });
+      toast('대회가 삭제되었습니다.', 'success');
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || '대회 삭제에 실패했습니다.';
       toast(errorMessage, 'error');
     }
   };
@@ -125,37 +133,27 @@ const useContestAdmin = () => {
     }
   };
 
-  const handleCreateTeam = async (teamId: number) => {
-    try {
-      // await createProjectDetails({
-      //   contestId: contestId,
-      //   teamName: teamName,
-      //   projectName: projectName,
-      //   leaderName: leaderName,
-      //   overview,
-      //   productionPath: prodUrl,
-      //   githubPath: githubUrl,
-      //   youTubePath: youtubeUrl,
-      // });
-      const response = await createProjectDetails({
-        contestId: teamId,
-        teamName: '팀 이름',
-        projectName: '프로젝트 이름',
-        leaderName: '팀장 이름',
-        overview: '프로젝트 소개글',
-        productionPath: '',
-        githubPath: 'https://github.com/2025-PNU-SW-Hackathon',
-        youTubePath: 'https://youtu.be/CYoK_cuG8lU',
-      });
-      const createdTeamId = response.teamId;
-      toast('저장이 완료되었습니다.', 'success');
-      navigate(`/teams/edit/${createdTeamId}`);
-    } catch (err: any) {
-      toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
+  const handleDelete = async () => {
+    if (!deleteModal.type || !deleteModal.targetId) return;
+    if (deleteModal.type === 'contest') {
+      await handleDeleteContest(deleteModal.targetId);
+    } else if (deleteModal.type === 'team') {
+      await handleDeleteTeam(deleteModal.targetId);
     }
+    setState((prev) => ({ ...prev, isDeleteModalOpen: false }));
+    setDeleteModal({ type: null, targetId: null });
   };
 
-  const closeDeleteModal = () => setState((prev) => ({ ...prev, isModalOpen: false }));
+  const openDeleteModal = (type: 'contest' | 'team', targetId: number) => {
+    setState((prev) => ({ ...prev, isDeleteModalOpen: true }));
+    setDeleteModal({ type, targetId });
+  };
+
+  const closeDeleteModal = () => {
+    setState((prev) => ({ ...prev, isDeleteModalOpen: false }));
+    setDeleteModal({ type: null, targetId: null });
+  };
+
   const openEditModal = (contestId: number) =>
     setState((prev) => ({
       ...prev,
@@ -170,13 +168,14 @@ const useContestAdmin = () => {
     toast,
     handleAddContest,
     handleDeleteContest,
-    handleCreateTeam,
     handleContestChange,
-    handleDeleteTeam,
+    openDeleteModal,
     closeDeleteModal,
     openEditModal,
     closeEditModal,
     setContestName: (name: string) => setState((prev) => ({ ...prev, contestName: name })),
+    deleteModal,
+    handleDelete,
   };
 };
 

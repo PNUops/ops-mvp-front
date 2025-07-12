@@ -164,7 +164,7 @@ const MediaRenderer = ({
         alt="Project image"
         onLoad={() => setImageLoaded(true)}
         onError={() => setLoadFailed(true)}
-        className={`border-lightGray absolute inset-0 h-full w-full border object-cover object-top transition-opacity duration-200 ${
+        className={`border-lightGray absolute inset-0 h-full w-full border object-cover transition-opacity duration-200 ${
           imageLoaded ? 'opacity-100' : 'opacity-0'
         }`}
       />
