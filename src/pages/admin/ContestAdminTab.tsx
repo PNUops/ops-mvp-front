@@ -10,7 +10,6 @@ import Table from '@components/Table';
 import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { IoIosArrowDown } from 'react-icons/io';
-// import DeleteInfoModal from '@pages/admin/DeleteInfoModal';
 import EditModal from '@pages/admin/EditModal';
 import useContestAdmin from 'hooks/useContestAdmin';
 
@@ -20,30 +19,27 @@ type HistoryMenuProps = {
 };
 
 const HistoryMenu = ({ contestName, onContestChange }: HistoryMenuProps) => {
-  const [isOpen, setIsOpen] = useState(false);
   const { data: contests } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
 
   return (
-    <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-      <div className="hover:text-mainGreen flex pt-1 pb-4">
-        <button>{contestName}</button>
-        <IoIosArrowDown className="text-mainGreen text-2xl" />
-      </div>
-
-      {isOpen && contests && (
-        <ul className="border-subGreen absolute z-50 w-fit border-2 bg-white text-base font-normal text-nowrap">
-          {contests.map((contest: ContestResponseDto) => (
-            <li key={contest.contestId}>
-              <button
-                onClick={() => onContestChange(contest.contestName, contest.contestId)}
-                className="hover:text-mainGreen hover:bg-whiteGray block w-full p-4 transition-colors duration-200 ease-in"
-              >
-                {contest.contestName}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="relative inline-block">
+      <select
+        value={contestName}
+        onChange={(e) => {
+          const selectedContest = contests?.find((contest) => contest.contestName === e.target.value);
+          if (selectedContest) {
+            onContestChange(selectedContest.contestName, selectedContest.contestId);
+          }
+        }}
+        className="border-subGreen cursor-pointer appearance-none rounded border-b-2 bg-white px-4 py-2 pr-10 text-nowrap focus:outline-none"
+      >
+        {contests?.map((contest: ContestResponseDto) => (
+          <option key={contest.contestId} value={contest.contestName}>
+            {contest.contestName}
+          </option>
+        ))}
+      </select>
+      <IoIosArrowDown className="text-mainGreen pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-lg" />
     </div>
   );
 };
@@ -85,16 +81,10 @@ const ContestAdminTab = () => {
           rows={contests ?? []}
           actions={(row) => (
             <>
-              <Button
-                className="bg-mainRed h-[35px] w-full min-w-[70px]"
-                onClick={() => handleDeleteContest(row.contestId)}
-              >
+              <Button className="bg-mainRed h-[35px] w-full" onClick={() => handleDeleteContest(row.contestId)}>
                 삭제하기
               </Button>
-              <Button
-                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
-                onClick={() => openEditModal(row.contestId)}
-              >
+              <Button className="bg-mainGreen h-[35px] w-full" onClick={() => openEditModal(row.contestId)}>
                 수정하기
               </Button>
             </>
@@ -146,7 +136,7 @@ const ContestAdminTab = () => {
         <div className="mt-8 flex w-full flex-row-reverse">
           <Button
             onClick={() => handleCreateTeam(state.currentContestId)}
-            className="bg-mainBlue h-12 w-[20%] min-w-[130px]"
+            className="bg-mainBlue h-12 w-[20%] min-w-[160px]"
           >
             프로젝트 생성하기
           </Button>
