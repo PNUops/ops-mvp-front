@@ -30,7 +30,7 @@ export const imageValidator = (images: File | File[]): ImageValidateResult => {
     }
     if (image.size > MAX_IMAGE_SIZE) {
       imageValidateResult.isValid = false;
-      imageValidateResult.message.push(`이미지 파일의 크기가 ${MAX_IMAGE_SIZE / ONE_MB}B를 초과해요`);
+      imageValidateResult.message.push(`이미지 파일의 크기가 ${MAX_IMAGE_SIZE / ONE_MB}MB를 초과해요`);
       return imageValidateResult;
     }
     if (!ALLOWED_MIME_TYPES.includes(image.type)) {
