@@ -1,5 +1,5 @@
 import { RouteObject } from 'react-router-dom';
-import ContestAdminTab from '@pages/admin/ContestAdminTab';
+import ContestAdminTab from '@pages/admin/ContestsTab/ContestAdminTab';
 import OngoingContestsTab from '@pages/admin/OngoingContestsTab';
 import ManageNoticeListTab from '@pages/admin/NoticeManageTab/ManageNoticeListTab';
 import NoticeCreateTab from '@pages/admin/NoticeManageTab/NoticeCreateTab';

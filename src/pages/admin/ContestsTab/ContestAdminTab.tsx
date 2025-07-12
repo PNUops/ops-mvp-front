@@ -10,8 +10,9 @@ import Table from '@components/Table';
 import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { IoIosArrowDown } from 'react-icons/io';
-import EditModal from '@pages/admin/EditModal';
+import EditModal from '@pages/admin/ContestsTab/EditModal';
 import useContestAdmin from 'hooks/useContestAdmin';
+import CommentConfirmModal from '@pages/project-viewer/CommentSection/CommentConfirmModal';
 
 type HistoryMenuProps = {
   contestName: string;
@@ -49,20 +50,26 @@ const ContestAdminTab = () => {
     state,
     contests,
     handleAddContest,
-    handleDeleteContest,
     handleContestChange,
-    handleDeleteTeam,
-    // closeDeleteModal,
+    openDeleteModal,
+    closeDeleteModal,
     openEditModal,
     closeEditModal,
     setContestName,
+    deleteModal,
+    handleDelete,
   } = useContestAdmin();
   const navigate = useNavigate();
   const toast = useToast();
 
   return (
     <>
-      {/* {state.isModalOpen && <DeleteInfoModal closeModal={closeDeleteModal} />} */}
+      <CommentConfirmModal
+        isOpen={state.isDeleteModalOpen}
+        onConfirm={handleDelete}
+        onCancel={closeDeleteModal}
+        message={`삭제한 ${deleteModal.type == 'contest' ? '대회' : '팀'}은 복구할 수 없습니다.`}
+      />
       {state.isEditModalOpen && <EditModal closeModal={closeEditModal} editId={state.editContestId} />}
 
       <section className="mb-8 min-w-[350px]">
@@ -80,7 +87,7 @@ const ContestAdminTab = () => {
           rows={contests ?? []}
           actions={(row) => (
             <>
-              <Button className="bg-mainRed h-[35px] w-full" onClick={() => handleDeleteContest(row.contestId)}>
+              <Button className="bg-mainRed h-[35px] w-full" onClick={() => openDeleteModal('contest', row.contestId)}>
                 삭제하기
               </Button>
               <Button className="bg-mainGreen h-[35px] w-full" onClick={() => openEditModal(row.contestId)}>
@@ -119,7 +126,10 @@ const ContestAdminTab = () => {
           rows={state.contestTeams}
           actions={(row) => (
             <>
-              <Button className="bg-mainRed h-[35px] w-full min-w-[70px]" onClick={() => handleDeleteTeam(row.teamId)}>
+              <Button
+                className="bg-mainRed h-[35px] w-full min-w-[70px]"
+                onClick={() => openDeleteModal('team', row.teamId)}
+              >
                 삭제하기
               </Button>
               <Button

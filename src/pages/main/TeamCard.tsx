@@ -17,17 +17,15 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
   return (
     <Link
       to={`/teams/view/${teamId}`}
-      className="border-lightGray flex aspect-[7/8] w-full cursor-pointer flex-col overflow-hidden rounded-xl border-[0.2px] transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
-      style={{
-        boxShadow: '4px 4px 10px rgba(0,0,0,0.1)',
-      }}
+      className="border-none flex aspect-[7/8] w-full flex-col overflow-hidden"
+
     >
-      <div className="aspect-[3/2] object-cover relative overflow-hidden">
+      <div className="aspect-[3/2] flex-shrink-0 object-cover relative overflow-hidden rounded-sm cursor-pointer transition-transform duration-200 hover:scale-[1.02] hover:shadow-md">
         {!imageError ? (
           <img
             src={thumbnailUrl}
             alt="썸네일"
-            className="object-cover object-center"
+            className="w-full h-full object-cover"
             onError={() => setImageError(true)}
           />
           ) : (
@@ -45,10 +43,10 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
 
         <div className="p-3">
           <div
-            className="font-semibold text-black text-[clamp(0.85rem,2.5vw,1.5rem)] break-keep overflow-hidden text-ellipsis">
+            className="font-semibold text-black text-[clamp(0.85rem,2vw,1.3rem)] leading-tight line-clamp-2">
             {projectName}
           </div>
-          <div className="text-midGray text-[clamp(0.8rem,2vw,1rem)] truncate overflow-hidden">
+          <div className="py-2 text-midGray text-[clamp(0.8rem,1.8vw,1rem)] truncate overflow-hidden">
             {teamName}
           </div>
 
