@@ -11,7 +11,10 @@ const EditModal = ({ closeModal, editId }: EditModalProps) => {
   const { contestName, setContestName, isLoading, handleEdit } = useEditContest(editId, closeModal);
 
   return (
-    <div onClick={closeModal} className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center">
+    <div
+      onClick={closeModal}
+      className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/30"
+    >
       <div
         onClick={(e) => e.stopPropagation()}
         className="border-mainBlue flex flex-col items-center justify-center rounded-xl border-2 bg-white p-10 py-6 opacity-100 shadow-2xl"
