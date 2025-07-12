@@ -60,3 +60,8 @@ export interface LikeUpdateRequestDto {
   teamId: number;
   isLiked: boolean;
 }
+
+export interface PreviewImage {
+  id?: number;
+  url: string | File;
+}

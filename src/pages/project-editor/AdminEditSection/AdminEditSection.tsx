@@ -1,9 +1,6 @@
-import { TeamMember } from 'types/DTO/projectViewerDto';
-
 import ContestMenu from './ContestMenu';
-import MembersInput from './MembersInput';
 
-interface AdminInputSectionProps {
+interface AdminEditSectionProps {
   contestId: number | null;
   setContestId: (id: number) => void;
   projectName: string;
@@ -12,12 +9,9 @@ interface AdminInputSectionProps {
   setTeamName: (teamName: string) => void;
   leaderName: string;
   setLeaderName: (teamName: string) => void;
-  teamMembers: TeamMember[];
-  onMemberAdd: (newMemberName: string) => void;
-  onMemberRemove: (index: number) => void;
 }
 
-const AdminInputSection = ({
+const AdminEditSection = ({
   contestId,
   setContestId,
   projectName,
@@ -26,10 +20,7 @@ const AdminInputSection = ({
   setTeamName,
   leaderName,
   setLeaderName,
-  teamMembers,
-  onMemberAdd,
-  onMemberRemove,
-}: AdminInputSectionProps) => {
+}: AdminEditSectionProps) => {
   return (
     <div className="flex flex-col gap-8 sm:gap-5">
       <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">
@@ -86,17 +77,8 @@ const AdminInputSection = ({
           />
         </div>
       </div>
-      <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-start sm:gap-10">
-        <div className="text-midGray flex w-25 gap-1">
-          <span className="mr-1 text-red-500">*</span>
-          <span className="w-full">팀원</span>
-        </div>
-        <div className="flex flex-1 flex-col">
-          <MembersInput teamMembers={teamMembers} onMemberAdd={onMemberAdd} onMemberRemove={onMemberRemove} />
-        </div>
-      </div>
     </div>
   );
 };
 
-export default AdminInputSection;
+export default AdminEditSection;
