@@ -88,8 +88,8 @@ const ProjectBasicForm = ({ initialContestId, onSuccess }: ProjectBasicFormProps
         />
         <div className="h-10" />
         <UrlInput
-          prodUrl={productionUrl}
-          setProdUrl={setProductionUrl}
+          productionUrl={productionUrl}
+          setProductionUrl={setProductionUrl}
           githubUrl={githubUrl}
           setGithubUrl={setGithubUrl}
           youtubeUrl={youtubeUrl}

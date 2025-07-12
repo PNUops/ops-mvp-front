@@ -5,14 +5,21 @@ import { FaGithub, FaYoutube } from 'react-icons/fa';
 
 interface UrlInputProps {
   productionUrl: string | null;
-  setproductionUrl: (value: string) => void;
+  setProductionUrl: (value: string) => void;
   githubUrl: string;
   setGithubUrl: (value: string) => void;
   youtubeUrl: string;
   setYoutubeUrl: (value: string) => void;
 }
 
-const UrlInput = ({ productionUrl, setproductionUrl, githubUrl, setGithubUrl, youtubeUrl, setYoutubeUrl }: UrlInputProps) => {
+const UrlInput = ({
+  productionUrl,
+  setProductionUrl,
+  githubUrl,
+  setGithubUrl,
+  youtubeUrl,
+  setYoutubeUrl,
+}: UrlInputProps) => {
   return (
     <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
       <div className="text-midGray flex w-25">
@@ -47,7 +54,7 @@ const UrlInput = ({ productionUrl, setproductionUrl, githubUrl, setGithubUrl, yo
             placeholder="https://your-project.vercel.app (선택)"
             className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
             value={productionUrl ?? ''}
-            onChange={(e) => setproductionUrl(e.target.value)}
+            onChange={(e) => setProductionUrl(e.target.value)}
           />
         </div>
       </div>

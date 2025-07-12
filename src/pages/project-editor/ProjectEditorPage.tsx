@@ -59,7 +59,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   const [previews, setPreviews] = useState<PreviewImage[]>([]);
   const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [productionUrl, setproductionUrl] = useState<string | null>(null);
+  const [productionUrl, setProductionUrl] = useState<string | null>(null);
   const [githubUrl, setGithubUrl] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [overview, setOverview] = useState('');
@@ -116,7 +116,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       setTeamMembers(projectData.teamMembers);
       setGithubUrl(projectData.githubPath);
       setYoutubeUrl(projectData.youTubePath);
-      setproductionUrl(projectData.productionPath);
+      setProductionUrl(projectData.productionPath);
       setOverview(projectData.overview);
     }
   }, [projectData]);
@@ -373,7 +373,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
       <UrlInput
         productionUrl={productionUrl}
-        setproductionUrl={setproductionUrl}
+        setProductionUrl={setProductionUrl}
         githubUrl={githubUrl}
         setGithubUrl={setGithubUrl}
         youtubeUrl={youtubeUrl}
