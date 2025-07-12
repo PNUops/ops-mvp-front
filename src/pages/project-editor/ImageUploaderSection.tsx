@@ -1,10 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useToast } from 'hooks/useToast';
+import { imageValidator } from 'utils/image';
+import { PreviewImage } from 'types/DTO/projectViewerDto';
+
 import { HiInformationCircle } from 'react-icons/hi';
 import { FiX } from 'react-icons/fi';
 import { AiFillPicture } from 'react-icons/ai';
 import { MdOutlineFileUpload, MdBrokenImage } from 'react-icons/md';
-import { PreviewImage } from 'types/DTO/projectViewerDto';
+import { CgSandClock } from 'react-icons/cg';
 
 interface ImageUploaderSectionProps {
   thumbnail: string | File | undefined;
@@ -30,14 +33,22 @@ const ImageUploaderSection = ({
   const toast = useToast();
 
   const images: (PreviewImage | undefined)[] = useMemo(() => {
-    const thumbSlot = thumbnail ? { url: thumbnail } : undefined;
+    const isEmptyThumbnail = !thumbnail || thumbnail === 'THUMBNAIL_ERR_404';
+    const thumbSlot = isEmptyThumbnail ? undefined : { url: thumbnail };
     const result: (PreviewImage | undefined)[] = [thumbSlot, ...previews];
     return result.slice(0, MAX_IMAGES);
   }, [thumbnail, previews]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
+    e.target.value = '';
     if (files.length === 0) return;
+
+    const validate = imageValidator(files);
+    if (!validate.isValid) {
+      validate.message.forEach((msg) => toast(msg, 'error'));
+      return;
+    }
 
     const currentImageCount = (thumbnail ? 1 : 0) + previews.length;
     const newImageCount = currentImageCount + files.length;
@@ -48,17 +59,30 @@ const ImageUploaderSection = ({
     }
 
     const newPreviews: PreviewImage[] = files.map((file) => ({ url: file }));
+    if (newPreviews.length === 0) {
+      toast('업로드할 수 있는 이미지가 없어요', 'info');
+      return;
+    }
 
-    if (!thumbnail) {
+    const MAX_PREVIEWS = MAX_IMAGES - 1;
+    const isEmptyThumbnail = !thumbnail || thumbnail === 'THUMBNAIL_ERR_404';
+
+    if (isEmptyThumbnail) {
       const first = newPreviews[0];
+      if (!first) {
+        toast('썸네일로 사용할 수 있는 이미지가 없어요', 'error');
+        return;
+      }
       const rest = newPreviews.slice(1);
-      const combinedPreviews = [...previews, ...rest].slice(0, MAX_IMAGES - 1);
+      const combinedPreviews = [...previews, ...rest].slice(0, MAX_PREVIEWS);
       setThumbnail(first.url);
       setPreviews(combinedPreviews);
     } else {
-      const combined = [...previews, ...newPreviews].slice(0, MAX_IMAGES - 1);
+      const combined = [...previews, ...newPreviews].slice(0, MAX_PREVIEWS);
       setPreviews(combined);
     }
+
+    toast('썸네일 이미지가 업로드 되었어요', 'success');
   };
 
   const handleRemove = (index: number) => {
@@ -70,22 +94,32 @@ const ImageUploaderSection = ({
         setThumbnailToDelete(true);
       }
       setThumbnail(undefined);
+      toast('썸네일 이미지를 삭제했어요', 'info');
       return;
     }
 
     if (target.id !== undefined) {
       setPreviewsToDelete((prev) => [...prev, target.id!]);
     }
+
     const next = images
       .filter((_, i) => i !== index)
       .filter((img, i) => i !== 0 && img !== undefined) as PreviewImage[];
 
     setPreviews(next);
+    toast('프리뷰 이미지를 삭제했어요', 'info');
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'));
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length === 0) return;
+
+    const validate = imageValidator(files);
+    if (!validate.isValid) {
+      validate.message.forEach((msg) => toast(msg, 'error'));
+      return;
+    }
 
     const currentImageCount = (thumbnail ? 1 : 0) + previews.length;
     const newImageCount = currentImageCount + files.length;
@@ -96,9 +130,30 @@ const ImageUploaderSection = ({
     }
 
     const newPreviews: PreviewImage[] = files.map((file) => ({ url: file }));
-    const next = [...(thumbnail ? [{ url: thumbnail }] : []), ...previews, ...newPreviews].slice(0, MAX_IMAGES);
-    setThumbnail(next[0]?.url);
-    setPreviews(next.slice(1));
+    if (newPreviews.length === 0) {
+      toast('업로드할 수 있는 이미지가 없어요', 'info');
+      return;
+    }
+
+    const MAX_PREVIEWS = MAX_IMAGES - 1;
+    const isEmptyThumbnail = !thumbnail || thumbnail === 'THUMBNAIL_ERR_404';
+
+    if (isEmptyThumbnail) {
+      const first = newPreviews[0];
+      if (!first) {
+        toast('썸네일로 사용할 수 있는 이미지가 없어요', 'error');
+        return;
+      }
+      const rest = newPreviews.slice(1);
+      const combinedPreviews = [...previews, ...rest].slice(0, MAX_PREVIEWS);
+      setThumbnail(first.url);
+      setPreviews(combinedPreviews);
+    } else {
+      const combined = [...previews, ...newPreviews].slice(0, MAX_PREVIEWS);
+      setPreviews(combined);
+    }
+
+    toast('프리뷰 이미지가 업로드 되었어요', 'success');
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => e.preventDefault();
@@ -113,7 +168,7 @@ const ImageUploaderSection = ({
       <div className="flex flex-col items-start gap-3">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
-          <span>썸네일</span>
+          <span>이미지</span>
         </div>
         <div className="group relative inline-block">
           <span className="inline-flex cursor-help items-center gap-1 rounded-full bg-sky-50 px-2 py-1 text-xs text-sky-400">
@@ -127,7 +182,7 @@ const ImageUploaderSection = ({
 
       <div className="flex w-full flex-1 flex-col gap-3 xl:flex-row">
         <div
-          className="border-midGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-center gap-2 rounded border p-6 text-center sm:gap-5"
+          className="border-lightGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-center gap-2 rounded border p-6 text-center sm:gap-5"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
@@ -144,15 +199,15 @@ const ImageUploaderSection = ({
             img ? (
               <div
                 key={index}
-                className="border-lightGray relative flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded border text-xs text-gray-400"
+                className="border-lightGray text-lightGray relative flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded border text-xs"
               >
-                {img.url === 'ERROR' ? (
+                {img.url === 'THUMBNAIL_ERR_ETC' || img.url === 'PREVIEW_ERR_ETC' ? (
                   <MdBrokenImage size={30} className="text-red-300" />
-                ) : img.url === 'ERROR_409' ? (
-                  <div className="text-lightGray border-lightGray flex h-full w-full flex-col items-center justify-center gap-5 border">
-                    <MdBrokenImage size={30} className="text-red-300" />
-                    <span className="text-xs">
-                      서버에서 이미지 변환 중입니다.<br></br>나중에 시도해 주세요.
+                ) : img.url === 'THUMBNAIL_ERR_409' || img.url === 'PREVIEW_ERR_409' ? (
+                  <div className="text-lightGray flex h-full w-full animate-pulse flex-col items-center justify-center gap-5">
+                    <CgSandClock size={25} />
+                    <span className="text-center text-xs">
+                      서버에서 이미지를 압축 중이에요<br></br>조금만 기다려주세요!
                     </span>
                   </div>
                 ) : (

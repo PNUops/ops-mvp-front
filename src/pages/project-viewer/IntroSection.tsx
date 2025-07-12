@@ -11,10 +11,10 @@ import { FiExternalLink } from 'react-icons/fi';
 interface IntroSectionProps {
   contestId: number;
   teamId: number;
-  leaderId: number;
+  isEditor: boolean;
   projectName: string;
   teamName: string;
-  prodUrl: string | null;
+  productionUrl: string | null;
   githubUrl: string;
   youtubeUrl: string;
 }
@@ -54,16 +54,13 @@ const UrlButton = ({ url }: { url: string }) => {
 const IntroSection = ({
   contestId,
   teamId,
-  leaderId,
+  isEditor,
   projectName,
   teamName,
-  prodUrl,
+  productionUrl,
   githubUrl,
   youtubeUrl,
 }: IntroSectionProps) => {
-  const { isLeader, isAdmin } = useAuth();
-  const memberId = useUserStore((state) => state.user?.id);
-  const isLeaderOfThisTeam = isLeader && memberId == leaderId;
   const navigate = useNavigate();
 
   return (
@@ -73,7 +70,7 @@ const IntroSection = ({
           <div className="text-title min-w-0 leading-none font-bold">{projectName}</div>
           <div className="text-smbold font-bold text-[#4B5563]">{teamName}</div>
         </div>
-        {(isLeaderOfThisTeam || isAdmin) && (
+        {isEditor && (
           <div className="flex pt-3">
             <button
               onClick={() => navigate(`/teams/edit/${teamId}`)}
@@ -87,7 +84,7 @@ const IntroSection = ({
       </div>
 
       <div className="flex w-full flex-1 flex-col items-end gap-2">
-        {prodUrl && <UrlButton url={prodUrl} />}
+        {productionUrl && <UrlButton url={productionUrl} />}
         {githubUrl && <UrlButton url={githubUrl} />}
         {youtubeUrl && <UrlButton url={youtubeUrl} />}
       </div>
