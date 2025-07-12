@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+import { useToast } from 'hooks/useToast';
 import { TeamMember } from 'types/DTO/projectViewerDto';
 
 import ContestMenu from './ContestMenu';
@@ -15,6 +17,7 @@ interface AdminInputSectionProps {
   teamMembers: TeamMember[];
   onMemberAdd: (newMemberName: string) => void;
   onMemberRemove: (index: number) => void;
+  onDuplicate?: (duplicateName: string) => void;
 }
 
 const AdminInputSection = ({
@@ -30,6 +33,8 @@ const AdminInputSection = ({
   onMemberAdd,
   onMemberRemove,
 }: AdminInputSectionProps) => {
+  const toast = useToast();
+
   return (
     <div className="flex flex-col gap-8 sm:gap-5">
       <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">

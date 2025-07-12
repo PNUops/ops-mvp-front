@@ -43,7 +43,7 @@ const ImageUploaderSection = ({
     const newImageCount = currentImageCount + files.length;
 
     if (newImageCount > MAX_IMAGES) {
-      toast(`이미지는 최대 ${MAX_IMAGES}개까지 업로드할 수 있습니다.`, 'error');
+      toast(`이미지는 최대 ${MAX_IMAGES}개까지 업로드할 수 있어요`, 'error');
       return;
     }
 
@@ -91,7 +91,7 @@ const ImageUploaderSection = ({
     const newImageCount = currentImageCount + files.length;
 
     if (newImageCount > MAX_IMAGES) {
-      toast(`이미지는 최대 ${MAX_IMAGES}개까지 업로드할 수 있습니다.`, 'error');
+      toast(`이미지는 최대 ${MAX_IMAGES}개까지 업로드할 수 있어요`, 'error');
       return;
     }
 

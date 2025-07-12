@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
@@ -47,6 +47,7 @@ const ProjectEditorPage = () => {
   const [previews, setPreviews] = useState<PreviewImage[]>([]);
   const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const teamMembersRef = useRef<TeamMember[]>(teamMembers);
   const [prodUrl, setProdUrl] = useState<string | null>(null);
   const [githubUrl, setGithubUrl] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
@@ -115,6 +116,10 @@ const ProjectEditorPage = () => {
       setPreviews(paired);
     }
   }, [previewData, projectData]);
+
+  useEffect(() => {
+    teamMembersRef.current = teamMembers;
+  }, [teamMembers]);
 
   if (!teamId) return <div>팀 정보를 불러올 수 없습니다.</div>;
 
@@ -216,15 +221,40 @@ const ProjectEditorPage = () => {
   console.log('setTeamMembers', setTeamMembers);
 
   const onMemberAdd = (newMemberName: string) => {
-    setTeamMembers((prevMembers) => [...prevMembers, { teamMemberId: Date.now(), teamMemberName: newMemberName }]);
-    console.log('teamMembers', teamMembers);
-    console.log('setTeamMembers', setTeamMembers);
+    const trimmedName = newMemberName.trim();
+    const normalized = trimmedName.toLowerCase();
+
+    const removedOriginalMembers = projectData.teamMembers.filter(
+      (original) => !teamMembers.some((current) => current.teamMemberId === original.teamMemberId),
+    );
+    const removedNames = removedOriginalMembers.map((m) => m.teamMemberName.toLowerCase());
+
+    const isDuplicate = teamMembers.some(
+      (member) => member.teamMemberName.toLowerCase() === normalized && !removedNames.includes(normalized),
+    );
+
+    if (isDuplicate) {
+      toast(`팀원 "${trimmedName}" 은(는) 이미 존재해요`, 'error');
+      return;
+    }
+
+    const generateUniqueId = () => Date.now() + Math.floor(Math.random() * 1000);
+
+    const newMember = {
+      teamMemberId: generateUniqueId(),
+      teamMemberName: trimmedName,
+    };
+
+    setTeamMembers((prev) => [...prev, newMember]);
+    toast(`팀원 "${trimmedName}" 을(를) 추가했어요`, 'success');
   };
 
-  const onMemberRemove = (index: number) => {
-    setTeamMembers((prevMembers) => prevMembers.filter((_, idx) => idx !== index));
-    console.log('teamMembers', teamMembers);
-    console.log('setTeamMembers', setTeamMembers);
+  const onMemberRemove = (teamMemberId: number) => {
+    const member = teamMembersRef.current.find((m) => m.teamMemberId === teamMemberId);
+    if (!member) return;
+
+    setTeamMembers((prev) => prev.filter((m) => m.teamMemberId !== teamMemberId));
+    toast(`팀원 "${member.teamMemberName}" 을(를) 삭제했어요`, 'info');
   };
 
   return (
