@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTeamId } from 'hooks/useId';
+import useAuth from 'hooks/useAuth';
 import { useUserStore } from 'stores/useUserStore';
 import { getProjectDetails } from 'apis/projectViewer';
 
@@ -21,8 +22,8 @@ import {
 
 const ProjectViewerPage = () => {
   const teamId = useTeamId();
-  const memberId = useUserStore((state) => state.user?.id);
-  const queryClient = useQueryClient();
+  const { isLeader, isAdmin, user } = useAuth();
+  const memberId = user?.id;
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['projectDetails', teamId],
@@ -55,27 +56,34 @@ const ProjectViewerPage = () => {
   if (error) return <div>에러 발생: {String(error)}</div>;
   if (!data) return <div>데이터를 불러올 수 없습니다.</div>;
 
+  const isLeaderOfThisTeam = isLeader && memberId == data.leaderId;
+
   return (
     <div className="px-5">
       <IntroSection
         contestId={data.contestId}
         teamId={data.teamId}
-        leaderId={data.leaderId}
+        isEditor={isLeaderOfThisTeam || isAdmin}
         projectName={data.projectName}
         teamName={data.teamName}
-        prodUrl={data.productionPath}
+        productionUrl={data.productionPath}
         githubUrl={data.githubPath}
         youtubeUrl={data.youTubePath}
       />
       <div className="h-10" />
-      <CarouselSection teamId={data.teamId} previewIds={data.previewIds} youtubeUrl={data.youTubePath} />
+      <CarouselSection
+        teamId={data.teamId}
+        previewIds={data.previewIds}
+        youtubeUrl={data.youTubePath}
+        isEditor={isLeaderOfThisTeam || isAdmin}
+      />
       <div className="h-10" />
       <LikeSection teamId={data.teamId} isLiked={data.isLiked} />
       <div className="h-10" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} teamMembers={data.teamMembers} />
       {/* WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의*/}
       <div className="h-28" />
-      <CommentSection teamId={data.teamId} memberId={memberId} />
+      <CommentSection teamId={data.teamId} />
     </div>
   );
 };
