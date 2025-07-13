@@ -1,24 +1,39 @@
 import Button from '@components/Button';
 import Input from '@components/Input';
 import useEditContest from 'hooks/useEditContest';
+import { RxCross2 } from 'react-icons/rx';
+import { FaRegEdit } from 'react-icons/fa';
 
 type EditModalProps = {
+  isOpen: boolean;
   closeModal: () => void;
   editId: number;
 };
 
-const EditModal = ({ closeModal, editId }: EditModalProps) => {
+const EditModal = ({ isOpen, closeModal, editId }: EditModalProps) => {
   const { contestName, setContestName, isLoading, handleEdit } = useEditContest(editId, closeModal);
+  if (!isOpen) return null;
 
   return (
     <div
       onClick={closeModal}
-      className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/30"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="border-mainBlue flex flex-col items-center justify-center rounded-xl border-2 bg-white p-10 py-6 opacity-100 shadow-2xl"
+        className="relative w-[640px] rounded-2xl bg-white p-6 shadow-xl transition-all duration-300 ease-in-out"
       >
+        <button
+          onClick={closeModal}
+          className="absolute top-4 right-4 text-gray-400 hover:cursor-pointer hover:text-gray-600"
+          aria-label="닫기"
+        >
+          <RxCross2 size={20} />
+        </button>
+        <div className="text-mainBlue mx-auto my-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+          <FaRegEdit size={25} />
+        </div>
+        <h3 className="text-center text-lg font-semibold text-gray-800">수정할 대회명을 입력하세요.</h3>
         <div className="mt-8 mb-8 flex w-full justify-between">
           <Input
             type="text"
@@ -28,13 +43,23 @@ const EditModal = ({ closeModal, editId }: EditModalProps) => {
             className="bg-whiteGray mx-4 h-12 w-[70%] rounded-lg"
             disabled={isLoading}
           />
-          <Button className="bg-mainBlue h-12 w-[20%] min-w-[130px]" onClick={handleEdit} disabled={isLoading}>
+        </div>
+        <div className="mx-auto my-4 flex items-center justify-center gap-4">
+          <Button
+            className="border-lightGray text-midGray rounded-full border px-5 py-3 hover:bg-gray-100"
+            onClick={closeModal}
+            disabled={isLoading}
+          >
+            닫기
+          </Button>
+          <Button
+            className="bg-mainBlue rounded-full px-5 py-3 hover:bg-blue-500"
+            onClick={handleEdit}
+            disabled={isLoading}
+          >
             {isLoading ? '수정 중...' : '대회 수정하기'}
           </Button>
         </div>
-        <Button className="bg-mainBlue w-[100px]" onClick={closeModal} disabled={isLoading}>
-          닫기
-        </Button>
       </div>
     </div>
   );
