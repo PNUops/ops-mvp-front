@@ -260,6 +260,8 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         newFiles.forEach((file) => formData.append('images', file));
         await postPreview(teamId!, formData);
       }
+
+      queryClient.invalidateQueries({ queryKey: ['contests'] });
       queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] });
       queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] });
       queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
