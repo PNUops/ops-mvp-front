@@ -203,8 +203,6 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
       if (!thumbnail404ToastShownRef.current) {
         if (isEditor) {
           toast('썸네일 이미지를 업로드해주세요', 'info');
-        } else {
-          toast('썸네일 이미지를 찾을 수 없어요.', 'info');
         }
         thumbnail404ToastShownRef.current = true;
       }
