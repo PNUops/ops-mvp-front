@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useMediaQuery } from '@react-hookz/web';
-
+import { useToast } from 'hooks/useToast';
 import { getThumbnail } from 'apis/projectEditor';
 import { getPreviewImages } from 'apis/projectViewer';
 import { PreviewImagesResponseDto } from 'types/DTO/projectViewerDto';
@@ -20,7 +20,7 @@ interface CarouselSectionProps {
   isEditor: boolean;
 }
 
-const ERROR_CODES = ['ERROR_ETC', 'THUMBNAIL_ERR_404', 'PREVIEW_ERR_404', 'THUMBNAIL_ERR_409', 'PREVIEW_ERR_409'];
+const ERROR_CODES = ['ERROR_ETC', 'THUMBNAIL_ERR_404', 'PREVIEW_ERR_404', 'THUMBNAIL_ERR_409', 'PREVIEW_ERR_409']; // 'THUMBNAIL_ERR_404'
 
 const getEmbedUrl = (url: string) => {
   try {
@@ -178,6 +178,9 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   const [loadFailed, setLoadFailed] = useState(false);
   const isMobile = useMediaQuery('(max-width:640px)');
 
+  const toast = useToast();
+  const thumbnail404ToastShownRef = useRef(false);
+
   const { data: thumbnailUrl } = useQuery<string>({
     queryKey: ['thumbnail', teamId],
     queryFn: () => getThumbnail(teamId),
@@ -195,6 +198,21 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
     },
   });
 
+  useEffect(() => {
+    if (thumbnailUrl === 'THUMBNAIL_ERR_404') {
+      if (!thumbnail404ToastShownRef.current) {
+        if (isEditor) {
+          toast('썸네일 이미지를 업로드해주세요', 'info');
+        } else {
+          toast('썸네일 이미지를 찾을 수 없어요.', 'info');
+        }
+        thumbnail404ToastShownRef.current = true;
+      }
+    } else {
+      thumbnail404ToastShownRef.current = false;
+    }
+  }, [thumbnailUrl, isEditor, toast]);
+
   const previewUrls = previewData?.imageUrls ?? [];
   const embedUrl = useMemo(() => getEmbedUrl(youtubeUrl), [youtubeUrl]);
   const rawImageUrls = useMemo(() => {
@@ -202,7 +220,8 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   }, [embedUrl, thumbnailUrl, previewUrls]);
 
   const visibleImageUrls = useMemo(() => {
-    return isEditor ? rawImageUrls : rawImageUrls.filter((url) => !ERROR_CODES.includes(url));
+    if (!isEditor) return rawImageUrls.filter((url) => !ERROR_CODES.includes(url));
+    return rawImageUrls.filter((url) => url !== 'THUMBNAIL_ERR_404');
   }, [rawImageUrls, isEditor]);
 
   const currentImage = useMemo(() => visibleImageUrls[currentIndex] || null, [visibleImageUrls, currentIndex]);
