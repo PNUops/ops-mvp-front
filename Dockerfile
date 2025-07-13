@@ -1,4 +1,4 @@
-FROM node:22-slim AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
