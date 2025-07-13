@@ -97,13 +97,13 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
           {Array.from({ length: emptySlotsCount }).map((_, idx) => (
             <div
               key={`new-${idx}`}
-              className="relative flex items-center gap-1 rounded border border-gray-300 px-4 py-2 text-sm"
+              className="border-lightGray relative flex items-center gap-1 rounded border px-4 py-2 text-sm"
             >
               <IoPersonOutline className="text-lightGray mr-2" size={20} />
               <input
                 type="text"
                 placeholder="팀원명을 입력해주세요."
-                className="placeholder:text-lightGray flex-1 bg-transparent focus:outline-none"
+                className="placeholder:text-lightGray flex-1 truncate bg-transparent focus:outline-none"
                 value={newInputs[idx] ?? ''}
                 onChange={(e) => handleNewInputChange(idx, e.target.value)}
                 onKeyDown={(e) => {
