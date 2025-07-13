@@ -6,11 +6,12 @@ import { useToast } from 'hooks/useToast';
 import { FaHeart } from 'react-icons/fa';
 
 interface LikeSectionProps {
+  contestId: number;
   teamId: number;
   isLiked: boolean;
 }
 
-const LikeSection = ({ teamId, isLiked }: LikeSectionProps) => {
+const LikeSection = ({ contestId, teamId, isLiked }: LikeSectionProps) => {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
@@ -22,6 +23,7 @@ const LikeSection = ({ teamId, isLiked }: LikeSectionProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       queryClient.invalidateQueries({ queryKey: ['teams', 'current', user?.id ?? 'guest'] });
+      queryClient.invalidateQueries({ queryKey: ['teams', contestId, user?.id ?? 'guest'] });
       toast(!isLiked ? '좋아요를 눌렀어요.' : '좋아요를 취소했어요.');
     },
   });
