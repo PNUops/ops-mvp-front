@@ -37,22 +37,21 @@ const NoticeList = ({ notices }: Props) => {
           const showNewIcon = isNew(notice.updatedAt);
 
           return (
-            <li
+            <Link to={`/notices/${notice.noticeId}`}
               key={notice.noticeId}
               className="hover:bg-lightGray flex items-center justify-between rounded px-2 py-1 transition"
             >
               <AiOutlineNotification className="mr-2" />
               <div className="flex flex-1 items-center gap-1 truncate ">
-                <Link to={`/notices/${notice.noticeId}`} className="text-[clamp(0.75rem,2vw,1rem)] truncate">
-                  {notice.title}
-                </Link>
+                <div className="text-[clamp(0.75rem,2vw,1rem)] truncate">
+                  {notice.title} </div>
                 {showNewIcon && (
                   <MdFiberNew className="text-mainRed shrink-0 text-[clamp(1rem,2vw,1.5rem)] " />
                 )}
               </div>
 
               <span className="ml-2 text-midGray truncate text-right text-xs">{notice.updatedAt}</span>
-            </li>
+            </Link>
           );
         })}
       </ul>
