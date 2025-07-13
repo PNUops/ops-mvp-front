@@ -8,10 +8,16 @@ type EditModalProps = {
   isOpen: boolean;
   closeModal: () => void;
   editId: number;
+  editContestName: string;
 };
 
-const EditModal = ({ isOpen, closeModal, editId }: EditModalProps) => {
-  const { contestName, setContestName, isLoading, handleEdit } = useEditContest(editId, closeModal);
+const EditModal = ({ isOpen, closeModal, editId, editContestName }: EditModalProps) => {
+  const { contestName, setContestName, isLoading, handleEdit } = useEditContest(
+    isOpen,
+    editId,
+    closeModal,
+    editContestName,
+  );
   if (!isOpen) return null;
 
   return (
