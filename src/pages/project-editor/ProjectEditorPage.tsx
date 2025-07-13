@@ -319,6 +319,8 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       toast('세부 정보 등록이 완료되었습니다', 'success');
       setTimeout(() => navigate(`/teams/view/${createdTeamId}`), 300);
 
+      queryClient.invalidateQueries({ queryKey: ['contests'] });
+      queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] });
       queryClient.invalidateQueries({ queryKey: ['projectDetails', createdTeamId] });
       queryClient.invalidateQueries({ queryKey: ['thumbnail', createdTeamId] });
       queryClient.invalidateQueries({ queryKey: ['previewImages', createdTeamId] });
