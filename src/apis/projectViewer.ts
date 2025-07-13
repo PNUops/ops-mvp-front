@@ -7,6 +7,7 @@ import {
   CommentDeleteRequestDto,
   CommentEditRequestDto,
   CommentDto,
+  PreviewsResult,
 } from 'types/DTO/projectViewerDto';
 
 export const getProjectDetails = async (teamId: number): Promise<ProjectDetailsResponseDto> => {
@@ -15,27 +16,32 @@ export const getProjectDetails = async (teamId: number): Promise<ProjectDetailsR
 };
 
 export const getPreviewImages = async (teamId: number, imageIds: number[]): Promise<PreviewImagesResponseDto> => {
-  const imageUrls: string[] = [];
+  const imageResults: PreviewsResult[] = [];
 
   for (const imageId of imageIds) {
     try {
       const response = await apiClient.get(`/teams/${teamId}/image/${imageId}`, {
         responseType: 'blob',
       });
-      const objectUrl = URL.createObjectURL(response.data);
-      imageUrls.push(objectUrl);
-    } catch (error: any) {
-      if (error.response?.status === 409) {
-        imageUrls.push('PREVIEW_ERR_409');
-      } else if (error.response?.status === 404) {
-        imageUrls.push('PREVIEW_ERR_404');
+      if (response.status === 200) {
+        const objectUrl = URL.createObjectURL(response.data);
+        imageResults.push({ status: 'success', url: objectUrl });
+      } else if (response.status === 202) {
+        imageResults.push({ status: 'processing', code: 'PREVIEW_PROCESSING' });
       } else {
-        imageUrls.push('PREVIEW_ERR_ETC');
+        const objectUrl = URL.createObjectURL(response.data);
+        imageResults.push({ status: 'success', url: objectUrl });
+      }
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        imageResults.push({ status: 'error', code: 'PREVIEW_NOTFOUND' });
+      } else {
+        imageResults.push({ status: 'error', code: 'PREVIEW_ERR_ETC' });
       }
     }
   }
 
-  return { imageUrls };
+  return { imageResults };
 };
 
 export const patchLikeToggle = async (request: LikeUpdateRequestDto) => {

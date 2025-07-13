@@ -6,19 +6,30 @@ export const patchProjectDetails = async (teamId: number, body: ProjectDetailsEd
   return response.data;
 };
 
-export const getThumbnail = async (teamId: number): Promise<string> => {
+export type ThumbnailResult =
+  | { status: 'success'; url: string }
+  | { status: 'processing'; code: 'THUMBNAIL_PROCESSING' }
+  | { status: 'error'; code: 'THUMBNAIL_NOTFOUND' | 'THUMBNAIL_ERR_ETC' };
+
+export const getThumbnail = async (teamId: number): Promise<ThumbnailResult> => {
   try {
     const response = await apiClient.get(`/teams/${teamId}/image/thumbnail`, {
       responseType: 'blob',
     });
-    return URL.createObjectURL(response.data);
-  } catch (error: any) {
-    if (error.response?.status === 409) {
-      return 'THUMBNAIL_ERR_409';
-    } else if (error.response?.status === 404) {
-      return 'THUMBNAIL_ERR_404';
+
+    if (response.status === 200) {
+      return { status: 'success', url: URL.createObjectURL(response.data) };
+    } else if (response.status === 202) {
+      return { status: 'processing', code: 'THUMBNAIL_PROCESSING' };
     } else {
-      return 'THUMBNAIL_ERR_ETC';
+      console.warn(`[getThumbnail] 예상치 못한 성공 코드: ${response.status}`);
+      return { status: 'success', url: URL.createObjectURL(response.data) };
+    }
+  } catch (error: any) {
+    if (error.response?.status === 404) {
+      return { status: 'error', code: 'THUMBNAIL_NOTFOUND' };
+    } else {
+      return { status: 'error', code: 'THUMBNAIL_ERR_ETC' };
     }
   }
 };
