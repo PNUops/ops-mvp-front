@@ -174,9 +174,9 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
     if (productionUrl && !isValidProjectUrl(productionUrl)) return '유효한 프로젝트 주소를 입력하세요.';
     if (isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요.';
-    if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
-    if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
-    if (previews.length === 0) return '프리뷰 이미지가 업로드 되지 않았어요.';
+    // if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
+    // if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
+    // if (previews.length === 0) return '프리뷰 이미지가 업로드 되지 않았어요.';
     return validateCommonFields();
   };
 
