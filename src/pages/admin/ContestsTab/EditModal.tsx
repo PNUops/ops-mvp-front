@@ -46,14 +46,14 @@ const EditModal = ({ isOpen, closeModal, editId }: EditModalProps) => {
         </div>
         <div className="mx-auto my-4 flex items-center justify-center gap-4">
           <Button
-            className="border-lightGray text-midGray rounded-full border px-5 py-1.5 hover:bg-gray-100"
+            className="border-lightGray text-midGray rounded-full border px-5 py-3 hover:bg-gray-100"
             onClick={closeModal}
             disabled={isLoading}
           >
             닫기
           </Button>
           <Button
-            className="bg-mainBlue rounded-full px-5 py-1.5 hover:bg-blue-500"
+            className="bg-mainBlue rounded-full px-5 py-3 hover:bg-blue-500"
             onClick={handleEdit}
             disabled={isLoading}
           >
