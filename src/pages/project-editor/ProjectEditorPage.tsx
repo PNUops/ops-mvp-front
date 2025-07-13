@@ -157,44 +157,33 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   const isEmpty = (value?: string | null) => !value || value.trim() === '';
 
   const validateCommonFields = () => {
+    if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요';
+    if (isEmpty(teamName)) return '팀명이 입력되지 않았어요';
+    if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요';
+    if (isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요';
     if (teamMembers.length < 1) return '등록된 팀원이 없어요.';
-    if (productionUrl && !isValidProjectUrl(productionUrl)) return '유효한 프로젝트 주소를 입력하세요.';
+    if (productionUrl && !isValidProjectUrl(productionUrl)) return '유효한 프로젝트 주소를 입력하세요';
+    if (isEmpty(githubUrl)) return 'GitHub 링크가 입력되지 않았어요';
     if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
+    if (isEmpty(youtubeUrl)) return 'YouTube 링크가 입력되지 않았어요';
     if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
   };
 
   const validateCreateInputs = () => {
-    if (contestId === null) return '대회 종류를 설정해야 해요.';
-    if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요.';
-    if (isEmpty(teamName)) return '팀명이 입력되지 않았어요.';
-    if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요.';
-    if (isEmpty(githubUrl)) return '깃허브 링크가 입력되지 않았어요.';
-    if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
-    if (isEmpty(youtubeUrl)) return '유튜브 링크가 입력되지 않았어요.';
-    if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
-    if (productionUrl && !isValidProjectUrl(productionUrl)) return '유효한 프로젝트 주소를 입력하세요.';
-    if (isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요.';
-    // if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
-    // if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
-    // if (previews.length === 0) return '프리뷰 이미지가 업로드 되지 않았어요.';
+    if (contestId === null) return '대회 종류를 선택해야 해요';
     return validateCommonFields();
   };
 
   const validateEditInputs = () => {
     if (isAdmin) {
-      if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요.';
-      if (isEmpty(teamName)) return '팀명이 입력되지 않았어요.';
-      if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요.';
-      if (contestId !== 1 && isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요.';
+      if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요';
+      if (isEmpty(teamName)) return '팀명이 입력되지 않았어요';
+      if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요';
+      if (contestId !== 1 && isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요';
     }
 
     if (isLeaderOfThisTeam) {
-      if (!thumbnail && !previews.length) return '썸네일과 프리뷰 이미지가 모두 업로드되지 않았어요.';
-      if (!thumbnail) return '썸네일이 업로드 되지 않았어요.';
-      if (previews.length === 0) return '프리뷰 이미지가 업로드 되지 않았어요.';
-      if (isEmpty(githubUrl)) return '깃허브 링크가 입력되지 않았어요.';
-      if (isEmpty(youtubeUrl)) return '유튜브 링크가 입력되지 않았어요.';
-      if (isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요.';
+      if (!thumbnail || previews.length === 0) return '두개 이상의 이미지 업로드가 필요해요';
     }
 
     return validateCommonFields();
