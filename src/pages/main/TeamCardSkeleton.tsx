@@ -2,9 +2,9 @@ const TeamCardSkeleton = () => {
     return (
       <section className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-8">
         <div
-          className="border-none flex aspect-[7/8] rounded-sm w-full animate-pulse flex-col overflow-hidden border"
+          className="border-none flex aspect-[7/8] w-full animate-pulse flex-col overflow-hidden border"
         >
-          <div className="bg-lightGray relative aspect-[3/2] w-full">
+          <div className="bg-lightGray relative rounded-md aspect-[3/2] w-full">
             <div className="absolute top-2 right-2 z-10">
               <div className="h-[clamp(1.5rem,2vw,1.8rem)] w-[clamp(1.5rem,2vw,1.8rem)] rounded-full bg-midGray" />
             </div>
