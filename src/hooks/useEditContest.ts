@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { patchContest } from 'apis/contests';
 import { useToast } from 'hooks/useToast';
 
-const useEditContest = (editId: number, onClose: () => void) => {
+const useEditContest = (isOpen: boolean, editId: number, onClose: () => void, editContestName: string) => {
   const [contestName, setContestName] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const toast = useToast();
@@ -29,6 +29,9 @@ const useEditContest = (editId: number, onClose: () => void) => {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (isOpen) setContestName(editContestName);
+  }, [isOpen]);
 
   return {
     contestName,

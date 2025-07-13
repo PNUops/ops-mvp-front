@@ -20,6 +20,7 @@ type ContestAdminState = {
   isEditModalOpen: boolean;
   isDeleteModalOpen: boolean;
   editContestId: number;
+  editContestName: string;
 };
 
 const useContestAdmin = () => {
@@ -31,6 +32,7 @@ const useContestAdmin = () => {
     isEditModalOpen: false,
     isDeleteModalOpen: false,
     editContestId: 0,
+    editContestName: '',
   });
 
   const [deleteModal, setDeleteModal] = useState<DeleteModalState>({
@@ -154,11 +156,12 @@ const useContestAdmin = () => {
     setDeleteModal({ type: null, targetId: null });
   };
 
-  const openEditModal = (contestId: number) =>
+  const openEditModal = (contestId: number, contestName: string) =>
     setState((prev) => ({
       ...prev,
       isEditModalOpen: true,
       editContestId: contestId,
+      editContestName: contestName,
     }));
   const closeEditModal = () => setState((prev) => ({ ...prev, isEditModalOpen: false }));
 
