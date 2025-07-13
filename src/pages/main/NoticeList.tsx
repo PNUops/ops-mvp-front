@@ -39,7 +39,7 @@ const NoticeList = ({ notices }: Props) => {
         {notices?.map((notice) => {
           const date = parsedDate(notice.updatedAt);
           const showNewIcon = isNew(date);
-          const dateResult = date.format('YYYY.MM.DD HH:mm')
+          const dateResult = date.format('YYYY-MM-DD HH:mm')
 
           return (
             <Link to={`/notices/${notice.noticeId}`}
