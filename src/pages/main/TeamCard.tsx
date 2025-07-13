@@ -17,10 +17,10 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
   return (
     <Link
       to={`/teams/view/${teamId}`}
-      className="border-none flex aspect-[7/8] w-full flex-col overflow-hidden"
+      className="border-none flex aspect-[7/8] w-full flex-col"
 
     >
-      <div className="aspect-[3/2] flex-shrink-0 object-cover relative overflow-hidden rounded-sm cursor-pointer transition-transform duration-200 hover:scale-[1.02] hover:shadow-md">
+      <div className="aspect-[3/2] flex-shrink-0 object-cover overflow-hidden relative rounded-md cursor-pointer transition-transform duration-200 hover:scale-[1.02] hover:shadow-md">
         {!imageError ? (
           <img
             src={thumbnailUrl}

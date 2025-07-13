@@ -28,10 +28,10 @@ const NoticeDetail = () => {
       <h1 className="text-2xl font-bold mb-6">공지사항</h1>
       <div className="flex items-center bg-whiteGray rounded px-4 py-5 mb-2">
         <AiOutlineNotification className="mr-4" />
-        <span className="font-semibold text-base flex-1">{notice.title}</span>
+        <span className="font-bold text-[clamp(0.85rem,2vw,1.3rem)] flex-1">{notice.title}</span>
       </div>
-      <div className="text-right text-midGray mb-6">{notice.updatedAt}</div>
-      <div className="bg-subGreen rounded p-6 leading-relaxed whitespace-pre-line">
+      <div className="text-[clamp(0.7rem,1.5vw,0.9rem)] text-right text-midGray mb-6">{notice.updatedAt}</div>
+      <div className="text-[clamp(0.75rem,2vw,1rem)] bg-subGreen rounded p-6 leading-relaxed whitespace-pre-line">
         {notice.description}
       </div>
     </div>
