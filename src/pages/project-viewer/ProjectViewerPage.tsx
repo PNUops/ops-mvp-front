@@ -78,7 +78,7 @@ const ProjectViewerPage = () => {
         isEditor={isLeaderOfThisTeam || isAdmin}
       />
       <div className="h-10" />
-      <LikeSection teamId={data.teamId} isLiked={data.isLiked} />
+      <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} />
       <div className="h-10" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} teamMembers={data.teamMembers} />
       {/* WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의*/}
