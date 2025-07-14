@@ -37,11 +37,11 @@ const ManageNoticeListTab = () => {
           columns={[
             {
               label: '편집일시',
-              width: '20%',
+              width: '30%',
               key: 'updatedAt',
               render: (row) => row.updatedAt,
             },
-            { label: '제목', width: '50%', key: 'title' },
+            { label: '제목', width: '30%', key: 'title' },
           ]}
           rows={notices ?? []}
           actions={(row) => (
