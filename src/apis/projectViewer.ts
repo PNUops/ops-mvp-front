@@ -25,12 +25,12 @@ export const getPreviewImages = async (teamId: number, imageIds: number[]): Prom
       });
       if (response.status === 200) {
         const objectUrl = URL.createObjectURL(response.data);
-        imageResults.push({ status: 'success', url: objectUrl });
+        imageResults.push({ id: imageId, status: 'success', url: objectUrl });
       } else if (response.status === 202) {
         imageResults.push({ status: 'processing', code: 'PREVIEW_PROCESSING' });
       } else {
         const objectUrl = URL.createObjectURL(response.data);
-        imageResults.push({ status: 'success', url: objectUrl });
+        imageResults.push({ id: imageId, status: 'success', url: objectUrl });
       }
     } catch (error: any) {
       if (error.response?.status === 404) {

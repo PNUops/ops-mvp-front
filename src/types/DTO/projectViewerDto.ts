@@ -20,13 +20,13 @@ export interface ProjectDetailsResponseDto {
   isLiked: boolean;
 }
 
-export type PreviewsResult =
-  | { status: 'success'; url: string }
+export type PreviewResult =
+  | { id: number; status: 'success'; url: string }
   | { status: 'processing'; code: 'PREVIEW_PROCESSING' }
   | { status: 'error'; code: 'PREVIEW_NOTFOUND' | 'PREVIEW_ERR_ETC' };
 
 export interface PreviewImagesResponseDto {
-  imageResults: PreviewsResult[];
+  imageResults: PreviewResult[];
 }
 
 export interface CommentCreateRequestDto {
