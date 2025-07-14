@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import type { Query } from '@tanstack/react-query';
@@ -18,6 +18,7 @@ import {
   deleteThumbnail,
   postMember,
   deleteMember,
+  ThumbnailResult,
 } from 'apis/projectEditor';
 
 import {
@@ -49,6 +50,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
   const isEditMode = mode === 'edit';
   const isCreateMode = mode === 'create';
+  const [isSaved, setIsSaved] = useState(false);
 
   const [contestId, setContestId] = useState<number | null>(initialContestId ?? null);
   const [teamName, setTeamName] = useState('');
@@ -81,29 +83,29 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     enabled: isEditMode && teamId !== null,
   });
 
-  const { data: thumbnailUrl } = useQuery<string>({
+  const { data: thumbnailResult } = useQuery<ThumbnailResult>({
     queryKey: ['thumbnail', teamId],
     queryFn: async () => {
       if (teamId === null) throw new Error('teamId is null');
       return await getThumbnail(teamId);
     },
     enabled: teamId !== null,
-    refetchInterval: (query) => {
-      const shouldRefetch = query.state.data === 'THUMBNAIL_ERR_409';
-      return shouldRefetch ? 1500 : false;
-    },
+    refetchInterval: (query) => (query.state.data?.status === 'processing' ? 1500 : false),
   });
 
+  const stablePreviewIds = useMemo(() => {
+    return projectData?.previewIds ?? [];
+  }, [projectData?.previewIds?.join(',')]);
   const { data: previewData } = useQuery<PreviewImagesResponseDto>({
-    queryKey: ['previewImages', teamId, projectData?.previewIds],
+    queryKey: ['previewImages', teamId, stablePreviewIds],
     queryFn: async () => {
       if (teamId === null || !projectData?.previewIds) throw new Error('previewIds 없음');
       return await getPreviewImages(teamId, projectData.previewIds);
     },
-    enabled: teamId !== null && !!projectData?.previewIds?.length,
+    enabled: teamId !== null && stablePreviewIds.length > 0,
     refetchInterval: (query) => {
       const data = query.state.data;
-      const shouldRefetch = data?.imageUrls?.every((url) => url === 'PREVIEW_ERR_409') ?? false;
+      const shouldRefetch = data?.imageResults?.every((result) => result.status === 'processing') ?? false;
       return shouldRefetch ? 1500 : false;
     },
   });
@@ -123,18 +125,19 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   }, [projectData]);
 
   useEffect(() => {
-    if (thumbnailUrl && typeof thumbnailUrl === 'string') {
-      setThumbnail(thumbnailUrl);
+    if (thumbnailResult && thumbnailResult.status === 'success') {
+      setThumbnail(thumbnailResult.url);
     }
-  }, [thumbnailUrl]);
+  }, [thumbnailResult]);
 
   useEffect(() => {
-    if (previewData?.imageUrls && projectData?.previewIds) {
-      const paired = previewData.imageUrls.map((url, index) => ({
-        id: projectData.previewIds?.[index],
-        url,
+    if (previewData && previewData.imageResults) {
+      const newPreviews: PreviewImage[] = previewData.imageResults.map((result, index) => ({
+        id: projectData?.previewIds[index] ?? -1,
+        url: result.status === 'success' ? result.url : '',
+        status: result.status,
       }));
-      setPreviews(paired);
+      setPreviews(newPreviews);
     }
   }, [previewData, projectData]);
 
@@ -250,15 +253,18 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         await postPreview(teamId!, formData);
       }
 
-      queryClient.invalidateQueries({ queryKey: ['contests'] });
-      queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] });
-      queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] });
-      queryClient.invalidateQueries({ queryKey: ['previewImages', teamId] });
-      queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
-      toast('저장이 완료되었습니다.', 'success');
-      (isLeaderOfThisTeam || isAdmin) && navigate(`/teams/view/${teamId}`);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['contests'] }),
+        queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] }),
+        queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] }),
+        queryClient.invalidateQueries({ queryKey: ['previewImages', teamId, stablePreviewIds] }),
+        queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] }),
+      ]);
+
+      toast('수정이 완료되었어요', 'success');
+      (isLeaderOfThisTeam || isAdmin) && setTimeout(() => navigate(`/teams/view/${teamId}`), 300);
     } catch (err: any) {
-      toast(err?.response?.data?.message || '저장 중 오류가 발생했습니다.', 'error');
+      toast(err?.response?.data?.message || '저장 중 오류가 발생했어요', 'error');
     }
   };
 
@@ -283,7 +289,6 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
       const createdTeamId = response.teamId;
       queryClient.invalidateQueries({ queryKey: ['projectDetails'] });
-      toast('기본 정보 등록에 성공했어요');
 
       const postDetailTasks: Promise<any>[] = [];
 
@@ -307,14 +312,16 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
       await Promise.all(postDetailTasks);
 
-      toast('세부 정보 등록이 완료되었습니다', 'success');
-      setTimeout(() => navigate(`/teams/view/${createdTeamId}`), 300);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['contests'] }),
+        queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] }),
+        queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] }),
+        queryClient.invalidateQueries({ queryKey: ['previewImages', teamId, stablePreviewIds] }),
+        queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] }),
+      ]);
 
-      queryClient.invalidateQueries({ queryKey: ['contests'] });
-      queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] });
-      queryClient.invalidateQueries({ queryKey: ['projectDetails', createdTeamId] });
-      queryClient.invalidateQueries({ queryKey: ['thumbnail', createdTeamId] });
-      queryClient.invalidateQueries({ queryKey: ['previewImages', createdTeamId] });
+      toast('생성이 완료되었어요', 'success');
+      setTimeout(() => navigate(`/teams/view/${createdTeamId}`), 300);
     } catch (err: any) {
       toast(err?.response?.data?.message || '생성 도중 실패했어요', 'error');
       setTimeout(() => navigate(`/admin/contest`), 300);
@@ -324,7 +331,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   const onMemberAdd = (newMemberName: string) => {
     const trimmedName = newMemberName.trim();
     if (!trimmedName) {
-      toast('팀원 이름을 입력해주세요.', 'info');
+      toast('팀원 이름을 입력해주세요', 'info');
       return;
     }
 
@@ -364,12 +371,17 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     toast(`팀원 "${memberName}"을(를) 삭제했어요`, 'info');
   };
 
-  const handleSave = () => {
-    if (isCreateMode) {
-      handleCreate();
-    }
-    if (isEditMode) {
-      handleEdit();
+  const handleSave = async () => {
+    if (isSaved) return;
+    setIsSaved(true);
+    try {
+      if (isCreateMode) {
+        await handleCreate();
+      } else if (isEditMode) {
+        await handleEdit();
+      }
+    } finally {
+      setIsSaved(false);
     }
   };
 
@@ -438,6 +450,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         </button>
         <button
           onClick={handleSave}
+          disabled={isSaved}
           className="bg-mainGreen rounded-full px-4 py-2 text-sm font-bold text-white hover:cursor-pointer hover:bg-green-700 focus:bg-green-400 focus:outline-none sm:px-15 sm:py-4"
         >
           저장
