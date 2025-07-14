@@ -176,13 +176,13 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요';
     if (isEmpty(teamName)) return '팀명이 입력되지 않았어요';
     if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요';
-    if (isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요';
-    if (teamMembers.length < 1) return '등록된 팀원이 없어요.';
-    if (productionUrl && !isValidProjectUrl(productionUrl)) return '유효한 프로젝트 주소를 입력하세요';
+    if (isEmpty(overview)) return '프로젝트 소개글이 입력되지 않았어요';
+    if (teamMembers.length < 1) return '팀원이 목록이 비어있어요';
+    if (productionUrl && !isValidProjectUrl(productionUrl)) return '프로젝트 주소가 유효하지 않아요';
     if (isEmpty(githubUrl)) return 'GitHub 링크가 입력되지 않았어요';
-    if (!isValidGithubUrl(githubUrl)) return '유효한 깃헙 URL을 입력하세요.';
+    if (!isValidGithubUrl(githubUrl)) return 'GitHub URL이 유효하지 않아요';
     if (isEmpty(youtubeUrl)) return 'YouTube 링크가 입력되지 않았어요';
-    if (!isValidYoutubeUrl(youtubeUrl)) return '유효한 유튜브 URL을 입력하세요.';
+    if (!isValidYoutubeUrl(youtubeUrl)) return 'YouTube URL이 유효하지 않아요';
   };
 
   const validateCreateInputs = () => {
@@ -194,7 +194,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
   const validateEditInputs = () => {
     if (isLeaderOfThisTeam) {
-      if (!thumbnail || previews.length === 0) return '썸네일을 포함하여 두 개 이상의 이미지를 업로드해주세요';
+      if (!thumbnail || previews.length === 0) return '썸네일을 포함한 두 개 이상의 이미지를 올려주세요';
     }
 
     return validateCommonFields();
@@ -339,7 +339,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   const onMemberAdd = (newMemberName: string) => {
     const trimmedName = newMemberName.trim();
     if (!trimmedName) {
-      toast('팀원 이름을 입력해주세요', 'info');
+      toast('팀원 이름이 입력되지 않았어요', 'info');
       return;
     }
 

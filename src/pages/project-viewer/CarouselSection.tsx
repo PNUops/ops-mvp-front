@@ -216,7 +216,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
     if (thumbnailResult?.status === 'error' && thumbnailResult.code === 'THUMBNAIL_NOTFOUND') {
       if (!thumbnailNotFoundToast.current) {
         if (isEditor) {
-          toast('썸네일 이미지를 업로드해주세요', 'info');
+          toast('썸네일 이미지를 올려주세요', 'info');
         }
         thumbnailNotFoundToast.current = true;
       }
