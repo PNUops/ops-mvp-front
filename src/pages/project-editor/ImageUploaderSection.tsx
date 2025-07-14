@@ -82,7 +82,7 @@ const ImageUploaderSection = ({
       setPreviews(combined);
     }
 
-    toast('썸네일 이미지가 업로드 되었어요', 'success');
+    toast('이미지가 업로드 되었어요', 'success');
   };
 
   const handleRemove = (index: number) => {
@@ -94,7 +94,7 @@ const ImageUploaderSection = ({
         setThumbnailToDelete(true);
       }
       setThumbnail(undefined);
-      toast('썸네일 이미지를 삭제했어요', 'info');
+      toast('이미지를 삭제했어요', 'info');
       return;
     }
 
@@ -171,11 +171,16 @@ const ImageUploaderSection = ({
           <span>이미지</span>
         </div>
         <div className="group relative inline-block">
-          <span className="inline-flex cursor-help items-center gap-1 rounded-full bg-sky-50 px-2 py-1 text-xs text-sky-400">
+          <span className="ml-1 inline-flex animate-bounce cursor-help items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs text-green-500">
             <HiInformationCircle /> 가이드
           </span>
-          <div className="absolute top-full left-1/2 z-10 mt-3 w-max -translate-x-1/2 rounded bg-sky-50 p-3 text-xs text-sky-400 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
-            3:2 비율 (예: 1500×1000)이<br></br>가장 예쁘게 보여져요!
+
+          <div className="absolute top-1/2 left-full z-10 ml-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80">
+            권장 비율: <strong>3:2</strong> (예: 1500×1000)
+            <br />
+            최대 용량: <strong>2MB</strong>
+            <br />
+            허용 확장자: <strong>.jpg, .png, .gif, .bmp, .webp</strong>
           </div>
         </div>
       </div>
