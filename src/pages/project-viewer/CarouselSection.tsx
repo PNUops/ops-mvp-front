@@ -200,9 +200,10 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
     refetchInterval: (query) => (query.state.data?.status === 'processing' ? 1500 : false),
   });
 
+  const stablePreviewIds = useMemo(() => [...previewIds], [previewIds]);
   const { data: previewData } = useQuery<PreviewImagesResponseDto>({
-    queryKey: ['previewImages', teamId],
-    queryFn: () => getPreviewImages(teamId, previewIds),
+    queryKey: ['previewImages', teamId, stablePreviewIds],
+    queryFn: () => getPreviewImages(teamId, stablePreviewIds),
     enabled: previewIds.length > 0,
     refetchInterval: (query) => {
       const data = query.state.data;
@@ -215,7 +216,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
     if (thumbnailResult?.status === 'error' && thumbnailResult.code === 'THUMBNAIL_NOTFOUND') {
       if (!thumbnailNotFoundToast.current) {
         if (isEditor) {
-          toast('썸네일 이미지를 업로드해주세요.', 'info');
+          toast('썸네일 이미지를 업로드해주세요', 'info');
         }
         thumbnailNotFoundToast.current = true;
       }
