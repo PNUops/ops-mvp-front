@@ -186,18 +186,13 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   };
 
   const validateCreateInputs = () => {
-    if (contestId === null) return '대회 종류를 선택해야 해요';
+    if (isAdmin) {
+      if (contestId === null) return '대회 종류를 선택해야 해요';
+    }
     return validateCommonFields();
   };
 
   const validateEditInputs = () => {
-    if (isAdmin) {
-      if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요';
-      if (isEmpty(teamName)) return '팀명이 입력되지 않았어요';
-      if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요';
-      if (contestId !== 1 && isEmpty(overview)) return '프로젝트 소개글이 작성되지 않았어요';
-    }
-
     if (isLeaderOfThisTeam) {
       if (!thumbnail || previews.length === 0) return '썸네일을 포함하여 두 개 이상의 이미지를 업로드해주세요';
     }
