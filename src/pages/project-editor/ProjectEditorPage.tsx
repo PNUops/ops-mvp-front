@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import type { Query } from '@tanstack/react-query';
 
 import useAuth from 'hooks/useAuth';
 import { useContestId, useTeamId } from 'hooks/useId';
@@ -25,7 +24,7 @@ import {
   TeamMember,
   PreviewImagesResponseDto,
   ProjectDetailsResponseDto,
-  PreviewImage,
+  PreviewResult,
 } from 'types/DTO/projectViewerDto';
 
 import { isValidGithubUrl, isValidYoutubeUrl, isValidProjectUrl } from './urlValidators';
@@ -56,9 +55,9 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   const [teamName, setTeamName] = useState('');
   const [projectName, setProjectName] = useState('');
   const [leaderName, setLeaderName] = useState('');
-  const [thumbnail, setThumbnail] = useState<string | File | undefined>();
+  const [thumbnail, setThumbnail] = useState<ThumbnailResult | File | undefined>();
   const [thumbnailToDelete, setThumbnailToDelete] = useState<boolean>(false);
-  const [previews, setPreviews] = useState<PreviewImage[]>([]);
+  const [previews, setPreviews] = useState<(PreviewResult | File)[]>([]);
   const [previewsToDelete, setPreviewsToDelete] = useState<number[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const teamMembersRef = useRef<TeamMember[]>(teamMembers);
@@ -125,25 +124,39 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   }, [projectData]);
 
   useEffect(() => {
-    if (thumbnailResult && thumbnailResult.status === 'success') {
-      setThumbnail(thumbnailResult.url);
+    if (thumbnailResult) {
+      setThumbnail(thumbnailResult);
     }
   }, [thumbnailResult]);
 
   useEffect(() => {
     if (previewData && previewData.imageResults) {
-      const newPreviews: PreviewImage[] = previewData.imageResults.map((result, index) => ({
-        id: projectData?.previewIds[index] ?? -1,
-        url: result.status === 'success' ? result.url : '',
-        status: result.status,
-      }));
-      setPreviews(newPreviews);
+      setPreviews(previewData.imageResults);
     }
-  }, [previewData, projectData]);
+  }, [previewData]);
 
   useEffect(() => {
     teamMembersRef.current = teamMembers;
   }, [teamMembers]);
+
+  useEffect(() => {
+    return () => {
+      if (
+        thumbnail &&
+        typeof thumbnail === 'object' &&
+        'url' in thumbnail &&
+        typeof thumbnail.url === 'string' &&
+        thumbnail.url.startsWith('blob:')
+      ) {
+        URL.revokeObjectURL(thumbnail.url);
+      }
+      previews.forEach((p) => {
+        if (typeof p === 'object' && 'url' in p && typeof p.url === 'string' && p.url.startsWith('blob:')) {
+          URL.revokeObjectURL(p.url);
+        }
+      });
+    };
+  }, [thumbnail, previews]);
 
   if ((isCreateMode && !initialContestId) || (isEditMode && !contestId))
     return <div>프로젝트의 대회 소속을 불러올 수 없습니다.</div>;
@@ -186,7 +199,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     }
 
     if (isLeaderOfThisTeam) {
-      if (!thumbnail || previews.length === 0) return '두개 이상의 이미지 업로드가 필요해요';
+      if (!thumbnail || previews.length === 0) return '썸네일을 포함하여 두 개 이상의 이미지를 업로드해주세요';
     }
 
     return validateCommonFields();
@@ -246,7 +259,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       if (previewsToDelete.length > 0) {
         await deletePreview(teamId!, { imageIds: previewsToDelete });
       }
-      const newFiles = previews.filter((p) => p.url instanceof File).map((p) => p.url as File);
+      const newFiles = previews.filter((p) => p instanceof File).map((p) => p as File);
       if (newFiles.length > 0) {
         const formData = new FormData();
         newFiles.forEach((file) => formData.append('images', file));
@@ -303,7 +316,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         postDetailTasks.push(postThumbnail(createdTeamId, formData));
       }
 
-      const newFiles = previews.filter((p) => p.url instanceof File).map((p) => p.url as File);
+      const newFiles = previews.filter((p) => p instanceof File).map((p) => p as File);
       if (newFiles.length > 0) {
         const formData = new FormData();
         newFiles.forEach((file) => formData.append('images', file));

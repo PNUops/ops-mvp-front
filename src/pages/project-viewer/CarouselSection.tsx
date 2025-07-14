@@ -4,7 +4,7 @@ import { useMediaQuery } from '@react-hookz/web';
 import { useToast } from 'hooks/useToast';
 import { ThumbnailResult, getThumbnail } from 'apis/projectEditor';
 import { getPreviewImages } from 'apis/projectViewer';
-import { PreviewsResult, PreviewImagesResponseDto } from 'types/DTO/projectViewerDto';
+import { PreviewResult, PreviewImagesResponseDto } from 'types/DTO/projectViewerDto';
 
 import Spinner from '@components/Spinner';
 
@@ -90,7 +90,7 @@ const ErrorMessage = ({ icon: Icon, message }: { icon: React.ElementType; messag
   </div>
 );
 
-type MediaType = ThumbnailResult | PreviewsResult | 'youtube' | null;
+type MediaType = ThumbnailResult | PreviewResult | 'youtube' | null;
 
 const MediaRenderer = ({
   currentMedia,
@@ -227,7 +227,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
 
   const embedUrl = useMemo(() => getEmbedUrl(youtubeUrl), [youtubeUrl]);
   const rawImages = useMemo(() => {
-    const images: (ThumbnailResult | PreviewsResult | 'youtube')[] = [];
+    const images: (ThumbnailResult | PreviewResult | 'youtube')[] = [];
     if (embedUrl) {
       images.push('youtube');
     }
