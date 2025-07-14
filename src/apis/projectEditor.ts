@@ -22,7 +22,6 @@ export const getThumbnail = async (teamId: number): Promise<ThumbnailResult> => 
     } else if (response.status === 202) {
       return { status: 'processing', code: 'THUMBNAIL_PROCESSING' };
     } else {
-      console.warn(`[getThumbnail] 예상치 못한 성공 코드: ${response.status}`);
       return { status: 'success', url: URL.createObjectURL(response.data) };
     }
   } catch (error: any) {
