@@ -22,7 +22,7 @@ const UrlInput = ({
 }: UrlInputProps) => {
   return (
     <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
-      <div className="text-midGray flex w-25">
+      <div className="text-midGray flex w-25 sm:py-3">
         <span className="mr-1 text-red-500">*</span>
         <span>URL</span>
       </div>
