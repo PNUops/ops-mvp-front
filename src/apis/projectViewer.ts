@@ -7,7 +7,7 @@ import {
   CommentDeleteRequestDto,
   CommentEditRequestDto,
   CommentDto,
-  PreviewsResult,
+  PreviewResult,
 } from 'types/DTO/projectViewerDto';
 
 export const getProjectDetails = async (teamId: number): Promise<ProjectDetailsResponseDto> => {
@@ -16,7 +16,7 @@ export const getProjectDetails = async (teamId: number): Promise<ProjectDetailsR
 };
 
 export const getPreviewImages = async (teamId: number, imageIds: number[]): Promise<PreviewImagesResponseDto> => {
-  const imageResults: PreviewsResult[] = [];
+  const imageResults: PreviewResult[] = [];
 
   for (const imageId of imageIds) {
     try {
