@@ -7,6 +7,7 @@ import { getPreviewImages } from 'apis/projectViewer';
 import { PreviewResult, PreviewImagesResponseDto } from 'types/DTO/projectViewerDto';
 
 import Spinner from '@components/Spinner';
+import DefaultImage from '@assets/basicThumbnail.jpg';
 
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { FaSadTear } from 'react-icons/fa';
@@ -90,7 +91,8 @@ const ErrorMessage = ({ icon: Icon, message }: { icon: React.ElementType; messag
   </div>
 );
 
-type MediaType = ThumbnailResult | PreviewResult | 'youtube' | null;
+type DefaultMedia = { status: 'default'; url: string };
+type MediaType = ThumbnailResult | PreviewResult | 'youtube' | DefaultMedia | null;
 
 const MediaRenderer = ({
   currentMedia,
@@ -109,6 +111,16 @@ const MediaRenderer = ({
 }) => {
   if (currentMedia === 'youtube' && embedUrl) {
     return <iframe src={embedUrl} title="Youtube Iframe" allowFullScreen className="absolute inset-0 h-full w-full" />;
+  }
+
+  if (typeof currentMedia === 'object' && currentMedia?.status === 'default') {
+    return (
+      <img
+        src={currentMedia.url}
+        alt="기본 이미지"
+        className="border-lightGray absolute inset-0 h-full w-full border object-cover"
+      />
+    );
   }
 
   const statusMessageMap: Record<string, { icon: React.ElementType; message: React.ReactNode; isError?: boolean }> = {
@@ -227,7 +239,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
 
   const embedUrl = useMemo(() => getEmbedUrl(youtubeUrl), [youtubeUrl]);
   const rawImages = useMemo(() => {
-    const images: (ThumbnailResult | PreviewResult | 'youtube')[] = [];
+    const images: MediaType[] = [];
     if (embedUrl) {
       images.push('youtube');
     }
@@ -237,16 +249,25 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
     if (previewData?.imageResults) {
       images.push(...previewData.imageResults);
     }
+
+    const hasValidMedia = images.some(
+      (media) => media === 'youtube' || (typeof media === 'object' && media?.status === 'success'),
+    );
+
+    if (!hasValidMedia) images.push({ status: 'default', url: DefaultImage });
+
     return images;
   }, [embedUrl, thumbnailResult, previewData]);
 
   const visibleImages = useMemo(() => {
-    return rawImages.filter((media) => {
+    return rawImages.filter((media): media is MediaType => {
       if (media === 'youtube') return true;
-      if (media.status === 'success') return true;
-      if (media.status === 'processing') return true;
-      if (media.status === 'error') {
-        return media.code === 'THUMBNAIL_ERR_ETC' || media.code === 'PREVIEW_ERR_ETC';
+      if (media && typeof media === 'object') {
+        if (media.status === 'success' || media.status === 'processing') return true;
+        if (media.status === 'error') {
+          return 'code' in media && (media.code === 'THUMBNAIL_ERR_ETC' || media.code === 'PREVIEW_ERR_ETC');
+        }
+        if (media.status === 'default') return true;
       }
       return false;
     });
