@@ -1,6 +1,7 @@
 import { FaHeart } from 'react-icons/fa';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import basicThumbnail from '@assets/basicThumbnail.jpg'
 
 interface TeamCardProps {
   teamId: number;
@@ -29,9 +30,10 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
             onError={() => setImageError(true)}
           />
           ) : (
-          <div className="bg-lightGray flex aspect-[3/2] w-full items-center justify-center">
-          <div className="text-midGray flex h-full w-full items-center justify-center text-sm">썸네일</div>
-          </div>
+          <img
+            src={basicThumbnail}
+            alt="기본 썸네일"
+            />
           )}
 
         <div className="absolute top-3 right-3 z-10">
