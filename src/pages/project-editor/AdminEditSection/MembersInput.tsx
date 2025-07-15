@@ -32,10 +32,10 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
           {teamMembers.map((member) => (
             <div
               key={member.teamMemberId}
-              className="border:lightGray relative w-full rounded border py-3 pr-5 pl-15 text-sm text-black"
+              className="border:lightGray relative w-full rounded border px-15 py-3 text-sm text-black"
             >
               <IoPerson className="text-mainGreen/50 absolute top-1/2 left-5 -translate-y-1/2" size={20} />
-              <div className="truncate pr-12">{member.teamMemberName}</div>
+              <div className="truncate">{member.teamMemberName}</div>
               <button
                 type="button"
                 onClick={() => onMemberRemove(member.teamMemberId)}
@@ -51,7 +51,7 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
               <input
                 type="text"
                 placeholder="팀원명을 입력해주세요."
-                className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:outline-none"
+                className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-15 py-3 text-sm text-black duration-300 ease-in-out focus:outline-none"
                 value={newMemberInput}
                 onChange={(e) => setNewMemberInput(e.target.value)}
                 onKeyDown={(e) => {
