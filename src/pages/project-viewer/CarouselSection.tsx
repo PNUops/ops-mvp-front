@@ -2,11 +2,12 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useMediaQuery } from '@react-hookz/web';
 import { useToast } from 'hooks/useToast';
-import { getThumbnail } from 'apis/projectEditor';
+import { ThumbnailResult, getThumbnail } from 'apis/projectEditor';
 import { getPreviewImages } from 'apis/projectViewer';
-import { PreviewImagesResponseDto } from 'types/DTO/projectViewerDto';
+import { PreviewResult, PreviewImagesResponseDto } from 'types/DTO/projectViewerDto';
 
 import Spinner from '@components/Spinner';
+import DefaultImage from '@assets/basicThumbnail.jpg';
 
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { FaSadTear } from 'react-icons/fa';
@@ -19,8 +20,6 @@ interface CarouselSectionProps {
   youtubeUrl: string;
   isEditor: boolean;
 }
-
-const ERROR_CODES = ['ERROR_ETC', 'THUMBNAIL_ERR_404', 'PREVIEW_ERR_404', 'THUMBNAIL_ERR_409', 'PREVIEW_ERR_409']; // 'THUMBNAIL_ERR_404'
 
 const getEmbedUrl = (url: string) => {
   try {
@@ -92,84 +91,110 @@ const ErrorMessage = ({ icon: Icon, message }: { icon: React.ElementType; messag
   </div>
 );
 
+type DefaultMedia = { status: 'default'; url: string };
+type MediaType = ThumbnailResult | PreviewResult | 'youtube' | DefaultMedia | null;
+
 const MediaRenderer = ({
-  currentImage,
+  currentMedia,
   embedUrl,
   imageLoaded,
   setImageLoaded,
   setLoadFailed,
   isEditor,
 }: {
-  currentImage: string | null;
+  currentMedia: MediaType;
   embedUrl: string | null;
   imageLoaded: boolean;
   setImageLoaded: (loaded: boolean) => void;
   setLoadFailed: (failed: boolean) => void;
   isEditor: boolean;
 }) => {
-  if (currentImage === 'youtube' && embedUrl) {
+  if (currentMedia === 'youtube' && embedUrl) {
     return <iframe src={embedUrl} title="Youtube Iframe" allowFullScreen className="absolute inset-0 h-full w-full" />;
   }
 
-  const errorMap: Record<string, { icon: React.ElementType; message: React.ReactNode }> = {
-    ERROR_ETC: {
-      icon: FaSadTear,
-      message: '이미지를 찾을 수 없어요',
+  if (typeof currentMedia === 'object' && currentMedia?.status === 'default') {
+    return (
+      <img
+        src={currentMedia.url}
+        alt="기본 이미지"
+        className="border-lightGray absolute inset-0 h-full w-full border object-cover"
+      />
+    );
+  }
+
+  const statusMessageMap: Record<string, { icon: React.ElementType; message: React.ReactNode; isError?: boolean }> = {
+    THUMBNAIL_PROCESSING: {
+      icon: CgSandClock,
+      message: (
+        <>
+          서버에서 썸네일을 압축 중이에요
+          <br />
+          조금만 기다려주세요!
+        </>
+      ),
+    },
+    PREVIEW_PROCESSING: {
+      icon: CgSandClock,
+      message: (
+        <>
+          서버에서 프리뷰 이미지를 압축 중이에요
+          <br />
+          조금만 기다려주세요!
+        </>
+      ),
     },
     THUMBNAIL_ERR_404: {
       icon: CiNoWaitingSign,
-      message: '썸네일이 아직 업로드 되지 않았어요',
+      message: '썸네일 이미지가 아직 업로드되지 않았어요',
+      isError: true,
     },
     PREVIEW_ERR_404: {
       icon: CiNoWaitingSign,
-      message: '프리뷰 이미지가 아직 업로드 되지 않았어요',
+      message: '프리뷰 이미지가 아직 업로드되지 않았어요',
+      isError: true,
     },
-    THUMBNAIL_ERR_409: {
-      icon: CgSandClock,
-      message: (
-        <>
-          서버에서 이미지를 압축 중이에요
-          <br />
-          조금만 기다려주세요!
-        </>
-      ),
+    THUMBNAIL_ERR_ETC: {
+      icon: FaSadTear,
+      message: '썸네일 로드 중 알 수 없는 오류가 발생했어요',
+      isError: true,
     },
-    PREVIEW_ERR_409: {
-      icon: CgSandClock,
-      message: (
-        <>
-          서버에서 이미지를 압축 중이에요
-          <br />
-          조금만 기다려주세요!
-        </>
-      ),
+    PREVIEW_ERR_ETC: {
+      icon: FaSadTear,
+      message: '프리뷰 이미지 로드 중 알 수 없는 오류가 발생했어요',
+      isError: true,
     },
   };
 
-  if (!currentImage || ERROR_CODES.includes(currentImage)) {
-    if (!isEditor) return null;
-    const { icon, message } = currentImage ? errorMap[currentImage] : errorMap['ERROR_ETC'];
-    return <ErrorMessage icon={icon} message={message} />;
+  if (typeof currentMedia === 'object' && currentMedia !== null) {
+    if (currentMedia.status === 'success') {
+      return (
+        <>
+          {!imageLoaded && (
+            <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-white">
+              <Spinner />
+            </div>
+          )}
+          <img
+            src={currentMedia.url}
+            alt="Project image"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setLoadFailed(true)}
+            className={`border-lightGray absolute inset-0 h-full w-full border object-cover transition-opacity duration-200 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        </>
+      );
+    } else if (currentMedia.status === 'processing') {
+      const messageData = statusMessageMap[currentMedia.code];
+      return messageData ? <ErrorMessage icon={messageData.icon} message={messageData.message} /> : null;
+    } else if (currentMedia.status === 'error') {
+      const messageData = statusMessageMap[currentMedia.code];
+      return messageData ? <ErrorMessage icon={messageData.icon} message={messageData.message} /> : null;
+    }
   }
-
-  return (
-    <>
-      {!imageLoaded && (
-        <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-white">
-          <Spinner />
-        </div>
-      )}
-      <img
-        src={currentImage}
-        alt="Project image"
-        onLoad={() => setImageLoaded(true)}
-        onError={() => setLoadFailed(true)}
-        className={`border-lightGray absolute inset-0 h-full w-full border object-cover transition-opacity duration-200 ${
-          imageLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-      />
-    </>
-  );
+  return <ErrorMessage icon={FaSadTear} message="이미지를 찾을 수 없거나 올바르지 않아요" />;
 };
 
 const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselSectionProps) => {
@@ -179,78 +204,102 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   const isMobile = useMediaQuery('(max-width:640px)');
 
   const toast = useToast();
-  const thumbnail404ToastShownRef = useRef(false);
+  const thumbnailNotFoundToast = useRef(false);
 
-  const { data: thumbnailUrl } = useQuery<string>({
+  const { data: thumbnailResult } = useQuery<ThumbnailResult>({
     queryKey: ['thumbnail', teamId],
     queryFn: () => getThumbnail(teamId),
-    refetchInterval: (query) => (query.state.data === 'ERROR_409' ? 1500 : false),
+    refetchInterval: (query) => (query.state.data?.status === 'processing' ? 1500 : false),
   });
 
+  const stablePreviewIds = useMemo(() => [...previewIds], [previewIds]);
   const { data: previewData } = useQuery<PreviewImagesResponseDto>({
-    queryKey: ['previewImages', teamId],
-    queryFn: () => getPreviewImages(teamId, previewIds),
+    queryKey: ['previewImages', teamId, stablePreviewIds],
+    queryFn: () => getPreviewImages(teamId, stablePreviewIds),
     enabled: previewIds.length > 0,
     refetchInterval: (query) => {
       const data = query.state.data;
-      const shouldRefetch = data?.imageUrls?.every((url) => url === 'ERROR_409') ?? false;
+      const shouldRefetch = data?.imageResults?.every((result) => result.status === 'processing') ?? false;
       return shouldRefetch ? 1500 : false;
     },
   });
 
   useEffect(() => {
-    if (thumbnailUrl === 'THUMBNAIL_ERR_404') {
-      if (!thumbnail404ToastShownRef.current) {
+    if (thumbnailResult?.status === 'error' && thumbnailResult.code === 'THUMBNAIL_NOTFOUND') {
+      if (!thumbnailNotFoundToast.current) {
         if (isEditor) {
-          toast('썸네일 이미지를 업로드해주세요', 'info');
-        } else {
-          toast('썸네일 이미지를 찾을 수 없어요.', 'info');
+          toast('썸네일 이미지를 올려주세요', 'info');
         }
-        thumbnail404ToastShownRef.current = true;
+        thumbnailNotFoundToast.current = true;
       }
     } else {
-      thumbnail404ToastShownRef.current = false;
+      thumbnailNotFoundToast.current = false;
     }
-  }, [thumbnailUrl, isEditor, toast]);
+  }, [thumbnailResult, isEditor, toast]);
 
-  const previewUrls = previewData?.imageUrls ?? [];
   const embedUrl = useMemo(() => getEmbedUrl(youtubeUrl), [youtubeUrl]);
-  const rawImageUrls = useMemo(() => {
-    return [...(embedUrl ? ['youtube'] : []), ...(thumbnailUrl ? [thumbnailUrl] : []), ...previewUrls];
-  }, [embedUrl, thumbnailUrl, previewUrls]);
+  const rawImages = useMemo(() => {
+    const images: MediaType[] = [];
+    if (embedUrl) {
+      images.push('youtube');
+    }
+    if (thumbnailResult) {
+      images.push(thumbnailResult);
+    }
+    if (previewData?.imageResults) {
+      images.push(...previewData.imageResults);
+    }
 
-  const visibleImageUrls = useMemo(() => {
-    if (!isEditor) return rawImageUrls.filter((url) => !ERROR_CODES.includes(url));
-    return rawImageUrls.filter((url) => url !== 'THUMBNAIL_ERR_404');
-  }, [rawImageUrls, isEditor]);
+    const hasValidMedia = images.some(
+      (media) => media === 'youtube' || (typeof media === 'object' && media?.status === 'success'),
+    );
 
-  const currentImage = useMemo(() => visibleImageUrls[currentIndex] || null, [visibleImageUrls, currentIndex]);
+    if (!hasValidMedia) images.push({ status: 'default', url: DefaultImage });
+
+    return images;
+  }, [embedUrl, thumbnailResult, previewData]);
+
+  const visibleImages = useMemo(() => {
+    return rawImages.filter((media): media is MediaType => {
+      if (media === 'youtube') return true;
+      if (media && typeof media === 'object') {
+        if (media.status === 'success' || media.status === 'processing') return true;
+        if (media.status === 'error') {
+          return 'code' in media && (media.code === 'THUMBNAIL_ERR_ETC' || media.code === 'PREVIEW_ERR_ETC');
+        }
+        if (media.status === 'default') return true;
+      }
+      return false;
+    });
+  }, [rawImages]);
+
+  const currentMedia = useMemo(() => visibleImages[currentIndex] || null, [visibleImages, currentIndex]);
 
   useEffect(() => {
     setImageLoaded(false);
     setLoadFailed(false);
-  }, [currentImage]);
+  }, [currentMedia]);
 
   useEffect(() => {
     return () => {
-      if (thumbnailUrl?.startsWith('blob:')) {
-        URL.revokeObjectURL(thumbnailUrl);
+      if (thumbnailResult?.status === 'success' && thumbnailResult.url?.startsWith('blob:')) {
+        URL.revokeObjectURL(thumbnailResult.url);
       }
     };
-  }, [thumbnailUrl]);
+  }, [thumbnailResult]);
 
-  const goToPrev = () => setCurrentIndex((prev) => (prev === 0 ? visibleImageUrls.length - 1 : prev - 1));
-  const goToNext = () => setCurrentIndex((prev) => (prev === visibleImageUrls.length - 1 ? 0 : prev + 1));
+  const goToPrev = () => setCurrentIndex((prev) => (prev === 0 ? visibleImages.length - 1 : prev - 1));
+  const goToNext = () => setCurrentIndex((prev) => (prev === visibleImages.length - 1 ? 0 : prev + 1));
   const goToSlide = (index: number) => setCurrentIndex(index);
 
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center justify-center md:gap-10">
-        {visibleImageUrls.length > 1 && !isMobile && <ArrowButton direction="left" onClick={goToPrev} />}
+        {visibleImages.length > 1 && !isMobile && <ArrowButton direction="left" onClick={goToPrev} />}
 
         <div className="border-lightGray relative aspect-[3/2] w-[50vw] max-w-[900px] min-w-[300px] overflow-hidden rounded">
           <MediaRenderer
-            currentImage={currentImage}
+            currentMedia={currentMedia}
             embedUrl={embedUrl}
             imageLoaded={imageLoaded}
             setImageLoaded={setImageLoaded}
@@ -259,17 +308,17 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
           />
         </div>
 
-        {visibleImageUrls.length > 1 && !isMobile && <ArrowButton direction="right" onClick={goToNext} />}
+        {visibleImages.length > 1 && !isMobile && <ArrowButton direction="right" onClick={goToNext} />}
       </div>
 
-      {visibleImageUrls.length > 1 && (
+      {visibleImages.length > 1 && (
         <div
           className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-[50vw] max-w-[900px] min-w-[300px] px-3`}
         >
           {isMobile && <ArrowButton direction="left" onClick={goToPrev} size={40} />}
 
           <div className="flex gap-5">
-            <IndicatorDots count={visibleImageUrls.length} currentIndex={currentIndex} onClick={goToSlide} />
+            <IndicatorDots count={visibleImages.length} currentIndex={currentIndex} onClick={goToSlide} />
           </div>
 
           {isMobile && <ArrowButton direction="right" onClick={goToNext} size={40} />}

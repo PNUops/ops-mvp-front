@@ -25,7 +25,7 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
         <>
           <div className="flex flex-col gap-3">
             <div className="text-title font-bold">Overview</div>
-            <div className="bg-whiteGray rounded-md p-4 text-sm leading-[1.7]">
+            <div className="bg-whiteGray rounded-md p-4 text-sm leading-[1.7] whitespace-pre-wrap">
               {visibleText}
               {shouldTruncate && (
                 <button

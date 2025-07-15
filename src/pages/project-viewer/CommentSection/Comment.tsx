@@ -131,7 +131,9 @@ const Comment = ({ comment }: CommentProps) => {
           </div>
         </div>
       ) : (
-        <div className="whitespace-pre-wrap text-gray-700 transition-all duration-300 ease-in-out">{description}</div>
+        <div className="break-words whitespace-pre-wrap text-gray-700 transition-all duration-300 ease-in-out">
+          {description}
+        </div>
       )}
       <CommentConfirmModal
         isOpen={showConfirm}

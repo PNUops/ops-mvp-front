@@ -12,7 +12,7 @@ interface ImageValidateResult {
 
 export const imageValidator = (images: File | File[]): ImageValidateResult => {
   const ONE_MB = 1024 * 1024;
-  const MAX_IMAGE_SIZE = 2 * ONE_MB; // 2MB -> 나중에 5MB로 바꾸기!
+  const MAX_IMAGE_SIZE = 5 * ONE_MB;
   const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
 
   const imageValidateResult: ImageValidateResult = {
