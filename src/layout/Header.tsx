@@ -18,9 +18,9 @@ const Header = () => {
   };
 
   return (
-    <header className="border-lightGray lg:h-header md:h-header xs:h-8 z-20 flex w-full min-w-[350px] items-center justify-between border-b bg-white px-4 py-2 sm:h-16">
-      <div className="mx-auto flex w-full items-center justify-between gap-4 px-4 sm:px-8 md:gap-8 lg:gap-16 lg:px-16">
-        <Link to="/">
+    <header className="border-lightGray lg:h-header md:h-header xs:h-8 z-20 flex w-full min-w-[350px] items-center justify-between border-b bg-white px-4 py-2 sm:h-20">
+      <div className="mx-auto flex w-full items-center justify-between gap-4 px-4 sm:px-8 sm:pt-4 md:gap-8 lg:gap-16 lg:px-16">
+        <Link to="/" className="sm:-translate-y-1.5 md:-translate-y-[7px] lg:-translate-y-2">
           <img
             className="w-auto max-sm:hidden sm:h-8 md:h-9 lg:h-10"
             src="/Logo.svg"
@@ -39,17 +39,17 @@ const Header = () => {
           {isAdmin && (
             <Link to="/admin/ongoing" className="flex items-center gap-2 hover:cursor-pointer">
               <BiCog className="text-mainGreen cursor-pointer text-sm" />
-              <span className="text-exsm hidden md:inline">관리자 페이지</span>
+              <span className="text-exsm hidden text-nowrap lg:inline">관리자 페이지</span>
             </Link>
           )}
           {user?.name && (
-            <div className="text-exsm max-md:hidden">
-              <span className="text-mainGreen text-sm">{user.name}</span> 님 환영합니다!
+            <div className="text-exsm text-nowrap max-md:hidden">
+              <span className="text-mainGreen text-sm leading-none">{user.name}</span> 님 환영합니다!
             </div>
           )}
           <button
             onClick={isSignedIn ? handleLogout : () => navigate('/signin')}
-            className="text-exsm border-lightGray rounded-full border px-4 py-2 hover:cursor-pointer"
+            className="text-exsm border-lightGray rounded-full border px-4 py-2 text-nowrap hover:cursor-pointer"
           >
             {isSignedIn ? '로그아웃' : '로그인 / 회원가입'}
           </button>
