@@ -43,7 +43,7 @@ const AdminEditSection = ({
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             placeholder="프로젝트 이름을 입력해주세요."
-            className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 px-5 py-3 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
+            className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-5 py-3 text-sm text-black duration-300 ease-in-out focus:outline-none"
           />
         </div>
       </div>
@@ -58,7 +58,7 @@ const AdminEditSection = ({
             value={teamName}
             onChange={(e) => setTeamName(e.target.value)}
             placeholder="팀 이름을 입력해주세요."
-            className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 px-5 py-3 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
+            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border px-5 py-3 text-sm text-black duration-300 ease-in-out focus:outline-none"
           />
         </div>
       </div>
@@ -73,7 +73,7 @@ const AdminEditSection = ({
             value={leaderName}
             onChange={(e) => setLeaderName(e.target.value)}
             placeholder="팀장 이름을 입력해주세요."
-            className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 px-5 py-3 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
+            className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-5 py-3 text-sm text-black duration-300 ease-in-out focus:outline-none"
           />
         </div>
       </div>

@@ -32,7 +32,7 @@ const UrlInput = ({
           <input
             type="url"
             placeholder="https://github.com/ (필수)"
-            className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
+            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:outline-none"
             value={githubUrl}
             onChange={(e) => setGithubUrl(e.target.value)}
           />
@@ -42,7 +42,7 @@ const UrlInput = ({
           <input
             type="url"
             placeholder="https://youtube.com/ (필수)"
-            className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
+            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:outline-none"
             value={youtubeUrl}
             onChange={(e) => setYoutubeUrl(e.target.value)}
           />
@@ -52,7 +52,7 @@ const UrlInput = ({
           <input
             type="url"
             placeholder="https://your-project.vercel.app (선택)"
-            className="placeholder-lightGray focus:ring-lightGray w-full truncate rounded bg-gray-100 py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:ring-1 focus:outline-none"
+            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border py-3 pr-5 pl-15 text-sm text-black duration-300 ease-in-out focus:outline-none"
             value={productionUrl ?? ''}
             onChange={(e) => setProductionUrl(e.target.value)}
           />
