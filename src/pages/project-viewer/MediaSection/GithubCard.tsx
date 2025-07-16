@@ -1,21 +1,22 @@
 import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { FaGithub } from 'react-icons/fa';
 import { GithubCardSkeleton } from '../ViewerSkeleton';
 import { fetchGithubContent } from 'utils/media';
-import { FaGithub } from 'react-icons/fa';
-
-export type GithubContentType = 'repo' | 'profile';
 
 interface GithubCardProps {
   githubRepoUrl: string;
 }
 
+export type GithubContentType = 'repo' | 'profile';
+
 export interface GithubRepoData {
   name: string;
   description: string;
-  language: string;
+  html_url: string;
   owner: {
     avatar_url: string;
+    login: string;
   };
 }
 
@@ -25,7 +26,7 @@ export interface GithubProfileData {
   html_url: string;
   bio?: string;
   name?: string;
-  type: 'User' | 'Organization';
+  public_repos?: number;
 }
 
 const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
@@ -40,48 +41,45 @@ const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
   if (isPending) return <GithubCardSkeleton />;
   if (isError || !data) return null;
 
+  const cardStyle =
+    'flex w-full items-center justify-between rounded border border-gray-200 bg-white px-6 py-5 transition hover:bg-gray-50';
+
   if (data.type === 'repo') {
     const repo = data.data as GithubRepoData;
     return (
-      <a
-        href={githubRepoUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center rounded border border-gray-200 p-3 hover:bg-gray-50"
-      >
-        <img src={repo.owner.avatar_url} alt="owner" className="mx-5 h-10 w-10 rounded-full border border-gray-300" />
-        <div className="ml-3 flex flex-1 flex-col text-sm">
-          <span className="font-semibold">{repo.name}</span>
-          <span className="hidden w-full max-w-[500px] truncate text-xs text-gray-500 sm:block">
-            {repo.description}
-          </span>
-          <span className="text-xs text-gray-400">{repo.language}</span>
+      <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className={cardStyle}>
+        <div className="flex flex-col gap-1 truncate">
+          <p className="truncate text-sm font-semibold text-gray-900">{repo.name}</p>
+          <p className="text-exsm line-clamp-2 truncate text-gray-600">
+            {repo.description || 'No description provided.'}
+          </p>
+          <div className="text-exsm mt-2 flex items-center gap-2 text-gray-700 hover:text-black">
+            <FaGithub size={16} className="shrink-0" />
+            <p className="truncate">{repo.html_url}</p>
+          </div>
         </div>
-        <FaGithub size={30} className="mx-5 shrink-0 text-xl text-black" />
+        <img src={repo.owner.avatar_url} alt={`${repo.owner.login}'s avatar`} className="h-10 w-10 sm:h-30 sm:w-30" />
       </a>
     );
   }
 
   if (data.type === 'profile') {
     const profile = data.data as GithubProfileData;
+
     return (
-      <a
-        href={profile.html_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center rounded border border-gray-200 p-4 hover:bg-gray-50"
-      >
-        <img
-          src={profile.avatar_url}
-          alt={profile.login}
-          className="mx-5 h-14 w-14 rounded-full border border-gray-300"
-        />
-        <div className="ml-3 flex flex-col text-sm">
-          <span className="text-lg font-semibold">{profile.name || profile.login}</span>
-          <span className="text-xs text-gray-500">{profile.bio}</span>
-          <span className="text-xs text-gray-400">{profile.type}</span>
+      <a href={profile.html_url} target="_blank" rel="noopener noreferrer" className={cardStyle}>
+        <div className="flex flex-col gap-1 truncate">
+          <p className="truncate text-sm font-semibold text-gray-900">{profile.name || profile.login}</p>
+          <p className="text-exsm line-clamp-2 truncate text-gray-600">
+            {profile.name || profile.login} has {profile.public_repos ?? 'several'} repositories available. Follow their
+            code on GitHub.
+          </p>
+          <div className="text-exsm mt-2 flex items-center gap-2 text-gray-700 hover:text-black">
+            <FaGithub size={16} className="shrink-0" />
+            <p className="truncate">{profile.html_url}</p>
+          </div>
         </div>
-        <FaGithub size={30} className="mx-5 shrink-0 text-xl text-black" />
+        <img src={profile.avatar_url} alt={`${profile.login}'s avatar`} className="h-15 w-15 sm:h-20 sm:w-20" />
       </a>
     );
   }
