@@ -36,12 +36,21 @@ const ManageNoticeListTab = () => {
         <Table<NoticeResponseDto>
           columns={[
             {
-              label: '편집일시',
-              width: '30%',
+              header: '편집일시',
+              width: '20%',
               key: 'updatedAt',
               render: (row) => row.updatedAt,
             },
-            { label: '제목', width: '30%', key: 'title' },
+            {
+              header: '제목',
+              width: '50%',
+              key: 'title',
+              render: (row) => (
+                <span onClick={() => navigate(`/notices/${row.noticeId}`)} className="cursor-pointer">
+                  {row.title}
+                </span>
+              ),
+            },
           ]}
           rows={notices ?? []}
           actions={(row) => (

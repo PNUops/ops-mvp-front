@@ -23,7 +23,7 @@ const HistoryMenu = ({ contestName, onContestChange }: HistoryMenuProps) => {
   const { data: contests } = useQuery({ queryKey: ['contests'], queryFn: getAllContests });
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block w-64">
       <select
         value={contestName}
         onChange={(e) => {
@@ -82,12 +82,12 @@ const ContestAdminTab = () => {
         <Table<ContestResponseDto>
           columns={[
             {
-              label: '편집일시',
+              header: '편집일시',
               width: '20%',
               key: 'updatedAt',
               render: (row) => row.updatedAt.replace('T', ' ').slice(0, 16),
             },
-            { label: '대회명', width: '50%', key: 'contestName' },
+            { header: '대회명', width: '50%', key: 'contestName' },
           ]}
           rows={contests ?? []}
           actions={(row) => (
@@ -120,16 +120,19 @@ const ContestAdminTab = () => {
       </section>
 
       <section className="min-w-[350px]">
-        <div className="mb-8 flex">
-          <h2 className="mr-16 text-2xl font-bold">대회별 프로젝트 목록</h2>
+        <div className="mb-8 flex flex-col md:flex-row">
+          <h2 className="mr-16 text-2xl font-bold text-nowrap sm:mb-4">대회별 프로젝트 목록</h2>
           <HistoryMenu contestName={state.currentContestName} onContestChange={handleContestChange} />
         </div>
-
         <Table<TeamListItemResponseDto>
           columns={[
-            { label: '순번', width: '10%', key: 'teamId' },
-            { label: '팀명', width: '30%', key: 'teamName' },
-            { label: '작품명', width: '30%', key: 'projectName' },
+            { header: '순번', width: '10%', key: 'teamId' },
+            {
+              header: '팀명',
+              width: '30%',
+              key: 'teamName',
+            },
+            { header: '작품명', width: '30%', key: 'projectName' },
           ]}
           rows={state.contestTeams}
           actions={(row) => (
