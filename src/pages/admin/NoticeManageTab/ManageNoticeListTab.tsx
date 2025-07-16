@@ -5,6 +5,7 @@ import { deleteNotice, getNotices } from 'apis/notices';
 import { useToast } from 'hooks/useToast';
 import { useNavigate } from 'react-router-dom';
 import { NoticeResponseDto } from 'types/DTO/notices/NoticeResponseDto';
+import { Link } from 'react-router-dom';
 
 const ManageNoticeListTab = () => {
   const navigate = useNavigate();
@@ -46,9 +47,10 @@ const ManageNoticeListTab = () => {
               width: '50%',
               key: 'title',
               render: (row) => (
-                <span onClick={() => navigate(`/notices/${row.noticeId}`)} className="cursor-pointer">
-                  {row.title}
-                </span>
+                <Link to={`/notices/${row.noticeId}`}>{row.title}</Link>
+                // <span onClick={() => navigate(`/notices/${row.noticeId}`)} className="cursor-pointer">
+                //   {row.title}
+                // </span>
               ),
             },
           ]}
