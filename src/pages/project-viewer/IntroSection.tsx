@@ -63,26 +63,24 @@ const IntroSection = ({
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-w-xs flex-wrap items-start gap-4">
-      <div className="w-full flex-col">
-        <div className="flex w-full items-center justify-between gap-5">
-          <div className="text-title min-w-0 leading-none font-bold">{projectName}</div>
-          <div className="flex gap-3">
-            {isEditor && (
-              <div className="flex">
-                <button
-                  onClick={() => navigate(`/teams/edit/${teamId}`)}
-                  className="border-midGray text-exsm text-midGray hover:text-mainGreen hover:border-mainGreen flex h-10 w-10 items-center justify-center gap-2 rounded-full border px-5 transition-colors duration-200 hover:cursor-pointer hover:bg-[#D1F3E1]/60 sm:w-auto"
-                >
-                  <span className="hidden whitespace-nowrap sm:inline">수정하기</span>{' '}
-                  <FaEdit className="text-lightGray shrink-0" />
-                </button>
-              </div>
-            )}
-            {productionUrl && <UrlButton url={productionUrl} />}
+    <div className="flex min-w-xs flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+      <div className="flex flex-col items-center gap-2 md:items-start">
+        <div className="sm:text-title pt-1 text-xl leading-none font-bold">{projectName}</div>
+        <div className="text-midGray text-exsm font-bold sm:text-sm">{teamName}</div>
+      </div>
+      <div className="flex items-center gap-3">
+        {isEditor && (
+          <div className="flex">
+            <button
+              onClick={() => navigate(`/teams/edit/${teamId}`)}
+              className="border-midGray text-exsm text-midGray hover:text-mainGreen hover:border-mainGreen flex h-10 w-10 items-center justify-center gap-2 rounded-full border px-5 transition-colors duration-200 hover:cursor-pointer hover:bg-[#D1F3E1]/60 sm:w-auto"
+            >
+              <span className="hidden whitespace-nowrap sm:inline">수정하기</span>{' '}
+              <FaEdit className="text-lightGray shrink-0" />
+            </button>
           </div>
-        </div>
-        <div className="text-exsm text-midGray font-bold">{teamName}</div>
+        )}
+        {productionUrl && <UrlButton url={productionUrl} />}
       </div>
     </div>
   );
