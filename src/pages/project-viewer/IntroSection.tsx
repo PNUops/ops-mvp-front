@@ -85,8 +85,6 @@ const IntroSection = ({
 
       <div className="flex w-full flex-1 flex-col items-end gap-2">
         {productionUrl && <UrlButton url={productionUrl} />}
-        {githubUrl && <UrlButton url={githubUrl} />}
-        {youtubeUrl && <UrlButton url={youtubeUrl} />}
       </div>
     </div>
   );

@@ -21,26 +21,6 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
 
   return (
     <>
-      {hasOverview && (
-        <>
-          <div className="flex flex-col gap-3">
-            <div className="text-title font-bold">Overview</div>
-            <div className="bg-whiteGray rounded-md p-4 text-sm leading-[1.7] whitespace-pre-wrap">
-              {visibleText}
-              {shouldTruncate && (
-                <button
-                  className="bg-subGreen text-mainGreen mx-3 cursor-pointer rounded-full px-3 py-1 text-xs hover:bg-emerald-100"
-                  onClick={() => setIsFolded(!isFolded)}
-                >
-                  {isFolded ? <IoEllipsisHorizontal /> : '간략히'}
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="h-20" />
-        </>
-      )}
-
       <div className="flex flex-col gap-3">
         <div className="text-title font-bold">Participants</div>
         <span className="flex items-center gap-3">
@@ -58,6 +38,26 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
           </div>
         </div>
       </div>
+
+      {hasOverview && (
+        <>
+          <div className="h-10" />
+          <div className="flex flex-col gap-3">
+            <div className="text-title font-bold">Overview</div>
+            <div className="bg-whiteGray rounded-md p-4 text-sm leading-[1.7] whitespace-pre-wrap">
+              {visibleText}
+              {shouldTruncate && (
+                <button
+                  className="bg-subGreen text-mainGreen mx-3 cursor-pointer rounded-full px-3 py-1 text-xs hover:bg-emerald-100"
+                  onClick={() => setIsFolded(!isFolded)}
+                >
+                  {isFolded ? <IoEllipsisHorizontal /> : '간략히'}
+                </button>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };
