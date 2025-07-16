@@ -42,7 +42,7 @@ const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
   if (isError || !data) return null;
 
   const cardStyle =
-    'flex w-full items-center justify-between rounded border border-gray-200 bg-white px-6 py-5 transition hover:bg-gray-50';
+    'flex w-full items-center justify-between rounded border border-gray-200 bg-white px-6 py-5 transition hover:bg-gray-50 min-w-xs';
 
   if (data.type === 'repo') {
     const repo = data.data as GithubRepoData;

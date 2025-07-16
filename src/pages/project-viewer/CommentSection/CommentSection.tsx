@@ -25,7 +25,7 @@ const CommentSection = ({ teamId }: CommentSectionProps) => {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex min-w-xs flex-col">
         <CommentFormSection teamId={teamId} />
         <div className="h-20" />
         <CommentListSection teamId={teamId} />

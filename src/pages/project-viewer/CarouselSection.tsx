@@ -293,7 +293,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   const goToSlide = (index: number) => setCurrentIndex(index);
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex min-w-xs flex-col items-center gap-4">
       <div className="flex items-center justify-center md:gap-10">
         {visibleImages.length > 1 && !isMobile && <ArrowButton direction="left" onClick={goToPrev} />}
 
