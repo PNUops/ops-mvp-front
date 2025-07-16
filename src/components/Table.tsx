@@ -12,10 +12,9 @@ interface Props<T extends RowData> {
   columns: Column<T>[];
   rows: T[];
   actions?: (row: T) => ReactNode;
-  onRowClick?: (row: T) => void;
 }
 
-function Table<T extends RowData>({ columns, rows, actions, onRowClick }: Props<T>) {
+function Table<T extends RowData>({ columns, rows, actions }: Props<T>) {
   const tableColumns: ColumnDef<T>[] = columns.map((col) => ({
     accessorKey: col.key,
     header: col.header,
@@ -76,11 +75,7 @@ function Table<T extends RowData>({ columns, rows, actions, onRowClick }: Props<
             </tr>
           ) : (
             table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                onClick={onRowClick ? () => onRowClick(row.original) : undefined}
-                style={onRowClick ? { cursor: 'pointer' } : undefined}
-              >
+              <tr key={row.id}>
                 {row.getVisibleCells().map((cell, idx) => (
                   <td
                     key={cell.id}

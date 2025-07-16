@@ -46,12 +46,7 @@ const ManageNoticeListTab = () => {
               header: '제목',
               width: '50%',
               key: 'title',
-              render: (row) => (
-                <Link to={`/notices/${row.noticeId}`}>{row.title}</Link>
-                // <span onClick={() => navigate(`/notices/${row.noticeId}`)} className="cursor-pointer">
-                //   {row.title}
-                // </span>
-              ),
+              render: (row) => <Link to={`/notices/${row.noticeId}`}>{row.title}</Link>,
             },
           ]}
           rows={notices ?? []}
