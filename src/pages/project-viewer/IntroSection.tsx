@@ -74,7 +74,8 @@ const IntroSection = ({
                   onClick={() => navigate(`/teams/edit/${teamId}`)}
                   className="border-midGray text-exsm text-midGray hover:text-mainGreen hover:border-mainGreen flex h-10 w-10 items-center justify-center gap-2 rounded-full border px-5 transition-colors duration-200 hover:cursor-pointer hover:bg-[#D1F3E1]/60 sm:w-auto"
                 >
-                  <span className="hidden sm:inline">수정하기</span> <FaEdit className="text-lightGray shrink-0" />
+                  <span className="hidden whitespace-nowrap sm:inline">수정하기</span>{' '}
+                  <FaEdit className="text-lightGray shrink-0" />
                 </button>
               </div>
             )}
