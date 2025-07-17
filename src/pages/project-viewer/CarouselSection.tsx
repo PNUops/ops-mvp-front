@@ -57,7 +57,7 @@ const ArrowButton = ({
     <button onClick={onClick} className="focus:outline-none">
       <Icon
         size={size}
-        className="text-lightGray hover:text-mainGreen rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25"
+        className="text-lightGray/50 hover:text-mainGreen animate-pulse rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25"
       />
     </button>
   );
