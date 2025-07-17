@@ -22,8 +22,8 @@ const AdminEditSection = ({
   setLeaderName,
 }: AdminEditSectionProps) => {
   return (
-    <div className="flex flex-col gap-8 sm:gap-5">
-      <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">
+    <div className="text-exsm flex flex-col gap-8 sm:gap-5 sm:text-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-10">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span className="w-full">대회명</span>
@@ -32,7 +32,7 @@ const AdminEditSection = ({
           <ContestMenu value={contestId} onChange={setContestId} />
         </div>
       </div>
-      <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-10">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span className="w-full text-nowrap">프로젝트명</span>
@@ -43,11 +43,11 @@ const AdminEditSection = ({
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             placeholder="프로젝트 이름을 입력해주세요."
-            className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-5 py-3 text-sm text-black duration-300 ease-in-out focus:outline-none"
+            className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-5 py-3 text-black duration-300 ease-in-out focus:outline-none"
           />
         </div>
       </div>
-      <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-10">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span className="w-full">팀명</span>
@@ -58,11 +58,11 @@ const AdminEditSection = ({
             value={teamName}
             onChange={(e) => setTeamName(e.target.value)}
             placeholder="팀 이름을 입력해주세요."
-            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border px-5 py-3 text-sm text-black duration-300 ease-in-out focus:outline-none"
+            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border px-5 py-3 text-black duration-300 ease-in-out focus:outline-none"
           />
         </div>
       </div>
-      <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-center sm:gap-10">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-10">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span className="w-full">팀장명</span>
@@ -73,7 +73,7 @@ const AdminEditSection = ({
             value={leaderName}
             onChange={(e) => setLeaderName(e.target.value)}
             placeholder="팀장 이름을 입력해주세요."
-            className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-5 py-3 text-sm text-black duration-300 ease-in-out focus:outline-none"
+            className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-5 py-3 text-black duration-300 ease-in-out focus:outline-none"
           />
         </div>
       </div>

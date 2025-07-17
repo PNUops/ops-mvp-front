@@ -45,7 +45,7 @@ const ContestMenu = ({ value, onChange }: ContestMenuProps) => {
     );
 
   return (
-    <div className="relative w-full max-w-sm text-sm">
+    <div className="text-exsm relative w-full max-w-sm sm:text-sm">
       <button
         className="border-lightGray focus:ring-subGreen focus:border-mainGreen flex w-full items-center justify-between rounded border px-5 py-3 text-left duration-150 hover:cursor-pointer focus:outline-none"
         onClick={() => {

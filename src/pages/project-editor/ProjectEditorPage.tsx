@@ -396,8 +396,8 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   };
 
   return (
-    <div className="px-2 sm:px-5">
-      <div className="text-title font-bold">{isEditMode ? '프로젝트 수정' : '프로젝트 생성'}</div>
+    <div className="min-w-xs px-2 sm:px-5">
+      <div className="sm:text-title text-xl font-bold">{isEditMode ? '프로젝트 수정' : '프로젝트 생성'}</div>
       <div className="h-10" />
       {isAdmin && contestId !== 1 && (
         <>
@@ -451,17 +451,17 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       <div className="h-15" />
       <OverviewInput overview={overview} setOverview={setOverview} />
       <div className="h-20" />
-      <div className="flex justify-end gap-5 sm:gap-10">
+      <div className="flex flex-col-reverse items-end gap-5 sm:flex-row sm:justify-end sm:gap-10">
         <button
           onClick={() => navigate(-1)}
-          className="border-mainGreen hover:bg-whiteGray focus:bg-subGreen text-mainGreen rounded-full border px-4 py-2 font-bold hover:cursor-pointer focus:outline-none sm:px-15 sm:py-4"
+          className="border-mainGreen hover:bg-whiteGray focus:bg-subGreen text-mainGreen rounded-full border px-15 py-4 font-bold hover:cursor-pointer focus:outline-none"
         >
           취소
         </button>
         <button
           onClick={handleSave}
           disabled={isSaved}
-          className="bg-mainGreen rounded-full px-4 py-2 text-sm font-bold text-white hover:cursor-pointer hover:bg-green-700 focus:bg-green-400 focus:outline-none sm:px-15 sm:py-4"
+          className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white hover:cursor-pointer hover:bg-green-700 focus:bg-green-400 focus:outline-none"
         >
           저장
         </button>

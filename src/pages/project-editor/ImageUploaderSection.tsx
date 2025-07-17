@@ -171,8 +171,8 @@ const ImageUploaderSection = ({
   while (paddedImages.length < MAX_IMAGES) paddedImages.push(undefined);
 
   return (
-    <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
-      <div className="flex items-start gap-3 sm:flex-col sm:pt-3">
+    <div className="flex flex-col gap-3 text-sm sm:flex-row sm:gap-10">
+      <div className="text-exsm flex items-start gap-3 sm:flex-col sm:pt-3 sm:text-sm">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span>이미지</span>
@@ -182,7 +182,7 @@ const ImageUploaderSection = ({
             <HiInformationCircle /> 가이드
           </span>
 
-          <div className="absolute top-1/2 left-full z-10 ml-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80">
+          <div className="absolute top-1/2 left-full z-10 ml-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80 group-active:opacity-100">
             권장 비율: <strong>3:2</strong> (예: 1500×1000)
             <br />
             최대 용량: <strong>2MB</strong>
