@@ -24,7 +24,7 @@ const LikeSection = ({ contestId, teamId, isLiked }: LikeSectionProps) => {
       queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] });
       queryClient.invalidateQueries({ queryKey: ['teams', 'current', user?.id ?? 'guest'] });
       queryClient.invalidateQueries({ queryKey: ['teams', contestId, user?.id ?? 'guest'] });
-      toast(!isLiked ? '좋아요를 눌렀어요.' : '좋아요를 취소했어요.');
+      toast(!isLiked ? '좋아요를 눌렀어요' : '좋아요를 취소했어요');
     },
   });
 
