@@ -44,7 +44,7 @@ const LikeSection = ({ contestId, teamId, isLiked }: LikeSectionProps) => {
         disabled={likeMutation.isPending}
         className={`${
           isLiked ? 'bg-mainGreen text-white hover:bg-emerald-600' : 'bg-lightGray text-white hover:bg-gray-300'
-        } relative flex cursor-pointer items-center gap-5 justify-self-center rounded-full px-5 py-3 text-sm sm:px-8`}
+        } relative flex cursor-pointer items-center gap-5 justify-self-center rounded-full p-4 text-sm sm:px-8 sm:py-3`}
       >
         <FaHeart className={`${isLiked ? 'text-white' : 'text-whiteGray'}`} size={20} />
         <span className="hidden sm:inline">좋아요</span>
