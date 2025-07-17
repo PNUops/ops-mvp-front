@@ -42,9 +42,9 @@ const UrlButton = ({ url }: { url: string }) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="border-mainGreen text-mainGreen hover:border-mainGreen inline-flex h-10 w-10 items-center justify-center gap-2 rounded-full border transition-colors duration-200 hover:bg-[#D1F3E1]/60 focus:outline-none sm:w-auto sm:px-5"
+      className="border-mainGreen text-mainGreen hover:border-mainGreen inline-flex h-10 w-auto items-center justify-center gap-2 rounded-full border px-5 transition-colors duration-200 hover:bg-[#D1F3E1]/60 focus:outline-none"
     >
-      <span className="text-exsm hidden font-medium whitespace-nowrap sm:inline-block">{text}</span>
+      <span className="text-exsm font-medium whitespace-nowrap">{text}</span>
       <FiExternalLink className="text-subGreen shrink-0" />
     </a>
   );
@@ -63,8 +63,8 @@ const IntroSection = ({
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-start sm:justify-between">
-      <div className="flex flex-col items-start gap-2 self-start sm:self-auto">
+    <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+      <div className="flex flex-col items-start gap-2 self-start md:self-auto">
         <div className="sm:text-title pt-1 text-xl leading-none font-bold">{projectName}</div>
         <div className="text-midGray text-exsm font-bold sm:text-sm">{teamName}</div>
       </div>
@@ -73,9 +73,9 @@ const IntroSection = ({
           <div className="flex">
             <button
               onClick={() => navigate(`/teams/edit/${teamId}`)}
-              className="border-midGray text-exsm text-midGray hover:text-mainGreen hover:border-mainGreen flex h-10 w-10 items-center justify-center gap-2 rounded-full border px-5 transition-colors duration-200 hover:cursor-pointer hover:bg-[#D1F3E1]/60 sm:w-auto"
+              className="border-midGray text-exsm text-midGray hover:text-mainGreen hover:border-mainGreen flex h-10 w-auto items-center justify-center gap-2 rounded-full border px-5 transition-colors duration-200 hover:cursor-pointer hover:bg-[#D1F3E1]/60"
             >
-              <span className="hidden whitespace-nowrap sm:inline">수정하기</span>{' '}
+              <span className="whitespace-nowrap">수정하기</span>
               <FaEdit className="text-lightGray shrink-0" />
             </button>
           </div>
