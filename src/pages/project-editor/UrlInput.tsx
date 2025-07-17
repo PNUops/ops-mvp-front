@@ -31,31 +31,46 @@ const UrlInput = ({
           <FaGithub className="absolute top-1/2 left-5 -translate-y-1/2 text-gray-500" size={20} />
           <input
             type="url"
-            placeholder="https://github.com/ (필수)"
-            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border py-3 pr-5 pl-15 text-black duration-300 ease-in-out focus:outline-none"
+            placeholder="https://github.com"
+            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border py-3 pr-5 pl-13 text-black duration-300 ease-in-out focus:outline-none"
             value={githubUrl}
             onChange={(e) => setGithubUrl(e.target.value)}
           />
+          {!githubUrl && (
+            <span className="text-mainGreen/60 bg-subGreen/50 absolute top-1/2 right-4 -translate-y-1/2 rounded-full px-2 py-1 text-xs">
+              필수
+            </span>
+          )}
         </div>
         <div className="relative w-full">
           <FaYoutube className="absolute top-1/2 left-5 -translate-y-1/2 text-red-400" size={20} />
           <input
             type="url"
-            placeholder="https://youtube.com/ (필수)"
-            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border py-3 pr-5 pl-15 text-black duration-300 ease-in-out focus:outline-none"
+            placeholder="https://youtube.com"
+            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border py-3 pr-5 pl-13 text-black duration-300 ease-in-out focus:outline-none"
             value={youtubeUrl}
             onChange={(e) => setYoutubeUrl(e.target.value)}
           />
+          {!youtubeUrl && (
+            <span className="text-mainGreen/60 bg-subGreen/50 absolute top-1/2 right-4 -translate-y-1/2 rounded-full px-2 py-1 text-xs">
+              필수
+            </span>
+          )}
         </div>
         <div className="relative w-full">
           <RiLink className="text-mainGreen/50 absolute top-1/2 left-5 -translate-y-1/2" size={20} />
           <input
             type="url"
-            placeholder="https://your-project.vercel.app (선택)"
-            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border py-3 pr-5 pl-15 text-black duration-300 ease-in-out focus:outline-none"
+            placeholder="https://your-project.com"
+            className="placeholder-lightGray focus:border-mainGreen border-lightGray w-full truncate rounded border py-3 pr-5 pl-13 text-black duration-300 ease-in-out focus:outline-none"
             value={productionUrl ?? ''}
             onChange={(e) => setProductionUrl(e.target.value)}
           />
+          {!productionUrl && (
+            <span className="text-midGray/80 bg-whiteGray absolute top-1/2 right-4 -translate-y-1/2 rounded-full px-2 py-1 text-xs">
+              선택
+            </span>
+          )}
         </div>
       </div>
     </div>
