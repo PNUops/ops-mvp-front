@@ -53,7 +53,9 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
                 placeholder="팀원명을 입력해주세요."
                 className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-15 py-3 text-sm text-black duration-300 ease-in-out focus:outline-none"
                 value={newMemberInput}
-                onChange={(e) => setNewMemberInput(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 20) setNewMemberInput(e.target.value);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleAddMember();
                 }}
