@@ -396,7 +396,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   };
 
   return (
-    <div className="px-5">
+    <div className="px-2 sm:px-5">
       <div className="text-title font-bold">{isEditMode ? '프로젝트 수정' : '프로젝트 생성'}</div>
       <div className="h-10" />
       {isAdmin && contestId !== 1 && (

@@ -63,8 +63,8 @@ const IntroSection = ({
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-w-xs flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
-      <div className="flex flex-col items-center gap-2 md:items-start">
+    <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col items-start gap-2 self-start sm:self-auto">
         <div className="sm:text-title pt-1 text-xl leading-none font-bold">{projectName}</div>
         <div className="text-midGray text-exsm font-bold sm:text-sm">{teamName}</div>
       </div>

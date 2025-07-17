@@ -20,7 +20,7 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
   const visibleText = isFolded && shouldTruncate ? safeOverview.slice(0, INIT_LENGTH) : safeOverview;
 
   return (
-    <div className="min-w-xs">
+    <>
       <div className="flex flex-col gap-3">
         <div className="sm:text-title text-xl font-bold">Participants</div>
         <span className="flex items-center gap-3">
@@ -60,7 +60,7 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
           </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

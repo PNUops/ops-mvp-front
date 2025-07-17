@@ -61,7 +61,7 @@ const ProjectViewerPage = () => {
   const isLeaderOfThisTeam = isLeader && memberId == data.leaderId;
 
   return (
-    <div className="px-5">
+    <div className="min-w-xs px-2 sm:px-5">
       <IntroSection
         contestId={data.contestId}
         teamId={data.teamId}

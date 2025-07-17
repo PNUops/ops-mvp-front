@@ -38,7 +38,7 @@ const LikeSection = ({ contestId, teamId, isLiked }: LikeSectionProps) => {
   };
 
   return (
-    <div className="min-w-xs">
+    <>
       <button
         onClick={handleClick}
         disabled={likeMutation.isPending}
@@ -49,7 +49,7 @@ const LikeSection = ({ contestId, teamId, isLiked }: LikeSectionProps) => {
         <FaHeart className={`${isLiked ? 'text-white' : 'text-whiteGray'}`} size={20} />
         <span className="hidden sm:inline">좋아요</span>
       </button>
-    </div>
+    </>
   );
 };
 
