@@ -58,7 +58,7 @@ const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
             <p className="truncate">{repo.html_url}</p>
           </div>
         </div>
-        <img src={repo.owner.avatar_url} alt={`${repo.owner.login}'s avatar`} className="h-10 w-10 sm:h-30 sm:w-30" />
+        <img src={repo.owner.avatar_url} alt={`${repo.owner.login}'s avatar`} className="h-15 w-15 sm:h-20 sm:w-20" />
       </a>
     );
   }
