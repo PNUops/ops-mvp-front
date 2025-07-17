@@ -171,8 +171,8 @@ const ImageUploaderSection = ({
   while (paddedImages.length < MAX_IMAGES) paddedImages.push(undefined);
 
   return (
-    <div className="flex gap-10 text-sm">
-      <div className="flex flex-col items-start gap-3">
+    <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
+      <div className="flex items-start gap-3 sm:flex-col sm:pt-3">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span>이미지</span>
@@ -200,13 +200,13 @@ const ImageUploaderSection = ({
         >
           <p className="text-xs sm:inline sm:text-sm">파일을 이곳에 끌어놓아주세요.</p>
           <p className="text-midGray my-2 text-xs sm:inline sm:text-sm">OR</p>
-          <label className="text-mainGreen flex cursor-pointer rounded-full bg-[#D1F3E1] p-4 text-sm font-bold">
+          <label className="text-mainGreen bg-subGreen hover:bg-emerald-00 flex cursor-pointer rounded-full p-4 text-sm font-bold">
             <MdOutlineFileUpload className="sm:hidden" />
             <span className="hidden px-4 sm:inline">파일 업로드</span>
             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
           </label>
         </div>
-        <div className="grid flex-1 grid-cols-1 gap-3 text-center sm:grid-cols-2">
+        <div className="grid flex-1 grid-cols-2 gap-3 text-center">
           {paddedImages.map((img, index) => {
             if (!img) {
               return (

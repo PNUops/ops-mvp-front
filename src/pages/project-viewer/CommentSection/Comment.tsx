@@ -95,7 +95,7 @@ const Comment = ({ comment }: CommentProps) => {
 
       {isEditing ? (
         <div className="animate-fade-in flex flex-col gap-5">
-          <div className="bg-whiteGray focus:ring-lightGray flex h-36 flex-col gap-2 rounded p-3 text-sm transition-all duration-300 ease-in-out focus:outline-none">
+          <div className="bg-whiteGray focus-within:ring-lightGray flex h-36 flex-col gap-2 rounded p-3 text-sm transition-all duration-300 ease-in-out focus-within:ring-1 focus:outline-none">
             <textarea
               className="placeholder:text-lightGray w-full flex-1 resize-none p-2 focus:outline-none"
               placeholder="댓글을 입력하세요 (최대 255자)"

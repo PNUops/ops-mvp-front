@@ -65,7 +65,7 @@ const CommentFormSection = ({ teamId }: CommentFormSection) => {
 
   return (
     <>
-      <div className="ring-lightGray focus-within:ring-midGray flex h-36 flex-col gap-2 rounded p-3 text-sm ring-1 transition-all duration-300 ease-in-out focus-within:ring-1">
+      <div className="ring-lightGray focus-within:ring-mainGreen flex h-36 flex-col gap-2 rounded p-3 text-sm ring-1 transition-all duration-300 ease-in-out focus-within:ring-1">
         <textarea
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
