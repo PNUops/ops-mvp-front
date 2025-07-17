@@ -9,7 +9,6 @@ const VoteRate = () => {
     queryFn: getVoteRate,
   });
 
-  console.log('VoteRate data:', data);
   const pieColors = ['#22c55e', '#e5e7eb'];
   const voteData = data ?? { voteRate: 0, totalVoteCount: 0 };
   const { voteRate, totalVoteCount } = voteData;
