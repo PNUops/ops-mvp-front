@@ -5,6 +5,7 @@ import { deleteNotice, getNotices } from 'apis/notices';
 import { useToast } from 'hooks/useToast';
 import { useNavigate } from 'react-router-dom';
 import { NoticeResponseDto } from 'types/DTO/notices/NoticeResponseDto';
+import { Link } from 'react-router-dom';
 
 const ManageNoticeListTab = () => {
   const navigate = useNavigate();
@@ -36,12 +37,17 @@ const ManageNoticeListTab = () => {
         <Table<NoticeResponseDto>
           columns={[
             {
-              label: '편집일시',
-              width: '30%',
+              header: '편집일시',
+              width: '20%',
               key: 'updatedAt',
               render: (row) => row.updatedAt,
             },
-            { label: '제목', width: '30%', key: 'title' },
+            {
+              header: '제목',
+              width: '50%',
+              key: 'title',
+              render: (row) => <Link to={`/notices/${row.noticeId}`}>{row.title}</Link>,
+            },
           ]}
           rows={notices ?? []}
           actions={(row) => (
