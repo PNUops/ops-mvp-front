@@ -381,8 +381,37 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     toast(`팀원 "${memberName}"을(를) 삭제했어요`, 'info');
   };
 
+  const hasChanges = (): boolean => {
+    if (!projectData) return true;
+
+    const basicInfoChanged =
+      projectData.projectName !== projectName ||
+      projectData.teamName !== teamName ||
+      projectData.leaderName !== leaderName ||
+      projectData.overview !== overview ||
+      projectData.productionPath !== productionUrl ||
+      projectData.githubPath !== githubUrl ||
+      projectData.youTubePath !== youtubeUrl;
+
+    const membersChanged =
+      JSON.stringify(projectData.teamMembers.map((m) => m.teamMemberName).sort()) !==
+      JSON.stringify(teamMembers.map((m) => m.teamMemberName).sort());
+
+    const thumbnailChanged = thumbnailToDelete || thumbnail instanceof File;
+
+    const previewAdded = previews.some((p) => p instanceof File);
+    const previewDeleted = previewsToDelete.length > 0;
+
+    return basicInfoChanged || membersChanged || thumbnailChanged || previewAdded || previewDeleted;
+  };
+
   const handleSave = async () => {
     if (isSaved) return;
+    if (isEditMode && !hasChanges()) {
+      toast('수정된 내용이 없어요', 'info');
+      return;
+    }
+
     setIsSaved(true);
     try {
       if (isCreateMode) {
@@ -460,8 +489,8 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         </button>
         <button
           onClick={handleSave}
-          disabled={isSaved}
-          className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white hover:cursor-pointer hover:bg-green-700 focus:bg-green-400 focus:outline-none"
+          disabled={isSaved || !hasChanges()}
+          className={`${isSaved || !hasChanges() ? 'bg-lightGray cursor-not-allowed' : 'bg-mainGreen cursor-pointer hover:bg-green-700 focus:bg-green-400'} rounded-full px-15 py-4 text-sm font-bold text-white transition-colors duration-300 ease-in-out focus:outline-none`}
         >
           저장
         </button>
