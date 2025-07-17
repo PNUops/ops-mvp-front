@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { FaGithub } from 'react-icons/fa';
 import { GithubCardSkeleton } from '../ViewerSkeleton';
 import { fetchGithubContent } from 'utils/media';
 
 interface GithubCardProps {
-  githubRepoUrl: string;
+  githubUrl: string;
 }
 
 export type GithubContentType = 'repo' | 'profile';
@@ -29,14 +29,13 @@ export interface GithubProfileData {
   public_repos?: number;
 }
 
-const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
-  const { mutate, data, isPending, isError } = useMutation({
-    mutationFn: fetchGithubContent,
+const GithubCard = ({ githubUrl }: GithubCardProps) => {
+  const { data, isPending, isError } = useQuery({
+    queryKey: ['githubContent', githubUrl],
+    queryFn: () => fetchGithubContent(githubUrl),
+    enabled: !!githubUrl,
+    staleTime: 1000 * 60 * 5,
   });
-
-  useEffect(() => {
-    if (githubRepoUrl) mutate(githubRepoUrl);
-  }, [githubRepoUrl, mutate]);
 
   if (isPending) return <GithubCardSkeleton />;
   if (isError || !data) return null;
