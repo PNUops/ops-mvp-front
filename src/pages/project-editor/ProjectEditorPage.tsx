@@ -344,7 +344,9 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     }
 
     const isDuplicate = teamMembersRef.current.some(
-      (member) => member.teamMemberName.toLowerCase() === trimmedName.toLowerCase(),
+      (member) =>
+        member.teamMemberName.toLowerCase() === trimmedName.toLowerCase() ||
+        leaderName.trim().toLowerCase() === trimmedName.toLowerCase(),
     );
 
     if (isDuplicate) {

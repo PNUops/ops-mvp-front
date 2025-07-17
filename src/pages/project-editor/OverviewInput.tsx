@@ -28,7 +28,7 @@ const OverviewInput = ({ overview, setOverview }: OverviewInputProps) => {
 
   return (
     <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
-      <div className="text-midGray flex w-25 gap-1">
+      <div className="text-midGray flex w-25 gap-1 sm:py-3">
         <span className="mr-1 text-red-500">*</span>
         <span className="w-full">Overview</span>
       </div>
@@ -36,7 +36,7 @@ const OverviewInput = ({ overview, setOverview }: OverviewInputProps) => {
         <textarea
           ref={textareaRef}
           placeholder={`Overview를 입력해주세요. (최대 ${MAX_OVERVIEW}자)`}
-          className="placeholder-lightGray ring-lightGray h-40 max-h-40 min-h-40 w-full resize-none overflow-auto rounded bg-gray-100 px-4 py-3 text-sm transition-all duration-300 ease-in-out focus-within:ring-1 focus:outline-none"
+          className="placeholder-lightGray border-lightGray focus:border-mainGreen h-40 max-h-40 min-h-40 w-full resize-none overflow-auto rounded border px-4 py-3 text-sm transition-all duration-300 ease-in-out focus:outline-none"
           value={overview ?? ''}
           onChange={handleOverviewChange}
           onBlur={handleOverviewBlur}
