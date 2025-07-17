@@ -49,11 +49,11 @@ const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
     return (
       <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className={cardStyle}>
         <div className="flex flex-col gap-1 truncate">
-          <p className="truncate text-sm font-semibold text-gray-900">{repo.name}</p>
-          <p className="text-exsm line-clamp-2 truncate text-gray-600">
+          <p className="text-exsm truncate font-semibold text-gray-900 sm:text-sm">{repo.name}</p>
+          <p className="sm:text-exsm line-clamp-2 truncate text-xs text-gray-600">
             {repo.description || 'No description provided.'}
           </p>
-          <div className="text-exsm mt-2 flex items-center gap-2 text-gray-700 hover:text-black">
+          <div className="sm:text-exsm mt-2 flex items-center gap-2 text-xs text-gray-700 hover:text-black">
             <FaGithub size={16} className="shrink-0" />
             <p className="truncate">{repo.html_url}</p>
           </div>
@@ -69,12 +69,12 @@ const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
     return (
       <a href={profile.html_url} target="_blank" rel="noopener noreferrer" className={cardStyle}>
         <div className="flex flex-col gap-1 truncate">
-          <p className="truncate text-sm font-semibold text-gray-900">{profile.name || profile.login}</p>
-          <p className="text-exsm line-clamp-2 truncate text-gray-600">
+          <p className="text-exsm truncate font-semibold text-gray-900 sm:text-sm">{profile.name || profile.login}</p>
+          <p className="sm:text-exsm line-clamp-2 truncate text-xs text-gray-600">
             {profile.name || profile.login} has {profile.public_repos ?? 'several'} repositories available. Follow their
             code on GitHub.
           </p>
-          <div className="text-exsm mt-2 flex items-center gap-2 text-gray-700 hover:text-black">
+          <div className="sm:text-exsm mt-2 flex items-center gap-2 text-xs text-gray-700 hover:text-black">
             <FaGithub size={16} className="shrink-0" />
             <p className="truncate">{profile.html_url}</p>
           </div>
