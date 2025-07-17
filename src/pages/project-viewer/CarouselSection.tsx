@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useMediaQuery } from '@react-hookz/web';
+import { useSwipeable } from 'react-swipeable';
 import { useToast } from 'hooks/useToast';
 import { ThumbnailResult, getThumbnail } from 'apis/projectEditor';
 import { getPreviewImages } from 'apis/projectViewer';
@@ -292,12 +293,23 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   const goToNext = () => setCurrentIndex((prev) => (prev === visibleImages.length - 1 ? 0 : prev + 1));
   const goToSlide = (index: number) => setCurrentIndex(index);
 
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (visibleImages.length > 1) goToNext();
+    },
+    onSwipedRight: () => {
+      if (visibleImages.length > 1) goToPrev();
+    },
+    preventScrollOnSwipe: true,
+    trackMouse: false,
+  });
+
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center justify-center md:gap-10">
+      <div {...handlers} className="flex w-full items-center justify-center md:gap-10">
         {visibleImages.length > 1 && !isMobile && <ArrowButton direction="left" onClick={goToPrev} />}
 
-        <div className="border-lightGray relative aspect-[3/2] w-[50vw] max-w-[900px] min-w-sm overflow-hidden rounded">
+        <div className="border-lightGray relative aspect-[3/2] w-full max-w-2xl overflow-hidden rounded">
           <MediaRenderer
             currentMedia={currentMedia}
             embedUrl={embedUrl}
@@ -313,7 +325,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
 
       {visibleImages.length > 1 && (
         <div
-          className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-[50vw] max-w-[900px] min-w-sm px-3`}
+          className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-full max-w-2xl px-3`}
         >
           {isMobile && <ArrowButton direction="left" onClick={goToPrev} size={40} />}
 
