@@ -17,9 +17,7 @@ const ManageNoticeListTab = () => {
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: async (noticeId: number) => {
-      deleteNotice(noticeId);
-    },
+    mutationFn: (noticeId: number) => deleteNotice(noticeId),
     onError: () => {
       toast('공지사항 삭제에 실패했습니다.', 'error');
     },
