@@ -297,7 +297,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
       <div className="flex items-center justify-center md:gap-10">
         {visibleImages.length > 1 && !isMobile && <ArrowButton direction="left" onClick={goToPrev} />}
 
-        <div className="border-lightGray relative aspect-[3/2] w-[50vw] max-w-[900px] min-w-[300px] overflow-hidden rounded">
+        <div className="border-lightGray relative aspect-[3/2] w-[50vw] max-w-[900px] min-w-sm overflow-hidden rounded">
           <MediaRenderer
             currentMedia={currentMedia}
             embedUrl={embedUrl}
@@ -313,7 +313,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
 
       {visibleImages.length > 1 && (
         <div
-          className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-[50vw] max-w-[900px] min-w-[300px] px-3`}
+          className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-[50vw] max-w-[900px] min-w-sm px-3`}
         >
           {isMobile && <ArrowButton direction="left" onClick={goToPrev} size={40} />}
 

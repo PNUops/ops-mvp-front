@@ -21,7 +21,7 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
   };
 
   return (
-    <div className="flex flex-col gap-5 text-sm sm:flex-row sm:items-start sm:gap-10">
+    <div className="text-exsm flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-10 sm:text-sm">
       <div className="text-midGray flex w-25 sm:py-3">
         <span className="mr-1 text-red-500">*</span>
         <span>팀원</span>
@@ -32,7 +32,7 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
           {teamMembers.map((member) => (
             <div
               key={member.teamMemberId}
-              className="border:lightGray relative w-full rounded border px-15 py-3 text-sm text-black"
+              className="border:lightGray relative w-full rounded border px-15 py-3 text-black"
             >
               <IoPerson className="text-mainGreen/50 absolute top-1/2 left-5 -translate-y-1/2" size={20} />
               <div className="truncate">{member.teamMemberName}</div>
@@ -51,9 +51,11 @@ const MembersInput = ({ teamMembers, onMemberAdd, onMemberRemove }: MembersInput
               <input
                 type="text"
                 placeholder="팀원명을 입력해주세요."
-                className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-15 py-3 text-sm text-black duration-300 ease-in-out focus:outline-none"
+                className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-15 py-3 text-black duration-300 ease-in-out focus:outline-none"
                 value={newMemberInput}
-                onChange={(e) => setNewMemberInput(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 20) setNewMemberInput(e.target.value);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleAddMember();
                 }}

@@ -171,8 +171,8 @@ const ImageUploaderSection = ({
   while (paddedImages.length < MAX_IMAGES) paddedImages.push(undefined);
 
   return (
-    <div className="flex flex-col gap-5 text-sm sm:flex-row sm:gap-10">
-      <div className="flex items-start gap-3 sm:flex-col sm:pt-3">
+    <div className="flex flex-col gap-3 text-sm sm:flex-row sm:gap-10">
+      <div className="text-exsm flex items-start gap-3 sm:flex-col sm:pt-3 sm:text-sm">
         <div className="text-midGray flex w-25 gap-1">
           <span className="mr-1 text-red-500">*</span>
           <span>이미지</span>
@@ -182,7 +182,7 @@ const ImageUploaderSection = ({
             <HiInformationCircle /> 가이드
           </span>
 
-          <div className="absolute top-1/2 left-full z-10 ml-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80">
+          <div className="absolute top-1/2 left-full z-10 ml-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80 group-active:opacity-100">
             권장 비율: <strong>3:2</strong> (예: 1500×1000)
             <br />
             최대 용량: <strong>2MB</strong>
@@ -194,15 +194,15 @@ const ImageUploaderSection = ({
 
       <div className="flex w-full flex-1 flex-col gap-3 xl:flex-row">
         <div
-          className="border-lightGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-center gap-2 rounded border p-6 text-center sm:gap-5"
+          className="border-lightGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-center gap-2 rounded border p-6 text-center sm:gap-3 md:gap-5"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
-          <p className="text-xs sm:inline sm:text-sm">파일을 이곳에 끌어놓아주세요.</p>
-          <p className="text-midGray my-2 text-xs sm:inline sm:text-sm">OR</p>
-          <label className="text-mainGreen bg-subGreen hover:bg-emerald-00 flex cursor-pointer rounded-full p-4 text-sm font-bold">
+          <p className="sm:text-exsm text-xs sm:inline">파일을 이곳에 끌어놓아주세요.</p>
+          <p className="text-midGray sm:text-exsm my-2 text-xs sm:inline">OR</p>
+          <label className="text-mainGreen bg-subGreen hover:bg-emerald-00 flex cursor-pointer rounded-full p-4 font-bold">
             <MdOutlineFileUpload className="sm:hidden" />
-            <span className="hidden px-4 sm:inline">파일 업로드</span>
+            <span className="sm:text-exsm hidden px-4 text-sm sm:inline">파일 업로드</span>
             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
           </label>
         </div>

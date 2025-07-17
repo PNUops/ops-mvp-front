@@ -1,4 +1,4 @@
-import { GithubRepoData } from '@pages/project-viewer/MediaSection/GithubCard';
+import { GithubContentType, GithubRepoData, GithubProfileData } from '@pages/project-viewer/MediaSection/GithubCard';
 
 /**
  * YouTube URL을 임베드 URL로 변환하는 유틸 함수
@@ -33,15 +33,32 @@ export const formatEmbedUrl = (url: string): string | null => {
  * @param url
  * @returns GithubCard 컴포넌트 내의 GithubRepoData 인터페이스 참고
  **/
-export const fetchGithubRepoData = async (repoUrl: string): Promise<GithubRepoData | null> => {
+export const fetchGithubContent = async (
+  githubUrl: string,
+): Promise<{ type: GithubContentType; data: GithubRepoData | GithubProfileData } | null> => {
   try {
-    const path = new URL(repoUrl).pathname;
-    const response = await fetch(`https://api.github.com/repos${path}`);
+    const url = new URL(githubUrl);
+    const parts = url.pathname.split('/').filter(Boolean);
 
-    if (!response.ok) return null;
-    return await response.json();
-  } catch (e) {
-    console.error('GitHub API fetch error:', e);
+    if (parts.length === 1) {
+      const profileRes = await fetch(`https://api.github.com/users/${parts[0]}`);
+      if (!profileRes.ok) return null;
+
+      const profileData: GithubProfileData = await profileRes.json();
+      return { type: 'profile', data: profileData };
+    }
+
+    if (parts.length === 2) {
+      const repoRes = await fetch(`https://api.github.com/repos/${parts[0]}/${parts[1]}`);
+      if (!repoRes.ok) return null;
+
+      const repoData: GithubRepoData = await repoRes.json();
+      return { type: 'repo', data: repoData };
+    }
+
+    return null;
+  } catch (err) {
+    console.error('GitHub fetch error:', err);
     return null;
   }
 };

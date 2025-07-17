@@ -4,7 +4,7 @@ import useAuth from 'hooks/useAuth';
 import { useUserStore } from 'stores/useUserStore';
 
 import { FaGithub, FaYoutube } from 'react-icons/fa';
-import { GoPencil } from 'react-icons/go';
+import { FaEdit } from 'react-icons/fa';
 import { RiLink } from 'react-icons/ri';
 import { FiExternalLink } from 'react-icons/fi';
 
@@ -42,11 +42,10 @@ const UrlButton = ({ url }: { url: string }) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="border-lightGray hover:border-mainGreen inline-flex w-45 items-center gap-2 rounded-full border px-4 py-1 transition-colors duration-200 hover:bg-[#D1F3E1]/60 focus:outline-none"
+      className="border-mainGreen text-mainGreen hover:border-mainGreen inline-flex h-10 w-auto items-center justify-center gap-2 rounded-full border px-5 transition-colors duration-200 hover:bg-[#D1F3E1]/60 focus:outline-none"
     >
-      <span className="shrink-0">{icon}</span>
-      <span className="text-xs whitespace-nowrap text-gray-700">{text}</span>
-      <FiExternalLink className="text-lightGray ml-auto shrink-0" />
+      <span className="text-exsm font-medium whitespace-nowrap">{text}</span>
+      <FiExternalLink className="text-subGreen shrink-0" />
     </a>
   );
 };
@@ -64,29 +63,24 @@ const IntroSection = ({
   const navigate = useNavigate();
 
   return (
-    <div className="flex w-full flex-wrap items-start gap-4">
-      <div className="flex justify-start gap-5">
-        <div className="flex min-w-0 flex-col gap-2">
-          <div className="text-title min-w-0 leading-none font-bold">{projectName}</div>
-          <div className="text-smbold font-bold text-[#4B5563]">{teamName}</div>
-        </div>
+    <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+      <div className="flex flex-col items-start gap-2 self-start md:self-auto">
+        <div className="sm:text-title pt-1 text-xl leading-none font-bold">{projectName}</div>
+        <div className="text-midGray text-exsm font-bold sm:text-sm">{teamName}</div>
+      </div>
+      <div className="flex items-center gap-3">
         {isEditor && (
-          <div className="flex pt-3">
+          <div className="flex">
             <button
               onClick={() => navigate(`/teams/edit/${teamId}`)}
-              className="border-midGray text-exsm text-midGray hover:text-mainGreen hover:border-mainGreen flex h-10 items-center gap-2 rounded-full border px-4 py-1 transition-colors duration-200 hover:cursor-pointer hover:bg-[#D1F3E1]/60"
+              className="border-midGray text-exsm text-midGray hover:text-mainGreen hover:border-mainGreen flex h-10 w-auto items-center justify-center gap-2 rounded-full border px-5 transition-colors duration-200 hover:cursor-pointer hover:bg-[#D1F3E1]/60"
             >
-              <GoPencil />
-              <span className="hidden sm:inline">수정하기</span>
+              <span className="whitespace-nowrap">수정하기</span>
+              <FaEdit className="text-lightGray shrink-0" />
             </button>
           </div>
         )}
-      </div>
-
-      <div className="flex w-full flex-1 flex-col items-end gap-2">
         {productionUrl && <UrlButton url={productionUrl} />}
-        {githubUrl && <UrlButton url={githubUrl} />}
-        {youtubeUrl && <UrlButton url={youtubeUrl} />}
       </div>
     </div>
   );

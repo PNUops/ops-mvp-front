@@ -73,7 +73,7 @@ const ManageNoticeListTab = () => {
         />
         <button
           type="submit"
-          className="bg-mainBlue mx-auto w-fit rounded-lg px-6 py-3 text-lg text-white"
+          className="bg-mainBlue mx-auto w-fit rounded-lg px-6 py-3 text-lg text-white hover:cursor-pointer"
           onClick={() => navigate('/admin/notice/create')}
         >
           공지사항 추가하기

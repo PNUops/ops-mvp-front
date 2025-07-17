@@ -9,6 +9,8 @@ import IntroSection from './IntroSection';
 import CarouselSection from './CarouselSection';
 import LikeSection from './LikeSection';
 import DetailSection from './DetailSection';
+import MediaSection from './MediaSection/MediaSection';
+import GithubCard from './MediaSection/GithubCard';
 import CommentSection from './CommentSection/CommentSection';
 
 import {
@@ -59,7 +61,7 @@ const ProjectViewerPage = () => {
   const isLeaderOfThisTeam = isLeader && memberId == data.leaderId;
 
   return (
-    <div className="px-5">
+    <div className="min-w-xs px-2 sm:px-5">
       <IntroSection
         contestId={data.contestId}
         teamId={data.teamId}
@@ -81,6 +83,8 @@ const ProjectViewerPage = () => {
       <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} />
       <div className="h-10" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} teamMembers={data.teamMembers} />
+      <div className="h-10" />
+      <GithubCard githubRepoUrl={data.githubPath} />
       {/* WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의*/}
       <div className="h-28" />
       <CommentSection teamId={data.teamId} />

@@ -21,11 +21,32 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
 
   return (
     <>
+      <div className="flex flex-col gap-3">
+        <div className="sm:text-title text-xl font-bold">Participants</div>
+        <span className="flex items-center gap-3">
+          <FaCrown className="text-amber-300" size={20} />
+          <span className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
+            {leaderName}
+          </span>
+        </span>
+        <div className="flex items-start gap-3">
+          <IoPerson className="mt-1 shrink-0 text-blue-400" size={20} />
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            {teamMembers.map((member, index) => (
+              <span key={index} className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
+                {member.teamMemberName}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {hasOverview && (
         <>
+          <div className="h-10" />
           <div className="flex flex-col gap-3">
-            <div className="text-title font-bold">Overview</div>
-            <div className="bg-whiteGray rounded-md p-4 text-sm leading-[1.7] whitespace-pre-wrap">
+            <div className="sm:text-title text-xl font-bold">Overview</div>
+            <div className="bg-whiteGray text-exsm rounded p-4 leading-[1.7] whitespace-pre-wrap sm:text-sm">
               {visibleText}
               {shouldTruncate && (
                 <button
@@ -37,27 +58,8 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
               )}
             </div>
           </div>
-          <div className="h-20" />
         </>
       )}
-
-      <div className="flex flex-col gap-3">
-        <div className="text-title font-bold">Participants</div>
-        <span className="flex items-center gap-3">
-          <FaCrown className="text-amber-300" size={20} />
-          <span className="bg-whiteGray rounded-full px-3 py-1 text-sm whitespace-nowrap">{leaderName}</span>
-        </span>
-        <div className="flex items-start gap-3 sm:items-center">
-          <IoPerson className="mt-2 shrink-0 text-blue-400 sm:mt-0" size={20} />
-          <div className="flex flex-wrap gap-2 sm:gap-3">
-            {teamMembers.map((member, index) => (
-              <span key={index} className="bg-whiteGray rounded-full px-3 py-1 text-sm whitespace-nowrap">
-                {member.teamMemberName}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
     </>
   );
 };
