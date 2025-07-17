@@ -194,15 +194,15 @@ const ImageUploaderSection = ({
 
       <div className="flex w-full flex-1 flex-col gap-3 xl:flex-row">
         <div
-          className="border-lightGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-center gap-2 rounded border p-6 text-center sm:gap-5"
+          className="border-lightGray text-midGray sm:items-around flex flex-1 flex-col items-center justify-center gap-2 rounded border p-6 text-center sm:gap-3 md:gap-5"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
-          <p className="text-xs sm:inline sm:text-sm">파일을 이곳에 끌어놓아주세요.</p>
-          <p className="text-midGray my-2 text-xs sm:inline sm:text-sm">OR</p>
-          <label className="text-mainGreen bg-subGreen hover:bg-emerald-00 flex cursor-pointer rounded-full p-4 text-sm font-bold">
+          <p className="sm:text-exsm text-xs sm:inline">파일을 이곳에 끌어놓아주세요.</p>
+          <p className="text-midGray sm:text-exsm my-2 text-xs sm:inline">OR</p>
+          <label className="text-mainGreen bg-subGreen hover:bg-emerald-00 flex cursor-pointer rounded-full p-4 font-bold">
             <MdOutlineFileUpload className="sm:hidden" />
-            <span className="hidden px-4 sm:inline">파일 업로드</span>
+            <span className="sm:text-exsm hidden px-4 text-sm sm:inline">파일 업로드</span>
             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
           </label>
         </div>
