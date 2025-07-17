@@ -16,9 +16,11 @@ const TableHead = ({ type }: { type: 'project' | 'vote' }) => {
   return (
     <thead className="bg-gray-100">
       <tr>
-        <th className="w-[5%] border-r border-b border-gray-300 p-2 text-sm">{type === 'project' ? '순번' : '순위'}</th>
-        <th className="w-[20%] border-r border-b border-gray-300 p-2 text-sm">팀명</th>
-        <th className="w-[55%] border-r border-b border-gray-300 p-2 text-sm">작품명</th>
+        <th className="w-[5%] border-r border-b border-gray-300 p-2 text-left text-sm">
+          {type === 'project' ? '순번' : '순위'}
+        </th>
+        <th className="w-[20%] border-r border-b border-gray-300 p-2 text-left text-sm">팀명</th>
+        <th className="w-[55%] border-r border-b border-gray-300 p-2 text-left text-sm">작품명</th>
         <th className="w-[20%] border-b border-gray-300 p-2 text-sm">
           {type === 'project' ? '제출여부' : '좋아요 수'}
         </th>
