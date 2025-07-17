@@ -47,14 +47,16 @@ const ArrowButton = ({
   direction,
   onClick,
   size = 50,
+  className = '',
 }: {
   direction: 'left' | 'right';
   onClick: () => void;
   size?: number;
+  className?: string;
 }) => {
   const Icon = direction === 'left' ? FaChevronLeft : FaChevronRight;
   return (
-    <button onClick={onClick} className="focus:outline-none">
+    <button onClick={onClick} className={`focus:outline-none ${className}`}>
       <Icon
         size={size}
         className="text-lightGray/50 hover:text-mainGreen animate-pulse rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25"
@@ -307,7 +309,13 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   return (
     <div className="flex flex-col items-center gap-4">
       <div {...handlers} className="flex w-full items-center justify-center md:gap-10">
-        {visibleImages.length > 1 && !isMobile && <ArrowButton direction="left" onClick={goToPrev} />}
+        {!isMobile && (
+          <ArrowButton
+            direction="left"
+            onClick={goToPrev}
+            className={visibleImages.length > 1 ? 'visible' : 'invisible'}
+          />
+        )}
 
         <div className="border-lightGray relative aspect-[3/2] w-full max-w-2xl overflow-hidden rounded">
           <MediaRenderer
@@ -320,7 +328,13 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
           />
         </div>
 
-        {visibleImages.length > 1 && !isMobile && <ArrowButton direction="right" onClick={goToNext} />}
+        {!isMobile && (
+          <ArrowButton
+            direction="right"
+            onClick={goToNext}
+            className={visibleImages.length > 1 ? 'visible' : 'invisible'}
+          />
+        )}
       </div>
 
       {visibleImages.length > 1 && (
