@@ -176,13 +176,13 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요';
     if (isEmpty(teamName)) return '팀명이 입력되지 않았어요';
     if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요';
-    if (isEmpty(overview)) return '프로젝트 소개글이 입력되지 않았어요';
     if (teamMembers.length < 1) return '팀원이 목록이 비어있어요';
     if (productionUrl && !isValidProjectUrl(productionUrl)) return '프로젝트 주소가 유효하지 않아요';
     if (isEmpty(githubUrl)) return 'GitHub 링크가 입력되지 않았어요';
     if (!isValidGithubUrl(githubUrl)) return 'GitHub URL이 유효하지 않아요';
     if (isEmpty(youtubeUrl)) return 'YouTube 링크가 입력되지 않았어요';
     if (!isValidYoutubeUrl(youtubeUrl)) return 'YouTube URL이 유효하지 않아요';
+    if (isEmpty(overview)) return '프로젝트 소개글이 입력되지 않았어요';
   };
 
   const validateCreateInputs = () => {
@@ -381,7 +381,20 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     toast(`팀원 "${memberName}"을(를) 삭제했어요`, 'info');
   };
 
-  const hasChanges = (): boolean => {
+  const hasCreatorInputs = (): boolean => {
+    return (
+      !!contestId &&
+      !isEmpty(projectName) &&
+      !isEmpty(teamName) &&
+      !isEmpty(leaderName) &&
+      teamMembers.length > 0 &&
+      !isEmpty(githubUrl) &&
+      !isEmpty(youtubeUrl) &&
+      !isEmpty(overview)
+    );
+  };
+
+  const hasEditorChanges = (): boolean => {
     if (!projectData) return true;
 
     const basicInfoChanged =
@@ -407,10 +420,6 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
   const handleSave = async () => {
     if (isSaved) return;
-    if (isEditMode && !hasChanges()) {
-      toast('수정된 내용이 없어요', 'info');
-      return;
-    }
 
     setIsSaved(true);
     try {
@@ -489,8 +498,8 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         </button>
         <button
           onClick={handleSave}
-          disabled={isSaved || !hasChanges()}
-          className={`${isSaved || !hasChanges() ? 'bg-lightGray cursor-not-allowed' : 'bg-mainGreen cursor-pointer hover:bg-green-700 focus:bg-green-400'} rounded-full px-15 py-4 text-sm font-bold text-white transition-colors duration-300 ease-in-out focus:outline-none`}
+          disabled={isSaved || !hasEditorChanges() || !hasCreatorInputs()}
+          className={`${isSaved || !hasEditorChanges() || !hasCreatorInputs() ? 'bg-lightGray cursor-not-allowed' : 'bg-mainGreen cursor-pointer hover:bg-green-700 focus:bg-green-400'} rounded-full px-15 py-4 text-sm font-bold text-white transition-colors duration-300 ease-in-out focus:outline-none`}
         >
           저장
         </button>
