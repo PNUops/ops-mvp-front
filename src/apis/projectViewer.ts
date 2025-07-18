@@ -16,21 +16,20 @@ export const getProjectDetails = async (teamId: number): Promise<ProjectDetailsR
 };
 
 export const getPreviewImages = async (teamId: number, imageIds: number[]): Promise<PreviewImagesResponseDto> => {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://swpms.pnu.app';
+
   const imageResults: PreviewResult[] = [];
 
   for (const imageId of imageIds) {
     try {
-      const response = await apiClient.get(`/teams/${teamId}/image/${imageId}`, {
-        responseType: 'blob',
-      });
+      const response = await apiClient.get(`/teams/${teamId}/image/${imageId}`);
+
       if (response.status === 200) {
-        const objectUrl = URL.createObjectURL(response.data);
-        imageResults.push({ id: imageId, status: 'success', url: objectUrl });
+        imageResults.push({ id: imageId, status: 'success', url: `${baseUrl}/api/teams/${teamId}/image/${imageId}` });
       } else if (response.status === 202) {
         imageResults.push({ status: 'processing', code: 'PREVIEW_PROCESSING' });
       } else {
-        const objectUrl = URL.createObjectURL(response.data);
-        imageResults.push({ id: imageId, status: 'success', url: objectUrl });
+        imageResults.push({ id: imageId, status: 'success', url: `${baseUrl}/api/teams/${teamId}/image/${imageId}` });
       }
     } catch (error: any) {
       if (error.response?.status === 404) {
