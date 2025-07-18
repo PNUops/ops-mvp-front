@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useToast } from 'hooks/useToast';
 import { imageValidator } from 'utils/image';
 import { ThumbnailResult } from 'apis/projectEditor';
@@ -122,6 +122,24 @@ const ImageUploaderSection = ({
     setPreviews(nextPreviews);
     toast('프리뷰 이미지를 삭제했어요', 'info');
   };
+
+  useEffect(() => {
+    if (
+      thumbnail &&
+      typeof thumbnail === 'object' &&
+      'url' in thumbnail &&
+      typeof thumbnail.url === 'string' &&
+      thumbnail.url.startsWith('blob:')
+    ) {
+      URL.revokeObjectURL(thumbnail.url);
+    }
+
+    previews.forEach((p) => {
+      if (typeof p === 'object' && 'url' in p && typeof p.url === 'string' && p.url.startsWith('blob:')) {
+        URL.revokeObjectURL(p.url);
+      }
+    });
+  }, [thumbnail, previews]);
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
