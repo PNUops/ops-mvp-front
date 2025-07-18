@@ -8,7 +8,6 @@ import { fetchGithubContent } from 'utils/media';
 
 interface GithubCardProps {
   githubUrl: string;
-  isEditor: boolean;
 }
 
 export type GithubContentType = 'repo' | 'profile';
