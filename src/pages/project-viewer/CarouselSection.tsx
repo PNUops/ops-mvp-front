@@ -283,14 +283,6 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
     setLoadFailed(false);
   }, [currentMedia]);
 
-  useEffect(() => {
-    return () => {
-      if (thumbnailResult?.status === 'success' && thumbnailResult.url?.startsWith('blob:')) {
-        URL.revokeObjectURL(thumbnailResult.url);
-      }
-    };
-  }, [thumbnailResult]);
-
   const goToPrev = () => setCurrentIndex((prev) => (prev === 0 ? visibleImages.length - 1 : prev - 1));
   const goToNext = () => setCurrentIndex((prev) => (prev === visibleImages.length - 1 ? 0 : prev + 1));
   const goToSlide = (index: number) => setCurrentIndex(index);
