@@ -74,7 +74,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     isLoading: isProjectLoading,
     isError: isProjectError,
   } = useQuery<ProjectDetailsResponseDto>({
-    queryKey: ['projectEditorInfo', teamId],
+    queryKey: ['projectDetails', teamId],
     queryFn: async () => {
       if (teamId === null) throw new Error('teamId is null');
       return await getProjectDetails(teamId);
@@ -253,6 +253,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
       if (previewsToDelete.length > 0) {
         await deletePreview(teamId!, { imageIds: previewsToDelete });
+        setPreviewsToDelete([]);
       }
       const newFiles = previews.filter((p) => p instanceof File).map((p) => p as File);
       if (newFiles.length > 0) {
@@ -263,14 +264,13 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['contests'] }),
-        queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] }),
         queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] }),
         queryClient.invalidateQueries({ queryKey: ['previewImages', teamId, stablePreviewIds] }),
         queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] }),
       ]);
 
       toast('수정이 완료되었어요', 'success');
-      (isLeaderOfThisTeam || isAdmin) && setTimeout(() => navigate(`/teams/view/${teamId}`), 300);
+      navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했어요', 'error');
     }
@@ -322,17 +322,16 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['contests'] }),
-        queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] }),
         queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] }),
         queryClient.invalidateQueries({ queryKey: ['previewImages', teamId, stablePreviewIds] }),
         queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] }),
       ]);
 
       toast('생성이 완료되었어요', 'success');
-      setTimeout(() => navigate(`/teams/view/${createdTeamId}`), 300);
+      navigate(`/teams/view/${createdTeamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '생성 도중 실패했어요', 'error');
-      setTimeout(() => navigate(`/admin/contest`), 300);
+      navigate(`/admin/contest`);
     }
   };
 
