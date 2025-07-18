@@ -33,8 +33,6 @@ export interface GithubProfileData {
 }
 
 const GithubCard = ({ githubUrl }: GithubCardProps) => {
-  const toast = useToast();
-
   const { data, isPending, isError } = useQuery({
     queryKey: ['githubContent', githubUrl],
     queryFn: () => fetchGithubContent(githubUrl),
@@ -42,10 +40,6 @@ const GithubCard = ({ githubUrl }: GithubCardProps) => {
     staleTime: 1000 * 60 * 5,
     retry: false,
   });
-
-  useEffect(() => {
-    if (data === null) toast('GitHub 정보를 불러오는 데 실패했어요', 'error');
-  }, [data, toast]);
 
   if (isPending) return <GithubCardSkeleton />;
   if (isError || !data) return null;
