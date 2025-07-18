@@ -18,6 +18,7 @@ interface ImageUploaderSectionProps {
   setThumbnailToDelete: (value: boolean) => void;
   previewsToDelete: number[];
   setPreviewsToDelete: React.Dispatch<React.SetStateAction<number[]>>;
+  isAdmin: boolean;
 }
 
 const getImageSrc = (data: File | ThumbnailResult | PreviewResult): string => {
@@ -40,6 +41,7 @@ const ImageUploaderSection = ({
   setThumbnailToDelete,
   previewsToDelete,
   setPreviewsToDelete,
+  isAdmin,
 }: ImageUploaderSectionProps) => {
   const toast = useToast();
 
@@ -174,7 +176,7 @@ const ImageUploaderSection = ({
     <div className="flex flex-col gap-3 text-sm sm:flex-row sm:gap-10">
       <div className="text-exsm flex items-start justify-between gap-3 sm:flex-col sm:justify-normal sm:pt-3 sm:text-sm">
         <div className="text-midGray flex w-25 gap-1">
-          <span className="mr-1 text-red-500">*</span>
+          <span className={`{mr-1 ${isAdmin ? 'invisible' : 'text-red-500'} }`}>*</span>
           <span>이미지</span>
         </div>
         <div className="group relative inline-block">
