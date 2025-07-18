@@ -74,7 +74,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     isLoading: isProjectLoading,
     isError: isProjectError,
   } = useQuery<ProjectDetailsResponseDto>({
-    queryKey: ['projectEditorInfo', teamId],
+    queryKey: ['projectDetails', teamId],
     queryFn: async () => {
       if (teamId === null) throw new Error('teamId is null');
       return await getProjectDetails(teamId);
@@ -104,7 +104,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     enabled: teamId !== null && stablePreviewIds.length > 0,
     refetchInterval: (query) => {
       const data = query.state.data;
-      const shouldRefetch = data?.imageResults?.every((result) => result.status === 'processing') ?? false;
+      const shouldRefetch = data?.imageResults?.some((result) => result.status === 'processing') ?? false;
       return shouldRefetch ? 1500 : false;
     },
   });
@@ -176,13 +176,13 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     if (isEmpty(projectName)) return '프로젝트명이 입력되지 않았어요';
     if (isEmpty(teamName)) return '팀명이 입력되지 않았어요';
     if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요';
-    if (isEmpty(overview)) return '프로젝트 소개글이 입력되지 않았어요';
     if (teamMembers.length < 1) return '팀원이 목록이 비어있어요';
     if (productionUrl && !isValidProjectUrl(productionUrl)) return '프로젝트 주소가 유효하지 않아요';
     if (isEmpty(githubUrl)) return 'GitHub 링크가 입력되지 않았어요';
     if (!isValidGithubUrl(githubUrl)) return 'GitHub URL이 유효하지 않아요';
     if (isEmpty(youtubeUrl)) return 'YouTube 링크가 입력되지 않았어요';
     if (!isValidYoutubeUrl(youtubeUrl)) return 'YouTube URL이 유효하지 않아요';
+    if (isEmpty(overview)) return '프로젝트 소개글이 입력되지 않았어요';
   };
 
   const validateCreateInputs = () => {
@@ -253,6 +253,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
       if (previewsToDelete.length > 0) {
         await deletePreview(teamId!, { imageIds: previewsToDelete });
+        setPreviewsToDelete([]);
       }
       const newFiles = previews.filter((p) => p instanceof File).map((p) => p as File);
       if (newFiles.length > 0) {
@@ -263,14 +264,13 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['contests'] }),
-        queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] }),
         queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] }),
         queryClient.invalidateQueries({ queryKey: ['previewImages', teamId, stablePreviewIds] }),
         queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] }),
       ]);
 
       toast('수정이 완료되었어요', 'success');
-      (isLeaderOfThisTeam || isAdmin) && setTimeout(() => navigate(`/teams/view/${teamId}`), 300);
+      navigate(`/teams/view/${teamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '저장 중 오류가 발생했어요', 'error');
     }
@@ -322,17 +322,16 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['contests'] }),
-        queryClient.invalidateQueries({ queryKey: ['projectEditorInfo', teamId] }),
         queryClient.invalidateQueries({ queryKey: ['thumbnail', teamId] }),
         queryClient.invalidateQueries({ queryKey: ['previewImages', teamId, stablePreviewIds] }),
         queryClient.invalidateQueries({ queryKey: ['projectDetails', teamId] }),
       ]);
 
       toast('생성이 완료되었어요', 'success');
-      setTimeout(() => navigate(`/teams/view/${createdTeamId}`), 300);
+      navigate(`/teams/view/${createdTeamId}`);
     } catch (err: any) {
       toast(err?.response?.data?.message || '생성 도중 실패했어요', 'error');
-      setTimeout(() => navigate(`/admin/contest`), 300);
+      navigate(`/admin/contest`);
     }
   };
 
@@ -381,8 +380,46 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     toast(`팀원 "${memberName}"을(를) 삭제했어요`, 'info');
   };
 
+  const hasCreatorInputs = (): boolean => {
+    return (
+      !!contestId &&
+      !isEmpty(projectName) &&
+      !isEmpty(teamName) &&
+      !isEmpty(leaderName) &&
+      teamMembers.length > 0 &&
+      !isEmpty(githubUrl) &&
+      !isEmpty(youtubeUrl) &&
+      !isEmpty(overview)
+    );
+  };
+
+  const hasEditorChanges = (): boolean => {
+    if (!projectData) return true;
+
+    const basicInfoChanged =
+      projectData.projectName !== projectName ||
+      projectData.teamName !== teamName ||
+      projectData.leaderName !== leaderName ||
+      projectData.overview !== overview ||
+      projectData.productionPath !== productionUrl ||
+      projectData.githubPath !== githubUrl ||
+      projectData.youTubePath !== youtubeUrl;
+
+    const membersChanged =
+      JSON.stringify(projectData.teamMembers.map((m) => m.teamMemberName).sort()) !==
+      JSON.stringify(teamMembers.map((m) => m.teamMemberName).sort());
+
+    const thumbnailChanged = thumbnailToDelete || thumbnail instanceof File;
+
+    const previewAdded = previews.some((p) => p instanceof File);
+    const previewDeleted = previewsToDelete.length > 0;
+
+    return basicInfoChanged || membersChanged || thumbnailChanged || previewAdded || previewDeleted;
+  };
+
   const handleSave = async () => {
     if (isSaved) return;
+
     setIsSaved(true);
     try {
       if (isCreateMode) {
@@ -397,7 +434,21 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
 
   return (
     <div className="min-w-xs px-2 sm:px-5">
-      <div className="sm:text-title text-xl font-bold">{isEditMode ? '프로젝트 수정' : '프로젝트 생성'}</div>
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
+        <div className="sm:text-title text-xl font-bold">{isEditMode ? '프로젝트 수정' : '프로젝트 생성'}</div>
+        <p className="text-midGray text-exsm">
+          {isEditMode ? (
+            <>
+              필수(<span className="text-rose-400">*</span>) 항목과 변경사항이 있어야 버튼이 켜져요.
+            </>
+          ) : (
+            <>
+              필수(<span className="text-rose-400">*</span>) 항목을 모두 작성하면 버튼이 켜져요.
+            </>
+          )}
+        </p>
+      </div>
+
       <div className="h-10" />
       {isAdmin && contestId !== 1 && (
         <>
@@ -446,6 +497,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         setThumbnailToDelete={setThumbnailToDelete}
         previewsToDelete={previewsToDelete}
         setPreviewsToDelete={setPreviewsToDelete}
+        isAdmin={isAdmin}
       />
 
       <div className="h-15" />
@@ -460,8 +512,8 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         </button>
         <button
           onClick={handleSave}
-          disabled={isSaved}
-          className="bg-mainGreen rounded-full px-15 py-4 text-sm font-bold text-white hover:cursor-pointer hover:bg-green-700 focus:bg-green-400 focus:outline-none"
+          disabled={isSaved || !hasEditorChanges() || !hasCreatorInputs()}
+          className={`${isSaved || !hasEditorChanges() || !hasCreatorInputs() ? 'bg-lightGray cursor-not-allowed' : 'bg-mainGreen cursor-pointer hover:bg-green-700 focus:bg-green-400'} rounded-full px-15 py-4 text-sm font-bold text-white transition-colors duration-300 ease-in-out focus:outline-none`}
         >
           저장
         </button>

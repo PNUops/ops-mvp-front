@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useToast } from 'hooks/useToast';
 import { imageValidator } from 'utils/image';
 import { ThumbnailResult } from 'apis/projectEditor';
@@ -18,6 +18,7 @@ interface ImageUploaderSectionProps {
   setThumbnailToDelete: (value: boolean) => void;
   previewsToDelete: number[];
   setPreviewsToDelete: React.Dispatch<React.SetStateAction<number[]>>;
+  isAdmin: boolean;
 }
 
 const getImageSrc = (data: File | ThumbnailResult | PreviewResult): string => {
@@ -40,6 +41,7 @@ const ImageUploaderSection = ({
   setThumbnailToDelete,
   previewsToDelete,
   setPreviewsToDelete,
+  isAdmin,
 }: ImageUploaderSectionProps) => {
   const toast = useToast();
 
@@ -121,6 +123,24 @@ const ImageUploaderSection = ({
     toast('프리뷰 이미지를 삭제했어요', 'info');
   };
 
+  useEffect(() => {
+    if (
+      thumbnail &&
+      typeof thumbnail === 'object' &&
+      'url' in thumbnail &&
+      typeof thumbnail.url === 'string' &&
+      thumbnail.url.startsWith('blob:')
+    ) {
+      URL.revokeObjectURL(thumbnail.url);
+    }
+
+    previews.forEach((p) => {
+      if (typeof p === 'object' && 'url' in p && typeof p.url === 'string' && p.url.startsWith('blob:')) {
+        URL.revokeObjectURL(p.url);
+      }
+    });
+  }, [thumbnail, previews]);
+
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
@@ -172,17 +192,16 @@ const ImageUploaderSection = ({
 
   return (
     <div className="flex flex-col gap-3 text-sm sm:flex-row sm:gap-10">
-      <div className="text-exsm flex items-start gap-3 sm:flex-col sm:pt-3 sm:text-sm">
+      <div className="text-exsm flex items-start justify-between gap-3 sm:flex-col sm:justify-normal sm:pt-3 sm:text-sm">
         <div className="text-midGray flex w-25 gap-1">
-          <span className="mr-1 text-red-500">*</span>
+          <span className={`{mr-1 ${isAdmin ? 'invisible' : 'text-red-500'} }`}>*</span>
           <span>이미지</span>
         </div>
         <div className="group relative inline-block">
           <span className="ml-1 inline-flex animate-bounce cursor-help items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs text-green-500">
             <HiInformationCircle /> 가이드
           </span>
-
-          <div className="absolute top-1/2 left-full z-10 ml-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80 group-active:opacity-100">
+          <div className="absolute top-1/2 right-full z-10 mr-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80 group-active:opacity-100 sm:left-full sm:ml-3">
             권장 비율: <strong>3:2</strong> (예: 1500×1000)
             <br />
             최대 용량: <strong>2MB</strong>

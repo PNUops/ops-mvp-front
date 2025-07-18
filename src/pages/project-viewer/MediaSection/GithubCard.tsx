@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { useToast } from 'hooks/useToast';
+
 import { FaGithub } from 'react-icons/fa';
 import { GithubCardSkeleton } from '../ViewerSkeleton';
 import { fetchGithubContent } from 'utils/media';
 
 interface GithubCardProps {
-  githubRepoUrl: string;
+  githubUrl: string;
 }
 
 export type GithubContentType = 'repo' | 'profile';
@@ -29,20 +31,20 @@ export interface GithubProfileData {
   public_repos?: number;
 }
 
-const GithubCard = ({ githubRepoUrl }: GithubCardProps) => {
-  const { mutate, data, isPending, isError } = useMutation({
-    mutationFn: fetchGithubContent,
+const GithubCard = ({ githubUrl }: GithubCardProps) => {
+  const { data, isPending, isError } = useQuery({
+    queryKey: ['githubContent', githubUrl],
+    queryFn: () => fetchGithubContent(githubUrl),
+    enabled: !!githubUrl,
+    staleTime: 1000 * 60 * 5,
+    retry: false,
   });
-
-  useEffect(() => {
-    if (githubRepoUrl) mutate(githubRepoUrl);
-  }, [githubRepoUrl, mutate]);
 
   if (isPending) return <GithubCardSkeleton />;
   if (isError || !data) return null;
 
   const cardStyle =
-    'flex w-full items-center justify-between rounded border border-gray-200 bg-white px-6 py-5 transition hover:bg-gray-50';
+    'flex w-full items-center justify-between rounded border border-lightGray bg-white px-6 py-5 transition hover:bg-whiteGray';
 
   if (data.type === 'repo') {
     const repo = data.data as GithubRepoData;

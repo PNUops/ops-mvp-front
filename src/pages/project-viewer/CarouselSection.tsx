@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useMediaQuery } from '@react-hookz/web';
+import { useSwipeable } from 'react-swipeable';
 import { useToast } from 'hooks/useToast';
 import { ThumbnailResult, getThumbnail } from 'apis/projectEditor';
 import { getPreviewImages } from 'apis/projectViewer';
@@ -46,17 +47,19 @@ const ArrowButton = ({
   direction,
   onClick,
   size = 50,
+  className = '',
 }: {
   direction: 'left' | 'right';
   onClick: () => void;
   size?: number;
+  className?: string;
 }) => {
   const Icon = direction === 'left' ? FaChevronLeft : FaChevronRight;
   return (
-    <button onClick={onClick} className="focus:outline-none">
+    <button onClick={onClick} className={`focus:outline-none ${className}`}>
       <Icon
         size={size}
-        className="text-lightGray hover:text-mainGreen rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25"
+        className="text-lightGray/50 hover:text-mainGreen animate-pulse rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25"
       />
     </button>
   );
@@ -216,10 +219,10 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   const { data: previewData } = useQuery<PreviewImagesResponseDto>({
     queryKey: ['previewImages', teamId, stablePreviewIds],
     queryFn: () => getPreviewImages(teamId, stablePreviewIds),
-    enabled: previewIds.length > 0,
+    enabled: stablePreviewIds.length > 0,
     refetchInterval: (query) => {
       const data = query.state.data;
-      const shouldRefetch = data?.imageResults?.every((result) => result.status === 'processing') ?? false;
+      const shouldRefetch = data?.imageResults?.some((result) => result.status === 'processing') ?? false;
       return shouldRefetch ? 1500 : false;
     },
   });
@@ -280,24 +283,33 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
     setLoadFailed(false);
   }, [currentMedia]);
 
-  useEffect(() => {
-    return () => {
-      if (thumbnailResult?.status === 'success' && thumbnailResult.url?.startsWith('blob:')) {
-        URL.revokeObjectURL(thumbnailResult.url);
-      }
-    };
-  }, [thumbnailResult]);
-
   const goToPrev = () => setCurrentIndex((prev) => (prev === 0 ? visibleImages.length - 1 : prev - 1));
   const goToNext = () => setCurrentIndex((prev) => (prev === visibleImages.length - 1 ? 0 : prev + 1));
   const goToSlide = (index: number) => setCurrentIndex(index);
 
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (visibleImages.length > 1) goToNext();
+    },
+    onSwipedRight: () => {
+      if (visibleImages.length > 1) goToPrev();
+    },
+    preventScrollOnSwipe: true,
+    trackMouse: false,
+  });
+
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center justify-center md:gap-10">
-        {visibleImages.length > 1 && !isMobile && <ArrowButton direction="left" onClick={goToPrev} />}
+      <div {...handlers} className="flex w-full items-center justify-center md:gap-10">
+        {!isMobile && (
+          <ArrowButton
+            direction="left"
+            onClick={goToPrev}
+            className={visibleImages.length > 1 ? 'visible' : 'invisible'}
+          />
+        )}
 
-        <div className="border-lightGray relative aspect-[3/2] w-[50vw] max-w-[900px] min-w-sm overflow-hidden rounded">
+        <div className="border-lightGray relative aspect-[3/2] w-full max-w-2xl overflow-hidden rounded">
           <MediaRenderer
             currentMedia={currentMedia}
             embedUrl={embedUrl}
@@ -308,12 +320,18 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
           />
         </div>
 
-        {visibleImages.length > 1 && !isMobile && <ArrowButton direction="right" onClick={goToNext} />}
+        {!isMobile && (
+          <ArrowButton
+            direction="right"
+            onClick={goToNext}
+            className={visibleImages.length > 1 ? 'visible' : 'invisible'}
+          />
+        )}
       </div>
 
       {visibleImages.length > 1 && (
         <div
-          className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-[50vw] max-w-[900px] min-w-sm px-3`}
+          className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-full max-w-2xl px-3`}
         >
           {isMobile && <ArrowButton direction="left" onClick={goToPrev} size={40} />}
 
