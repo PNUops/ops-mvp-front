@@ -104,7 +104,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     enabled: teamId !== null && stablePreviewIds.length > 0,
     refetchInterval: (query) => {
       const data = query.state.data;
-      const shouldRefetch = data?.imageResults?.every((result) => result.status === 'processing') ?? false;
+      const shouldRefetch = data?.imageResults?.some((result) => result.status === 'processing') ?? false;
       return shouldRefetch ? 1500 : false;
     },
   });

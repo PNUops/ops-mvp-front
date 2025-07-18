@@ -219,10 +219,10 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   const { data: previewData } = useQuery<PreviewImagesResponseDto>({
     queryKey: ['previewImages', teamId, stablePreviewIds],
     queryFn: () => getPreviewImages(teamId, stablePreviewIds),
-    enabled: previewIds.length > 0,
+    enabled: stablePreviewIds.length > 0,
     refetchInterval: (query) => {
       const data = query.state.data;
-      const shouldRefetch = data?.imageResults?.every((result) => result.status === 'processing') ?? false;
+      const shouldRefetch = data?.imageResults?.some((result) => result.status === 'processing') ?? false;
       return shouldRefetch ? 1500 : false;
     },
   });
