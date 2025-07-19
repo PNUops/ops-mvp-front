@@ -6,6 +6,7 @@ import { useToast } from 'hooks/useToast';
 import { useNavigate } from 'react-router-dom';
 import { NoticeResponseDto } from 'types/DTO/notices/NoticeResponseDto';
 import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 const ManageNoticeListTab = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const ManageNoticeListTab = () => {
               header: '편집일시',
               width: '20%',
               key: 'updatedAt',
-              render: (row) => row.updatedAt,
+              render: (row) => dayjs(row.updatedAt).format('YYYY년 M월 D일 HH:mm'),
             },
             {
               header: '제목',
