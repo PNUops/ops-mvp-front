@@ -5,12 +5,15 @@ import { NoticeRequestDto } from 'types/DTO/notices/NoticeRequestDto';
 
 export const getNotices = async (): Promise<NoticeResponseDto[]> => {
   const { data } = await apiClient.get('/notices');
-  return data;
+  return data.map((notice: NoticeResponseDto) => ({
+    ...notice,
+    updatedAt: new Date(notice.updatedAt),
+  }));
 };
 
 export const getNoticeDetail = async (noticeId: number): Promise<NoticeDetailDto> => {
   const { data } = await apiClient.get(`/notices/${noticeId}`);
-  return data;
+  return { ...data, updatedAt: new Date(data.updatedAt) };
 };
 
 export const postCreateNotice = async (request: NoticeRequestDto) => {

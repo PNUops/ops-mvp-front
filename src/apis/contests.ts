@@ -3,10 +3,12 @@ import apiClient from './apiClient';
 import { mockContestsResponse } from 'mocks/data/contests';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 
-
 export const getAllContests = async (): Promise<ContestResponseDto[]> => {
   const res = await apiClient.get('/contests');
-  return res.data;
+  return res.data.map((contest: ContestResponseDto) => ({
+    ...contest,
+    updatedAt: new Date(contest.updatedAt),
+  }));
 };
 
 export const postAllContests = async (contestName: string) => {
