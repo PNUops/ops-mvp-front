@@ -13,6 +13,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import EditModal from '@pages/admin/ContestsTab/EditModal';
 import useContestAdmin from 'hooks/useContestAdmin';
 import CommentConfirmModal from '@pages/project-viewer/CommentSection/CommentConfirmModal';
+import dayjs from 'dayjs';
 
 type HistoryMenuProps = {
   contestName: string;
@@ -85,7 +86,7 @@ const ContestAdminTab = () => {
               header: '편집일시',
               width: '20%',
               key: 'updatedAt',
-              render: (row) => row.updatedAt.replace('T', ' ').slice(0, 16),
+              render: (row) => dayjs(row.updatedAt).format('YYYY년 M월 D일 HH:mm'),
             },
             { header: '대회명', width: '50%', key: 'contestName' },
           ]}
