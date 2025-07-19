@@ -36,7 +36,7 @@ const ManageNoticeListTab = () => {
         <Table<NoticeResponseDto>
           columns={[
             {
-              header: '편집일시',
+              header: '작성일시',
               width: '20%',
               key: 'createdAt',
               render: (row) => dayjs(row.createdAt).format('YYYY년 M월 D일 HH:mm'),
