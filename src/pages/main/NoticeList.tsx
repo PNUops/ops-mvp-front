@@ -16,7 +16,7 @@ const NoticeList = ({ notices }: Props) => {
           <li className="text-midGray py-2 text-center text-sm">등록된 공지사항이 없습니다.</li>
         )}
         {notices?.map((notice) => {
-          const showNewIcon = dayjs(notice.updatedAt).isAfter(dayjs().subtract(3, 'day'));
+          const showNewIcon = dayjs(notice.createdAt).isAfter(dayjs().subtract(3, 'day'));
 
           return (
             <Link
@@ -31,7 +31,7 @@ const NoticeList = ({ notices }: Props) => {
               </div>
 
               <span className="text-midGray ml-2 truncate text-right text-xs">
-                {dayjs(notice.updatedAt).format('YYYY년 M월 D일 HH:mm')}
+                {dayjs(notice.createdAt).format('YYYY년 M월 D일 HH:mm')}
               </span>
             </Link>
           );

@@ -38,8 +38,8 @@ const ManageNoticeListTab = () => {
             {
               header: '편집일시',
               width: '20%',
-              key: 'updatedAt',
-              render: (row) => dayjs(row.updatedAt).format('YYYY년 M월 D일 HH:mm'),
+              key: 'createdAt',
+              render: (row) => dayjs(row.createdAt).format('YYYY년 M월 D일 HH:mm'),
             },
             {
               header: '제목',
