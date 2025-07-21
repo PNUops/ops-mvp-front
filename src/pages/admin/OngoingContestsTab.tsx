@@ -35,10 +35,14 @@ const OngoingContestsTab = () => {
   }
   return (
     <>
-      <TeamSortToggle />
-      <ProjectSubmissionTable submissions={dashboardData} type="project" />
-      <ProjectSubmissionTable submissions={rankingData} type="vote" />
-      <VoteRate />
+      <div className="relative">
+        <div className="absolute right-0">
+          <TeamSortToggle />
+        </div>
+        <ProjectSubmissionTable submissions={dashboardData} type="project" />
+        <ProjectSubmissionTable submissions={rankingData} type="vote" />
+        <VoteRate />
+      </div>
     </>
   );
 };

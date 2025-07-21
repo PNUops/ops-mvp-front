@@ -36,8 +36,8 @@ const TeamSortToggle = () => {
   };
 
   return (
-    <div className="flex items-center justify-start gap-4">
-      <span className="text-sm whitespace-nowrap">팀 정렬 기준</span>
+    <div className="flex h-8 items-center justify-start gap-4">
+      <span className="hidden text-sm whitespace-nowrap sm:inline-block">정렬 기준</span>
       <div className="bg-whiteGray inline-flex items-center justify-center rounded-md p-2">
         {sortOptions.map((option) => (
           <button
