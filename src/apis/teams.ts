@@ -24,7 +24,7 @@ export const patchSortTeam = async (mode: string) => {
   return res.data;
 };
 
-export const getSortTeam = async (): Promise<SortOption> => {
+export const getSortStatus = async (): Promise<SortOption> => {
   const res = await apiClient.get('/teams/sort');
   return res.data.currentMode as SortOption;
 };

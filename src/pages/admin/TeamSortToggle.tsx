@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { getSortTeam, patchSortTeam } from 'apis/teams';
+import { getSortStatus, patchSortTeam } from 'apis/teams';
 
 export type SortOption = 'RANDOM' | 'ASC';
 
@@ -16,7 +16,7 @@ const TeamSortToggle = () => {
   useEffect(() => {
     const fetchSortMode = async () => {
       try {
-        const mode = await getSortTeam();
+        const mode = await getSortStatus();
         setSelected(mode);
       } catch (error) {
         console.error('Error fetching sort mode:', error);
