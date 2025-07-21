@@ -1,5 +1,6 @@
 import ProjectSubmissionTable from '@pages/admin/ProjectSubmissionTable';
 import VoteRate from '@pages/admin/VoteRate';
+import TeamSortToggle from './TeamSortToggle';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { getDashboard } from 'apis/dashboard';
@@ -34,6 +35,7 @@ const OngoingContestsTab = () => {
   }
   return (
     <>
+      <TeamSortToggle />
       <ProjectSubmissionTable submissions={dashboardData} type="project" />
       <ProjectSubmissionTable submissions={rankingData} type="vote" />
       <VoteRate />
