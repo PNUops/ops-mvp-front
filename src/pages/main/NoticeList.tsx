@@ -31,7 +31,7 @@ const NoticeList = ({ notices }: Props) => {
               </div>
 
               <span className="text-midGray ml-2 truncate text-right text-xs">
-                {dayjs(notice.createdAt).format('YYYY년 M월 D일 HH:mm')}
+                {dayjs(notice.createdAt).format('YYYY년 MM월 DD일 HH:mm')}
               </span>
             </Link>
           );
