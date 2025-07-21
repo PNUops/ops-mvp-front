@@ -37,7 +37,7 @@ const NoticeDetail = () => {
 
             <div className="flex justify-end">
                 <div className="flex px-2">
-                    <div className="px-2 text-midGray text-[clamp(0.75rem,1.5vw,1rem)]">수정일</div>
+                    <div className="px-2 text-midGray text-[clamp(0.75rem,1.5vw,1rem)]">작성일</div>
                     <div className=" mb-6 text-midGray text-right text-[clamp(0.75rem,1.5vw,1rem)] font-semibold">
                         {dayjs(notice.createdAt).format('YYYY.MM.DD')}
                     </div>
@@ -46,7 +46,7 @@ const NoticeDetail = () => {
                 <div className="px-1 text-midGray text-[clamp(0.75rem,1.5vw,1rem)] font-bold"> |</div>
 
                 <div className="flex">
-                    <div className="px-2 text-midGray text-[clamp(0.75rem,1.5vw,1rem)]">작성일</div>
+                    <div className="px-2 text-midGray text-[clamp(0.75rem,1.5vw,1rem)]">수정일</div>
                     <div className=" mb-6 text-midGray text-right text-[clamp(0.75rem,1.5vw,1rem)] font-semibold">
                         {dayjs(notice.updatedAt).format('YYYY.MM.DD')}
                     </div>
