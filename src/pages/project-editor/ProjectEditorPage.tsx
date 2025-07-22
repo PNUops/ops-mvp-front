@@ -177,6 +177,13 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     if (isEmpty(teamName)) return '팀명이 입력되지 않았어요';
     if (isEmpty(leaderName)) return '팀장명이 입력되지 않았어요';
     if (teamMembers.length < 1) return '팀원이 목록이 비어있어요';
+
+    const leaderLower = leaderName.trim().toLowerCase();
+    const isDuplicateWithMember = teamMembers.some(
+      (member) => member.teamMemberName.trim().toLowerCase() === leaderLower,
+    );
+    if (isDuplicateWithMember) return '팀장 이름이 팀원과 중복돼요';
+
     if (productionUrl && !isValidProjectUrl(productionUrl)) return '프로젝트 주소가 유효하지 않아요';
     if (isEmpty(githubUrl)) return 'GitHub 링크가 입력되지 않았어요';
     if (!isValidGithubUrl(githubUrl)) return 'GitHub URL이 유효하지 않아요';
