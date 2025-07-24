@@ -77,13 +77,14 @@ const useContestAdmin = () => {
   }, [currentTeams]);
 
   const handleAddContest = async () => {
-    if (!state.contestName.trim()) {
+    const trimmedName = state.contestName.trim();
+    if (!trimmedName) {
       toast('대회명이 비어있습니다.', 'error');
       return;
     }
 
     try {
-      await postAllContests(state.contestName);
+      await postAllContests(trimmedName);
       console.log('대회 추가 후 캐시 무효화');
       await queryClient.invalidateQueries({ queryKey: ['contests'] });
       setState((prev) => ({ ...prev, contestName: '' }));
