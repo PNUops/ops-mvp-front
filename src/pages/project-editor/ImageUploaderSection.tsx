@@ -103,6 +103,11 @@ const ImageUploaderSection = ({
     const target = images[index];
     if (!target) return;
 
+    if (!(target instanceof File) && 'status' in target && target.status === 'processing') {
+      toast('이미지 압축 중에는 삭제할 수 없어요', 'info');
+      return;
+    }
+
     if (index === 0) {
       if (!(target instanceof File) && 'status' in target && target.status === 'success') {
         setThumbnailToDelete(true);

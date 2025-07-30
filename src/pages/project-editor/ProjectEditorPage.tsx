@@ -250,7 +250,10 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       await Promise.all(addMemberPromises);
 
       if (thumbnailToDelete) {
-        await deleteThumbnail(teamId!);
+        const res = await deleteThumbnail(teamId!);
+        if (res.status === 202) {
+          toast('압축 중인 이미지는 삭제할 수 없어요', 'error');
+        }
       }
       if (thumbnail instanceof File) {
         const formData = new FormData();
@@ -259,7 +262,10 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       }
 
       if (previewsToDelete.length > 0) {
-        await deletePreview(teamId!, { imageIds: previewsToDelete });
+        const res = await deletePreview(teamId!, { imageIds: previewsToDelete });
+        if (res.status === 202) {
+          toast('압축 중인 이미지는 삭제할 수 없어요', 'error');
+        }
         setPreviewsToDelete([]);
       }
       const newFiles = previews.filter((p) => p instanceof File).map((p) => p as File);
