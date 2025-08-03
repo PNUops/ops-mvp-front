@@ -1,9 +1,7 @@
 import { TeamListItemResponseDto } from '../types/DTO/teams/teamListDto';
 import { SubmissionStatusResponseDto } from '../types/DTO/teams/submissionStatusDto';
 import apiClient from './apiClient';
-import { mockTeamsResponse } from 'mocks/data/teams';
 import { SortOption } from '@pages/admin/TeamSortToggle';
-import {ThumbnailResponseDto} from "../types/DTO/teams/thumbnailResponseDto";
 
 export const getAllTeams = async (contestId: number): Promise<TeamListItemResponseDto[]> => {
   const res = await apiClient.get(`/contests/${contestId}/teams`);
