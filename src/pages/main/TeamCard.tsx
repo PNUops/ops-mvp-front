@@ -1,7 +1,8 @@
 import { FaHeart } from 'react-icons/fa';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import basicThumbnail from '@assets/basicThumbnail.jpg'
+import {getThumbnailTeams} from "../../apis/teams";
 
 interface TeamCardProps {
   teamId: number;
@@ -11,9 +12,17 @@ interface TeamCardProps {
 }
 
 const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => {
-  const [imageError, setImageError] = useState(false);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>(basicThumbnail);
 
-  const thumbnailUrl = `${import.meta.env.VITE_API_BASE_URL}/api/teams/${teamId}/image/thumbnail`;
+  useEffect(() => {
+    const fetchThumbnail = async () => {
+      const url = await getThumbnailTeams(teamId);
+      if (url) {
+        setThumbnailUrl(url);
+      }
+    };
+    fetchThumbnail();
+  }, [teamId]);
 
   return (
     <Link
@@ -22,19 +31,10 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked }: TeamCardProps) => 
 
     >
       <div className="aspect-[3/2] flex-shrink-0 object-cover overflow-hidden relative rounded-md border border-lightGray cursor-pointer transition-transform duration-200 hover:scale-[1.02] hover:shadow-md">
-        {!imageError ? (
-          <img
-            src={thumbnailUrl}
+          <img src={thumbnailUrl ?? basicThumbnail}
             alt="썸네일"
             className="w-full h-full object-cover"
-            onError={() => setImageError(true)}
           />
-          ) : (
-          <img
-            src={basicThumbnail}
-            alt="기본 썸네일"
-            />
-          )}
 
         <div className="absolute top-3 right-3 z-10">
           {isLiked && (
