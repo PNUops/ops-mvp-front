@@ -24,12 +24,12 @@ const Header = () => {
           <img
             className="w-auto max-sm:hidden sm:h-8 md:h-9 lg:h-10"
             src="/Logo.svg"
-            alt="부산대학교 SW성과관리시스템 로고"
+            alt="부산대학교 SW프로젝트관리시스템 로고"
           />
           <img
             className="h-8 w-auto sm:hidden"
             src="/swOpsLogo-sm.png"
-            alt="부산대학교 SW성과관리시스템 로고 (작은 버전)"
+            alt="부산대학교 SW프로젝트관리시스템 로고 (작은 버전)"
           />
         </Link>
 
