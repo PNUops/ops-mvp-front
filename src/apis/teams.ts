@@ -2,6 +2,7 @@ import { TeamListItemResponseDto } from '../types/DTO/teams/teamListDto';
 import { SubmissionStatusResponseDto } from '../types/DTO/teams/submissionStatusDto';
 import apiClient from './apiClient';
 import { SortOption } from '@pages/admin/TeamSortToggle';
+import { API_BASE_URL } from '@constants/index';
 
 export const getAllTeams = async (contestId: number): Promise<TeamListItemResponseDto[]> => {
   const res = await apiClient.get(`/contests/${contestId}/teams`);
@@ -14,20 +15,19 @@ export const getSubmissionStatus = async (): Promise<SubmissionStatusResponseDto
 };
 
 export const getThumbnailTeams = async (teamId: number) => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://swpms.pnu.app';
-    try {
-        const response = await apiClient.get(`/teams/${teamId}/image/thumbnail`);
+  try {
+    const response = await apiClient.get(`/teams/${teamId}/image/thumbnail`);
 
-        if (response.status === 200) {
-            return `${baseUrl}/api/teams/${teamId}/image/thumbnail`;
-        } else if (response.status === 202) {
-            return null;
-        }
-    } catch (error: any) {
-        if (error.response?.status === 404) {
-            return null;
-        }
+    if (response.status === 200) {
+      return `${API_BASE_URL}/api/teams/${teamId}/image/thumbnail`;
+    } else if (response.status === 202) {
+      return null;
     }
+  } catch (error: any) {
+    if (error.response?.status === 404) {
+      return null;
+    }
+  }
 };
 
 export const deleteTeams = async (teamId_: number) => {
