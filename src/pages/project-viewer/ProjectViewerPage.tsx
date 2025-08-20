@@ -28,7 +28,7 @@ const ProjectViewerPage = () => {
   const memberId = user?.id;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['projectDetails', teamId],
+    queryKey: ['projectDetails', teamId], // 추후 projectDetails에 투표 기간 여부 true/false 값 추가
     queryFn: async () => {
       if (teamId === null) throw new Error('teamId is null');
       return getProjectDetails(teamId);
@@ -58,6 +58,8 @@ const ProjectViewerPage = () => {
   if (error) return <div>에러 발생: {String(error)}</div>;
   if (!data) return <div>데이터를 불러올 수 없습니다.</div>;
 
+  const IS_VOTE_TERM = false; // 투표 기간 여부
+
   const isLeaderOfThisTeam = isLeader && memberId == data.leaderId;
 
   return (
@@ -80,7 +82,7 @@ const ProjectViewerPage = () => {
         isEditor={isLeaderOfThisTeam || isAdmin}
       />
       <div className="h-10" />
-      <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} />
+      {IS_VOTE_TERM ? <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} /> : null}
       <div className="h-10" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} teamMembers={data.teamMembers} />
       <div className="h-10" />
