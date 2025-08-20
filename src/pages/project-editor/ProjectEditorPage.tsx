@@ -232,6 +232,8 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         youTubePath: youtubeUrl,
       });
 
+      console.log('수정된 프로젝트 이름: ', projectName);
+
       const addedMembers = teamMembers.filter(
         (member) => !projectData!.teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
       );
@@ -483,6 +485,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       {(isLeaderOfThisTeam || (isAdmin && contestId === 1)) && (
         <IntroSection
           projectName={projectName}
+          setProjectName={setProjectName}
           teamName={teamName}
           leaderName={leaderName}
           teamMembers={teamMembers} // WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의
