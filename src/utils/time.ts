@@ -8,3 +8,10 @@ export const formatToMMSS = (totalSeconds: number): string => {
   const seconds = (totalSeconds % 60).toString().padStart(2, '0');
   return `${minutes}:${seconds}`;
 };
+
+export const formatDateTime = (date: Date, time: string): Date => {
+  const [hours, minutes, seconds] = time.split(':').map(Number);
+  const result = new Date(date);
+  result.setHours(hours, minutes, seconds || 0);
+  return result;
+};

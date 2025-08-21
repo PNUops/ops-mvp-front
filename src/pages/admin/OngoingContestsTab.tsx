@@ -1,12 +1,11 @@
 import ProjectSubmissionTable from '@pages/admin/ProjectSubmissionTable';
 import VoteRate from '@pages/admin/VoteRate';
-import TeamSortToggle from './TeamSortToggle';
+import ProjectSortToggle from './ProjectSortToggle';
+import VoteTermSelector from './VoteTermSelector';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { getDashboard } from 'apis/dashboard';
 import { getRanking } from 'apis/ranking';
 import { DashboardTeamResponseDto, TeamLikeResponseDto } from 'types/DTO';
-import useAuth from 'hooks/useAuth';
 
 const OngoingContestsTab = () => {
   const { data: dashboardData, isLoading: isDashboardLoading } = useQuery<DashboardTeamResponseDto[]>({
@@ -35,9 +34,10 @@ const OngoingContestsTab = () => {
   }
   return (
     <>
-      <div className="relative">
-        <div className="absolute right-0">
-          <TeamSortToggle />
+      <div className="flex flex-col gap-12">
+        <div className="border-lightGray flex flex-col items-start gap-8 rounded-xl border p-8">
+          <VoteTermSelector />
+          <ProjectSortToggle />
         </div>
         <ProjectSubmissionTable submissions={dashboardData} type="project" />
         <ProjectSubmissionTable submissions={rankingData} type="vote" />

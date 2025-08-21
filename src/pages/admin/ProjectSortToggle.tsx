@@ -9,7 +9,7 @@ const sortOptions: { label: string; value: SortOption }[] = [
   { label: '오름차순', value: 'ASC' },
 ];
 
-const TeamSortToggle = () => {
+const ProjectSortToggle = () => {
   const queryClient = useQueryClient();
   const [selected, setSelected] = useState<SortOption | null>(null);
 
@@ -36,16 +36,16 @@ const TeamSortToggle = () => {
   };
 
   return (
-    <div className="flex h-8 items-center justify-start gap-4">
-      <span className="hidden text-sm whitespace-nowrap sm:inline-block">정렬 기준</span>
-      <div className="bg-whiteGray inline-flex items-center justify-center rounded-md p-2">
+    <div className="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:gap-15">
+      <span className="text-sm font-medium whitespace-nowrap">- 프로젝트 정렬 설정</span>
+      <div className="border-lightGray flex flex-1 items-center justify-center rounded-md border p-1">
         {sortOptions.map((option) => (
           <button
             key={option.value}
             type="button"
             onClick={() => handleToggle(option.value)}
-            className={`w-25 cursor-pointer rounded-md p-1 text-sm transition-colors ${
-              selected === option.value ? 'bg-mainGreen text-white' : 'text-midGray hover:text-gray-500'
+            className={`h-10 flex-1 cursor-pointer rounded-sm text-sm transition-colors ${
+              selected === option.value ? 'bg-mainGreen text-white' : 'text-black hover:text-gray-500'
             }`}
           >
             {option.label}
@@ -56,4 +56,4 @@ const TeamSortToggle = () => {
   );
 };
 
-export default TeamSortToggle;
+export default ProjectSortToggle;
