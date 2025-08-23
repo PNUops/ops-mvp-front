@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from 'hooks/useToast';
 import { getSortStatus, patchSortTeam } from 'apis/teams';
 
 export type SortOption = 'RANDOM' | 'ASC';
@@ -11,6 +12,7 @@ const sortOptions: { label: string; value: SortOption }[] = [
 
 const ProjectSortToggle = () => {
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [selected, setSelected] = useState<SortOption | null>(null);
 
   useEffect(() => {
@@ -30,8 +32,10 @@ const ProjectSortToggle = () => {
       await patchSortTeam(mode);
       setSelected(mode);
       queryClient.invalidateQueries({ queryKey: ['teams'] });
+      toast(`프로젝트가 ${mode === 'RANDOM' ? '랜덤' : '오름차순'} 정렬로 변경되었어요`, 'success');
     } catch (error) {
       console.error('Error sorting teams:', error);
+      toast('프로젝트 정렬 설정에 실패했어요', 'error');
     }
   };
 
