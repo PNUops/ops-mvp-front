@@ -26,8 +26,6 @@ export const useIsVoteTerm = (contestId: number | undefined) => {
     return now >= startTime && now <= endTime;
   }, [voteTermData]);
 
-  console.log('isVoteTerm', isVoteTerm, voteTermData);
-
   return { isVoteTerm };
 };
 
