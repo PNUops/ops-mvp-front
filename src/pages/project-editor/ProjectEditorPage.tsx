@@ -224,15 +224,13 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       await patchProjectDetails(teamId!, {
         contestId: isAdmin ? (contestId !== null ? contestId : projectData!.contestId) : projectData!.contestId,
         teamName: isAdmin ? teamName : projectData!.teamName,
-        projectName: isAdmin ? projectName : projectData!.projectName,
+        projectName: projectName,
         leaderName: isAdmin ? leaderName : projectData!.leaderName,
         overview,
         productionPath: productionUrl,
         githubPath: githubUrl,
         youTubePath: youtubeUrl,
       });
-
-      console.log('수정된 프로젝트 이름: ', projectName);
 
       const addedMembers = teamMembers.filter(
         (member) => !projectData!.teamMembers.some((existing) => existing.teamMemberId === member.teamMemberId),
