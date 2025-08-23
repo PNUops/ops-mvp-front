@@ -9,10 +9,10 @@ interface TeamCardProps {
   teamName: string;
   projectName: string;
   isLiked: boolean;
-  IS_VOTE_TERM?: boolean;
+  isVoteTerm?: boolean;
 }
 
-const TeamCard = ({ teamId, teamName, projectName, isLiked, IS_VOTE_TERM }: TeamCardProps) => {
+const TeamCard = ({ teamId, teamName, projectName, isLiked, isVoteTerm }: TeamCardProps) => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>(basicThumbnail);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked, IS_VOTE_TERM }: Team
         <img src={thumbnailUrl ?? basicThumbnail} alt="썸네일" className="h-full w-full object-cover" />
 
         <div className="absolute top-3 right-3 z-10">
-          {IS_VOTE_TERM && isLiked && <FaHeart color="red" size="clamp(1.5rem, 2vw, 1.8rem)" />}
+          {isVoteTerm && isLiked && <FaHeart color="red" size="clamp(1.5rem, 2vw, 1.8rem)" />}
         </div>
       </div>
 

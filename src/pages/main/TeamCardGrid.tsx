@@ -2,6 +2,10 @@ import TeamCard from '@pages/main/TeamCard';
 import TeamCardSkeleton from '@pages/main/TeamCardSkeleton';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 
+import { useIsVoteTerm } from 'hooks/useVoteTerm';
+import { useParams } from 'react-router-dom';
+import { is } from 'date-fns/locale';
+
 interface Props {
   teams?: TeamListItemResponseDto[];
   isLoading: boolean;
@@ -9,8 +13,8 @@ interface Props {
 }
 
 const TeamCardGrid = ({ teams, isLoading, isError }: Props) => {
-  const IS_VOTE_TERM = false; // 투표 기간 여부
-  console.log('이거 상수 세팅해둠 나중에 바꾸기! IS_VOTE_TERM:', IS_VOTE_TERM);
+  const { contestId } = useParams();
+  const { isVoteTerm } = useIsVoteTerm(Number(contestId) ?? 1);
 
   return (
     <section className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-7 xl:gap-8">
@@ -23,7 +27,7 @@ const TeamCardGrid = ({ teams, isLoading, isError }: Props) => {
           teamName={team.teamName}
           projectName={team.projectName}
           isLiked={team.isLiked}
-          IS_VOTE_TERM={IS_VOTE_TERM}
+          isVoteTerm={isVoteTerm}
         />
       ))}
     </section>

@@ -3,3 +3,8 @@ export interface ContestResponseDto {
   contestName: string;
   updatedAt: Date;
 }
+
+export interface VoteTermDto {
+  voteStartAt: string;
+  voteEndAt: string;
+}

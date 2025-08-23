@@ -1,16 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from 'hooks/useToast';
 import DateTimePicker from '@components/DateTimePicker';
+import { getVoteTerm, updateVoteTerm } from 'apis/contests';
+import { formatDateTime } from 'utils/time';
 
-const now = new Date();
-const koreaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
-const START_DATE: Date = new Date(koreaTime.getFullYear(), koreaTime.getMonth(), koreaTime.getDate(), 9, 0, 0);
-const END_DATE: Date = new Date(koreaTime.getFullYear(), koreaTime.getMonth(), koreaTime.getDate(), 18, 0, 0);
+const CURRENT_CONTEST_ID = 1;
 
 const VoteTermSelector = () => {
   const toast = useToast();
-  const [startDate, setStartDate] = useState<Date>(START_DATE);
-  const [endDate, setEndDate] = useState<Date>(END_DATE);
+  const queryClient = useQueryClient();
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(new Date());
+
+  const { data: voteTermData, isLoading } = useQuery({
+    queryKey: ['voteTerm', CURRENT_CONTEST_ID],
+    queryFn: () => getVoteTerm(CURRENT_CONTEST_ID),
+  });
+
+  useEffect(() => {
+    if (voteTermData) {
+      setStartDate(new Date(voteTermData.voteStartAt));
+      setEndDate(new Date(voteTermData.voteEndAt));
+    }
+  }, [voteTermData]);
+
+  const updateVoteTermMutation = useMutation({
+    mutationFn: (params: { contestId: number; payload: { voteStartAt: string; voteEndAt: string } }) =>
+      updateVoteTerm(params.contestId, params.payload),
+    onSuccess: () => {
+      toast('투표 기간이 저장되었어요', 'success');
+      queryClient.invalidateQueries({ queryKey: ['voteTerm', CURRENT_CONTEST_ID] });
+    },
+    onError: (err) => {
+      console.error('console: ', err);
+      toast('투표 기간 저장에 실패했어요', 'error');
+    },
+  });
 
   const handleDateSave = () => {
     if (!startDate || !endDate) {
@@ -22,28 +48,32 @@ const VoteTermSelector = () => {
       return;
     }
 
-    console.log('보낼 데이터: ', {
-      start: startDate.toISOString(),
-      end: endDate.toISOString(),
-    });
-    console.log('로컬 시간으로 확인: ', {
-      start: `${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString()}`,
-      end: `${endDate.toLocaleDateString()} ${endDate.toLocaleTimeString()}`,
+    updateVoteTermMutation.mutate({
+      contestId: CURRENT_CONTEST_ID,
+      payload: {
+        voteStartAt: formatDateTime(startDate),
+        voteEndAt: formatDateTime(endDate),
+      },
     });
   };
 
   return (
-    <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
-      <span className="text-lg font-medium whitespace-nowrap">- 투표 기간 설정</span>
+    <div className="flex w-full flex-col justify-between gap-5 lg:w-auto lg:flex-row lg:items-center">
+      <span className="text-sm font-medium whitespace-nowrap">- 투표 기간 설정</span>
       <div className="flex flex-col items-center justify-between gap-3 lg:flex-row lg:gap-10">
-        <DateTimePicker label={'시작 일시'} prevDate={startDate.toISOString()} onChange={setStartDate} />
-        <DateTimePicker label={'종료 일시'} prevDate={endDate.toISOString()} onChange={setEndDate} />
+        <DateTimePicker
+          label={'시작 일시'}
+          prevDate={startDate}
+          onChange={(newDate) => setStartDate(new Date(newDate))}
+        />
+        <DateTimePicker label={'종료 일시'} prevDate={endDate} onChange={(newDate) => setEndDate(new Date(newDate))} />
       </div>
       <button
         onClick={handleDateSave}
-        className="bg-mainBlue hover:bg-mainBlue/90 rounded-md p-1 px-6 text-sm text-white"
+        disabled={updateVoteTermMutation.isPending || isLoading}
+        className="bg-mainBlue hover:bg-mainBlue/90 rounded-md p-1 px-6 text-sm text-white transition-colors disabled:cursor-not-allowed disabled:bg-gray-400"
       >
-        저장
+        {updateVoteTermMutation.isPending ? '저장 중...' : '저장'}
       </button>
     </div>
   );

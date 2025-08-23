@@ -1,17 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTeamId } from 'hooks/useId';
 import useAuth from 'hooks/useAuth';
-import { useUserStore } from 'stores/useUserStore';
+
 import { getProjectDetails } from 'apis/projectViewer';
 
 import IntroSection from './IntroSection';
 import CarouselSection from './CarouselSection';
 import LikeSection from './LikeSection';
 import DetailSection from './DetailSection';
-import MediaSection from './MediaSection/MediaSection';
+
 import GithubCard from './MediaSection/GithubCard';
 import CommentSection from './CommentSection/CommentSection';
+
+import { useIsVoteTerm } from 'hooks/useVoteTerm';
 
 import {
   IntroSectionSkeleton,
@@ -28,7 +29,7 @@ const ProjectViewerPage = () => {
   const memberId = user?.id;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['projectDetails', teamId], // 추후 projectDetails에 투표 기간 여부 true/false 값 추가
+    queryKey: ['projectDetails', teamId],
     queryFn: async () => {
       if (teamId === null) throw new Error('teamId is null');
       return getProjectDetails(teamId);
@@ -36,6 +37,8 @@ const ProjectViewerPage = () => {
     staleTime: 0,
     refetchOnMount: true,
   });
+
+  const { isVoteTerm } = useIsVoteTerm(data?.contestId);
 
   if (isLoading) {
     return (
@@ -57,9 +60,6 @@ const ProjectViewerPage = () => {
 
   if (error) return <div>에러 발생: {String(error)}</div>;
   if (!data) return <div>데이터를 불러올 수 없습니다.</div>;
-
-  const IS_VOTE_TERM = false; // 투표 기간 여부
-  console.log('이거 상수 세팅해둠 나중에 바꾸기! IS_VOTE_TERM:', IS_VOTE_TERM);
 
   const isLeaderOfThisTeam = isLeader && memberId == data.leaderId;
 
@@ -83,7 +83,7 @@ const ProjectViewerPage = () => {
         isEditor={isLeaderOfThisTeam || isAdmin}
       />
       <div className="h-10" />
-      {IS_VOTE_TERM ? <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} /> : null}
+      {isVoteTerm ? <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} /> : null}
       <div className="h-10" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} teamMembers={data.teamMembers} />
       <div className="h-10" />

@@ -9,9 +9,7 @@ export const formatToMMSS = (totalSeconds: number): string => {
   return `${minutes}:${seconds}`;
 };
 
-export const formatDateTime = (date: Date, time: string): Date => {
-  const [hours, minutes, seconds] = time.split(':').map(Number);
-  const result = new Date(date);
-  result.setHours(hours, minutes, seconds || 0);
-  return result;
+export const formatDateTime = (data: Date): string => {
+  const cleanFormatData = data.toISOString().substring(0, 19);
+  return cleanFormatData;
 };
