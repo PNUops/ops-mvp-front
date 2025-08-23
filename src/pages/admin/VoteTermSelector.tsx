@@ -1,22 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useGetVoteTerm, useUpdateVoteTerm } from 'hooks/useVoteTerm';
 import { useToast } from 'hooks/useToast';
 import DateTimePicker from '@components/DateTimePicker';
-import { getVoteTerm, updateVoteTerm } from 'apis/contests';
-import { formatDateTime } from 'utils/time';
 
 const CURRENT_CONTEST_ID = 1;
 
 const VoteTermSelector = () => {
   const toast = useToast();
-  const queryClient = useQueryClient();
+
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
 
-  const { data: voteTermData, isLoading } = useQuery({
-    queryKey: ['voteTerm', CURRENT_CONTEST_ID],
-    queryFn: () => getVoteTerm(CURRENT_CONTEST_ID),
-  });
+  const { data: voteTermData, isLoading } = useGetVoteTerm(CURRENT_CONTEST_ID);
+  const { mutate: updateVoteTerm, isPending } = useUpdateVoteTerm(CURRENT_CONTEST_ID);
 
   useEffect(() => {
     if (voteTermData) {
@@ -24,19 +20,6 @@ const VoteTermSelector = () => {
       setEndDate(new Date(voteTermData.voteEndAt));
     }
   }, [voteTermData]);
-
-  const updateVoteTermMutation = useMutation({
-    mutationFn: (params: { contestId: number; payload: { voteStartAt: string; voteEndAt: string } }) =>
-      updateVoteTerm(params.contestId, params.payload),
-    onSuccess: () => {
-      toast('투표 기간이 저장되었어요', 'success');
-      queryClient.invalidateQueries({ queryKey: ['voteTerm', CURRENT_CONTEST_ID] });
-    },
-    onError: (err) => {
-      console.error('console: ', err);
-      toast('투표 기간 저장에 실패했어요', 'error');
-    },
-  });
 
   const handleDateSave = () => {
     if (!startDate || !endDate) {
@@ -48,13 +31,7 @@ const VoteTermSelector = () => {
       return;
     }
 
-    updateVoteTermMutation.mutate({
-      contestId: CURRENT_CONTEST_ID,
-      payload: {
-        voteStartAt: formatDateTime(startDate),
-        voteEndAt: formatDateTime(endDate),
-      },
-    });
+    updateVoteTerm({ voteStartAt: startDate.toISOString(), voteEndAt: endDate.toISOString() });
   };
 
   return (
@@ -70,10 +47,10 @@ const VoteTermSelector = () => {
       </div>
       <button
         onClick={handleDateSave}
-        disabled={updateVoteTermMutation.isPending || isLoading}
+        disabled={isPending || isLoading}
         className="bg-mainBlue hover:bg-mainBlue/90 rounded-md p-1 px-6 text-sm text-white transition-colors disabled:cursor-not-allowed disabled:bg-gray-400"
       >
-        {updateVoteTermMutation.isPending ? '저장 중...' : '저장'}
+        {isPending ? '저장 중...' : '저장'}
       </button>
     </div>
   );
