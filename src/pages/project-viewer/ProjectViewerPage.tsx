@@ -1,17 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTeamId } from 'hooks/useId';
 import useAuth from 'hooks/useAuth';
-import { useUserStore } from 'stores/useUserStore';
+
 import { getProjectDetails } from 'apis/projectViewer';
 
 import IntroSection from './IntroSection';
 import CarouselSection from './CarouselSection';
 import LikeSection from './LikeSection';
 import DetailSection from './DetailSection';
-import MediaSection from './MediaSection/MediaSection';
+
 import GithubCard from './MediaSection/GithubCard';
 import CommentSection from './CommentSection/CommentSection';
+
+import { useIsVoteTerm } from 'hooks/useVoteTerm';
 
 import {
   IntroSectionSkeleton,
@@ -36,6 +37,8 @@ const ProjectViewerPage = () => {
     staleTime: 0,
     refetchOnMount: true,
   });
+
+  const { isVoteTerm } = useIsVoteTerm(data?.contestId);
 
   if (isLoading) {
     return (
@@ -80,12 +83,11 @@ const ProjectViewerPage = () => {
         isEditor={isLeaderOfThisTeam || isAdmin}
       />
       <div className="h-10" />
-      <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} />
+      {isVoteTerm ? <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} /> : null}
       <div className="h-10" />
       <DetailSection overview={data.overview} leaderName={data.leaderName} teamMembers={data.teamMembers} />
       <div className="h-10" />
       <GithubCard githubUrl={data.githubPath} />
-      {/* WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의*/}
       <div className="h-28" />
       <CommentSection teamId={data.teamId} />
     </div>

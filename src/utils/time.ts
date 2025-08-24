@@ -8,3 +8,20 @@ export const formatToMMSS = (totalSeconds: number): string => {
   const seconds = (totalSeconds % 60).toString().padStart(2, '0');
   return `${minutes}:${seconds}`;
 };
+
+export const formatDateTime = (data: Date): string => {
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return (
+    data.getFullYear() +
+    '-' +
+    pad(data.getMonth() + 1) +
+    '-' +
+    pad(data.getDate()) +
+    'T' +
+    pad(data.getHours()) +
+    ':' +
+    pad(data.getMinutes()) +
+    ':' +
+    pad(data.getSeconds())
+  );
+};

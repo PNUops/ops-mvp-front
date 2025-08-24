@@ -224,7 +224,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       await patchProjectDetails(teamId!, {
         contestId: isAdmin ? (contestId !== null ? contestId : projectData!.contestId) : projectData!.contestId,
         teamName: isAdmin ? teamName : projectData!.teamName,
-        projectName: isAdmin ? projectName : projectData!.projectName,
+        projectName: projectName,
         leaderName: isAdmin ? leaderName : projectData!.leaderName,
         overview,
         productionPath: productionUrl,
@@ -483,6 +483,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       {(isLeaderOfThisTeam || (isAdmin && contestId === 1)) && (
         <IntroSection
           projectName={projectName}
+          setProjectName={setProjectName}
           teamName={teamName}
           leaderName={leaderName}
           teamMembers={teamMembers} // WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의
