@@ -43,7 +43,7 @@ export const useUpdateVoteTerm = (contestId: number) => {
       queryClient.invalidateQueries({ queryKey: ['voteTerm', contestId] });
       toast('투표 기간이 업데이트 되었어요', 'success');
     },
-    onError: () => {
+    onError: (err) => {
       toast('투표 기간 업데이트에 실패했어요', 'error');
     },
   });

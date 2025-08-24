@@ -10,6 +10,18 @@ export const formatToMMSS = (totalSeconds: number): string => {
 };
 
 export const formatDateTime = (data: Date): string => {
-  const cleanFormatData = data.toISOString().substring(0, 19);
-  return cleanFormatData;
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return (
+    data.getFullYear() +
+    '-' +
+    pad(data.getMonth() + 1) +
+    '-' +
+    pad(data.getDate()) +
+    'T' +
+    pad(data.getHours()) +
+    ':' +
+    pad(data.getMinutes()) +
+    ':' +
+    pad(data.getSeconds())
+  );
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; // useEffect import 추가
+import { useState, useEffect } from 'react';
 import { ChevronDownIcon } from 'lucide-react';
 
 import { Button } from '@components/ui/button';
@@ -16,9 +16,12 @@ interface DateTimePickerProps {
 export const DateTimePicker = ({ label, prevDate, onChange }: DateTimePickerProps) => {
   const [open, setOpen] = useState(false);
   const [dateTime, setDateTime] = useState<Date>(new Date(prevDate));
+  const [timeInputValue, setTimeInputValue] = useState<string>(new Date(prevDate).toTimeString().slice(0, 8));
 
   useEffect(() => {
-    setDateTime(new Date(prevDate));
+    const newDate = new Date(prevDate);
+    setDateTime(newDate);
+    setTimeInputValue(newDate.toTimeString().slice(0, 8));
   }, [prevDate]);
 
   const handleDateChange = (date: Date | undefined) => {
@@ -28,23 +31,30 @@ export const DateTimePicker = ({ label, prevDate, onChange }: DateTimePickerProp
     newDateTime.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
 
     setDateTime(newDateTime);
+    setTimeInputValue(newDateTime.toTimeString().slice(0, 8));
     setOpen(false);
+
     onChange?.(newDateTime);
   };
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const timeValue = e.target.value;
-    const [hours, minutes] = timeValue.split(':').map(Number);
-
-    if (isNaN(hours) || isNaN(minutes)) return;
-
-    const newDateTime = new Date(dateTime);
-    newDateTime.setHours(hours, minutes, 0);
-    setDateTime(newDateTime);
+    setTimeInputValue(e.target.value);
   };
 
   const handleTimeBlur = () => {
-    onChange?.(dateTime);
+    const timeValue = timeInputValue;
+    const timeParts = timeValue.split(':').map(Number);
+    const [hours, minutes, seconds = 0] = timeParts;
+
+    if (isNaN(hours) || isNaN(minutes)) {
+      setTimeInputValue(dateTime.toTimeString().slice(0, 8));
+      return;
+    }
+
+    const newDateTime = new Date(dateTime);
+    newDateTime.setHours(hours, minutes, seconds);
+    setDateTime(newDateTime);
+    onChange?.(newDateTime);
   };
 
   return (
@@ -73,8 +83,9 @@ export const DateTimePicker = ({ label, prevDate, onChange }: DateTimePickerProp
         </Popover>
         <Input
           type="time"
+          step="1"
           id="time-picker"
-          value={dateTime.toTimeString().slice(0, 5)}
+          value={timeInputValue}
           onChange={handleTimeChange}
           onBlur={handleTimeBlur}
           className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"

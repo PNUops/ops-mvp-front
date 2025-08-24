@@ -35,8 +35,9 @@ const OngoingContestsTab = () => {
   return (
     <>
       <div className="flex flex-col gap-12">
-        <div className="border-lightGray flex flex-col items-start gap-8 rounded-xl border p-8">
+        <div className="border-lightGray rounded-xl border p-8">
           <VoteTermSelector />
+          <div className="my-6 border-t border-gray-200"></div>
           <ProjectSortToggle />
         </div>
         <ProjectSubmissionTable submissions={dashboardData} type="project" />
