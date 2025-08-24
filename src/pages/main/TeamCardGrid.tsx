@@ -4,7 +4,6 @@ import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 
 import { useIsVoteTerm } from 'hooks/useVoteTerm';
 import { useParams } from 'react-router-dom';
-import { is } from 'date-fns/locale';
 
 interface Props {
   teams?: TeamListItemResponseDto[];
@@ -15,6 +14,8 @@ interface Props {
 const TeamCardGrid = ({ teams, isLoading, isError }: Props) => {
   const { contestId } = useParams();
   const { isVoteTerm } = useIsVoteTerm(Number(contestId) ?? 1);
+  console.log('contestId', contestId);
+  console.log('isVoteTerm', isVoteTerm);
 
   return (
     <section className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-7 xl:gap-8">
