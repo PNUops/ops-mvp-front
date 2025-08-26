@@ -209,9 +209,13 @@ const ImageUploaderSection = ({
           <div className="absolute top-1/2 right-full z-10 mr-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80 group-active:opacity-100 sm:left-full sm:ml-3">
             권장 비율: <strong>3:2</strong> (예: 1500×1000)
             <br />
-            최대 용량: <strong>2MB</strong>
+            최대 이미지 개수: <strong>6개</strong>
             <br />
-            허용 확장자: <strong>.jpg, .png, .gif, .bmp, .webp</strong>
+            최대 용량: <strong>5MB</strong>
+            <br />
+            허용 확장자: .jpg, .png, .gif, .bmp, .webp
+            <br />
+            <br />※권장 비율이 아닌 이미지에는 빈 여백이 생길 수 있어요.※
           </div>
         </div>
       </div>
