@@ -27,8 +27,8 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked, isVoteTerm }: TeamCa
 
   return (
     <Link to={`/teams/view/${teamId}`} className="flex aspect-[7/8] w-full flex-col">
-      <div className="border-lightGray relative aspect-[3/2] flex-shrink-0 cursor-pointer overflow-hidden rounded-md border object-cover transition-transform duration-200 hover:scale-[1.02] hover:shadow-md">
-        <img src={thumbnailUrl ?? basicThumbnail} alt="썸네일" className="h-full w-full object-cover" />
+      <div className="border-lightGray relative aspect-[3/2] flex-shrink-0 cursor-pointer overflow-hidden rounded-md border transition-transform duration-200 hover:scale-[1.02] hover:shadow-md">
+        <img src={thumbnailUrl ?? basicThumbnail} alt="썸네일" className="h-full w-full object-contain" />
 
         <div className="absolute top-3 right-3 z-10">
           {isVoteTerm && isLiked && <FaHeart color="red" size="clamp(1.5rem, 2vw, 1.8rem)" />}

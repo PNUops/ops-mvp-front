@@ -121,7 +121,7 @@ const MediaRenderer = ({
       <img
         src={currentMedia.url}
         alt="기본 이미지"
-        className="border-lightGray absolute inset-0 h-full w-full border object-cover"
+        className="border-lightGray absolute inset-0 h-full w-full border object-contain"
       />
     );
   }
@@ -183,7 +183,7 @@ const MediaRenderer = ({
             alt="Project image"
             onLoad={() => setImageLoaded(true)}
             onError={() => setLoadFailed(true)}
-            className={`border-lightGray absolute inset-0 h-full w-full border object-cover transition-opacity duration-200 ${
+            className={`border-lightGray absolute inset-0 h-full w-full border object-contain transition-opacity duration-200 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
           />
