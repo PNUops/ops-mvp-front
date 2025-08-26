@@ -215,7 +215,8 @@ const ImageUploaderSection = ({
             <br />
             허용 확장자: .jpg, .png, .gif, .bmp, .webp
             <br />
-            <br />※권장 비율이 아닌 이미지에는 빈 여백이 생길 수 있어요.※
+            <br />
+            ※권장 비율이 아닌 이미지에는 빈 여백이 생길 수 있어요.※
           </div>
         </div>
       </div>
@@ -258,7 +259,7 @@ const ImageUploaderSection = ({
                 <img
                   src={getImageSrc(img)}
                   alt={`image-${index}`}
-                  className="absolute inset-0 h-full w-full object-cover"
+                  className="absolute inset-0 h-full w-full object-contain"
                 />
               );
             } else if ('status' in img) {
@@ -279,7 +280,7 @@ const ImageUploaderSection = ({
                     <img
                       src={getImageSrc(img)}
                       alt={`image-${index}`}
-                      className="absolute inset-0 h-full w-full object-cover"
+                      className="absolute inset-0 h-full w-full object-contain"
                     />
                   );
                 } else {
