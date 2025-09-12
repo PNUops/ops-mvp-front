@@ -1,6 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 import ContestAdminTab from '@pages/admin/ContestsTab/ContestAdminTab';
 import OngoingContestsTab from '@pages/admin/OngoingContestsTab';
+import VoteStatisticsTab from '@pages/admin/VoteStatisticsTab';
 import ManageNoticeListTab from '@pages/admin/NoticeManageTab/ManageNoticeListTab';
 import NoticeCreateTab from '@pages/admin/NoticeManageTab/NoticeCreateTab';
 import NoticeEditTab from '@pages/admin/NoticeManageTab/NoticeEditTab';
@@ -8,6 +9,11 @@ import ProjectEditorPage from '@pages/project-editor/ProjectEditorPage';
 
 const AdminTabs: RouteObject[] = [
   { index: true, path: 'ongoing', element: <OngoingContestsTab />, handle: { label: '진행 중 대회' } },
+  {
+    path: 'vote-statistics',
+    element: <VoteStatisticsTab />,
+    handle: { label: '투표 통계' },
+  },
   {
     path: 'notice',
     handle: { label: '공지사항 관리' },

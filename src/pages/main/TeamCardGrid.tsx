@@ -28,6 +28,9 @@ const TeamCardGrid = ({ teams, isLoading, isError }: Props) => {
           projectName={team.projectName}
           isLiked={team.isLiked}
           isVoteTerm={isVoteTerm}
+          awardTitle={team.awardTitle}
+          awardBadgeColor={team.awardBadgeColor}
+          awardBadgeSize={team.awardBadgeSize}
         />
       ))}
     </section>

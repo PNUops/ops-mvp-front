@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import basicThumbnail from '@assets/basicThumbnail.jpg';
 import { getThumbnailTeams } from '../../apis/teams';
+import AwardBadge from '@components/AwardBadge';
 
 interface TeamCardProps {
   teamId: number;
@@ -10,9 +11,12 @@ interface TeamCardProps {
   projectName: string;
   isLiked: boolean;
   isVoteTerm?: boolean;
+  awardTitle: string | null;
+  awardBadgeColor: string | null;
+  awardBadgeSize: string | null;
 }
 
-const TeamCard = ({ teamId, teamName, projectName, isLiked, isVoteTerm }: TeamCardProps) => {
+const TeamCard = ({ teamId, teamName, projectName, isLiked, isVoteTerm, awardTitle, awardBadgeColor, awardBadgeSize }: TeamCardProps) => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>(basicThumbnail);
 
   useEffect(() => {
@@ -33,6 +37,16 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked, isVoteTerm }: TeamCa
         <div className="absolute top-3 right-3 z-10">
           {isVoteTerm && isLiked && <FaHeart color="red" size="clamp(1.5rem, 2vw, 1.8rem)" />}
         </div>
+        
+        {awardTitle && (
+          <div className="absolute top-3 left-3 z-10">
+            <AwardBadge
+              title={awardTitle}
+              color={awardBadgeColor || '#FFD700'}
+              size={(awardBadgeSize as 'small' | 'medium' | 'large') || 'medium'}
+            />
+          </div>
+        )}
       </div>
 
       <div className="p-3">
