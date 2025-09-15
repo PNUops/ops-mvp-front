@@ -21,7 +21,8 @@ const ProjectSortToggle = () => {
     onSuccess: (_, mode) => {
       queryClient.invalidateQueries({ queryKey: ['sortStatus'] });
       queryClient.invalidateQueries({ queryKey: ['teams'] });
-      toast(`프로젝트가 ${mode === 'RANDOM' ? '랜덤' : '오름차순'} 정렬로 변경되었어요`, 'success');
+      const label = sortOptions.find(option => option.value === mode)?.label;
+      toast(`프로젝트가 ${label} 정렬로 변경되었어요`, 'success');
     },
     onError: () => {
       toast('프로젝트 정렬 설정에 실패했어요', 'error');
