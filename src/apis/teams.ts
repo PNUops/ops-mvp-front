@@ -44,3 +44,11 @@ export const getSortStatus = async (): Promise<SortOption> => {
   const res = await apiClient.get('/teams/sort');
   return res.data.currentMode as SortOption;
 };
+
+export const patchTeamAward = async (
+  teamId: number,
+  payload: { awardName: string | null; awardColor: string | null },
+) => {
+  const res = await apiClient.patch(`admin/teams/${teamId}/award`, payload);
+  return res.data;
+};

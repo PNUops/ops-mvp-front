@@ -11,6 +11,7 @@ import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { IoIosArrowDown } from 'react-icons/io';
 import EditModal from '@pages/admin/ContestsTab/EditModal';
+import AwardSetSection from './AwardSet/AwardSetSection';
 import useContestAdmin from 'hooks/useContestAdmin';
 import CommentConfirmModal from '@pages/project-viewer/CommentSection/CommentConfirmModal';
 import dayjs from 'dayjs';
@@ -124,6 +125,9 @@ const ContestAdminTab = () => {
         <div className="mb-8 flex flex-col md:flex-row">
           <h2 className="mr-16 text-2xl font-bold text-nowrap sm:mb-4">대회별 프로젝트 목록</h2>
           <HistoryMenu contestName={state.currentContestName} onContestChange={handleContestChange} />
+        </div>
+        <div className="mb-8">
+          <AwardSetSection contestId={state.currentContestId} />
         </div>
         <Table<TeamListItemResponseDto>
           columns={[
