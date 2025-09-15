@@ -52,3 +52,8 @@ export const patchTeamAward = async (
   const res = await apiClient.patch(`admin/teams/${teamId}/award`, payload);
   return res.data;
 };
+
+export const postCustomTeamOrder = async (contestId: number, teamOrders: { teamId: number; itemOrder: number }[]) => {
+  const res = await apiClient.post('/teams/sort/custom', { contestId, teamOrders });
+  return res.data;
+};

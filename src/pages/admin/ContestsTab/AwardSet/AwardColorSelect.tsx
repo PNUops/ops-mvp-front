@@ -32,7 +32,7 @@ const AwardColorSelect = ({ value, onChange }: AwardColorSelectProps) => {
           {Object.entries(badgeColors).map(([key, { name, exp }]) => (
             <SelectItem key={key} value={key} className="capitalize">
               <div className="flex items-center gap-3 truncate">
-                <FaAward className="rounded-sm" style={{ color: key }} aria-hidden />
+                <FaAward style={{ color: key }} aria-hidden />
                 <div className="flex items-center gap-3 text-left">
                   <span className="truncate capitalize">{name}</span>
                   <small className="text-muted-foreground text-xs">{exp}</small>
