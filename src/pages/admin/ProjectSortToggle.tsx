@@ -46,7 +46,7 @@ const ProjectSortToggle = () => {
   return (
     <div className="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:gap-15">
       <span className="text-sm font-medium whitespace-nowrap">- 프로젝트 정렬 설정</span>
-      <div className="border-lightGray flex flex-1 items-center justify-center rounded-md border p-1">
+      <div className="border-lightGray flex flex-1 items-center justify-center gap-1 rounded-md border p-1">
         {sortOptions.map((option) => (
           <button
             key={option.value}
@@ -54,7 +54,7 @@ const ProjectSortToggle = () => {
             onClick={() => handleToggle(option.value)}
             disabled={option.value == selected || isLoading || mutation.isPending}
             className={`h-10 flex-1 cursor-pointer rounded-sm text-sm transition-colors ${
-              selected === option.value ? 'bg-mainGreen text-white' : 'text-black hover:text-gray-500'
+              selected === option.value ? 'bg-mainGreen text-white' : 'hover:bg-lightGray/70 text-black'
             }`}
           >
             {option.label}
