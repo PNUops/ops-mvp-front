@@ -27,6 +27,8 @@ const TeamCardGrid = ({ teams, isLoading, isError }: Props) => {
           teamName={team.teamName}
           projectName={team.projectName}
           isLiked={team.isLiked}
+          awardName={team.awardName}
+          awardColor={team.awardColor}
           isVoteTerm={isVoteTerm}
         />
       ))}
