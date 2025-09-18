@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { patchTeamAward } from 'apis/teams';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getSortStatus, patchTeamAward } from 'apis/teams';
 import { PatchAwardRequestDto } from 'types/DTO';
+import { SortOption } from '@pages/admin/ProjectSortToggle';
 
 import { useToast } from 'hooks/useToast';
 import useAuth from 'hooks/useAuth';
@@ -19,7 +20,14 @@ export const useAwardPatchAdmin = (contestId: number) => {
   const { user } = useAuth();
   const toast = useToast();
   const queryClient = useQueryClient();
+
   const { data: teamList } = useTeamList(contestId);
+  const { data: sortStatus } = useQuery<SortOption>({
+    queryKey: ['sortStatus'],
+    queryFn: async () => {
+      return await getSortStatus();
+    },
+  });
 
   const [awardState, setAwardState] = useState<AwardState>({
     selectedTeamId: undefined,
@@ -27,7 +35,9 @@ export const useAwardPatchAdmin = (contestId: number) => {
     awardColor: '',
   });
 
-  const awardPatchAvailable = (awardState.selectedTeamId && awardState.awardName && awardState.awardColor) ?? false;
+  const awardPatchSectionAvailable = sortStatus === 'CUSTOM';
+  const awardPatchSubmitAvailable =
+    (awardState.selectedTeamId && awardState.awardName && awardState.awardColor) ?? false;
 
   useEffect(() => {
     if (!teamList || awardState.selectedTeamId === undefined) return;
@@ -75,8 +85,9 @@ export const useAwardPatchAdmin = (contestId: number) => {
   if (!contestId || !teamList) return null;
 
   return {
+    awardPatchSectionAvailable,
     teamList,
-    awardPatchAvailable,
+    awardPatchSubmitAvailable,
     awardState,
     onSelectTeam,
     onChangeAwardName,

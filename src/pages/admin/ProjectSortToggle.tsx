@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from 'hooks/useToast';
 import { getSortStatus, patchSortTeam } from 'apis/teams';
 
-export type SortOption = 'RANDOM' | 'ASC';
+export type SortOption = 'RANDOM' | 'ASC' | 'CUSTOM';
 
 const sortOptions: { label: string; value: SortOption }[] = [
   { label: '랜덤', value: 'RANDOM' },
