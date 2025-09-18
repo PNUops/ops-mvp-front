@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { useNavigate } from 'react-router-dom';
+import { useAwardCustomSortAdmin } from 'hooks/useAwardAdmin';
 
 import Button from '@components/Button';
 import { FaAward } from 'react-icons/fa6';
-import { postCustomTeamOrder } from 'apis/teams';
 
 interface TableHeaderProps {
   fields: Record<string, string>;
@@ -44,43 +44,10 @@ const SortableTable = ({ data, contestId, onDeleteTeam, editable }: SortableTabl
 
   const FIELDS = { 순번: '10%', 팀명: '20%', 작품명: '30%', 수상: '20%', 편집: '20%' };
 
-  const [rows, setRows] = useState<TeamListItemResponseDto[]>([...data]);
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    setRows([...data]);
-  }, [data, contestId]);
-
-  const handleDragStart = (index: number) => (e: React.DragEvent) => {
-    setDragIndex(index);
-    e.dataTransfer.effectAllowed = 'move';
-  };
-
-  const handleDragOver = (index: number) => (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  };
-
-  const handleDrop = (index: number) => (e: React.DragEvent) => {
-    e.preventDefault();
-    if (dragIndex === null) return;
-    const updated = [...rows];
-    const [moved] = updated.splice(dragIndex, 1);
-    updated.splice(index, 0, moved);
-    setRows(updated);
-    setDragIndex(null);
-  };
-
-  const handleSaveOrder = async () => {
-    const teamOrders = rows.map((r, idx) => ({ teamId: r.teamId, itemOrder: idx + 1 }));
-
-    try {
-      // await postCustomTeamOrder(contestId, teamOrders);
-      console.log('정렬 저장 성공', teamOrders);
-    } catch (error: any) {
-      console.error('정렬 저장 실패', error);
-    }
-  };
+  const { rows, handleDragStart, handleDragOver, handleDrop, handleSaveOrder } = useAwardCustomSortAdmin(
+    contestId,
+    data,
+  );
 
   return (
     <div>
@@ -135,11 +102,13 @@ const SortableTable = ({ data, contestId, onDeleteTeam, editable }: SortableTabl
           ))}
         </tbody>
       </table>
-      <div className="mt-3 flex justify-end">
-        <Button className="bg-mainBlue h-10" onClick={handleSaveOrder}>
-          정렬 저장
-        </Button>
-      </div>
+      {editable && (
+        <div className="mt-3 flex justify-end">
+          <Button className="text-mainBlue border-mainBlue border p-2 px-4" onClick={handleSaveOrder}>
+            정렬 저장
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

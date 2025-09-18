@@ -14,7 +14,9 @@ export interface PatchAwardRequestDto {
   awardColor: string | null;
 }
 
+export type TeamOrder = { teamId: number; itemOrder: number };
+
 export interface PatchCustomOrderRequestDto {
   contestId: number;
-  teamOrders: { teamId: number; itemOrder: number }[];
+  teamOrders: TeamOrder[];
 }

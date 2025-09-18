@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { patchTeamAward } from 'apis/teams';
-import { PatchAwardRequestDto } from 'types/DTO';
+import { patchTeamAward, patchCustomSortTeam } from 'apis/teams';
+import { PatchAwardRequestDto, PatchCustomOrderRequestDto } from 'types/DTO';
+import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 
 import { useToast } from 'hooks/useToast';
 import useAuth from 'hooks/useAuth';
@@ -89,4 +90,56 @@ export const useAwardPatchAdmin = (contestId: number) => {
   };
 };
 
-export const useAwardCustomSortAdmin = () => {};
+export const useAwardCustomSortAdmin = (contestId: number, data: TeamListItemResponseDto[]) => {
+  const { user } = useAuth();
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const [rows, setRows] = useState<TeamListItemResponseDto[]>([...data]);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+
+  const customSortMutation = useMutation({
+    mutationFn: ({ contestId, payload }: { contestId: number; payload: PatchCustomOrderRequestDto }) =>
+      patchCustomSortTeam(contestId, payload),
+    onSuccess: () => {
+      toast('정렬이 저장되었어요', 'success');
+      queryClient.invalidateQueries({ queryKey: ['teams', contestId, user?.id ?? 'guest'] });
+    },
+    onError: (error) => toast('정렬 저장에 실패했어요', 'error'),
+  });
+
+  const handleDragStart = (index: number) => (e: React.DragEvent) => {
+    setDragIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (index: number) => (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (index: number) => (e: React.DragEvent) => {
+    e.preventDefault();
+    if (dragIndex === null) return;
+    const updated = [...rows];
+    const [moved] = updated.splice(dragIndex, 1);
+    updated.splice(index, 0, moved);
+    setRows(updated);
+    setDragIndex(null);
+  };
+
+  const handleSaveOrder = async () => {
+    const teamOrders = rows.map((r, idx) => ({ teamId: r.teamId, itemOrder: idx + 1 }));
+    customSortMutation.mutate({
+      contestId,
+      payload: { contestId, teamOrders },
+    });
+  };
+
+  return {
+    rows,
+    handleDragStart,
+    handleDragOver,
+    handleDrop,
+    handleSaveOrder,
+  };
+};

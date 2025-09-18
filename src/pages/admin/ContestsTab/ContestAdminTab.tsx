@@ -132,13 +132,11 @@ const ContestAdminTab = () => {
         <div className="mb-8">
           <AwardSetSection contestId={state.currentContestId} editable={awardPatchSectionAvailable} />
         </div>
-        {/* <SortableTable data={state.contestTeams} contestId={state.currentContestId} /> */}
         <SortableTable
           data={state.contestTeams}
           contestId={state.currentContestId}
           onDeleteTeam={openDeleteModal}
           editable={awardPatchSectionAvailable}
-          // onOrderSaved={refetchTeams}
         />
         <div className="mt-8 flex w-full flex-row-reverse">
           <Button
