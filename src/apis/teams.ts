@@ -1,6 +1,6 @@
 import { TeamListItemResponseDto } from '../types/DTO/teams/teamListDto';
 import { SubmissionStatusResponseDto } from '../types/DTO/teams/submissionStatusDto';
-import { PatchAwardRequestDto } from 'types/DTO';
+import { PatchAwardRequestDto, PatchCustomOrderRequestDto } from 'types/DTO';
 
 import apiClient from './apiClient';
 import { SortOption } from '@pages/admin/ProjectSortToggle';
@@ -52,7 +52,7 @@ export const patchTeamAward = async (teamId: number, payload: PatchAwardRequestD
   return res.data;
 };
 
-export const postCustomTeamOrder = async (contestId: number, teamOrders: { teamId: number; itemOrder: number }[]) => {
-  const res = await apiClient.post('/teams/sort/custom', { contestId, teamOrders });
+export const postCustomTeamOrder = async (contestId: number, payload: PatchCustomOrderRequestDto) => {
+  const res = await apiClient.patch('/teams/sort/custom', payload);
   return res.data;
 };

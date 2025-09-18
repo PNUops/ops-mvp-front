@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
+import { useNavigate } from 'react-router-dom';
+
 import Button from '@components/Button';
 import { FaAward } from 'react-icons/fa6';
 import { postCustomTeamOrder } from 'apis/teams';
@@ -15,6 +17,8 @@ interface TableRowProps {
 interface SortableTableProps {
   data: TeamListItemResponseDto[];
   contestId: number;
+  onDeleteTeam: (type: 'team', id: number) => void;
+  editable: boolean;
 }
 
 const TableHeader = ({ fields }: TableHeaderProps) => {
@@ -35,52 +39,14 @@ const TableHeader = ({ fields }: TableHeaderProps) => {
   );
 };
 
-const TableRow = ({ tableRowData }: TableRowProps) => {
-  return (
-    <tr draggable="true" className="hover:bg-gray-50">
-      <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">{tableRowData.teamId}</td>
-      <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">{tableRowData.teamName}</td>
-      <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">{tableRowData.projectName}</td>
-      <td className="border-r border-b border-neutral-200 p-2 last:border-r-0">
-        <div className="flex items-center gap-2">
-          {tableRowData.awardName && tableRowData.awardColor ? (
-            <>
-              <FaAward style={{ color: tableRowData.awardColor }} />
-              <span>{tableRowData.awardName}</span>
-            </>
-          ) : (
-            '미등록'
-          )}
-        </div>
-      </td>
-      <td className="border-b border-neutral-200 p-2">
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <Button
-            className="bg-mainRed h-[35px] w-full min-w-[70px]"
-            onClick={() => {
-              // openDeleteModal('team', row.teamId);
-            }}
-          >
-            삭제<span className="hidden md:inline-block">하기</span>
-          </Button>
-          <Button
-            // onClick={() => navigate(`/teams/edit/${row.teamId}`)}
-            className="bg-mainGreen h-[35px] w-full min-w-[70px]"
-          >
-            수정<span className="hidden md:inline-block">하기</span>
-          </Button>
-        </div>
-      </td>
-    </tr>
-  );
-};
+const SortableTable = ({ data, contestId, onDeleteTeam, editable }: SortableTableProps) => {
+  const navigate = useNavigate();
 
-const SortableTable = ({ data, contestId }: SortableTableProps) => {
   const FIELDS = { 순번: '10%', 팀명: '20%', 작품명: '30%', 수상: '20%', 편집: '20%' };
+
   const [rows, setRows] = useState<TeamListItemResponseDto[]>([...data]);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
 
-  // sync rows whenever data or contestId changes (e.g., contest selection)
   useEffect(() => {
     setRows([...data]);
   }, [data, contestId]);
@@ -109,7 +75,7 @@ const SortableTable = ({ data, contestId }: SortableTableProps) => {
     const teamOrders = rows.map((r, idx) => ({ teamId: r.teamId, itemOrder: idx + 1 }));
 
     try {
-      await postCustomTeamOrder(contestId, teamOrders);
+      // await postCustomTeamOrder(contestId, teamOrders);
       console.log('정렬 저장 성공', teamOrders);
     } catch (error: any) {
       console.error('정렬 저장 실패', error);
@@ -124,11 +90,11 @@ const SortableTable = ({ data, contestId }: SortableTableProps) => {
           {rows.map((rowData, i) => (
             <tr
               key={rowData.teamId}
-              draggable
+              draggable={editable}
               onDragStart={handleDragStart(i)}
               onDragOver={handleDragOver(i)}
               onDrop={handleDrop(i)}
-              className="hover:bg-gray-50"
+              className={`hover:bg-gray-50 ${editable ? 'cursor-grab' : ''}`}
             >
               <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">{i + 1}</td>
               <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">{rowData.teamName}</td>
@@ -151,10 +117,16 @@ const SortableTable = ({ data, contestId }: SortableTableProps) => {
               </td>
               <td className="border-b border-neutral-200 p-2">
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <Button className="bg-mainRed h-[35px] w-full min-w-[70px]">
+                  <Button
+                    className="bg-mainRed h-[35px] w-full min-w-[70px]"
+                    onClick={() => onDeleteTeam('team', rowData.teamId)}
+                  >
                     삭제<span className="hidden lg:inline-block">하기</span>
                   </Button>
-                  <Button className="bg-mainGreen h-[35px] w-full min-w-[70px]">
+                  <Button
+                    className="bg-mainGreen h-[35px] w-full min-w-[70px]"
+                    onClick={() => navigate(`/teams/edit/${rowData.teamId}`)}
+                  >
                     수정<span className="hidden lg:inline-block">하기</span>
                   </Button>
                 </div>

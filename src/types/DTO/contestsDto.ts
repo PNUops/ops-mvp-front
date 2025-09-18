@@ -13,3 +13,8 @@ export interface PatchAwardRequestDto {
   awardName: string | null;
   awardColor: string | null;
 }
+
+export interface PatchCustomOrderRequestDto {
+  contestId: number;
+  teamOrders: { teamId: number; itemOrder: number }[];
+}

@@ -62,6 +62,7 @@ const ContestAdminTab = () => {
     setContestName,
     deleteModal,
     handleDelete,
+    awardPatchSectionAvailable,
   } = useContestAdmin();
   const navigate = useNavigate();
   const toast = useToast();
@@ -129,9 +130,16 @@ const ContestAdminTab = () => {
           <HistoryMenu contestName={state.currentContestName} onContestChange={handleContestChange} />
         </div>
         <div className="mb-8">
-          <AwardSetSection contestId={state.currentContestId} />
+          <AwardSetSection contestId={state.currentContestId} editable={awardPatchSectionAvailable} />
         </div>
-        <SortableTable data={state.contestTeams} contestId={state.currentContestId} />
+        {/* <SortableTable data={state.contestTeams} contestId={state.currentContestId} /> */}
+        <SortableTable
+          data={state.contestTeams}
+          contestId={state.currentContestId}
+          onDeleteTeam={openDeleteModal}
+          editable={awardPatchSectionAvailable}
+          // onOrderSaved={refetchTeams}
+        />
         <div className="mt-8 flex w-full flex-row-reverse">
           <Button
             onClick={() => {
