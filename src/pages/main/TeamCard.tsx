@@ -3,16 +3,19 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import basicThumbnail from '@assets/basicThumbnail.jpg';
 import { getThumbnailTeams } from '../../apis/teams';
+import { FaAward } from "react-icons/fa6";
 
 interface TeamCardProps {
   teamId: number;
   teamName: string;
   projectName: string;
   isLiked: boolean;
+  awardName: string | null;
+  awardColor: string | null;
   isVoteTerm?: boolean;
 }
 
-const TeamCard = ({ teamId, teamName, projectName, isLiked, isVoteTerm }: TeamCardProps) => {
+const TeamCard = ({ teamId, teamName, projectName, isLiked, awardName, awardColor, isVoteTerm }: TeamCardProps) => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>(basicThumbnail);
 
   useEffect(() => {
@@ -30,8 +33,14 @@ const TeamCard = ({ teamId, teamName, projectName, isLiked, isVoteTerm }: TeamCa
       <div className="border-lightGray relative aspect-[3/2] flex-shrink-0 cursor-pointer overflow-hidden rounded-md border transition-transform duration-200 hover:scale-[1.02] hover:shadow-md">
         <img src={thumbnailUrl ?? basicThumbnail} alt="썸네일" className="h-full w-full object-contain" />
 
-        <div className="absolute top-3 right-3 z-10">
-          {isVoteTerm && isLiked && <FaHeart color="red" size="clamp(1.5rem, 2vw, 1.8rem)" />}
+        <div className="absolute top-2">
+          <div className="flex items-center ml-2">
+            {awardColor &&  <FaAward color={awardColor} />}
+            <div className="ml-1 text-[clamp(0.8rem,1.8vw,1rem)]">{awardName}</div>
+          </div>
+          <div className="right-3">
+            {isVoteTerm && isLiked && <FaHeart color="red" size="clamp(1.5rem, 2vw, 1.8rem)" />}
+          </div>
         </div>
       </div>
 
