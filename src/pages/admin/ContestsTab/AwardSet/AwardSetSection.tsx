@@ -10,9 +10,10 @@ import { TfiHandDrag } from 'react-icons/tfi';
 interface AwardSetSectionProps {
   contestId: number;
   editable: boolean;
+  onSuccess?: () => void;
 }
 
-const AwardSetSection = ({ contestId, editable }: AwardSetSectionProps) => {
+const AwardSetSection = ({ contestId, editable, onSuccess }: AwardSetSectionProps) => {
   const patchAdmin = useAwardPatchAdmin(contestId);
 
   if (!patchAdmin) {
@@ -28,11 +29,19 @@ const AwardSetSection = ({ contestId, editable }: AwardSetSectionProps) => {
           <AwardNameInput value={patchAdmin.awardState.awardName ?? ''} onChange={patchAdmin.onChangeAwardName} />
           <AwardColorSelect value={patchAdmin.awardState.awardColor ?? ''} onChange={patchAdmin.onChangeAwardColor} />
           <div className="flex justify-end gap-3">
-            <Button variant="outline" disabled={!patchAdmin.awardPatchSubmitAvailable} onClick={patchAdmin.deleteAward}>
-              삭제
-            </Button>
-            <Button variant="default" disabled={!patchAdmin.awardPatchSubmitAvailable} onClick={patchAdmin.saveAward}>
+            <Button
+              variant="default"
+              disabled={!patchAdmin.awardPatchSubmitAvailable}
+              onClick={() => patchAdmin.saveAward(onSuccess)}
+            >
               저장
+            </Button>
+            <Button
+              variant="outline"
+              disabled={!patchAdmin.awardPatchSubmitAvailable}
+              onClick={() => patchAdmin.deleteAward(onSuccess)}
+            >
+              삭제
             </Button>
           </div>
         </>

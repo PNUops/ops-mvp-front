@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { useNavigate } from 'react-router-dom';
 import { useAwardCustomSortAdmin } from 'hooks/useAwardAdmin';
@@ -19,6 +19,7 @@ interface SortableTableProps {
   contestId: number;
   onDeleteTeam: (type: 'team', id: number) => void;
   editable: boolean;
+  onOrderSaved: () => void;
 }
 
 const TableHeader = ({ fields }: TableHeaderProps) => {
@@ -39,15 +40,24 @@ const TableHeader = ({ fields }: TableHeaderProps) => {
   );
 };
 
-const SortableTable = ({ data, contestId, onDeleteTeam, editable }: SortableTableProps) => {
+const SortableTable = ({ data, contestId, onDeleteTeam, editable, onOrderSaved }: SortableTableProps) => {
   const navigate = useNavigate();
 
   const FIELDS = { 순번: '10%', 팀명: '20%', 작품명: '30%', 수상: '20%', 편집: '20%' };
 
-  const { rows, handleDragStart, handleDragOver, handleDrop, handleSaveOrder } = useAwardCustomSortAdmin(
+  const { rows, setRows, handleDragStart, handleDragOver, handleDrop, handleSaveOrder } = useAwardCustomSortAdmin(
     contestId,
     data,
   );
+
+  const prevRowsRef = useRef<TeamListItemResponseDto[]>([]);
+  const handleBeforeSaveOrder = () => {
+    prevRowsRef.current = [...rows];
+    handleSaveOrder({
+      onSuccess: onOrderSaved,
+      onError: () => setRows(prevRowsRef.current),
+    });
+  };
 
   return (
     <div>
@@ -104,7 +114,7 @@ const SortableTable = ({ data, contestId, onDeleteTeam, editable }: SortableTabl
       </table>
       {editable && (
         <div className="mt-3 flex justify-end">
-          <Button className="text-mainBlue border-mainBlue border p-2 px-4" onClick={handleSaveOrder}>
+          <Button className="text-mainBlue border-mainBlue border p-2 px-4" onClick={handleBeforeSaveOrder}>
             정렬 저장
           </Button>
         </div>

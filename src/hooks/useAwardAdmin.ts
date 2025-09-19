@@ -38,7 +38,7 @@ export const useAwardPatchAdmin = (contestId: number) => {
     if (team) {
       setAwardState((prev) => ({
         ...prev,
-        awardName: team.awardName || '',
+        awardName: team.awardName?.trim() || '',
         awardColor: team.awardColor || '',
       }));
     }
@@ -60,18 +60,28 @@ export const useAwardPatchAdmin = (contestId: number) => {
   const onChangeAwardName = (value: string) => setAwardState((prev) => ({ ...prev, awardName: value }));
   const onChangeAwardColor = (color: string) => setAwardState((prev) => ({ ...prev, awardColor: color }));
 
-  const saveAward = () => {
+  const saveAward = (onSuccess?: () => void) => {
     if (awardState.selectedTeamId === undefined) return;
-    awardPatchMutation.mutate({
-      teamId: awardState.selectedTeamId,
-      awardName: awardState.awardName,
-      awardColor: awardState.awardColor,
-    });
+    awardPatchMutation.mutate(
+      {
+        teamId: awardState.selectedTeamId,
+        awardName: awardState.awardName,
+        awardColor: awardState.awardColor,
+      },
+      {
+        onSuccess,
+      },
+    );
   };
 
-  const deleteAward = () => {
+  const deleteAward = (onSuccess?: () => void) => {
     if (awardState.selectedTeamId === undefined) return;
-    awardPatchMutation.mutate({ teamId: awardState.selectedTeamId, awardName: null, awardColor: null });
+    awardPatchMutation.mutate(
+      { teamId: awardState.selectedTeamId, awardName: null, awardColor: null },
+      {
+        onSuccess,
+      },
+    );
     setAwardState((prev) => ({ ...prev, awardName: '', awardColor: '' }));
   };
 
@@ -94,8 +104,13 @@ export const useAwardCustomSortAdmin = (contestId: number, data: TeamListItemRes
   const { user } = useAuth();
   const toast = useToast();
   const queryClient = useQueryClient();
+
   const [rows, setRows] = useState<TeamListItemResponseDto[]>([...data]);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    setRows([...data]);
+  }, [data]);
 
   const customSortMutation = useMutation({
     mutationFn: ({ contestId, payload }: { contestId: number; payload: PatchCustomOrderRequestDto }) =>
@@ -127,16 +142,23 @@ export const useAwardCustomSortAdmin = (contestId: number, data: TeamListItemRes
     setDragIndex(null);
   };
 
-  const handleSaveOrder = async () => {
+  const handleSaveOrder = ({ onSuccess, onError }: { onSuccess?: () => void; onError?: () => void } = {}) => {
     const teamOrders = rows.map((r, idx) => ({ teamId: r.teamId, itemOrder: idx + 1 }));
-    customSortMutation.mutate({
-      contestId,
-      payload: { contestId, teamOrders },
-    });
+    customSortMutation.mutate(
+      {
+        contestId,
+        payload: { contestId, teamOrders },
+      },
+      {
+        onSuccess,
+        onError,
+      },
+    );
   };
 
   return {
     rows,
+    setRows,
     handleDragStart,
     handleDragOver,
     handleDrop,

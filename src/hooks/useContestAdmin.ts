@@ -49,8 +49,7 @@ const useContestAdmin = () => {
   const { data: currentTeams, refetch: refetchTeams } = useQuery({
     queryKey: ['teams', state.currentContestId],
     queryFn: async () => {
-      const teams = await getAllTeams(state.currentContestId);
-      return teams.sort((a, b) => a.teamId - b.teamId);
+      return await getAllTeams(state.currentContestId);
     },
     enabled: state.currentContestId > 0,
   });
@@ -190,6 +189,7 @@ const useContestAdmin = () => {
     deleteModal,
     handleDelete,
     awardPatchSectionAvailable,
+    refetchTeams,
   };
 };
 
