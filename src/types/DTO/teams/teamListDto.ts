@@ -3,6 +3,6 @@ export interface TeamListItemResponseDto {
   teamName: string;
   projectName: string;
   isLiked: boolean;
-  awardName: string;
-  awardColor: string;
+  awardName: string | null;
+  awardColor: string | null;
 }
