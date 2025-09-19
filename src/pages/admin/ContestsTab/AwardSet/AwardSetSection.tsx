@@ -37,14 +37,14 @@ const AwardSetSection = ({ contestId, editable }: AwardSetSectionProps) => {
           </div>
         </>
       ) : (
-        <div className="flex flex-col justify-start gap-3 text-lg">
-          <p>
-            <b>수상 설정</b>을 하려면 <span className="bg-subGreen rounded-md p-1 px-3">진행 중 대회</span> 탭에서
+        <div className="flex flex-col justify-start gap-3 text-lg leading-relaxed">
+          <p className="text-left break-words sm:text-justify">
+            <b>수상 설정</b>을 하려면 <span className="bg-subGreen rounded-md p-0.5 px-3">진행 중 대회</span> 탭에서
             프로젝트 정렬 설정을{' '}
-            <span className="bg-mainGreen rounded-md p-1 px-3 font-medium text-white">수상 정렬순</span>으로
+            <span className="bg-mainGreen rounded-md p-0.5 px-3 font-medium text-white">수상 정렬순</span>으로
             <b>변경</b>해주세요!
           </p>
-          <p className="flex items-center">
+          <p className="flex flex-wrap items-center gap-2 text-left break-words sm:text-justify">
             상훈 설정은 물론, 아래 테이블을 드래그
             <span className="rounded-md bg-gray-100 p-1">
               <TfiHandDrag />
