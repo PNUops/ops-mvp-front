@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAwardCustomSortAdmin } from 'hooks/useAwardAdmin';
 
 import Button from '@components/Button';
-import { FaAward } from 'react-icons/fa6';
+import AwardTag from '@components/AwardTag';
 
 interface TableHeaderProps {
   fields: Record<string, string>;
@@ -92,10 +92,7 @@ const SortableTable = ({ data, contestId, onDeleteTeam, editable, onOrderSaved }
                   <div className="flex items-center gap-2">
                     {rowData.awardName && rowData.awardColor ? (
                       <div className="border-lightGray flex w-full items-center justify-center">
-                        <p className="flex items-center justify-center gap-2 rounded-full border border-gray-100 bg-gray-50 p-2 px-4 text-center">
-                          <FaAward style={{ color: rowData.awardColor }} />
-                          <span>{rowData.awardName}</span>
-                        </p>
+                        <AwardTag awardName={rowData.awardName} awardColor={rowData.awardColor} />
                       </div>
                     ) : (
                       <span className="text-lightGray w-full text-center">미등록</span>
