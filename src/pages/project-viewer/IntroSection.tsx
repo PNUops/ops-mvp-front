@@ -7,16 +7,11 @@ import { FaGithub, FaYoutube } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
 import { RiLink } from 'react-icons/ri';
 import { FiExternalLink } from 'react-icons/fi';
+import { ProjectDetailsResponseDto } from 'types/DTO/projectViewerDto';
 
 interface IntroSectionProps {
-  contestId: number;
-  teamId: number;
+  data: ProjectDetailsResponseDto;
   isEditor: boolean;
-  projectName: string;
-  teamName: string;
-  productionUrl: string | null;
-  githubUrl: string;
-  youtubeUrl: string;
 }
 
 const UrlButton = ({ url }: { url: string }) => {
@@ -50,17 +45,9 @@ const UrlButton = ({ url }: { url: string }) => {
   );
 };
 
-const IntroSection = ({
-  contestId,
-  teamId,
-  isEditor,
-  projectName,
-  teamName,
-  productionUrl,
-  githubUrl,
-  youtubeUrl,
-}: IntroSectionProps) => {
+const IntroSection = ({ data, isEditor }: IntroSectionProps) => {
   const navigate = useNavigate();
+  const { teamId, teamName, projectName, productionPath } = data;
 
   return (
     <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
@@ -80,7 +67,7 @@ const IntroSection = ({
             </button>
           </div>
         )}
-        {productionUrl && <UrlButton url={productionUrl} />}
+        {productionPath && <UrlButton url={productionPath} />}
       </div>
     </div>
   );

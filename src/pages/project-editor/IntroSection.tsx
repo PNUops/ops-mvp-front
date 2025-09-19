@@ -6,22 +6,32 @@ interface IntroSectionProps {
   projectName: string;
   setProjectName: (projectName: string) => void;
   teamName: string;
+  professorName: string;
   leaderName: string;
   teamMembers: TeamMember[];
 }
 
-const IntroSection = ({ teamName, leaderName, teamMembers, projectName, setProjectName }: IntroSectionProps) => {
+const IntroSection = ({
+  teamName,
+  professorName,
+  leaderName,
+  teamMembers,
+  projectName,
+  setProjectName,
+}: IntroSectionProps) => {
   return (
     <>
       <div className="text-exsm flex gap-10 truncate sm:text-sm">
         <div className="text-midGray flex w-25 flex-col gap-3 pl-3">
-          <span>팀명</span>
-          <span>팀장</span>
-          <span>팀원</span>
+          {teamName && <span>팀명</span>}
+          {professorName && <span>지도교수</span>}
+          {leaderName && <span>팀장</span>}
+          {teamMembers.length > 0 && <span>팀원</span>}
         </div>
         <div className="flex flex-col gap-3">
-          <span>{teamName}</span>
-          <span>{leaderName}</span>
+          {teamName && <span>{teamName}</span>}
+          {professorName && <span>{professorName}</span>}
+          {leaderName && <span>{leaderName}</span>}
           <div className="flex flex-wrap gap-x-3">
             {teamMembers.map((member, index) => (
               <span key={index}>{member.teamMemberName}</span>

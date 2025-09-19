@@ -1,16 +1,16 @@
 import { useState } from 'react';
 
-import { TeamMember } from 'types/DTO/projectViewerDto';
+import { ProjectDetailsResponseDto, TeamMember } from 'types/DTO/projectViewerDto';
 import { FaCrown } from 'react-icons/fa6';
+import { FaChalkboardTeacher } from 'react-icons/fa';
 import { IoEllipsisHorizontal, IoPerson } from 'react-icons/io5';
 
 interface DetailSectionProps {
-  overview?: string;
-  leaderName: string;
-  teamMembers: TeamMember[];
+  data: ProjectDetailsResponseDto;
 }
 
-const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps) => {
+const DetailSection = ({ data }: DetailSectionProps) => {
+  const { overview, professorName = '교수님', leaderName, teamMembers } = data; // TODO: professorName mock data
   const hasOverview = overview?.trim();
   const safeOverview = overview ?? '';
   const INIT_LENGTH = 500;
@@ -22,7 +22,13 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
   return (
     <>
       <div className="flex flex-col gap-3">
-        <div className="sm:text-title text-xl font-bold">Participants</div>
+        <div className="sm:text-title text-xl font-bold">Contributors</div>
+        <span className="flex items-center gap-3">
+          <FaChalkboardTeacher className="text-teal-500" size={20} />
+          <span className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
+            {professorName}
+          </span>
+        </span>
         <span className="flex items-center gap-3">
           <FaCrown className="text-amber-300" size={20} />
           <span className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
@@ -30,11 +36,14 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
           </span>
         </span>
         <div className="flex items-start gap-3">
-          <IoPerson className="h-7 shrink-0 text-blue-400" size={20} />
+          <IoPerson className="h-8 shrink-0 text-blue-400" size={20} />
           <div className="flex flex-wrap gap-2 sm:gap-3">
             {teamMembers.map((member, index) => (
-              <div key={index} className="h-7">
-                <span className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
+              <div key={index} className="flex h-8 items-center">
+                <span
+                  key={index}
+                  className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm"
+                >
                   {member.teamMemberName}
                 </span>
               </div>

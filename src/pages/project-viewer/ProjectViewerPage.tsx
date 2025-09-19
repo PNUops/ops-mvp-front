@@ -65,16 +65,7 @@ const ProjectViewerPage = () => {
 
   return (
     <div className="min-w-xs px-2 sm:px-5">
-      <IntroSection
-        contestId={data.contestId}
-        teamId={data.teamId}
-        isEditor={isLeaderOfThisTeam || isAdmin}
-        projectName={data.projectName}
-        teamName={data.teamName}
-        productionUrl={data.productionPath}
-        githubUrl={data.githubPath}
-        youtubeUrl={data.youTubePath}
-      />
+      <IntroSection data={data} isEditor={isLeaderOfThisTeam || isAdmin} />
       <div className="h-10" />
       <CarouselSection
         teamId={data.teamId}
@@ -85,7 +76,7 @@ const ProjectViewerPage = () => {
       <div className="h-10" />
       {isVoteTerm ? <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} /> : null}
       <div className="h-10" />
-      <DetailSection overview={data.overview} leaderName={data.leaderName} teamMembers={data.teamMembers} />
+      <DetailSection data={data} />
       <div className="h-10" />
       <GithubCard githubUrl={data.githubPath} />
       <div className="h-28" />

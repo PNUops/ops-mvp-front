@@ -2,6 +2,7 @@ export interface ProjectDetailsEditDto {
   contestId: number;
   teamName: string;
   projectName: string;
+  professorName: string;
   leaderName: string;
   overview: string;
   productionPath: string | null;

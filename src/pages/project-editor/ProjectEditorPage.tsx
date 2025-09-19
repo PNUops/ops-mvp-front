@@ -54,6 +54,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   const [contestId, setContestId] = useState<number | null>(initialContestId ?? null);
   const [teamName, setTeamName] = useState('');
   const [projectName, setProjectName] = useState('');
+  const [professorName, setProfessorName] = useState('');
   const [leaderName, setLeaderName] = useState('');
   const [thumbnail, setThumbnail] = useState<ThumbnailResult | File | undefined>();
   const [thumbnailToDelete, setThumbnailToDelete] = useState<boolean>(false);
@@ -225,6 +226,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         contestId: isAdmin ? (contestId !== null ? contestId : projectData!.contestId) : projectData!.contestId,
         teamName: isAdmin ? teamName : projectData!.teamName,
         projectName: projectName,
+        professorName: isAdmin ? professorName : projectData!.professorName,
         leaderName: isAdmin ? leaderName : projectData!.leaderName,
         overview,
         productionPath: productionUrl,
@@ -301,6 +303,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         contestId: contestId!,
         projectName,
         teamName,
+        professorName,
         leaderName,
         githubPath: githubUrl,
         youTubePath: youtubeUrl,
@@ -398,6 +401,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       !!contestId &&
       !isEmpty(projectName) &&
       !isEmpty(teamName) &&
+      !isEmpty(professorName) &&
       !isEmpty(leaderName) &&
       teamMembers.length > 0 &&
       !isEmpty(githubUrl) &&
@@ -412,6 +416,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     const basicInfoChanged =
       projectData.projectName !== projectName ||
       projectData.teamName !== teamName ||
+      projectData.professorName !== professorName ||
       projectData.leaderName !== leaderName ||
       projectData.overview !== overview ||
       projectData.productionPath !== productionUrl ||
@@ -472,6 +477,8 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
             setProjectName={setProjectName}
             teamName={teamName}
             setTeamName={setTeamName}
+            professorName={professorName}
+            setProfessorName={setProfessorName}
             leaderName={leaderName}
             setLeaderName={setLeaderName}
           />
@@ -485,6 +492,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
           projectName={projectName}
           setProjectName={setProjectName}
           teamName={teamName}
+          professorName={professorName}
           leaderName={leaderName}
           teamMembers={teamMembers} // WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의
         />
