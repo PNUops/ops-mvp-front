@@ -52,7 +52,7 @@ const SortableTable = ({ data, contestId, onDeleteTeam, editable, onOrderSaved }
 
   const prevRowsRef = useRef<TeamListItemResponseDto[]>([]);
   const handleBeforeSaveOrder = () => {
-    prevRowsRef.current = [...rows];
+    prevRowsRef.current = [...data];
     handleSaveOrder({
       onSuccess: onOrderSaved,
       onError: () => setRows(prevRowsRef.current),
@@ -64,55 +64,65 @@ const SortableTable = ({ data, contestId, onDeleteTeam, editable, onOrderSaved }
       <table className="w-full table-fixed border-collapse truncate text-sm text-nowrap">
         <TableHeader fields={FIELDS} />
         <tbody>
-          {rows.map((rowData, i) => (
-            <tr
-              key={rowData.teamId}
-              draggable={editable}
-              onDragStart={handleDragStart(i)}
-              onDragOver={handleDragOver(i)}
-              onDrop={handleDrop(i)}
-              className={`hover:bg-gray-50 ${editable ? 'cursor-grab' : ''}`}
-            >
-              <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">{i + 1}</td>
-              <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">{rowData.teamName}</td>
-              <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">
-                {rowData.projectName}
-              </td>
-              <td className="border-r border-b border-neutral-200 p-2 last:border-r-0">
-                <div className="flex items-center gap-2">
-                  {rowData.awardName && rowData.awardColor ? (
-                    <div className="border-lightGray flex w-full items-center justify-center">
-                      <p className="flex items-center justify-center gap-2 rounded-full border border-gray-100 bg-gray-50 p-2 px-4 text-center">
-                        <FaAward style={{ color: rowData.awardColor }} />
-                        <span>{rowData.awardName}</span>
-                      </p>
-                    </div>
-                  ) : (
-                    <span className="text-lightGray w-full text-center">미등록</span>
-                  )}
-                </div>
-              </td>
-              <td className="border-b border-neutral-200 p-2">
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <Button
-                    className="bg-mainRed h-[35px] w-full min-w-[70px]"
-                    onClick={() => onDeleteTeam('team', rowData.teamId)}
-                  >
-                    삭제<span className="hidden lg:inline-block">하기</span>
-                  </Button>
-                  <Button
-                    className="bg-mainGreen h-[35px] w-full min-w-[70px]"
-                    onClick={() => navigate(`/teams/edit/${rowData.teamId}`)}
-                  >
-                    수정<span className="hidden lg:inline-block">하기</span>
-                  </Button>
-                </div>
+          {rows.length === 0 && (
+            <tr>
+              <td colSpan={Object.keys(FIELDS).length} className="border-b border-neutral-200 p-4 text-center">
+                데이터가 없습니다.
               </td>
             </tr>
-          ))}
+          )}
+          {rows.length > 0 &&
+            rows.map((rowData, i) => (
+              <tr
+                key={rowData.teamId}
+                draggable={editable}
+                onDragStart={handleDragStart(i)}
+                onDragOver={handleDragOver(i)}
+                onDrop={handleDrop(i)}
+                className={`hover:bg-gray-50 ${editable ? 'cursor-grab' : ''}`}
+              >
+                <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">{i + 1}</td>
+                <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">
+                  {rowData.teamName}
+                </td>
+                <td className="truncate border-r border-b border-neutral-200 p-2 last:border-r-0">
+                  {rowData.projectName}
+                </td>
+                <td className="border-r border-b border-neutral-200 p-2 last:border-r-0">
+                  <div className="flex items-center gap-2">
+                    {rowData.awardName && rowData.awardColor ? (
+                      <div className="border-lightGray flex w-full items-center justify-center">
+                        <p className="flex items-center justify-center gap-2 rounded-full border border-gray-100 bg-gray-50 p-2 px-4 text-center">
+                          <FaAward style={{ color: rowData.awardColor }} />
+                          <span>{rowData.awardName}</span>
+                        </p>
+                      </div>
+                    ) : (
+                      <span className="text-lightGray w-full text-center">미등록</span>
+                    )}
+                  </div>
+                </td>
+                <td className="border-b border-neutral-200 p-2">
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <Button
+                      className="bg-mainRed h-[35px] w-full min-w-[70px]"
+                      onClick={() => onDeleteTeam('team', rowData.teamId)}
+                    >
+                      삭제<span className="hidden lg:inline-block">하기</span>
+                    </Button>
+                    <Button
+                      className="bg-mainGreen h-[35px] w-full min-w-[70px]"
+                      onClick={() => navigate(`/teams/edit/${rowData.teamId}`)}
+                    >
+                      수정<span className="hidden lg:inline-block">하기</span>
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
-      {editable && (
+      {editable && rows.length > 1 && (
         <div className="mt-3 flex justify-end">
           <Button className="text-mainBlue border-mainBlue border p-2 px-4" onClick={handleBeforeSaveOrder}>
             정렬 저장
