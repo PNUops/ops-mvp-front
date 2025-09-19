@@ -30,12 +30,14 @@ const DetailSection = ({ overview, leaderName, teamMembers }: DetailSectionProps
           </span>
         </span>
         <div className="flex items-start gap-3">
-          <IoPerson className="mt-1 shrink-0 text-blue-400" size={20} />
+          <IoPerson className="h-7 shrink-0 text-blue-400" size={20} />
           <div className="flex flex-wrap gap-2 sm:gap-3">
             {teamMembers.map((member, index) => (
-              <span key={index} className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
-                {member.teamMemberName}
-              </span>
+              <div key={index} className="h-7">
+                <span className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
+                  {member.teamMemberName}
+                </span>
+              </div>
             ))}
           </div>
         </div>

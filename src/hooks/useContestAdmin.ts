@@ -2,10 +2,10 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getAllContests, postAllContests, deleteContest } from 'apis/contests';
-import { createProjectDetails } from 'apis/projectEditor';
-import { getAllTeams, deleteTeams } from 'apis/teams';
+import { getSortStatus, getAllTeams, deleteTeams } from 'apis/teams';
 import { useToast } from 'hooks/useToast';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
+import { SortOption } from '@pages/admin/ProjectSortToggle';
 
 type DeleteModalState = {
   type: 'contest' | 'team' | null;
@@ -49,11 +49,19 @@ const useContestAdmin = () => {
   const { data: currentTeams, refetch: refetchTeams } = useQuery({
     queryKey: ['teams', state.currentContestId],
     queryFn: async () => {
-      const teams = await getAllTeams(state.currentContestId);
-      return teams.sort((a, b) => a.teamId - b.teamId);
+      return await getAllTeams(state.currentContestId);
     },
     enabled: state.currentContestId > 0,
   });
+
+  const { data: sortStatus } = useQuery<SortOption>({
+    queryKey: ['sortStatus'],
+    queryFn: async () => {
+      return await getSortStatus();
+    },
+  });
+
+  const awardPatchSectionAvailable = sortStatus === 'CUSTOM';
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -180,6 +188,8 @@ const useContestAdmin = () => {
     setContestName: (name: string) => setState((prev) => ({ ...prev, contestName: name })),
     deleteModal,
     handleDelete,
+    awardPatchSectionAvailable,
+    refetchTeams,
   };
 };
 

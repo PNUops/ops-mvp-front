@@ -7,6 +7,9 @@ import { createProjectDetails } from 'apis/projectEditor';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import Table from '@components/Table';
+import AwardSetSection from './AwardSet/AwardSetSection';
+import SortableTable from './AwardSet/SortableTable';
+
 import { ContestResponseDto } from 'types/DTO';
 import { TeamListItemResponseDto } from 'types/DTO/teams/teamListDto';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -59,6 +62,8 @@ const ContestAdminTab = () => {
     setContestName,
     deleteModal,
     handleDelete,
+    awardPatchSectionAvailable,
+    refetchTeams,
   } = useContestAdmin();
   const navigate = useNavigate();
   const toast = useToast();
@@ -125,35 +130,20 @@ const ContestAdminTab = () => {
           <h2 className="mr-16 text-2xl font-bold text-nowrap sm:mb-4">대회별 프로젝트 목록</h2>
           <HistoryMenu contestName={state.currentContestName} onContestChange={handleContestChange} />
         </div>
-        <Table<TeamListItemResponseDto>
-          columns={[
-            { header: '순번', width: '10%', key: 'teamId' },
-            {
-              header: '팀명',
-              width: '30%',
-              key: 'teamName',
-            },
-            { header: '작품명', width: '30%', key: 'projectName' },
-          ]}
-          rows={state.contestTeams}
-          actions={(row) => (
-            <>
-              <Button
-                className="bg-mainRed h-[35px] w-full min-w-[70px]"
-                onClick={() => openDeleteModal('team', row.teamId)}
-              >
-                삭제하기
-              </Button>
-              <Button
-                onClick={() => navigate(`/teams/edit/${row.teamId}`)}
-                className="bg-mainGreen h-[35px] w-full min-w-[70px]"
-              >
-                수정하기
-              </Button>
-            </>
-          )}
+        <div className="mb-8">
+          <AwardSetSection
+            contestId={state.currentContestId}
+            editable={awardPatchSectionAvailable}
+            onSuccess={refetchTeams}
+          />
+        </div>
+        <SortableTable
+          data={state.contestTeams}
+          contestId={state.currentContestId}
+          onDeleteTeam={openDeleteModal}
+          editable={awardPatchSectionAvailable}
+          onOrderSaved={refetchTeams}
         />
-
         <div className="mt-8 flex w-full flex-row-reverse">
           <Button
             onClick={() => {
