@@ -42,7 +42,7 @@ interface ProjectEditorPageProps {
 }
 
 const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
-  const { user, isAdmin, isLeader } = useAuth();
+  const { user, isAdmin, isLeader, isMember } = useAuth();
   const memberId = user?.id;
   const teamId = useTeamId();
   const initialContestId = useContestId();
@@ -166,8 +166,13 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   if (isProjectLoading) return <EditorDetailSkeleton />;
   if ((isProjectError || !projectData) && isEditMode) return <div>데이터를 가져오지 못했습니다.</div>;
 
-  const isLeaderOfThisTeam = isLeader && isEditMode && projectData && memberId === projectData.leaderId;
-  if (!isLeaderOfThisTeam && !isAdmin) {
+  // const isLeaderOfThisTeam = isLeader && isEditMode && projectData && memberId === projectData.leaderId;
+  const isContributorOfThisTeam =
+    isEditMode &&
+    projectData &&
+    memberId &&
+    (memberId === projectData.leaderId || projectData.memberIds?.includes(memberId));
+  if (!isAdmin && !isContributorOfThisTeam) {
     return <div>접근 권한이 없습니다.</div>;
   }
 
@@ -201,7 +206,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
   };
 
   const validateEditInputs = () => {
-    if (isLeaderOfThisTeam) {
+    if (isContributorOfThisTeam) {
       if (!thumbnail || previews.length === 0) return '썸네일을 포함한 두 개 이상의 이미지를 올려주세요';
     }
 
@@ -487,7 +492,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         </>
       )}
 
-      {(isLeaderOfThisTeam || (isAdmin && contestId === 1)) && (
+      {(isContributorOfThisTeam || (isAdmin && contestId === 1)) && (
         <IntroSection
           projectName={projectName}
           setProjectName={setProjectName}

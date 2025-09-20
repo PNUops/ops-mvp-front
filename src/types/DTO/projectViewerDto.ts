@@ -8,6 +8,7 @@ export interface ProjectDetailsResponseDto {
   contestName: string;
   teamId: number;
   leaderId: number;
+  memberIds: number[];
   teamName: string;
   projectName: string;
   overview: string;
