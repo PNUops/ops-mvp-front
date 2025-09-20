@@ -56,11 +56,11 @@ const ArrowButton = ({
 }) => {
   const Icon = direction === 'left' ? FaChevronLeft : FaChevronRight;
   return (
-    <button onClick={onClick} className={`focus:outline-none ${className}`}>
-      <Icon
-        size={size}
-        className="text-lightGray/50 hover:text-mainGreen animate-pulse rounded-full p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-[#D1F3E1]/25"
-      />
+    <button
+      onClick={onClick}
+      className={`focus:outline-none ${className} text-lightGray/50 hover:text-mainGreen hover:cursor-pointer hover:bg-[#D1F3E1]/20`}
+    >
+      <Icon size={size} className="animate-pulse p-2 transition-colors duration-200 ease-in-out" />
     </button>
   );
 };
@@ -117,13 +117,7 @@ const MediaRenderer = ({
   }
 
   if (typeof currentMedia === 'object' && currentMedia?.status === 'default') {
-    return (
-      <img
-        src={currentMedia.url}
-        alt="기본 이미지"
-        className="border-lightGray absolute inset-0 h-full w-full border object-contain"
-      />
-    );
+    return <img src={currentMedia.url} alt="기본 이미지" className="absolute inset-0 h-full w-full object-contain" />;
   }
 
   const statusMessageMap: Record<string, { icon: React.ElementType; message: React.ReactNode; isError?: boolean }> = {
@@ -183,7 +177,7 @@ const MediaRenderer = ({
             alt="Project image"
             onLoad={() => setImageLoaded(true)}
             onError={() => setLoadFailed(true)}
-            className={`border-lightGray absolute inset-0 h-full w-full border object-contain transition-opacity duration-200 ${
+            className={`absolute inset-0 h-full w-full bg-gray-50 object-contain transition-opacity duration-200 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
           />
@@ -299,17 +293,13 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   });
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div {...handlers} className="flex w-full items-center justify-center md:gap-10">
-        {!isMobile && (
-          <ArrowButton
-            direction="left"
-            onClick={goToPrev}
-            className={visibleImages.length > 1 ? 'visible' : 'invisible'}
-          />
+    <div {...handlers} className="flex h-full w-full flex-col items-center gap-4">
+      <div className="h-xl relative flex aspect-[3/2] w-full max-w-xl items-center justify-center">
+        {!isMobile && visibleImages.length > 1 && (
+          <ArrowButton direction="left" onClick={goToPrev} className="absolute left-0 z-10 h-full" />
         )}
 
-        <div className="border-lightGray relative aspect-[3/2] w-full max-w-2xl overflow-hidden rounded">
+        <div className="flex flex-1 justify-center">
           <MediaRenderer
             currentMedia={currentMedia}
             embedUrl={embedUrl}
@@ -320,12 +310,8 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
           />
         </div>
 
-        {!isMobile && (
-          <ArrowButton
-            direction="right"
-            onClick={goToNext}
-            className={visibleImages.length > 1 ? 'visible' : 'invisible'}
-          />
+        {!isMobile && visibleImages.length > 1 && (
+          <ArrowButton direction="right" onClick={goToNext} className="absolute right-0 z-10 h-full" />
         )}
       </div>
 
@@ -333,13 +319,13 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
         <div
           className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-full max-w-2xl px-3`}
         >
-          {isMobile && <ArrowButton direction="left" onClick={goToPrev} size={40} />}
+          {isMobile && <ArrowButton direction="left" onClick={goToPrev} size={40} className="rounded-full" />}
 
           <div className="flex gap-5">
             <IndicatorDots count={visibleImages.length} currentIndex={currentIndex} onClick={goToSlide} />
           </div>
 
-          {isMobile && <ArrowButton direction="right" onClick={goToNext} size={40} />}
+          {isMobile && <ArrowButton direction="right" onClick={goToNext} size={40} className="rounded-full" />}
         </div>
       )}
     </div>

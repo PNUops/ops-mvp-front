@@ -23,15 +23,15 @@ const IntroSection = ({
     <>
       <div className="text-exsm flex gap-10 truncate sm:text-sm">
         <div className="text-midGray flex w-25 flex-col gap-3 pl-3">
-          {teamName && <span>팀명</span>}
-          {professorName && <span>지도교수</span>}
-          {leaderName && <span>팀장</span>}
-          {teamMembers.length > 0 && <span>팀원</span>}
+          <span>팀명</span>
+          <span>지도교수</span>
+          <span>팀장</span>
+          <span>팀원</span>
         </div>
         <div className="flex flex-col gap-3">
-          {teamName && <span>{teamName}</span>}
-          {professorName && <span>{professorName}</span>}
-          {leaderName && <span>{leaderName}</span>}
+          <span>{teamName}</span>
+          <span>{professorName}</span>
+          <span>{leaderName}</span>
           <div className="flex flex-wrap gap-x-3">
             {teamMembers.map((member, index) => (
               <span key={index}>{member.teamMemberName}</span>
