@@ -80,7 +80,7 @@ const LikeAbuseToolTip = ({ children }: { children: ReactNode }) => {
             <p className="break-keep">
               <strong className="text-mainBlue font-semibold">부정 로그인 계정</strong>을 모니터링하고 있어요.
             </p>
-            <p>좋아요 남용이 의심되는 경우, 경고 없이 제제 될 수 있어요.</p>
+            <p>좋아요 남용이 의심되는 경우, 경고 없이 제한 될 수 있어요.</p>
             <button
               onClick={handleConfirm}
               className="text-mainBlue self-end-safe hover:cursor-pointer hover:font-semibold"
