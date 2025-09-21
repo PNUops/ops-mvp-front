@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { patchLikeToggle } from 'apis/projectViewer';
 import { useToast } from 'hooks/useToast';
 import { FaHeart } from 'react-icons/fa';
+import Backdrop from '@components/Backdrop';
+import { ReactNode, useState } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@components/ToolTip';
 
 interface LikeSectionProps {
   contestId: number;
@@ -38,7 +41,7 @@ const LikeSection = ({ contestId, teamId, isLiked }: LikeSectionProps) => {
   };
 
   return (
-    <>
+    <LikeAbuseToolTip>
       <button
         onClick={handleClick}
         disabled={likeMutation.isPending}
@@ -49,8 +52,45 @@ const LikeSection = ({ contestId, teamId, isLiked }: LikeSectionProps) => {
         <FaHeart className={`${isLiked ? 'text-white' : 'text-whiteGray'}`} size={20} />
         <span className="hidden sm:inline">좋아요</span>
       </button>
-    </>
+    </LikeAbuseToolTip>
   );
 };
 
 export default LikeSection;
+
+const LikeAbuseToolTip = ({ children }: { children: ReactNode }) => {
+  const { user } = useAuth();
+  const likeAbuseMsgConfirmedUserList = JSON.parse(localStorage.getItem('likeAbuseMsgConfirmedUserList') ?? '[]');
+  const isConfirmed = !user || likeAbuseMsgConfirmedUserList.includes(user?.id);
+  const [showTooltip, setShowTooltip] = useState(!isConfirmed);
+
+  const handleConfirm = () => {
+    setShowTooltip(false);
+    likeAbuseMsgConfirmedUserList.push(user?.id);
+    localStorage.setItem('likeAbuseMsgConfirmedUserList', JSON.stringify(likeAbuseMsgConfirmedUserList));
+  };
+  return (
+    <div className="flex justify-center">
+      <Tooltip open={showTooltip}>
+        <TooltipTrigger className="z-50 rounded-lg bg-white p-2" onClick={handleConfirm}>
+          {children}
+        </TooltipTrigger>
+        <TooltipContent className="max-w-3xs duration-400">
+          <div className="flex flex-col gap-2 p-2 text-base">
+            <p className="break-keep">
+              <strong className="text-mainBlue font-semibold">부정 로그인 계정</strong>을 모니터링하고 있어요.
+            </p>
+            <p>좋아요 남용이 의심되는 경우, 경고 없이 제한 될 수 있어요.</p>
+            <button
+              onClick={handleConfirm}
+              className="text-mainBlue self-end-safe hover:cursor-pointer hover:font-semibold"
+            >
+              확인
+            </button>
+          </div>
+        </TooltipContent>
+      </Tooltip>
+      <Backdrop isVisible={showTooltip} />
+    </div>
+  );
+};
