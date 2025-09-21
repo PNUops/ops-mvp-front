@@ -171,7 +171,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     isEditMode &&
     projectData &&
     memberId &&
-    (memberId === projectData.leaderId || projectData.memberIds?.includes(memberId));
+    (memberId === projectData.leaderId || projectData.teamMembers.some((member) => member.teamMemberId === memberId));
   if (!isAdmin && !isContributorOfThisTeam) {
     return <div>접근 권한이 없습니다.</div>;
   }
