@@ -346,7 +346,7 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   return (
     <div {...handlers} className="flex h-full w-full flex-col items-center gap-4">
       <div className="relative flex w-full items-center justify-center">
-        <div className={`relative w-full max-w-2xl ${isFirstPreviewActive ? 'max-h-[80vh] sm:max-h-[70vh]' : ''}`}>
+        <div className={`relative w-full max-w-2xl ${isFirstPreviewActive ? 'max-h-[800vh] sm:max-h-[700vh]' : ''}`}>
           <div
             className={`border-lightGray relative w-full overflow-hidden rounded ${
               isFirstPreviewActive ? 'aspect-[2/3]' : 'aspect-[3/2]'
