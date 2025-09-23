@@ -12,7 +12,7 @@ const AwardTag = ({ awardName, awardColor }: AwardTagProps) => {
       style={{
         backgroundColor: awardColor,
         borderColor: awardColor,
-        boxShadow: `0 0 8px 2px ${awardColor}88, 0 0 24px 4px ${awardColor}44`,
+        boxShadow: `0 0 8px 2px ${awardColor}88, 0 0 4px 4px ${awardColor}44`,
       }}
     >
       <span className="award-shimmer" />

@@ -200,6 +200,9 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
   const [loadFailed, setLoadFailed] = useState(false);
   const isMobile = useMediaQuery('(max-width:640px)');
 
+  // TECHWEEK: 포스터 처리를 위한 state
+  const [isFirstPosterTall, setIsFirstPosterTall] = useState(false);
+
   const toast = useToast();
   const thumbnailNotFoundToast = useRef(false);
 
@@ -221,30 +224,66 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
     },
   });
 
+  // useEffect(() => {
+  //   if (thumbnailResult?.status === 'error' && thumbnailResult.code === 'THUMBNAIL_NOTFOUND') {
+  //     if (!thumbnailNotFoundToast.current) {
+  //       if (isEditor) {
+  //         toast('썸네일 이미지를 올려주세요', 'info');
+  //       }
+  //       thumbnailNotFoundToast.current = true;
+  //     }
+  //   } else {
+  //     thumbnailNotFoundToast.current = false;
+  //   }
+  // }, [thumbnailResult, isEditor, toast]);
+
+  // TECHWEEK: 포스터 없을 때 토스트
   useEffect(() => {
-    if (thumbnailResult?.status === 'error' && thumbnailResult.code === 'THUMBNAIL_NOTFOUND') {
+    if (previewIds.length === 0) {
       if (!thumbnailNotFoundToast.current) {
         if (isEditor) {
-          toast('썸네일 이미지를 올려주세요', 'info');
+          toast('졸업과제 포스터를 올려주세요', 'info');
         }
         thumbnailNotFoundToast.current = true;
+      } else {
+        thumbnailNotFoundToast.current = false;
       }
-    } else {
-      thumbnailNotFoundToast.current = false;
     }
-  }, [thumbnailResult, isEditor, toast]);
+  }, [previewIds, isEditor, toast]);
 
   const embedUrl = useMemo(() => getEmbedUrl(youtubeUrl), [youtubeUrl]);
   const rawImages = useMemo(() => {
     const images: MediaType[] = [];
+    // if (previewData?.imageResults) {
+    //   images.push(...(previewData.imageResults[0] ? [previewData.imageResults[0]] : []));
+    // }
+    // if (embedUrl) {
+    //   images.push('youtube');
+    // }
+    // if (thumbnailResult) {
+    //   images.push(thumbnailResult);
+    // }
+    // if (previewData?.imageResults) {
+    //   images.push(...(previewData.imageResults[1] ? previewData.imageResults.slice(1) : []));
+    // }
+
+    // TECHWEEK: 포스터 처리를 위한 로직
+    const imageResults = previewData?.imageResults ?? [];
+
+    if (imageResults.length > 0 && imageResults[0]) {
+      images.push(imageResults[0]); // 포스터 역할을 할 previewData.imageResults[0]을 맨 앞에 push 하기
+    }
+
     if (embedUrl) {
       images.push('youtube');
     }
+
     if (thumbnailResult) {
       images.push(thumbnailResult);
     }
-    if (previewData?.imageResults) {
-      images.push(...previewData.imageResults);
+
+    if (imageResults.length > 1) {
+      images.push(...imageResults.slice(1));
     }
 
     const hasValidMedia = images.some(
@@ -272,6 +311,18 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
 
   const currentMedia = useMemo(() => visibleImages[currentIndex] || null, [visibleImages, currentIndex]);
 
+  const isFirstPreviewActive = useMemo(() => {
+    const first = previewData?.imageResults?.[0];
+    if (!first) return false;
+    const media = visibleImages[currentIndex];
+    if (!media || typeof media !== 'object') return false;
+    // Only compare URLs when both items are successful preview results (they expose `url`)
+    if ('status' in media && media.status === 'success' && first.status === 'success') {
+      return media.url === first.url;
+    }
+    return false;
+  }, [previewData, visibleImages, currentIndex]);
+
   useEffect(() => {
     setImageLoaded(false);
     setLoadFailed(false);
@@ -294,38 +345,77 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
 
   return (
     <div {...handlers} className="flex h-full w-full flex-col items-center gap-4">
-      <div className="h-xl relative flex aspect-[3/2] w-full max-w-xl items-center justify-center">
-        {!isMobile && visibleImages.length > 1 && (
-          <ArrowButton direction="left" onClick={goToPrev} className="absolute left-0 z-10 h-full" />
-        )}
+      <div className="relative flex w-full items-center justify-center">
+        <div className={`relative w-full max-w-2xl ${isFirstPreviewActive ? 'max-h-[80vh] sm:max-h-[70vh]' : ''}`}>
+          <div
+            className={`border-lightGray relative w-full overflow-hidden rounded ${
+              isFirstPreviewActive ? 'aspect-[2/3]' : 'aspect-[3/2]'
+            }`}
+          >
+            {isFirstPreviewActive && typeof currentMedia === 'object' && currentMedia?.status === 'success' ? (
+              <img
+                src={(currentMedia as any).url}
+                alt="포스터"
+                onLoad={() => setImageLoaded(true)}
+                onError={() => setLoadFailed(true)}
+                className="absolute inset-0 h-full w-full bg-gray-50 object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 h-full w-full">
+                <MediaRenderer
+                  currentMedia={currentMedia}
+                  embedUrl={embedUrl}
+                  imageLoaded={imageLoaded}
+                  setImageLoaded={setImageLoaded}
+                  setLoadFailed={setLoadFailed}
+                  isEditor={isEditor}
+                />
+              </div>
+            )}
+          </div>
 
-        <div className="flex flex-1 justify-center">
-          <MediaRenderer
-            currentMedia={currentMedia}
-            embedUrl={embedUrl}
-            imageLoaded={imageLoaded}
-            setImageLoaded={setImageLoaded}
-            setLoadFailed={setLoadFailed}
-            isEditor={isEditor}
-          />
+          {/* {!isMobile && visibleImages.length > 1 && (
+            <>
+              <button
+                onClick={goToPrev}
+                aria-label="이전"
+                className="absolute top-0 bottom-0 left-0 flex items-center px-2"
+                style={{ zIndex: 20 }}
+              >
+                <span className="rounded-full p-2 transition-colors group-hover:bg-[#D1F3E1]/25">
+                  <FaChevronLeft size={50} className="text-lightGray/50 hover:text-mainGreen" />
+                </span>
+              </button>
+
+              <button
+                onClick={goToNext}
+                aria-label="다음"
+                className="absolute top-0 right-0 bottom-0 flex items-center px-2"
+                style={{ zIndex: 20 }}
+              >
+                <span className="rounded-full p-2 transition-colors group-hover:bg-[#D1F3E1]/25">
+                  <FaChevronRight size={50} className="text-lightGray/50 hover:text-mainGreen" />
+                </span>
+              </button>
+            </>
+          )} */}
         </div>
-
-        {!isMobile && visibleImages.length > 1 && (
-          <ArrowButton direction="right" onClick={goToNext} className="absolute right-0 z-10 h-full" />
-        )}
       </div>
 
       {visibleImages.length > 1 && (
-        <div
-          className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-full max-w-2xl px-3`}
-        >
-          {isMobile && <ArrowButton direction="left" onClick={goToPrev} size={40} className="rounded-full" />}
+        // TECHWEEK: PC와 모바일 indicator 위치 같도록
+        // <div
+        //   className={`mt-4 flex items-center ${!isMobile ? 'justify-center' : 'justify-between'} w-full max-w-2xl px-3`}
+        // >
+        <div className="mt-4 flex w-full max-w-2xl items-center justify-between px-3">
+          {/* TECHWEEK: PC와 모바일 indicator 위치 같도록 */}
+          <ArrowButton direction="left" onClick={goToPrev} size={40} className="rounded-full" />
 
           <div className="flex gap-5">
             <IndicatorDots count={visibleImages.length} currentIndex={currentIndex} onClick={goToSlide} />
           </div>
 
-          {isMobile && <ArrowButton direction="right" onClick={goToNext} size={40} className="rounded-full" />}
+          <ArrowButton direction="right" onClick={goToNext} size={40} className="rounded-full" />
         </div>
       )}
     </div>
