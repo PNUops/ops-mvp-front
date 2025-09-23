@@ -41,8 +41,12 @@ const OnBoardingToolTip = ({ children }: ToolTipProps) => {
         <TooltipContent className="max-w-3xs duration-400">
           <div className="flex flex-col gap-2 p-2 text-base">
             <p className="break-keep">
-              <strong className="text-mainBlue font-semibold">팀장이신가요? </strong>
-              소셜 로그인 대신 직접 회원가입 해주세요
+              <strong className="text-mainBlue font-semibold">팀장 </strong>
+              <span>또는 </span>
+              <strong className="text-mainBlue font-semibold">팀원</strong>
+              <span>이신가요? 소셜 로그인 대신 직접 </span>
+              <strong className="text-mainBlue font-semibold">회원가입 </strong>
+              <span>해주세요</span>
             </p>
             <button
               onClick={handleConfirm}
