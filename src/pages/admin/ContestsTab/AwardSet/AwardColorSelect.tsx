@@ -25,7 +25,7 @@ const AwardColorSelect = ({ value, onChange }: AwardColorSelectProps) => {
     <div className="flex flex-1 items-center gap-4">
       <h4 className="w-30 text-sm leading-none">{title}</h4>
       <Select value={selectedValue} onValueChange={handleValueChange}>
-        <SelectTrigger className="w-full overflow-hidden text-sm">
+        <SelectTrigger className="focus:border-mainGreen w-full overflow-hidden text-sm focus:ring-0 focus:outline-none">
           <SelectValue placeholder="뱃지 색상을 선택해주세요." className="truncate" />
         </SelectTrigger>
         <SelectContent className="text-sm">

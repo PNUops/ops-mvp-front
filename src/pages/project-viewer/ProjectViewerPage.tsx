@@ -61,31 +61,26 @@ const ProjectViewerPage = () => {
   if (error) return <div>에러 발생: {String(error)}</div>;
   if (!data) return <div>데이터를 불러올 수 없습니다.</div>;
 
-  const isLeaderOfThisTeam = isLeader && memberId == data.leaderId;
+  // const isLeaderOfThisTeam = isLeader && memberId == data.leaderId;
+  const isContributorOfThisTeam =
+    data &&
+    memberId &&
+    (memberId === data.leaderId || data.teamMembers.some((member) => member.teamMemberId === memberId));
 
   return (
     <div className="min-w-xs px-2 sm:px-5">
-      <IntroSection
-        contestId={data.contestId}
-        teamId={data.teamId}
-        isEditor={isLeaderOfThisTeam || isAdmin}
-        projectName={data.projectName}
-        teamName={data.teamName}
-        productionUrl={data.productionPath}
-        githubUrl={data.githubPath}
-        youtubeUrl={data.youTubePath}
-      />
+      <IntroSection data={data} isEditor={isContributorOfThisTeam || isAdmin} />
       <div className="h-10" />
       <CarouselSection
         teamId={data.teamId}
         previewIds={data.previewIds}
         youtubeUrl={data.youTubePath}
-        isEditor={isLeaderOfThisTeam || isAdmin}
+        isEditor={isContributorOfThisTeam || isAdmin}
       />
       <div className="h-10" />
       {isVoteTerm ? <LikeSection contestId={data.contestId} teamId={data.teamId} isLiked={data.isLiked} /> : null}
       <div className="h-10" />
-      <DetailSection overview={data.overview} leaderName={data.leaderName} teamMembers={data.teamMembers} />
+      <DetailSection data={data} />
       <div className="h-10" />
       <GithubCard githubUrl={data.githubPath} />
       <div className="h-28" />

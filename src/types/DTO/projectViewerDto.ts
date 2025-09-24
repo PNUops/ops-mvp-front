@@ -11,6 +11,7 @@ export interface ProjectDetailsResponseDto {
   teamName: string;
   projectName: string;
   overview: string;
+  professorName: string;
   leaderName: string;
   teamMembers: TeamMember[]; // WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의
   previewIds: number[];

@@ -10,6 +10,8 @@ import { AiFillPicture } from 'react-icons/ai';
 import { MdOutlineFileUpload, MdBrokenImage } from 'react-icons/md';
 import { CgSandClock } from 'react-icons/cg';
 
+const PREVIEW_BOX_TAGS = ['썸네일', '졸업과제 포스터'];
+
 interface ImageUploaderSectionProps {
   thumbnail: ThumbnailResult | File | undefined;
   setThumbnail: (thumb: ThumbnailResult | File | undefined) => void;
@@ -206,8 +208,12 @@ const ImageUploaderSection = ({
           <span className="ml-1 inline-flex animate-bounce cursor-help items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs text-green-500">
             <HiInformationCircle /> 가이드
           </span>
-          <div className="absolute top-1/2 right-full z-10 mr-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80 group-active:opacity-100 sm:left-full sm:ml-3">
+          <div className="absolute top-1/2 right-full z-10 mr-3 w-64 -translate-y-1/2 rounded bg-green-50 p-3 text-xs leading-5 text-green-600 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-80 group-active:opacity-100 sm:left-full sm:ml-3">
             권장 비율: <strong>3:2</strong> (예: 1500×1000)
+            <br />
+            <span className="bg-mainGreen rounded-lg p-0.5 px-1 text-white">
+              단, 포스터의 경우 약 2:3으로 표시돼요.
+            </span>
             <br />
             최대 이미지 개수: <strong>6개</strong>
             <br />
@@ -244,11 +250,11 @@ const ImageUploaderSection = ({
                   className="border-lightGray text-title text-lightGray relative flex aspect-[3/2] w-full items-center justify-center rounded border border-dashed"
                 >
                   <AiFillPicture />
-                  {index === 0 && (
+                  {index === 0 || index === 1 ? (
                     <span className="absolute bottom-1 left-1 rounded bg-green-100 px-2 py-0.5 text-xs text-green-600">
-                      썸네일
+                      {PREVIEW_BOX_TAGS[index]}
                     </span>
-                  )}
+                  ) : null}
                 </div>
               );
             }

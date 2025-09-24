@@ -21,7 +21,7 @@ const TeamSelect = ({ teamList, onChange }: TeamSelectProps) => {
     <div className="flex flex-1 items-center gap-4">
       <h4 className="w-30 text-sm leading-none">{title}</h4>
       <Select value={selectedValue} onValueChange={handleValueChange}>
-        <SelectTrigger className="w-full overflow-hidden text-sm">
+        <SelectTrigger className="focus:outline:none focus:border-mainGreen w-full overflow-hidden border text-sm focus:ring-0">
           <SelectValue placeholder="수상팀을 선택해주세요." className="truncate" />
         </SelectTrigger>
         <SelectContent className="text-sm">

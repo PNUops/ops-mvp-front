@@ -7,6 +7,8 @@ interface AdminEditSectionProps {
   setProjectName: (projectName: string) => void;
   teamName: string;
   setTeamName: (teamName: string) => void;
+  professorName: string;
+  setProfessorName: (professorName: string) => void;
   leaderName: string;
   setLeaderName: (teamName: string) => void;
 }
@@ -18,6 +20,8 @@ const AdminEditSection = ({
   setProjectName,
   teamName,
   setTeamName,
+  professorName,
+  setProfessorName,
   leaderName,
   setLeaderName,
 }: AdminEditSectionProps) => {
@@ -73,6 +77,21 @@ const AdminEditSection = ({
             value={leaderName}
             onChange={(e) => setLeaderName(e.target.value)}
             placeholder="팀장 이름을 입력해주세요."
+            className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-5 py-3 text-black duration-300 ease-in-out focus:outline-none"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-10">
+        <div className="text-midGray flex w-25 gap-1">
+          <span className="mr-1 text-red-500">*</span>
+          <span className="w-full">지도교수명</span>
+        </div>
+        <div className="flex flex-1 flex-col">
+          <input
+            type="text"
+            value={professorName}
+            onChange={(e) => setProfessorName(e.target.value)}
+            placeholder="지도교수 이름을 입력해주세요."
             className="placeholder-lightGray border-lightGray focus:border-mainGreen w-full truncate rounded border px-5 py-3 text-black duration-300 ease-in-out focus:outline-none"
           />
         </div>

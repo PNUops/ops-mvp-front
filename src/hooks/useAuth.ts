@@ -9,6 +9,7 @@ const useAuth = () => {
 
   const isSignedIn = !!user && !!token;
   const isLeader = isSignedIn && user?.roles?.includes('ROLE_팀장');
+  const isMember = isSignedIn && user?.roles?.includes('ROLE_팀원');
   const isAdmin = isSignedIn && user?.roles?.includes('ROLE_관리자');
 
   const signOut = useCallback(() => {
@@ -32,6 +33,7 @@ const useAuth = () => {
   return {
     isSignedIn,
     isLeader,
+    isMember,
     isAdmin,
     user,
     signIn,
