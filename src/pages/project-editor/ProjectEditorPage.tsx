@@ -114,6 +114,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     if (projectData) {
       setContestId(projectData.contestId);
       setTeamName(projectData.teamName);
+      setProfessorName(projectData.professorName);
       setProjectName(projectData.projectName);
       setLeaderName(projectData.leaderName);
       setTeamMembers(projectData.teamMembers);
@@ -231,7 +232,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         contestId: isAdmin ? (contestId !== null ? contestId : projectData!.contestId) : projectData!.contestId,
         teamName: isAdmin ? teamName : projectData!.teamName,
         projectName: projectName,
-        professorName: isAdmin ? professorName : projectData!.professorName,
+        professorName: professorName,
         leaderName: isAdmin ? leaderName : projectData!.leaderName,
         overview,
         productionPath: productionUrl,
@@ -498,6 +499,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
           setProjectName={setProjectName}
           teamName={teamName}
           professorName={professorName}
+          setProfessorName={setProfessorName}
           leaderName={leaderName}
           teamMembers={teamMembers} // WARN: 백엔드 측에서 필드명 바꿀 수도 있음 주의
         />
