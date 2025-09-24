@@ -30,7 +30,7 @@ const AwardSetSection = ({ contestId, editable, onSuccess }: AwardSetSectionProp
           <AwardColorSelect value={patchAdmin.awardState.awardColor ?? ''} onChange={patchAdmin.onChangeAwardColor} />
           <div className="flex justify-end gap-3">
             <Button
-              variant="default"
+              className="bg-mainGreen hover:bg-emerald-600"
               disabled={!patchAdmin.awardPatchSubmitAvailable}
               onClick={() => patchAdmin.saveAward(onSuccess)}
             >

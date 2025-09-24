@@ -61,6 +61,22 @@ const SortableTable = ({ data, contestId, onDeleteTeam, editable, onOrderSaved }
 
   return (
     <div>
+      {editable && rows.length > 1 && (
+        <div className="mb-3 flex justify-start gap-4">
+          <Button
+            className="bg-lightGray hover:bg-mainGreen p-2 px-6 text-black hover:text-white"
+            onClick={handleBeforeSaveOrder}
+          >
+            정렬 저장
+          </Button>
+          <Button
+            className="border-lightGray hover:bg-whiteGray border p-2 px-4 text-black"
+            onClick={() => setRows(prevRowsRef.current)}
+          >
+            정렬 새로고침
+          </Button>
+        </div>
+      )}
       <table className="w-full table-fixed border-collapse truncate text-sm text-nowrap">
         <TableHeader fields={FIELDS} />
         <tbody>
@@ -119,13 +135,6 @@ const SortableTable = ({ data, contestId, onDeleteTeam, editable, onOrderSaved }
             ))}
         </tbody>
       </table>
-      {editable && rows.length > 1 && (
-        <div className="mt-3 flex justify-end">
-          <Button className="text-mainBlue border-mainBlue border p-2 px-4" onClick={handleBeforeSaveOrder}>
-            정렬 저장
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
