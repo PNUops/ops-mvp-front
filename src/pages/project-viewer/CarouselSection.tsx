@@ -58,7 +58,7 @@ const ArrowButton = ({
   return (
     <button
       onClick={onClick}
-      className={`focus:outline-none ${className} text-lightGray/50 hover:text-mainGreen hover:cursor-pointer hover:bg-[#D1F3E1]/20`}
+      className={`focus:outline-none ${className} text-lightGray hover:text-mainGreen hover:cursor-pointer hover:bg-[#D1F3E1]/20`}
     >
       <Icon size={size} className="animate-pulse p-2 transition-colors duration-200 ease-in-out" />
     </button>
