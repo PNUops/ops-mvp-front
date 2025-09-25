@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from 'hooks/useAuth';
 import { useContestId, useTeamId } from 'hooks/useId';
 import { useToast } from 'hooks/useToast';
+import { CURRENT_CONTEST_ID } from 'constants/contest';
 
 import { getProjectDetails, getPreviewImages } from 'apis/projectViewer';
 import {
@@ -493,7 +494,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
         </>
       )}
 
-      {(isContributorOfThisTeam || (isAdmin && contestId === 1)) && (
+      {(isContributorOfThisTeam || (isAdmin && contestId === CURRENT_CONTEST_ID)) && (
         <IntroSection
           projectName={projectName}
           setProjectName={setProjectName}

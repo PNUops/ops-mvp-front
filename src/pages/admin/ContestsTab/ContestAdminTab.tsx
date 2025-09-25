@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useToast } from 'hooks/useToast';
+import { CURRENT_CONTEST_ID } from 'constants/contest';
 import { getAllContests } from 'apis/contests';
 import { createProjectDetails } from 'apis/projectEditor';
 import Input from '@components/Input';
@@ -147,7 +148,7 @@ const ContestAdminTab = () => {
         <div className="mt-8 flex w-full flex-row-reverse">
           <Button
             onClick={() => {
-              if (state.currentContestId === 1) {
+              if (state.currentContestId === CURRENT_CONTEST_ID) {
                 toast('현재 진행 중인 대회의 프로젝트를 생성할 수 없어요');
                 if (contests?.length === 1) toast('대회 생성 후 프로젝트 생성해주세요');
                 return;
