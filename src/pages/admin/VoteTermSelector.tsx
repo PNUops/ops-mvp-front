@@ -2,13 +2,10 @@ import { useState, useEffect } from 'react';
 import { useGetVoteTerm, useUpdateVoteTerm } from 'hooks/useVoteTerm';
 import { useToast } from 'hooks/useToast';
 import { formatDateTime } from 'utils/time';
+import { CURRENT_CONTEST_ID } from 'constants/contest';
 import DateTimePicker from '@components/DateTimePicker';
 
 import { MoveUp } from 'lucide-react';
-
-// const CURRENT_CONTEST_ID = 1;
-// tech-week
-const CURRENT_CONTEST_ID = 3;
 
 const VoteTermSelector = () => {
   const toast = useToast();
