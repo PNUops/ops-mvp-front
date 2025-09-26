@@ -10,7 +10,7 @@ interface DetailSectionProps {
 }
 
 const DetailSection = ({ data }: DetailSectionProps) => {
-  const { overview, professorName = '교수님', leaderName, teamMembers } = data; // TODO: professorName mock data
+  const { overview, professorName, leaderName, teamMembers } = data; // TODO: professorName mock data
   const hasOverview = overview?.trim();
   const safeOverview = overview ?? '';
   const INIT_LENGTH = 500;
@@ -23,12 +23,14 @@ const DetailSection = ({ data }: DetailSectionProps) => {
     <>
       <div className="flex flex-col gap-3">
         <div className="sm:text-title text-xl font-bold">Contributors</div>
-        <span className="flex items-center gap-3">
-          <FaChalkboardTeacher className="text-teal-500" size={20} />
-          <span className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
-            {professorName}
+        {professorName && (
+          <span className="flex items-center gap-3">
+            <FaChalkboardTeacher className="text-teal-500" size={20} />
+            <span className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
+              {professorName}
+            </span>
           </span>
-        </span>
+        )}
         <span className="flex items-center gap-3">
           <FaCrown className="text-amber-300" size={20} />
           <span className="bg-whiteGray text-exsm rounded-full px-3 py-1 whitespace-nowrap sm:text-sm">
