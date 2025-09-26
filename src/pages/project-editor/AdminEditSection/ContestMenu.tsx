@@ -50,10 +50,10 @@ const ContestMenu = ({ value, onChange }: ContestMenuProps) => {
       <button
         className="border-lightGray focus:ring-subGreen focus:border-mainGreen flex w-full items-center justify-between rounded border px-5 py-3 text-left duration-150 hover:cursor-pointer focus:outline-none"
         onClick={() => {
-          if (selectedContest?.contestId == 1) {
+          if (selectedContest?.contestId == CURRENT_CONTEST_ID) {
             toast('현재 진행 중인 대회의 프로젝트의 소속을 변경할 수 없습니다.', 'info');
           }
-          if (selectedContest?.contestId !== 1) {
+          if (selectedContest?.contestId !== CURRENT_CONTEST_ID) {
             setIsOpen((prev) => !prev);
           }
         }}

@@ -115,7 +115,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     if (projectData) {
       setContestId(projectData.contestId);
       setTeamName(projectData.teamName);
-      setProfessorName(projectData.professorName);
+      setProfessorName(projectData.professorName ?? '');
       setProjectName(projectData.projectName);
       setLeaderName(projectData.leaderName);
       setTeamMembers(projectData.teamMembers);
@@ -475,7 +475,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       </div>
 
       <div className="h-10" />
-      {isAdmin && contestId !== 1 && (
+      {isAdmin && contestId !== CURRENT_CONTEST_ID && (
         <>
           <AdminEditSection
             contestId={contestId}
