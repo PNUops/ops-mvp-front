@@ -475,7 +475,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
       </div>
 
       <div className="h-10" />
-      {isAdmin && contestId !== 1 && (
+      {isAdmin && contestId !== CURRENT_CONTEST_ID && (
         <>
           <AdminEditSection
             contestId={contestId}
