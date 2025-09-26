@@ -115,7 +115,7 @@ const ProjectEditorPage = ({ mode }: ProjectEditorPageProps) => {
     if (projectData) {
       setContestId(projectData.contestId);
       setTeamName(projectData.teamName);
-      setProfessorName(projectData.professorName);
+      setProfessorName(projectData.professorName ?? '');
       setProjectName(projectData.projectName);
       setLeaderName(projectData.leaderName);
       setTeamMembers(projectData.teamMembers);
