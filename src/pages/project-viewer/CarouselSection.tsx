@@ -113,11 +113,11 @@ const MediaRenderer = ({
   isEditor: boolean;
 }) => {
   if (currentMedia === 'youtube' && embedUrl) {
-    return <iframe src={embedUrl} title="Youtube Iframe" allowFullScreen className="absolute inset-0 h-full w-full" />;
+    return <iframe src={embedUrl} title="Youtube Iframe" allowFullScreen className="aspect-video w-full" />;
   }
 
   if (typeof currentMedia === 'object' && currentMedia?.status === 'default') {
-    return <img src={currentMedia.url} alt="기본 이미지" className="absolute inset-0 h-full w-full object-contain" />;
+    return <img src={currentMedia.url} alt="기본 이미지" className="w-full object-contain" />;
   }
 
   const statusMessageMap: Record<string, { icon: React.ElementType; message: React.ReactNode; isError?: boolean }> = {
@@ -177,7 +177,7 @@ const MediaRenderer = ({
             alt="Project image"
             onLoad={() => setImageLoaded(true)}
             onError={() => setLoadFailed(true)}
-            className={`absolute inset-0 h-full w-full bg-gray-50 object-contain transition-opacity duration-200 ${
+            className={`w-full bg-gray-50 object-contain transition-opacity duration-200 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
           />
@@ -347,21 +347,17 @@ const CarouselSection = ({ teamId, previewIds, youtubeUrl, isEditor }: CarouselS
     <div {...handlers} className="flex h-full w-full flex-col items-center gap-4">
       <div className="relative flex w-full items-center justify-center">
         <div className={`relative w-full max-w-2xl ${isFirstPreviewActive ? 'max-h-[800vh] sm:max-h-[700vh]' : ''}`}>
-          <div
-            className={`border-lightGray relative w-full overflow-hidden rounded ${
-              isFirstPreviewActive ? 'aspect-[2/3]' : 'aspect-[3/2]'
-            }`}
-          >
+          <div className="border-lightGray relative w-full overflow-hidden rounded">
             {isFirstPreviewActive && typeof currentMedia === 'object' && currentMedia?.status === 'success' ? (
               <img
                 src={(currentMedia as any).url}
                 alt="포스터"
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setLoadFailed(true)}
-                className="absolute inset-0 h-full w-full bg-gray-50 object-cover"
+                className="w-full bg-gray-50 object-contain"
               />
             ) : (
-              <div className="absolute inset-0 h-full w-full">
+              <div className="w-full">
                 <MediaRenderer
                   currentMedia={currentMedia}
                   embedUrl={embedUrl}
