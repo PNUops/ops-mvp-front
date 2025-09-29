@@ -8,6 +8,7 @@ import {
   CommentEditRequestDto,
   CommentDto,
   PreviewResult,
+  LikeUpdateResponseDto,
 } from 'types/DTO/projectViewerDto';
 
 export const getProjectDetails = async (teamId: number): Promise<ProjectDetailsResponseDto> => {
@@ -43,7 +44,7 @@ export const getPreviewImages = async (teamId: number, imageIds: number[]): Prom
   return { imageResults };
 };
 
-export const patchLikeToggle = async (request: LikeUpdateRequestDto) => {
+export const patchLikeToggle = async (request: LikeUpdateRequestDto): Promise<LikeUpdateResponseDto> => {
   const { teamId, isLiked } = request;
   const response = await apiClient.patch(`/teams/${teamId}/like`, { isLiked });
   return response.data;
