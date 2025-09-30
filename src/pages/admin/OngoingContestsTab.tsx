@@ -40,9 +40,8 @@ const OngoingContestsTab = () => {
           <div className="my-6 border-t border-gray-200"></div>
           <ProjectSortToggle />
         </div>
-        <ProjectSubmissionTable submissions={dashboardData} type="project" />
-        <ProjectSubmissionTable submissions={rankingData} type="vote" />
         <VoteRate />
+        <ProjectSubmissionTable submissions={rankingData} type="vote" />
       </div>
     </>
   );
