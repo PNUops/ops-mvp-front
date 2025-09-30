@@ -1,5 +1,6 @@
 import Header from './Header';
 import Footer from './Footer';
+import Sidebar from './Sidebar';
 import FullContainer from './FullContainer';
 import { Toaster } from '@components/Toaster';
 import useAuthInit from 'hooks/useAuthInit';
@@ -13,8 +14,13 @@ const MainLayout = () => {
     <>
       <div className="flex min-h-screen flex-col">
         <Header />
-        <div>
-          <FullContainer />
+        <div className="flex">
+          <div className="self-start">
+            <Sidebar />
+          </div>
+          <div className="flex-1">
+            <FullContainer />
+          </div>
         </div>
         <Footer />
       </div>

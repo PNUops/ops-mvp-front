@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const HeaderMenu = () => {
   return (
-    <div className="flex-1 font-semibold md:text-lg lg:text-xl">
+    <div className="flex-1 font-semibold md:text-lg lg:hidden lg:text-xl">
       <HistoryMenu />
     </div>
   );
@@ -21,7 +21,7 @@ const HistoryMenu = () => {
         히스토리
       </button>
       {isOpen && data && (
-        <ul className="border-subGreen absolute z-50 w-fit border-2 bg-white text-base font-normal text-nowrap">
+        <ul className="border-subGreen absolute z-9999 w-fit border-2 bg-white text-base font-normal text-nowrap">
           {data?.map((item) => (
             <li key={item.contestId}>
               <Link
