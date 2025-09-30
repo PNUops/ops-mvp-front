@@ -29,11 +29,22 @@ const TableHead = ({ type }: { type: 'project' | 'vote' }) => {
   );
 };
 
+const getTrackBackgroundColor = (teamName: string) => {
+  if (teamName.startsWith('A-')) return 'bg-[#FCD63E]/50';
+  if (teamName.startsWith('B-')) return 'bg-[#36D659]/50';
+  if (teamName.startsWith('C-')) return 'bg-[#FFA962]/50';
+  if (teamName.startsWith('D-')) return 'bg-[#6DB7FF]/50';
+  return 'bg-white';
+};
+
 const TableBody = ({ submissions, type }: Props) => {
   return (
     <tbody>
       {submissions.map((item: Submission, idx: number) => (
-        <tr key={`${item.teamName}-${item.projectName}-${idx}`} className="">
+        <tr
+          key={`${item.teamName}-${item.projectName}-${idx}`}
+          className={type === 'vote' ? getTrackBackgroundColor(item.teamName) : ''}
+        >
           {type === 'vote' && item.rank ? (
             <td className="w-[8%] border-r border-b border-gray-300 p-2 py-3 pl-4 text-sm">{item.rank}</td>
           ) : (
