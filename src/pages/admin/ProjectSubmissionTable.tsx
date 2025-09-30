@@ -30,11 +30,40 @@ const TableHead = ({ type }: { type: 'project' | 'vote' }) => {
 };
 
 const getTrackBackgroundColor = (teamName: string) => {
-  if (teamName.startsWith('A-')) return 'bg-[#FCD63E]/50';
-  if (teamName.startsWith('B-')) return 'bg-[#36D659]/50';
-  if (teamName.startsWith('C-')) return 'bg-[#FFA962]/50';
-  if (teamName.startsWith('D-')) return 'bg-[#6DB7FF]/50';
+  if (teamName.startsWith('A')) return 'bg-[#FCD63E]/50';
+  if (teamName.startsWith('B')) return 'bg-[#36D659]/50';
+  if (teamName.startsWith('C')) return 'bg-[#FFA962]/50';
+  if (teamName.startsWith('D')) return 'bg-[#6DB7FF]/50';
   return 'bg-white';
+};
+
+const getTrack = (teamName: string): 'A' | 'B' | 'C' | 'D' | null => {
+  const firstChar = teamName.charAt(0).toUpperCase();
+  if (['A', 'B', 'C', 'D'].includes(firstChar)) {
+    return firstChar as 'A' | 'B' | 'C' | 'D';
+  }
+  return null;
+};
+
+const groupByTrack = (submissions: Submission[]) => {
+  const tracks: Record<'A' | 'B' | 'C' | 'D', Submission[]> = { A: [], B: [], C: [], D: [] };
+
+  submissions.forEach((item) => {
+    const track = getTrack(item.teamName);
+    if (track) {
+      tracks[track].push(item);
+    }
+  });
+
+  // 각 분과별로 등수 재계산
+  Object.keys(tracks).forEach((track) => {
+    tracks[track as 'A' | 'B' | 'C' | 'D'] = tracks[track as 'A' | 'B' | 'C' | 'D'].map((item, idx) => ({
+      ...item,
+      rank: idx + 1,
+    }));
+  });
+
+  return tracks;
 };
 
 const TableBody = ({ submissions, type }: Props) => {
@@ -82,6 +111,31 @@ const TableBody = ({ submissions, type }: Props) => {
 };
 
 const ProjectSubmissionTable = ({ submissions, type }: Props) => {
+  if (type === 'vote') {
+    const trackGroups = groupByTrack(submissions);
+    const trackNames: Record<'A' | 'B' | 'C' | 'D', string> = {
+      A: 'A분과',
+      B: 'B분과',
+      C: 'C분과',
+      D: 'D분과',
+    };
+
+    return (
+      <section className="mb-8 min-w-[350px]">
+        <h2 className="mb-8 text-2xl font-bold">좋아요 랭킹</h2>
+        {(['A', 'B', 'C', 'D'] as const).map((track) => (
+          <div key={track} className="mb-8 last:mb-0">
+            <h3 className="mb-4 text-xl font-semibold">{trackNames[track]}</h3>
+            <table className="w-full border-collapse bg-white">
+              <TableHead type={type} />
+              <TableBody submissions={trackGroups[track]} type={type} />
+            </table>
+          </div>
+        ))}
+      </section>
+    );
+  }
+
   return (
     <section className="mb-8 min-w-[350px]">
       <h2 className="mb-8 text-2xl font-bold">{type === 'project' ? '프로젝트 등록현황' : '좋아요 랭킹'}</h2>
