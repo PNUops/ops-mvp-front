@@ -22,8 +22,8 @@ const Notice = () => {
     'https://cse.pusan.ac.kr/cse/14655/subview.do';
   return (
     <div className="flex flex-col gap-4">
-      <a href={BANNER_URL} target="_blank" className="flex min-h-25">
-        <img src={banner} alt="대회 로고" className="flex cursor-pointer object-cover object-center" />
+      <a href={BANNER_URL} target="_blank" className="block w-full">
+        <img src={banner} alt="대회 로고" className="w-full h-auto cursor-pointer object-cover" />
         {/* techweek: 기존 object-left */}
       </a>
       {isLoading && <NoticeListSkeleton />}
