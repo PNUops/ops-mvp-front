@@ -48,6 +48,7 @@ const LikeSection = ({ contestId, teamId, isLiked }: LikeSectionProps) => {
     if (!isSignedIn) {
       toast('로그인이 필요해요.');
       navigate('/signin');
+      return;
     }
     if (likeMutation.isPending) return;
     likeMutation.mutate(!isLiked);
