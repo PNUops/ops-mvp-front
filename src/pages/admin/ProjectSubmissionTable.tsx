@@ -52,7 +52,7 @@ const groupByTrack = (submissions: Submission[]) => {
     const track = getTrack(item.teamName);
     if (track) {
       tracks[track].push(item);
-    }
+    }s
   });
 
   // 각 분과별로 등수 재계산
